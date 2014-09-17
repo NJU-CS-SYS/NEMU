@@ -9,7 +9,9 @@
 #define ROW_WIDTH 10
 #define BANK_WIDTH 3
 #define RANK_WIDTH (27 - COL_WIDTH - ROW_WIDTH - BANK_WIDTH)
-
+/*
+ * member addr can have the same value of col!?
+ */
 typedef union {
 	struct {
 		uint32_t col	: COL_WIDTH;
@@ -20,12 +22,16 @@ typedef union {
 	uint32_t addr;
 } dram_addr;
 
-
+/*
+ * what does NR means?
+ */
 #define NR_COL (1 << COL_WIDTH)
 #define NR_ROW (1 << ROW_WIDTH)
 #define NR_BANK (1 << BANK_WIDTH)
 #define NR_RANK (1 << RANK_WIDTH)
-
+/*
+ * 4 dimensions !?
+ */
 #define HW_MEM_SIZE (1 << (COL_WIDTH + ROW_WIDTH + BANK_WIDTH + RANK_WIDTH))
 
 #define BURST_LEN 8
