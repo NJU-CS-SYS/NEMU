@@ -1,9 +1,11 @@
 #ifndef __MACRO_H__
 #define __MACRO_H__
 
+/* #x => "x" */
 #define str_temp(x) #x
 #define str(x) str_temp(x)
 
+/* x ## y => xy */
 #define concat_temp(x, y) x ## y
 #define concat(x, y) concat_temp(x, y)
 

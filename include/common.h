@@ -13,6 +13,7 @@ typedef uint32_t hwaddr_t;
 typedef uint32_t lnaddr_t;
 typedef uint32_t swaddr_t;
 
+/* boolean */
 #define false 0
 #define true 1
 
