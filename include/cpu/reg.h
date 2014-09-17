@@ -17,7 +17,7 @@
  */
 
 typedef struct {
-	union {
+	struct {
 		uint32_t _32;
 		uint16_t _16;
 		uint8_t _8[2];
