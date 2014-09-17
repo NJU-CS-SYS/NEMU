@@ -11,8 +11,12 @@
  * For more details about the GPR encoding scheme, see i386 manual.
  */
 
+/*
+ * What is GPR? GPR is the general-purpose registers,
+ * which i386 manual refers as general registers.
+ */
 typedef struct {
-	struct {
+	union {
 		uint32_t _32;
 		uint16_t _16;
 		uint8_t _8[2];
