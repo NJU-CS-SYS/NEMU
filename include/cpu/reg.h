@@ -15,6 +15,7 @@
  * What is GPR? GPR is the general-purpose registers,
  * which i386 manual refers as general registers.
  */
+
 typedef struct {
 	union {
 		uint32_t _32;
