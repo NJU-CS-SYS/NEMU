@@ -28,6 +28,10 @@ typedef union {
 	 * See i386 manual for more details.
 	 */
 
+	/*
+	 * What the hell can I define a uncompleted struct type 
+	 * without type name and even any var name!?
+	 */
 	struct {
 		uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
 		swaddr_t eip;
