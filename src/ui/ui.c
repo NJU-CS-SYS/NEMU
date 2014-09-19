@@ -81,7 +81,7 @@ static void cmd_r() {
 
 restart_:
 	restart();
-//	nemu_state = STOP; /* HIT good trap here !? */
+	nemu_state = STOP; /* HIT good trap here !? */
 	cmd_c();
 }
 
