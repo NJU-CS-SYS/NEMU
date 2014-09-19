@@ -8,7 +8,6 @@
 #include <readline/history.h>
 
 int nemu_state = END;
-int run_times = 1;
 
 void cpu_exec(uint32_t);
 void restart();
@@ -86,14 +85,13 @@ restart_:
 	cmd_c();
 }
 
-static void cmd_Si() {
+static void cmd_si(int run_times = 1) {
 	if (nemu_state == END) {
 		restart();
 	}
 	nemu_state = RUNNING;
 	cpu_exec(run_times);
 	if(nemu_state != END) { nemu_state = STOP; }
-	run_times = 1;
 }
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
@@ -108,13 +106,8 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "q") == 0) { return; }
 		else if(strcmp(p, "Si") == 0) {
 			p = strtok(NULL," ");
-		//	if (p == NULL) { cmd_Si(); }
-		//	else { 
-		//		run_times = atoi(p);
-		//		cmd_Si();
-		//	}
-			run_times = atoi(p);
-			cmd_Si();
+			if (p == NULL) { cmd_si(); }
+			else { cmd_si(atoi(p)); }
 		}
 		/* TODO: Add more commands */
 
