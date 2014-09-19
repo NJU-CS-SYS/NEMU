@@ -93,6 +93,7 @@ static void cmd_Si() {
 	nemu_state = RUNNING;
 	cpu_exec(run_times);
 	if(nemu_state != END) { nemu_state = STOP; }
+	run_times = 1;
 }
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
