@@ -62,12 +62,13 @@ static void cmd_c() {
 	}
 
 	nemu_state = RUNNING;
-	cpu_exec(10);
+	cpu_exec(-1);
 	if(nemu_state != END) { nemu_state = STOP; }
 }
 
 static void cmd_r() {
-	if(nemu_state != END) { 
+	if(nemu_state
+		   	!= END) { 
 		char c;
 		while(1) {
 			printf("The program is already running. Restart the program? (y or n)");
@@ -86,6 +87,16 @@ restart_:
 	cmd_c();
 }
 
+static void cmd_Si() {
+	if(nemu_state == END) {
+		puts("The Program does not start. Use 'r' command to start the program.");
+		return;
+	}
+
+	nemu_state = RUNNING;
+	cpu_exec(run_times);
+	if(nemu_state != END) { nemu_state = STOP: }
+}
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
@@ -97,7 +108,14 @@ void main_loop() { /* oh, main loop ! */
 		if(strcmp(p, "c") == 0) { cmd_c(); }
 		else if(strcmp(p, "r") == 0) { cmd_r(); }
 		else if(strcmp(p, "q") == 0) { return; }
-
+		else if(strcmp(p, "Si") == 0) {
+			p = strtok(NULL," ");
+			if (p == NULL) { cmd_Si(); }
+			else { 
+				run_times = str2int(p);
+				cmd _Si();
+			}
+		}
 		/* TODO: Add more commands */
 
 		else { printf("Unknown command '%s'\n", p); }
