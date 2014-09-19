@@ -95,7 +95,7 @@ static void cmd_Si() {
 
 	nemu_state = RUNNING;
 	cpu_exec(run_times);
-	if(nemu_state != END) { nemu_state = STOP: }
+	if(nemu_state != END) { nemu_state = STOP; }
 }
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
@@ -112,8 +112,8 @@ void main_loop() { /* oh, main loop ! */
 			p = strtok(NULL," ");
 			if (p == NULL) { cmd_Si(); }
 			else { 
-				run_times = str2int(p);
-				cmd _Si();
+				run_times = atoi(p);
+				cmd_Si();
 			}
 		}
 		/* TODO: Add more commands */
