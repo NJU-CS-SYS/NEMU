@@ -13,19 +13,23 @@ void cpu_exec(uint32_t);
 void restart();
 
 /* We use the readline library to provide more flexibility to read from stdin. */
-char* rl_gets() {
+char* rl_gets() { /* read line get string */
 	static char *line_read = NULL;
 
-	if (line_read) {
+	if (line_read) { /* why this statements needed? */
 		free(line_read);
 		line_read = NULL;
 	}
+
+	/* now line_read must be NULL */
 
 	line_read = readline("(nemu) ");
 
 	if (line_read && *line_read) {
 		add_history(line_read);
 	}
+
+	/* line_read points to sth and the string isn't \0 */
 
 	return line_read;
 }
@@ -43,6 +47,7 @@ static void control_C(int signum) {
 void init_signal() {
 	/* Register a signal handler. */
 	struct sigaction s;
+	/* sigaction is a system struct ! */
 	memset(&s, 0, sizeof(s));
 	s.sa_handler = control_C;
 	int ret = sigaction(SIGINT, &s, NULL);
