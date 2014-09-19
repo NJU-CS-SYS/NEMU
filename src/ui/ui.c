@@ -87,6 +87,9 @@ restart_:
 }
 
 static void cmd_Si() {
+	if (nemu_state == END) {
+		restart();
+	}
 	nemu_state = RUNNING;
 	cpu_exec(run_times);
 	if(nemu_state != END) { nemu_state = STOP; }
