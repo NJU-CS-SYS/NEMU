@@ -62,7 +62,7 @@ static void cmd_c() {
 	}
 
 	nemu_state = RUNNING;
-	cpu_exec(-1);
+	cpu_exec(10);
 	if(nemu_state != END) { nemu_state = STOP; }
 }
 
