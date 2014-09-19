@@ -104,7 +104,7 @@ void main_loop() { /* oh, main loop ! */
 		if(strcmp(p, "c") == 0) { cmd_c(); }
 		else if(strcmp(p, "r") == 0) { cmd_r(); }
 		else if(strcmp(p, "q") == 0) { return; }
-		else if(strcmp(p, "Si") == 0) {
+		else if(strcmp(p, "si") == 0) {
 			p = strtok(NULL," ");
 			if (p == NULL) { cmd_si(1); }
 			else { cmd_si(atoi(p)); }
