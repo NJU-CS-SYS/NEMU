@@ -8,6 +8,7 @@
 #include <readline/history.h>
 
 int nemu_state = END;
+int run_times = 1;
 
 void cpu_exec(uint32_t);
 void restart();
@@ -61,7 +62,7 @@ static void cmd_c() {
 	}
 
 	nemu_state = RUNNING;
-	cpu_exec(-1);
+	cpu_exec(10);
 	if(nemu_state != END) { nemu_state = STOP; }
 }
 
