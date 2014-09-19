@@ -108,11 +108,13 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "q") == 0) { return; }
 		else if(strcmp(p, "Si") == 0) {
 			p = strtok(NULL," ");
-			if (p == NULL) { cmd_Si(); }
-			else { 
-				run_times = atoi(p);
-				cmd_Si();
-			}
+		//	if (p == NULL) { cmd_Si(); }
+		//	else { 
+		//		run_times = atoi(p);
+		//		cmd_Si();
+		//	}
+			run_times = atoi(p);
+			cmd_Si();
 		}
 		/* TODO: Add more commands */
 
