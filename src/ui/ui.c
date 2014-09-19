@@ -67,8 +67,7 @@ static void cmd_c() {
 }
 
 static void cmd_r() {
-	if(nemu_state
-		   	!= END) { 
+	if(nemu_state != END) { 
 		char c;
 		while(1) {
 			printf("The program is already running. Restart the program? (y or n)");
@@ -88,11 +87,6 @@ restart_:
 }
 
 static void cmd_Si() {
-	if(nemu_state == END) {
-		puts("The Program does not start. Use 'r' command to start the program.");
-		return;
-	}
-
 	nemu_state = RUNNING;
 	cpu_exec(run_times);
 	if(nemu_state != END) { nemu_state = STOP; }
