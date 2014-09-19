@@ -81,15 +81,15 @@ static void cmd_r() {
 
 restart_:
 	restart();
-	nemu_state = STOP;
+//	nemu_state = STOP; /* HIT good trap here !? */
 	cmd_c();
 }
 
-void main_loop() {
+void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
 		cmd = rl_gets();
-		char *p = strtok(cmd, " ");
+		char *p = strtok(cmd, " ");/* use strtok to break a line into fiels with ' '*/	
 
 		if(p == NULL) { continue; }
 
