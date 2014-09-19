@@ -85,7 +85,7 @@ restart_:
 	cmd_c();
 }
 
-static void cmd_si(int run_times = 1) {
+static void cmd_si(int run_times) {
 	if (nemu_state == END) {
 		restart();
 	}
@@ -106,7 +106,7 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "q") == 0) { return; }
 		else if(strcmp(p, "Si") == 0) {
 			p = strtok(NULL," ");
-			if (p == NULL) { cmd_si(); }
+			if (p == NULL) { cmd_si(1); }
 			else { cmd_si(atoi(p)); }
 		}
 		/* TODO: Add more commands */
