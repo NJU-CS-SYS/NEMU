@@ -112,7 +112,7 @@ void cmd_x(int n,swaddr_t p)
 {
 	int i;
 	for (i=0; i<n; i++) { 
-		printf("0x%-15x%d\n", p+i, swaddr_read(p+i, 1));
+		printf("0x%-15x%x\n", p+i, swaddr_read(p+i, 4));
 	}
 }
 
