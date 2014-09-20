@@ -95,7 +95,7 @@ static void cmd_si(int run_times) {
 }
 
 static void cmd_info(char* opt) {
-	if (strcmp(opt, "f") == 0) {
+	if (strcmp(opt, "r") == 0) {
 		printf("%-15s%-15X%u\n","eax", cpu.eax, cpu.eax);
 		printf("%-15s%-15X%u\n","ecx", cpu.ecx, cpu.ecx); 
 		printf("%-15s%-15X%u\n","edx", cpu.edx, cpu.edx); 
