@@ -116,7 +116,7 @@ void cmd_x()
 {
 	char* _num = strtok(NULL, " ");
 	char* _addr = strtok(NULL, " ");
-	char** ptr;
+	char** ptr = NULL;
 	if((_num != NULL) && (_addr != NULL)) {
 		int num = atoi(_num);
 		swaddr_t addr = strtol(_addr,ptr,16);
@@ -127,6 +127,7 @@ void cmd_x()
 			for(j = 0; j < 4; j++) {
 			printf("%02x ", swaddr_read(addr+i+j, 1));
 			}
+			putchar('\n');
 		}
 	}
 }
