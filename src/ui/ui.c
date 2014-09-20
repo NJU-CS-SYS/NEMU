@@ -96,15 +96,15 @@ static void cmd_si(int run_times) {
 
 static void cmd_info(char* opt) {
 	if (strcmp(opt, "r") == 0) {
-		printf("%-15s%-15X%u\n","eax", cpu.eax, cpu.eax);
-		printf("%-15s%-15X%u\n","ecx", cpu.ecx, cpu.ecx); 
-		printf("%-15s%-15X%u\n","edx", cpu.edx, cpu.edx); 
-		printf("%-15s%-15X%u\n","ebx", cpu.ebx, cpu.ebx); 
-		printf("%-15s%-15X%u\n","esp", cpu.esp, cpu.esp); 
-		printf("%-15s%-15X%u\n","ebp", cpu.ebp, cpu.ebp); 
-		printf("%-15s%-15X%u\n","esi", cpu.esi, cpu.esi); 
-		printf("%-15s%-15X%u\n","edi", cpu.edi, cpu.edi); 
-		printf("%-15s%-15X%u\n","eip", cpu.eip, cpu.eip); 
+		printf("%-15s%#-15X%u\n","eax", cpu.eax, cpu.eax);
+		printf("%-15s%#-15X%u\n","ecx", cpu.ecx, cpu.ecx); 
+		printf("%-15s%#-15X%u\n","edx", cpu.edx, cpu.edx); 
+		printf("%-15s%#-15X%u\n","ebx", cpu.ebx, cpu.ebx); 
+		printf("%-15s%#-15X%u\n","esp", cpu.esp, cpu.esp); 
+		printf("%-15s%#-15X%u\n","ebp", cpu.ebp, cpu.ebp); 
+		printf("%-15s%#-15X%u\n","esi", cpu.esi, cpu.esi); 
+		printf("%-15s%#-15X%u\n","edi", cpu.edi, cpu.edi); 
+		printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip); 
 	}
 }	
 void main_loop() { /* oh, main loop ! */
