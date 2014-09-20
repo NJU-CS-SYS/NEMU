@@ -111,8 +111,8 @@ static void cmd_info(char* opt) {
 void cmd_x(int n,swaddr_t p)
 {
 	int i;
-	for (i=0; i<n; i+=4) { 
-		printf("0x%-15x%x\n", p+i, swaddr_read(p+i, 4));
+	for (i=0; i<n; i++) { 
+		printf("0x%-15x%x\n", p+4*i, swaddr_read(p+i, 4));
 	}
 }
 
