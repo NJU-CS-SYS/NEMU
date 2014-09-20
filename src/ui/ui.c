@@ -85,7 +85,10 @@ restart_:
 	cmd_c();
 }
 
-static void cmd_si(int run_times) {
+static void cmd_si() {
+	char* p = strtok(NULL, " ");
+	int run_times = 1;
+	if (p != NULL) { run_times = atoi(p); }
 	if (nemu_state == END) {
 		restart();
 	}
@@ -94,7 +97,8 @@ static void cmd_si(int run_times) {
 	if(nemu_state != END) { nemu_state = STOP; }
 }
 
-static void cmd_info(char* opt) {
+static void cmd_info() {
+	char* opt = strtok(NULL, " ");
 	if (strcmp(opt, "r") == 0) {
 		printf("%-15s%#-15X%u\n","eax", cpu.eax, cpu.eax);
 		printf("%-15s%#-15X%u\n","ecx", cpu.ecx, cpu.ecx); 
@@ -106,13 +110,24 @@ static void cmd_info(char* opt) {
 		printf("%-15s%#-15X%u\n","edi", cpu.edi, cpu.edi); 
 		printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip); 
 	}
-}	
+}
 
-void cmd_x(int n,swaddr_t p)
+void cmd_x()
 {
-	int i;
-	for (i=0; i<n; i++) { 
-		printf("0x%-15x%x\n", p+4*i, swaddr_read(p+i, 4));
+	char* _num = strtok(NULL, " ");
+	char* _addr = strtok(NULL, " ");
+	char** ptr;
+	if((_num != NULL) && (_addr != NULL)) {
+		int num = atoi(_num);
+		swaddr_t addr = strtol(_addr,ptr,16);
+		int i;
+		for(i = 0; i < num; i+=4){
+			int j;
+			printf("%8x:   ", addr+i);
+			for(j = 0; j < 4; j++) {
+			printf("%02x ", swaddr_read(addr+i+j, 1));
+			}
+		}
 	}
 }
 
@@ -126,19 +141,11 @@ void main_loop() { /* oh, main loop ! */
 
 		if(strcmp(p, "c") == 0) { cmd_c(); }
 		else if(strcmp(p, "r") == 0) { cmd_r(); }
+		else if(strcmp(p, "si") == 0) { cmd_si(); }
+		else if(strcmp(p, "info") == 0) { cmd_info(); }
+		else if(strcmp(p, "x") == 0) { cmd_x(); }
 		else if(strcmp(p, "q") == 0) { return; }
-		else if(strcmp(p, "si") == 0) {
-			p = strtok(NULL," ");
-			if (p == NULL) { cmd_si(1); }
-			else { cmd_si(atoi(p)); }
-		}
-		else if(strcmp(p, "info") == 0) { cmd_info(strtok(NULL, " ")); }
-		else if(strcmp(p, "x") == 0) {
-			char* num = strtok(NULL, " ");
-			char* src_addr = strtok(NULL, " ");
-			char** q = NULL;
-			cmd_x(atoi(num), strtol(src_addr,q,16));
-		}
+
 		/* TODO: Add more commands */
 
 		else { printf("Unknown command '%s'\n", p); }
