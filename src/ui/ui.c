@@ -123,11 +123,11 @@ void cmd_x()
 		int num = atoi(_num);
 		swaddr_t addr = strtol(_addr,ptr,16);
 		int i;
-		for(i = 0; i < num; i+=4){
+		for(i = 0; i < num; i++){
 			int j;
-			printf("%8x:   ", addr+i);
+			printf("%8x:   ", addr+i*4);
 			for(j = 0; j < 4; j++) {
-			printf("%02x ", swaddr_read(addr+i+j, 1));
+			printf("%02x ", swaddr_read(addr+i*4+j, 1));
 			}
 			putchar('\n');
 		}
