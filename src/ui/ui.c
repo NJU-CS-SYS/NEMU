@@ -96,15 +96,15 @@ static void cmd_si(int run_times) {
 
 static void cmd_info(char* opt) {
 	if (strcmp(opt, "f") == 0) {
-		printf("%-15s%-15#X%d\n","eax",  cpu_state.eax, cpu_state.eax);
-		printf("%-15s%-15#X%d\n","ecx",  cpu_state.ecx, cpu_state.ecx); 
-		printf("%-15s%-15#X%d\n","edx",  cpu_state.edx, cpu_state.edx); 
-		printf("%-15s%-15#X%d\n","ebx",  cpu_state.ebx, cpu_state.ebx); 
-		printf("%-15s%-15#X%d\n","esp",  cpu_state.esp, cpu_state.esp); 
-		printf("%-15s%-15#X%d\n","ebp",  cpu_state.ebp, cpu_state.ebp); 
-		printf("%-15s%-15#X%d\n","esi",  cpu_state.esi, cpu_state.esi); 
-		printf("%-15s%-15#X%d\n","edi",  cpu_state.edi, cpu_state.edi); 
-		printf("%-15s%-15#X%d\n","eip",  cpu_state.eip, cpu_state.eip); 
+		printf("%-15s%-15X%u\n","eax", cpu.eax, cpu.eax);
+		printf("%-15s%-15X%u\n","ecx", cpu.ecx, cpu.ecx); 
+		printf("%-15s%-15X%u\n","edx", cpu.edx, cpu.edx); 
+		printf("%-15s%-15X%u\n","ebx", cpu.ebx, cpu.ebx); 
+		printf("%-15s%-15X%u\n","esp", cpu.esp, cpu.esp); 
+		printf("%-15s%-15X%u\n","ebp", cpu.ebp, cpu.ebp); 
+		printf("%-15s%-15X%u\n","esi", cpu.esi, cpu.esi); 
+		printf("%-15s%-15X%u\n","edi", cpu.edi, cpu.edi); 
+		printf("%-15s%-15X%u\n","eip", cpu.eip, cpu.eip); 
 	}
 }	
 void main_loop() { /* oh, main loop ! */
@@ -123,7 +123,7 @@ void main_loop() { /* oh, main loop ! */
 			if (p == NULL) { cmd_si(1); }
 			else { cmd_si(atoi(p)); }
 		}
-		else if(strcmp(p, "info") == 0) { cmd_info(strtok(NULL," ")); }
+		else if(strcmp(p, "info") == 0) { cmd_info(strtok(NULL, " ")); }
 		/* TODO: Add more commands */
 
 		else { printf("Unknown command '%s'\n", p); }
