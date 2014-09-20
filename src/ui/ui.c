@@ -107,15 +107,15 @@ static void cmd_info(char* opt) {
 		printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip); 
 	}
 }	
-/*
+
 void cmd_x(int n,swaddr_t p)
 {
 	int i;
 	for (i=0; i<n; i++) { 
-		printf("0x%-15p%d\n", p+i, swaddr_read(p+i));
+		printf("0x%-15x%d\n", p+i, swaddr_read(p+i, 1));
 	}
 }
-*/
+
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
@@ -133,13 +133,13 @@ void main_loop() { /* oh, main loop ! */
 			else { cmd_si(atoi(p)); }
 		}
 		else if(strcmp(p, "info") == 0) { cmd_info(strtok(NULL, " ")); }
-/*		else if(strcmp(p, "x") == 0) {
+		else if(strcmp(p, "x") == 0) {
 			char* num = strtok(NULL, " ");
 			char* src_addr = strtok(NULL, " ");
-			char** q;
+			char** q = NULL;
 			cmd_x(atoi(num), strtol(src_addr,q,16));
 		}
-*/		/* TODO: Add more commands */
+		/* TODO: Add more commands */
 
 		else { printf("Unknown command '%s'\n", p); }
 	}
