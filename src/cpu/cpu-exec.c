@@ -40,7 +40,7 @@ static void print_bin_instr(swaddr_t eip, int len) {
 void cpu_exec(volatile uint32_t n) {
 	volatile uint32_t n_temp = n;
 
-	/* use volatile means n can be never modified by the func itself but
+	/* use volatile means n can never be modified by the func itself but
 	 * from memory directly by other func()
 	 */
 
@@ -53,6 +53,7 @@ void cpu_exec(volatile uint32_t n) {
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
 			print_bin_instr(eip_temp, instr_len);
+			printf("I don't think this will happen %d\n", n_temp);
 			puts(assembly);
 		}
 

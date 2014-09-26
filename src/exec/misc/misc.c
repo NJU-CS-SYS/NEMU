@@ -19,7 +19,7 @@ make_helper(inv) {
 make_helper(int3) {
 	/* A breakpoint is hit! Do something here! */
 	printf("HIT THE BREAK POINT!\n");
-	assert(0);
+	cpu_state = INIT;
 	return 1;
 }
 
