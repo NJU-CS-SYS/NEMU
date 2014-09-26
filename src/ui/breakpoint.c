@@ -88,7 +88,9 @@ BP* search_bp(swaddr_t addr) {
 
 void reset_bp(swaddr_t addr) {
 	BP* dest = search_bp(addr);
-	assert(dest != NULL);
+	
+	if (dest == NULL) return;
+	
 	swaddr_write(addr, 1, 0xcc);
 }
 
