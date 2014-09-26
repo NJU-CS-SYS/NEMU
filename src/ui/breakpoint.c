@@ -46,14 +46,16 @@ void free_bp(int n) {
 	pre->next = temp->next;
 	temp->next = free_;
 	free_ = temp;
+	swaddr_write(temp->addr, 1, temp->value);
 }
 
 void free_all() {
-	while(head != NULL) {
+	while(head != NULL) { 
 		BP* temp = head;
 		head = head->next;
 		temp->next = free_;
 		free_ = temp;
+		swaddr_write(temp->addr, 1, temp->value);
 	}
 }
 
