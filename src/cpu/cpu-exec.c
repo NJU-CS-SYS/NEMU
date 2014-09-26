@@ -51,7 +51,10 @@ void cpu_exec(volatile uint32_t n) {
 		int instr_len = exec(cpu.eip);
 
 		/* restore the breakpoint on the byte */
-		if (bp_state == RECOVER) reset_bp(cpu.eip);
+		if (bp_state == RECOVER) { 
+			printf("Prob here? \n");
+			reset_bp(cpu.eip);
+		}
 		
 		cpu.eip += instr_len;
 
