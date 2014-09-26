@@ -116,10 +116,9 @@ static void cmd_info() {
 void cmd_x() {
 	char* _num = strtok(NULL, " ");
 	char* _addr = strtok(NULL, " ");
-	char** ptr = NULL;
 	if((_num != NULL) && (_addr != NULL)) {
 		int num = atoi(_num);
-		swaddr_t addr = strtol(_addr,ptr,16);
+		swaddr_t addr = strtol(_addr,&_addr,16);
 		int i;
 		for(i = 0; i < num; i++){
 			int j;
@@ -135,8 +134,8 @@ void cmd_x() {
 void cmd_b() {
 	char* p = strtok(NULL, " ");
 	if (p[0] == '*') { /* what does * mean in this expression */
-		swaddr_t addr = (swaddr_t)strtol(p + 1, &p, 16);
-		swaddr_write(addr, 0xcc, 1);
+		swaddr_t addr = strtol(p + 1, &p, 16);
+		swaddr_write(addr, 1, 0xcc);
 	}
 }
 
