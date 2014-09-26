@@ -114,6 +114,14 @@ static void cmd_info() {
 		printf("%-15s%#-15X%u\n","edi", cpu.edi, cpu.edi); 
 		printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip); 
 	}
+	else if (strcmp(opt, "b") == 0) {
+		int i = 1;
+		BP* current = head;
+		printf("%-6s%-15s%-10s\n", "NUM", "TYPE", "ADDRESS");
+		while(current != NULL) {
+			printf("%-6d%-15s%-10x\n", i++, "breakpoint", current->addr);
+			current = current->next;
+		}
 }
 
 void cmd_x() {
