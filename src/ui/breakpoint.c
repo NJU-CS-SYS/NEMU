@@ -52,6 +52,7 @@ void add_bp(swaddr_t addr) {
 BP* search_bp(swaddr_t addr) {
 	BP* current = head;
 	while (current != NULL) {
+		printf("%d %x\n", current->NO, current->addr);
 		if (current->addr == addr) return current;
 	}
 	return NULL;
@@ -59,7 +60,6 @@ BP* search_bp(swaddr_t addr) {
 
 void reset_bp(swaddr_t addr) {
 	BP* dest = search_bp(addr);
-	assert(0);
 	assert(dest != NULL);
 	swaddr_write(addr, 1, 0xcc);
 }
