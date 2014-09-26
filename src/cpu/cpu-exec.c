@@ -47,6 +47,7 @@ void cpu_exec(volatile uint32_t n) {
 
 	setjmp(jbuf);
 	for(; n > 0; n --) {
+		printf("bp_state %d\n", bp_state);
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
 
