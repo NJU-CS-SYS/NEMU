@@ -119,7 +119,7 @@ static void cmd_info() {
 		BP* current = getHead();
 		printf("%-6s%-15s%-10s\n", "NUM", "TYPE", "ADDRESS");
 		while(current != NULL) {
-			printf("%-6d%-15s%-10x\n", i++, "breakpoint", current->addr);
+			printf("%-6d%-15s0x%-10x\n", i++, "breakpoint", current->addr);
 			current = current->next;
 		}
 	}
