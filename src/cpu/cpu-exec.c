@@ -50,9 +50,9 @@ void cpu_exec(volatile uint32_t n) {
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
 
-		if (recent_bp == cpu.eip)
-			reset_bp(recent_bp);
-
+		/* restore the breakpoint on the byte */
+		if (bp_state == RECOVER) reset(eip);
+		
 		cpu.eip += instr_len;
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
@@ -71,7 +71,7 @@ void cpu_exec(volatile uint32_t n) {
 			case INT:
 				printf("\n\nUser interrupt\n");
 				restore_bp(--cpu.eip);
-				recent_bp = cpu.eip;
+				bp_state = RECOVER;
 				return;
 			case END:
 				return;

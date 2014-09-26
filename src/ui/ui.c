@@ -9,6 +9,7 @@
 #include <readline/history.h>
 
 int nemu_state = END;
+enum _bp_state bp_state = NORMAL;
 
 void cpu_exec(uint32_t);
 void restart();

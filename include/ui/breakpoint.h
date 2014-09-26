@@ -17,10 +17,12 @@ typedef struct breakpoint {
 } BP;
 
 BP* new_bp();
+enum _bp_state{ NORMAL, RECOVER };
+extern enum _bp_state bp_state;
+
 void free_bp(BP *bp);
 void add_bp(swaddr_t addr);
 BP* search_bp(swaddr_t addr);
 void reset_bp(swaddr_t addr);
 void restore_bp(swaddr_t adddr);
-extern uint32_t recent_bp;
 #endif
