@@ -133,9 +133,9 @@ void cmd_x() {
 }
 
 void cmd_b() {
-	p = strtok(NULL, " ");
+	char* p = strtok(NULL, " ");
 	if (p[0] == '*') { /* what does * mean in this expression */
-		swaddr_t addr = strtok(p + 1, &p, 16);
+		swaddr_t addr = (swaddr_t)strtol(p + 1, &p, 16);
 		swaddr_write(addr, 0xcc, 1);
 	}
 }
