@@ -155,7 +155,7 @@ void cmd_d() {
 	if (opt == NULL) { free_all(); }
 	else {
 		int no = atoi(opt);
-		if (0 < no && no < 33)
+		if (0 <= no && no < 33)
 			free_bp(no);
 		else
 			assert(0);
