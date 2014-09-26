@@ -150,9 +150,9 @@ void main_loop() { /* oh, main loop ! */
 		printf("nemu state :");
 		switch(nemu_state) {
 			case STOP: 
-				printf("STOP");
+				printf("STOP"); break;
 			case END:
-				printf("END");
+				printf("END"); break;
 			default:
 				printf("OTHERS");
 		};
