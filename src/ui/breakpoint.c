@@ -7,6 +7,8 @@
 static BP bp_pool[NR_BP];
 static BP *head, *free_;
 
+uint32_t recent_bp = 0;
+
 void init_bp_pool() {
 	int i;
 	for(i = 0; i < NR_BP - 1; i ++) {
@@ -50,7 +52,7 @@ void add_bp(swaddr_t addr) {
 BP* search_bp(swaddr_t addr) {
 	BP* current = head;
 	while (current != NULL) {
-		if (current.addr == addr) return current;
+		if (current->addr == addr) return current;
 	}
 	return NULL;
 }
@@ -64,6 +66,6 @@ void reset_bp(swaddr_t addr) {
 void restore_bp(swaddr_t addr) {
 	BP* dest = search_bp(addr);
 	if (dest != NULL) {
-		swaddr_write(addr, 1, dest.value);
+		swaddr_write(addr, 1, dest->value);
 	}
 }

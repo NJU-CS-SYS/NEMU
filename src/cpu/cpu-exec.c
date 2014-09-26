@@ -1,5 +1,4 @@
 #include "ui/ui.h"
-#include "ui/breakpoint.h"
 
 #include "nemu.h"
 
@@ -18,8 +17,6 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 
 extern int quiet;
-exterm int bp = 0;
-
 
 void restart() {
 	/* Perform some initialization to restart a program */
@@ -33,6 +30,7 @@ void restart() {
 
 static void print_bin_instr(swaddr_t eip, int len) {
 	int i;
+
 	printf("%8x:   ", eip);
 	for(i = 0; i < len; i ++) {
 		printf("%02x ", swaddr_read(eip + i, 1));
@@ -52,8 +50,8 @@ void cpu_exec(volatile uint32_t n) {
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
 
-		if (bp == cpu.eip)
-			reset_bp(cpu.eip);
+		if (recent_bp == cpu.eip)
+			reset_bp(recent_bp);
 
 		cpu.eip += instr_len;
 
@@ -73,7 +71,7 @@ void cpu_exec(volatile uint32_t n) {
 			case INT:
 				printf("\n\nUser interrupt\n");
 				restore_bp(--cpu.eip);
-				bp = cpu.eip;
+				recent_bp = cpu.eip;
 				return;
 			case END:
 				return;

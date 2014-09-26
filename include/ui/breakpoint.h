@@ -18,4 +18,9 @@ typedef struct breakpoint {
 
 BP* new_bp();
 void free_bp(BP *bp);
+void add_bp(swaddr_t addr);
+BP* search_bp(swaddr_t addr);
+void reset_bp(swaddr_t addr);
+void restore_bp(swaddr_t adddr);
+extern uint32_t recent_bp;
 #endif
