@@ -161,6 +161,7 @@ void cmd_d() {
 			swaddr_write(del->addr, 1, del->value);
 			BP *temp = del;
 			del = del->next;
+			printf("ok?\n");
 			free_bp(temp);
 		}
 		return;
