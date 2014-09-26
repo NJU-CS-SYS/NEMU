@@ -57,6 +57,7 @@ void init_signal() {
 }
 
 static void cmd_c() {
+	printf("are you working?\n");
 	if(nemu_state == END) {
 		puts("The Program does not start. Use 'r' command to start the program.");
 		return;
@@ -144,6 +145,23 @@ void cmd_b() {
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
+
+
+		printf("nemu state :");
+		switch(nemu_state) {
+			case STOP: 
+				printf("STOP");
+			case END:
+				printf("END");
+			default:
+				printf("OTHERS");
+		};
+		putchar('\n');
+
+
+
+
+
 		cmd = rl_gets();
 		char *p = strtok(cmd, " ");/* use strtok to break a line into fiels with ' '*/	
 
