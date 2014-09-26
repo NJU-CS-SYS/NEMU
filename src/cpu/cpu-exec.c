@@ -45,7 +45,6 @@ void cpu_exec(volatile uint32_t n) {
 	 * from memory directly by other func()
 	 */
 
-	printf("work well?\n");
 	setjmp(jbuf);
 	for(; n > 0; n --) {
 		printf("bp_state %d\n", bp_state);
@@ -54,7 +53,6 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* restore the breakpoint on the byte */
 		if (bp_state == RECOVER) { 
-			assert(0);
 			printf("Prob here? \n");
 			reset_bp(cpu.eip);
 		}

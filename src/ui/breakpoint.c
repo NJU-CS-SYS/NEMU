@@ -51,7 +51,9 @@ void add_bp(swaddr_t addr) {
 
 BP* search_bp(swaddr_t addr) {
 	BP* current = head;
+	assert(0);
 	while (current != NULL) {
+		assert(current != NULL);
 		if (current->addr == addr) return current;
 	}
 	return NULL;
