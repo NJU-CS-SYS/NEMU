@@ -70,3 +70,5 @@ void restore_bp(swaddr_t addr) {
 		swaddr_write(addr, 1, dest->value);
 	}
 }
+
+BP* getHead() { return head; }

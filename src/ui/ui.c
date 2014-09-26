@@ -116,12 +116,13 @@ static void cmd_info() {
 	}
 	else if (strcmp(opt, "b") == 0) {
 		int i = 1;
-		BP* current = head;
+		BP* current = getHead();
 		printf("%-6s%-15s%-10s\n", "NUM", "TYPE", "ADDRESS");
 		while(current != NULL) {
 			printf("%-6d%-15s%-10x\n", i++, "breakpoint", current->addr);
 			current = current->next;
 		}
+	}
 }
 
 void cmd_x() {

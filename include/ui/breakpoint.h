@@ -26,4 +26,5 @@ void add_bp(swaddr_t addr);
 BP* search_bp(swaddr_t addr);
 void reset_bp(swaddr_t addr);
 void restore_bp(swaddr_t adddr);
+BP* getHead();
 #endif
