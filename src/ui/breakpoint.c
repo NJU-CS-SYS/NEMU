@@ -28,13 +28,25 @@ void init_bp_pool() {
 
 BP* new_bp() {
 	/* modify free like a stack !? */
-	if (free_ == NULL) assert(0);
+	assert(free != NULL);
 	BP* temp = free_;
 	free_ = free_->next;
 	return temp;
 }
 
 void free_bp(BP *bp) {
+
+	BP *cur = head;
+
+	if (bp == head) {
+		head = head->next;
+		cur->next = free_;
+		free_ = cur;
+	}
+
+	while (cur->next != bp) { cur = cur->next; }
+	assert(cur->next != NULL);
+	cur->next = bp->next;
 	bp->next = free_;
 	free_ = bp;
 }

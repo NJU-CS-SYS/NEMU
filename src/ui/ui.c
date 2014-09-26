@@ -151,6 +151,32 @@ void cmd_b() {
 	}
 }
 
+void cmd_d {
+	char *opt = strtok(NULL, " ");
+
+	BP *del = getHead()
+
+	if (opt == NULL) {
+		while (del != NULL) {
+			swaddr_write(del->addr, 1, del->value);
+			BP *temp = del;
+			del = del->next;
+			free_bp(del);
+		}
+		return;
+	}
+
+	int i = 1;
+	int n = atoi(opt);
+	while (i < n) { del = del->next; }
+	while(i < n) {
+		del = del->next;
+		i++;
+	}
+	swaddr_write(del->addr, 1, del->value);
+	free_bp(del);
+}
+
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
@@ -166,6 +192,7 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "info") == 0) { cmd_info(); }
 		else if(strcmp(p, "x") == 0) { cmd_x(); }
 		else if(strcmp(p, "b") == 0) { cmd_b(); }
+		else if(strcmp(p, "d") == 0) { cmd_d(); }
 		/*remember to delete this test instr */
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
 		else if(strcmp(p, "q") == 0) { return; }
