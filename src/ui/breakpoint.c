@@ -52,8 +52,8 @@ void add_bp(swaddr_t addr) {
 BP* search_bp(swaddr_t addr) {
 	BP* current = head;
 	while (current != NULL) {
-		printf("%d %x\n", current->NO, current->addr);
 		if (current->addr == addr) return current;
+		current = current->next;
 	}
 	return NULL;
 }

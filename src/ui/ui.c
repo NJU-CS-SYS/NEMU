@@ -145,28 +145,12 @@ void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
 
-
-		printf("nemu state :");
-		switch(nemu_state) {
-			case STOP: 
-				printf("STOP"); break;
-			case END:
-				printf("END"); break;
-			default:
-				printf("OTHERS");
-		};
-		putchar('\n');
-
-
-
-
-
 		cmd = rl_gets();
 		char *p = strtok(cmd, " ");/* use strtok to break a line into fiels with ' '*/	
 
 		if(p == NULL) { continue; }
 
-		if(strcmp(p, "c") == 0) { printf("working?\n"); cmd_c(); }
+		if(strcmp(p, "c") == 0) { cmd_c(); }
 		else if(strcmp(p, "r") == 0) { cmd_r(); }
 		else if(strcmp(p, "si") == 0) { cmd_si(); }
 		else if(strcmp(p, "info") == 0) { cmd_info(); }
