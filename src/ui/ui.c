@@ -154,6 +154,7 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "info") == 0) { cmd_info(); }
 		else if(strcmp(p, "x") == 0) { cmd_x(); }
 		else if(strcmp(p, "b") == 0) { cmd_b(); }
+		/*remember to delete this test instr */
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
 		else if(strcmp(p, "q") == 0) { return; }
 		/* TODO: Add more commands */
