@@ -24,13 +24,13 @@ void init_bp_pool() {
 
 BP* new_bp() {
 	/* modify free like a stack !? */
-	if (free_ == NULL) test(0);
+	if (free_ == NULL) assert(0);
 	BP* temp = free_;
-	free = free_->next;
+	free_ = free_->next;
 	return temp;
 }
 
 void free_bp(BP *bp) {
-	bp->next = free;
-	free = bp;
+	bp->next = free_;
+	free_ = bp;
 }
