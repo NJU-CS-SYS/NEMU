@@ -113,8 +113,7 @@ static void cmd_info() {
 	}
 }
 
-void cmd_x()
-{
+void cmd_x() {
 	char* _num = strtok(NULL, " ");
 	char* _addr = strtok(NULL, " ");
 	char** ptr = NULL;
@@ -133,6 +132,14 @@ void cmd_x()
 	}
 }
 
+void cmd_b() {
+	p = strtok(NULL, " ");
+	if (p[0] == '*') { /* what does * mean in this expression */
+		swaddr_t addr = strtok(p + 1, &p, 16);
+		swaddr_write(addr, 0xcc, 1);
+	}
+}
+
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
@@ -146,8 +153,8 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "si") == 0) { cmd_si(); }
 		else if(strcmp(p, "info") == 0) { cmd_info(); }
 		else if(strcmp(p, "x") == 0) { cmd_x(); }
+		else if(strcmp(p, "b") == 0) { cmd_b(); }
 		else if(strcmp(p, "q") == 0) { return; }
-
 		/* TODO: Add more commands */
 
 		else { printf("Unknown command '%s'\n", p); }
