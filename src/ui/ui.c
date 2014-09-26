@@ -71,7 +71,6 @@ static void cmd_r() {
 		while(1) {
 			printf("The program is already running. Restart the program? (y or n)");
 			fflush(stdout);
-			scanf("%c", &c);
 			scanf(" %c",&c);
 			switch(c) {
 				case 'y': goto restart_;
