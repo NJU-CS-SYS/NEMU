@@ -156,14 +156,13 @@ void cmd_d() {
 
 	printf("ok?\n");
 	BP *del = getHead();
-	assert(0);
 
 	if (opt == NULL) {
 		while (del != NULL) {
 			swaddr_write(del->addr, 1, del->value);
 			BP *temp = del;
 			del = del->next;
-			printf("ok?\n");
+			assert(0);
 			free_bp(temp);
 		}
 		return;
