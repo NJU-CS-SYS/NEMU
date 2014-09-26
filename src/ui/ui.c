@@ -1,4 +1,5 @@
 #include "ui/ui.h"
+#include "ui/breakpoint.h"
 
 #include "nemu.h"
 
@@ -135,7 +136,7 @@ void cmd_b() {
 	char* p = strtok(NULL, " ");
 	if (p[0] == '*') { /* what does * mean in this expression */
 		swaddr_t addr = strtol(p + 1, &p, 16);
-		swaddr_write(addr, 1, 0xcc);
+		add_bp(addr);
 	}
 }
 

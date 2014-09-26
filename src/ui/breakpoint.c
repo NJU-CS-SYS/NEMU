@@ -44,4 +44,26 @@ void add_bp(swaddr_t addr) {
 	head = temp;
 	temp->addr = addr;
 	temp->value = swaddr_read(addr, 1);
+	swaddr_write(addr, 1, 0xcc);
+}
+
+BP* search_bp(swaddr_t addr) {
+	BP* current = head;
+	while (current != NULL) {
+		if (current.addr == addr) return current;
+	}
+	return NULL;
+}
+
+void reset_bp(swaddr_t addr) {
+	BP* dest = search_bp(addr);
+	assert(dest != NULL);
+	swaddr_write(addr, 1, 0xcc);
+}
+
+void restore_bp(swaddr_t addr) {
+	BP* dest = search_bp(addr);
+	if (dest != NULL) {
+		swaddr_write(addr, 1, dest.value);
+	}
 }

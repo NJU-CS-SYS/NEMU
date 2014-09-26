@@ -1,4 +1,5 @@
 #include "ui/ui.h"
+#include "ui/breakpoint.h"
 
 #include "nemu.h"
 
@@ -17,6 +18,8 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 
 extern int quiet;
+exterm int bp = 0;
+
 
 void restart() {
 	/* Perform some initialization to restart a program */
@@ -49,18 +52,31 @@ void cpu_exec(volatile uint32_t n) {
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
 
+		if (bp == cpu.eip)
+			reset_bp(cpu.eip);
+
 		cpu.eip += instr_len;
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
 			print_bin_instr(eip_temp, instr_len);
-			printf("I don't think this will happen %d\n", n_temp);
 			puts(assembly);
 		}
-
+/*
 		if(nemu_state == INT) {
 			printf("\n\nUser interrupt\n");
+			cpu.eip--;
 			return;
 		} 
 		else if(nemu_state == END) { return; }
+*/
+		switch(nemu_state) {
+			case INT:
+				printf("\n\nUser interrupt\n");
+				restore_bp(--cpu.eip);
+				bp = cpu.eip;
+				return;
+			case END:
+				return;
+		}
 	}
 }
