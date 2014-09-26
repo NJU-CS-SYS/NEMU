@@ -28,7 +28,7 @@ void init_bp_pool() {
 
 BP* new_bp() {
 	/* modify free like a stack !? */
-	assert(free != NULL);
+	assert(free_ != NULL);
 	BP* temp = free_;
 	free_ = free_->next;
 	return temp;

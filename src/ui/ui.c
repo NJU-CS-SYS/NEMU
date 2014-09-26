@@ -151,17 +151,17 @@ void cmd_b() {
 	}
 }
 
-void cmd_d {
+void cmd_d() {
 	char *opt = strtok(NULL, " ");
 
-	BP *del = getHead()
+	BP *del = getHead();
 
 	if (opt == NULL) {
 		while (del != NULL) {
 			swaddr_write(del->addr, 1, del->value);
 			BP *temp = del;
 			del = del->next;
-			free_bp(del);
+			free_bp(temp);
 		}
 		return;
 	}
