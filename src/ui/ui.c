@@ -57,7 +57,6 @@ void init_signal() {
 }
 
 static void cmd_c() {
-	printf("are you working?\n");
 	if(nemu_state == END) {
 		puts("The Program does not start. Use 'r' command to start the program.");
 		return;
@@ -167,7 +166,7 @@ void main_loop() { /* oh, main loop ! */
 
 		if(p == NULL) { continue; }
 
-		if(strcmp(p, "c") == 0) { cmd_c(); }
+		if(strcmp(p, "c") == 0) { printf("working?\n"); cmd_c(); }
 		else if(strcmp(p, "r") == 0) { cmd_r(); }
 		else if(strcmp(p, "si") == 0) { cmd_si(); }
 		else if(strcmp(p, "info") == 0) { cmd_info(); }
