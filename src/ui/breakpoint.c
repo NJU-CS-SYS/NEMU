@@ -34,29 +34,42 @@ BP* new_bp() {
 	return temp;
 }
 
-void free_bp(BP *bp) {
-
-	BP *cur = head;
-
-	if (bp == head) {
-		head = head->next;
-		cur->next = free_;
-		free_ = cur;
-		return;
+void free_bp(int n) {
+	if (head == NULL) return;
+	BP* temp = head;
+	BP* pre = NULL;
+	while (temp != NULL && temp->NO != n) {
+		pre = temp;
+		temp = temp->next;
 	}
-
-	while (cur->next != bp) { cur = cur->next; }
-	assert(cur->next != NULL);
-	cur->next = bp->next;
-	bp->next = free_;
-	free_ = bp;
+	if (temp == NULL) return;
+	pre->next = temp->next;
+	temp->next = free_;
+	free_ = temp;
 }
+
+void free_all() {
+	while(head != NULL) {
+		BP* temp = head;
+		head = head->next;
+		temp->next = free_;
+		free_ = temp;
+	}
+}
+
 
 void add_bp(swaddr_t addr) {
 	/* add new breakpoint to the head */
 	BP* temp = new_bp();
-	temp->next = head;
-	head = temp;
+	/* add to the rear */
+	if (head == NULL) {
+		head = temp;
+	} else {
+		BP* rear = head;
+		while (rear->next != NULL) { rear = rear->next; }
+		rear->next = temp;
+	}
+	temp->next = NULL;
 	temp->addr = addr;
 	temp->value = swaddr_read(addr, 1);
 	swaddr_write(addr, 1, 0xcc);

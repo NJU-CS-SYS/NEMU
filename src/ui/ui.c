@@ -115,11 +115,10 @@ static void cmd_info() {
 		printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip); 
 	}
 	else if (strcmp(opt, "b") == 0) {
-		int i = 1;
 		BP* current = getHead();
 		printf("%-6s%-15s%-10s\n", "NUM", "TYPE", "ADDRESS");
 		while(current != NULL) {
-			printf("%-6d%-15s0x%-10x\n", i++, "breakpoint", current->addr);
+			printf("%-6d%-15s0x%-10x\n", current->NO, "breakpoint", current->addr);
 			current = current->next;
 		}
 	}
@@ -153,7 +152,15 @@ void cmd_b() {
 
 void cmd_d() {
 	char *opt = strtok(NULL, " ");
-
+	if (opt == NULL) { free_all(); }
+	else {
+		int no = atoi(opt);
+		if (0 < no && no < 33)
+			free_bp(no);
+		else
+			assert(0);
+	}
+/*
 	BP *del = getHead();
 
 	if (opt == NULL) {
@@ -175,6 +182,7 @@ void cmd_d() {
 	}
 	swaddr_write(del->addr, 1, del->value);
 	free_bp(del);
+	*/
 }
 
 void main_loop() { /* oh, main loop ! */

@@ -21,7 +21,8 @@ enum _bp_state{ NORMAL, RECOVER };
 extern enum _bp_state bp_state;
 extern swaddr_t bp_backup;
 
-void free_bp(BP *bp);
+void free_bp(int no);
+void free_all();
 void add_bp(swaddr_t addr);
 BP* search_bp(swaddr_t addr);
 void reset_bp(swaddr_t addr);
