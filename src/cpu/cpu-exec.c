@@ -54,6 +54,7 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* restore the breakpoint on the byte */
 		if (bp_state == RECOVER) { 
+			assert(0);
 			printf("Prob here? \n");
 			reset_bp(cpu.eip);
 		}
