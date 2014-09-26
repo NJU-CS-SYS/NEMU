@@ -155,6 +155,7 @@ void cmd_d() {
 	char *opt = strtok(NULL, " ");
 
 	printf("ok?\n");
+	assert(0);
 	BP *del = getHead();
 
 	if (opt == NULL) {
