@@ -8,7 +8,7 @@
 typedef struct breakpoint {
 	int NO;
 	swaddr_t addr;
-	int32_t value;
+	uint32_t value;
 	struct breakpoint *next;
 
 	/* TODO: Add more members if necessary */
