@@ -53,7 +53,8 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* restore the breakpoint on the byte */
 		if (bp_state == RECOVER) { 
-			reset_bp(cpu.eip);
+			reset_bp(bp_backup);
+			bp_state = NORMAL;
 		}
 		
 		cpu.eip += instr_len;
@@ -75,6 +76,7 @@ void cpu_exec(volatile uint32_t n) {
 				printf("\n\nUser interrupt\n");
 				restore_bp(--cpu.eip);
 				bp_state = RECOVER;
+				bp_backup = cpu.eip;
 				return;
 			case END:
 				return;

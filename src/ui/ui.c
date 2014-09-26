@@ -10,6 +10,7 @@
 
 int nemu_state = END;
 enum _bp_state bp_state = NORMAL;
+swaddr_t bp_backup = 0;
 
 void cpu_exec(uint32_t);
 void restart();
