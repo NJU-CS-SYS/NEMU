@@ -13,6 +13,7 @@ void init_bp_pool() {
 		bp_pool[i].NO = i;
 		bp_pool[i].next = &bp_pool[i + 1];
 	}
+	bp_pool[i].NO = NR_BP - 1;
 	bp_pool[i].next = NULL;
 
 	head = NULL;
@@ -20,3 +21,16 @@ void init_bp_pool() {
 }
 
 /* TODO: Implement the function of breakpoint */
+
+BP* new_bp() {
+	/* modify free like a stack !? */
+	if (free_ == NULL) test(0);
+	BP* temp = free_;
+	free = free_->next;
+	return temp;
+}
+
+void free_bp(BP *bp) {
+	bp->next = free;
+	free = bp;
+}

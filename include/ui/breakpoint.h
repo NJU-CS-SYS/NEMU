@@ -7,6 +7,8 @@
 
 typedef struct breakpoint {
 	int NO;
+	swaddr_t addr;
+	int32_t value;
 	struct breakpoint *next;
 
 	/* TODO: Add more members if necessary */
@@ -14,4 +16,6 @@ typedef struct breakpoint {
 
 } BP;
 
+BP* new_bp();
+void free_bp(BP *bp);
 #endif
