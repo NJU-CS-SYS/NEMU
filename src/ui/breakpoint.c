@@ -42,6 +42,7 @@ void free_bp(BP *bp) {
 		head = head->next;
 		cur->next = free_;
 		free_ = cur;
+		return;
 	}
 
 	while (cur->next != bp) { cur = cur->next; }
