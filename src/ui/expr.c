@@ -88,12 +88,12 @@ static bool make_token(char *e) {
 				/* TODO: Now a new token is recognized with rules[i]. 
 				 * Add codes to perform some actions with this token.
 				 */
-				tokens[nr_token].type = rules[i].type;
+				tokens[nr_token].type = rules[i].token_type;
 				if (substr_len < 32) {
 					strcpy(tokens[nr_token].str, substr_start);
 				} else {
 					printf("the substring of the tokens is too long!\n");
-					printf("position %d\n%s %s\n", position, rule[i].regex, substr_start);
+					printf("position %d\n%s %s\n", position, rules[i].regex, substr_start);
 					assert(0);
 				}
 				
@@ -119,7 +119,7 @@ static bool make_token(char *e) {
 void test_tokens(char *e) {
 	make_token(e);
 	int i;
-	for (i = 0; i < nr_tokens; i++) {
+	for (i = 0; i < nr_token; i++) {
 		printf("%s ", tokens[i].str);
 	}
 }
