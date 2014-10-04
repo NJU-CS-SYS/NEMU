@@ -30,7 +30,7 @@ static struct rule {
 	{"/", '/'},                   // divide
 	{"\\(", '('},                   // left bracket
 	{"\\)", ')'},                   // right bracket
-	{"[0-9]*", NUM},                // numbers
+	{"[0-9]+", NUM},                // numbers
 	{"==", EQ}						// equal
 };
 
