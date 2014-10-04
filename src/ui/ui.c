@@ -187,7 +187,7 @@ void cmd_d() {
 }
 
 void cmd_e() {
-	char *expr = strtok(NULL, " ");
+	char *expr = strtok(NULL, "");
 	test_tokens(expr);
 }
 
