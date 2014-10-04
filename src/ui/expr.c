@@ -89,12 +89,14 @@ static bool make_token(char *e) {
 				/* TODO: Now a new token is recognized with rules[i]. 
 				 * Add codes to perform some actions with this token.
 				 */
-				Token* temp_token = &tokens[nr_token];
-				temp_token->type = rules[i].token_type;
-				if (substr_len < 32)
-					strncpy(temp_token->str, substr_start, substr_len);
-				else assert(0);
-				nr_token++;
+				if (rules[i].token_tyep != NOTYPE) {
+					Token* temp_token = &tokens[nr_token];
+					temp_token->type = rules[i].token_type;
+					if (substr_len < 32)
+						strncpy(temp_token->str, substr_start, substr_len);
+					else assert(0);
+					nr_token++;
+				}
 				/* why ?
 				switch(rules[i].token_type) {
 					default: assert(0);
@@ -119,7 +121,7 @@ void test_tokens(char *e) {
 	printf("nr_tokens = %d\n", nr_token);
 	int i;
 	for (i = 0; i < nr_token; i++)
-		printf("%s ", tokens[i].str);
+		printf("%s", tokens[i].str);
 	putchar('\n');
 }
 
