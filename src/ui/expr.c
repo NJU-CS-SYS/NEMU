@@ -116,14 +116,26 @@ static bool make_token(char *e) {
 	return true; 
 }
 
-void test_tokens(char *e) {
-	make_token(e);
-	printf("nr_tokens = %d\n", nr_token);
-	int i;
-	for (i = 0; i < nr_token; i++)
-		printf("%s", tokens[i].str);
-	putchar('\n');
+
+
+/**
+ * Functions to evaluate the expression
+ * check_parentheses(int,int) : check parentheses
+ * expr(char*, bool*) : evaluate expressions
+ */
+bool check_parentheses(int p, int q) {
+	if (tokens[p].type == '(' && tokens[q].type == ')') {
+		int buf[32];
+		int i, j, rec;
+		for (i = j = rec = 0; i <= q; i++) {
+			if (tokens[i].type == '(') buf[j++] = i;
+			else if (tokens[i].type == ')') rec = buf[j--];
+		}
+		if (rec == p) return true;
+	}
+	return false
 }
+
 
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
@@ -136,3 +148,14 @@ uint32_t expr(char *e, bool *success) {
 	return 0;
 }
 
+
+
+void test_tokens(char *e) {
+	make_token(e);
+	printf("nr_tokens = %d\n", nr_token);
+	int i;
+	for (i = 0; i < nr_token; i++)
+		printf("%s", tokens[i].str);
+	putchar('\n');
+	printf("%d\n", check_parentheses(0, nr_token-1));
+}
