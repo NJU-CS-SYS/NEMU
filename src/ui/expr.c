@@ -131,6 +131,7 @@ bool check_parentheses(int p, int q) {
 			if (tokens[i].type == '(') buf[j++] = i;
 			else if (tokens[i].type == ')') rec = buf[j--];
 		}
+		printf("p = %d, rec = %d\n", p, rec);
 		if (rec == p) return true;
 	}
 	return false;
