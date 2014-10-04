@@ -7,8 +7,6 @@
 static BP bp_pool[NR_BP];
 static BP *head, *free_;
 
-uint32_t recent_bp = 0;
-
 void init_bp_pool() {
 	int i;
 	for(i = 0; i < NR_BP - 1; i ++) {
@@ -57,6 +55,7 @@ void free_all() {
 		free_ = temp;
 		swaddr_write(temp->addr, 1, temp->value);
 	}
+	bp_state = NORMAL;
 }
 
 

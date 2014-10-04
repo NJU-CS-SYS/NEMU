@@ -9,13 +9,13 @@
 int exec(swaddr_t);
 void load_prog();
 void init_dram();
+void free_all(); /* for breakpoint */
 
 char assembly[40];
 jmp_buf jbuf;	/* Make it easy to perform exception handling */
 
 extern uint8_t loader [];
 extern uint32_t loader_len;
-
 extern int quiet;
 
 void restart() {
@@ -26,6 +26,9 @@ void restart() {
 	cpu.eip = LOADER_START;
 
 	init_dram();
+
+	/* clear the breakpoint */
+	free_all();
 }
 
 static void print_bin_instr(swaddr_t eip, int len) {
