@@ -8,7 +8,7 @@
 #include <regex.h>
 
 enum {
-	NOTYPE = 256, EQ
+	NOTYPE = 256, EQ, NUM
 
 	/* TODO: Add more token types */
 
@@ -30,6 +30,15 @@ static struct rule {
 	{"\\/", '/'},                   // divide
 	{"\\(", '('},                   // left bracket
 	{"\\)", ')'},                   // right bracket
+	{"\\1", NUM},
+	{"\\2", NUM},
+	{"\\3", NUM},
+	{"\\4", NUM},
+	{"\\5", NUM},
+	{"\\6", NUM},
+	{"\\7", NUM},
+	{"\\8", NUM},
+	{"\\9", NUM},
 	{"==", EQ}						// equal
 };
 
@@ -88,14 +97,14 @@ static bool make_token(char *e) {
 				/* TODO: Now a new token is recognized with rules[i]. 
 				 * Add codes to perform some actions with this token.
 				 */
-				tokens[nr_token].type = rules[i].token_type;
-				if (substr_len < 32) {
-					strcpy(tokens[nr_token].str, substr_start);
-				} else {
-					printf("the substring of the tokens is too long!\n");
-					printf("position %d\n%s %s\n", position, rules[i].regex, substr_start);
-					assert(0);
+				Token* temp_token = tokens[nr_token];
+				temp_token->type = rules[i].token_type;
+				if (temp_token->type == NUM) {
+					int ix,jx;
+					for (ix = position; '0'<=e[ix] && e[ix]<='9'; ix++)
+						temp_token->str[jx++] = e[ix];
 				}
+				else temp_token->str[0] = '\0';
 				nr_token++;
 				/* why ?
 				switch(rules[i].token_type) {
