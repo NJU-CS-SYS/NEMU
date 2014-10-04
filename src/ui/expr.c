@@ -99,12 +99,7 @@ static bool make_token(char *e) {
 				 */
 				Token* temp_token = &tokens[nr_token];
 				temp_token->type = rules[i].token_type;
-				if (temp_token->type == NUM) {
-					int ix,jx;
-					for (ix = position,jx=0; '0'<=e[ix] && e[ix]<='9'; ix++)
-						temp_token->str[jx++] = e[ix];
-				}
-				else temp_token->str[0] = '\0';
+				printf("%d\n", substr_len);
 				nr_token++;
 				/* why ?
 				switch(rules[i].token_type) {
@@ -127,11 +122,7 @@ static bool make_token(char *e) {
 
 void test_tokens(char *e) {
 	make_token(e);
-	int i;
 	printf("nr_tokens = %d\n", nr_token);
-	for (i = 0; i < nr_token; i++) {
-		printf("%s ", tokens[i].str);
-	}
 	putchar('\n');
 }
 
