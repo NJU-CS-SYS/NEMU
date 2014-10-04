@@ -118,6 +118,7 @@ static bool make_token(char *e) {
 
 void test_tokens(char *e) {
 	make_token(e);
+	assert(0);
 	int i;
 	for (i = 0; i < nr_token; i++) {
 		printf("%s ", tokens[i].str);
