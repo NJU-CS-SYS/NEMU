@@ -14,6 +14,7 @@ swaddr_t bp_backup = 0;
 
 void cpu_exec(uint32_t);
 void restart();
+void test_tokens(char* e);
 
 /* We use the readline library to provide more flexibility to read from stdin. */
 char* rl_gets() { /* read line get string */
@@ -185,6 +186,11 @@ void cmd_d() {
 	*/
 }
 
+void cmd_e() {
+	char *expr = strtok(NULL, " ");
+	test_tokens(expr);
+}
+
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
@@ -202,6 +208,7 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "b") == 0) { cmd_b(); }
 		else if(strcmp(p, "d") == 0) { cmd_d(); }
 		/*remember to delete this test instr */
+		else if(strcmp(p, "e") == 0) { cmd_e(); }
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
 		else if(strcmp(p, "q") == 0) { return; }
 		/* TODO: Add more commands */
