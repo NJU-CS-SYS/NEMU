@@ -30,15 +30,7 @@ static struct rule {
 	{"\\/", '/'},                   // divide
 	{"\\(", '('},                   // left bracket
 	{"\\)", ')'},                   // right bracket
-	{"1", NUM},
-	{"2", NUM},
-	{"3", NUM},
-	{"4", NUM},
-	{"5", NUM},
-	{"6", NUM},
-	{"7", NUM},
-	{"8", NUM},
-	{"9", NUM},
+	{"[1-9]*", NUM},                // numbers
 	{"==", EQ}						// equal
 };
 
@@ -99,7 +91,9 @@ static bool make_token(char *e) {
 				 */
 				Token* temp_token = &tokens[nr_token];
 				temp_token->type = rules[i].token_type;
-				printf("%d\n", substr_len);
+				if (substr_len < 32)
+					strncpy(temp_token->str, substr_start, substr_len);
+				else assert(0);
 				nr_token++;
 				/* why ?
 				switch(rules[i].token_type) {
