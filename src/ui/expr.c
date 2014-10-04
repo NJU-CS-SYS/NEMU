@@ -123,6 +123,7 @@ void test_tokens(char *e) {
 	for (i = 0; i < nr_token; i++) {
 		printf("%s ", tokens[i].str);
 	}
+	putchar('\n');
 }
 
 uint32_t expr(char *e, bool *success) {
