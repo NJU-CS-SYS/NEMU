@@ -30,15 +30,15 @@ static struct rule {
 	{"\\/", '/'},                   // divide
 	{"\\(", '('},                   // left bracket
 	{"\\)", ')'},                   // right bracket
-	{"\\1", NUM},
-	{"\\2", NUM},
-	{"\\3", NUM},
-	{"\\4", NUM},
-	{"\\5", NUM},
-	{"\\6", NUM},
-	{"\\7", NUM},
-	{"\\8", NUM},
-	{"\\9", NUM},
+	{"1", NUM},
+	{"2", NUM},
+	{"3", NUM},
+	{"4", NUM},
+	{"5", NUM},
+	{"6", NUM},
+	{"7", NUM},
+	{"8", NUM},
+	{"9", NUM},
 	{"==", EQ}						// equal
 };
 
