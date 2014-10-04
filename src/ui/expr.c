@@ -97,11 +97,11 @@ static bool make_token(char *e) {
 				/* TODO: Now a new token is recognized with rules[i]. 
 				 * Add codes to perform some actions with this token.
 				 */
-				Token* temp_token = tokens[nr_token];
+				Token* temp_token = &tokens[nr_token];
 				temp_token->type = rules[i].token_type;
 				if (temp_token->type == NUM) {
 					int ix,jx;
-					for (ix = position; '0'<=e[ix] && e[ix]<='9'; ix++)
+					for (ix = position,jx=0; '0'<=e[ix] && e[ix]<='9'; ix++)
 						temp_token->str[jx++] = e[ix];
 				}
 				else temp_token->str[0] = '\0';
