@@ -133,7 +133,7 @@ bool check_parentheses(int p, int q) {
 		}
 		if (rec == p) return true;
 	}
-	return false
+	return false;
 }
 
 
