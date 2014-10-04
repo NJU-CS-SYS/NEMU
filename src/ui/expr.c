@@ -96,7 +96,7 @@ static bool make_token(char *e) {
 					printf("position %d\n%s %s\n", position, rules[i].regex, substr_start);
 					assert(0);
 				}
-				
+				nr_token++;
 				/* why ?
 				switch(rules[i].token_type) {
 					default: assert(0);
@@ -119,9 +119,8 @@ static bool make_token(char *e) {
 void test_tokens(char *e) {
 	make_token(e);
 	int i;
-	printf("why you don't show!");
+	printf("nr_tokens = %d", nr_token);
 	for (i = 0; i < nr_token; i++) {
-		printf("test\n");
 		printf("%s ", tokens[i].str);
 	}
 }
