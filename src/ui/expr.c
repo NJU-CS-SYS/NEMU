@@ -172,7 +172,24 @@ int find_domn(int p, int q) {
 	assert(0);
 	return -1;
 }
-	
+
+int evaluate(int p, int q) {
+	if (p > q) assert(0); // bad expression!
+	else if (p == q) return atoi(tokens[p].str);
+	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
+	else {
+		int op = find_domn(p, q);
+		int eval1 = evaluate(p, op - 1);
+		int eval2 = evaluate(op + 1, q);
+		switch(op) {
+			case '+': return eval1 + eval2;
+			case '-': return eval1 - eval2;
+			case '*': return eval1 * eval2;
+			case '/': return eval1 / eval2;
+			default: assert(0);
+		}
+	}
+}
 
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
@@ -181,8 +198,7 @@ uint32_t expr(char *e, bool *success) {
 	}
 
 	/* TODO: Implement code to evaluate the expression. */
-	assert(0);
-	return 0;
+	return evaluate(0, nr_token-1);
 }
 
 
@@ -194,5 +210,5 @@ void test_tokens(char *e) {
 		printf("%s", tokens[i].str);
 	putchar('\n');
 	printf("%d\n", check_parentheses(0, nr_token-1));
-	find_domn(0, nr_token-1);
+	printf("%d\n", evaluate(0, nr_token-1);
 }
