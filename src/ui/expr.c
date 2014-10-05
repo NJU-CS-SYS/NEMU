@@ -234,6 +234,7 @@ int find_domn(int p, int q) {
 			continue;
 		}
 		if (inParentheses) continue;
+		Log("is enum's wrong");
 		if (tokens[i].type < min_type) {
 			min_type = tokens[i].type;
 			which_token = i;
