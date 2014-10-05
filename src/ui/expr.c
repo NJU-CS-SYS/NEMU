@@ -9,12 +9,20 @@
 #include <stdlib.h>
 
 enum {
-	NOTYPE = 256, EQ, NUM
+	NOTYPE = 256, 
+	NUM, HEX, REG,
+	OR, AND, 
+	BIT_OR, BIT_XOR, BIT_AND,
+	NE, EQ, LE, LS, GE, GS,
+	RSHIFT, LSHIFT,
+	ADD, SUB, 
+	MUL, DIV, MOD, 
+	NOT, POINTER, NEG,
+	LBRACKET, RBRACKET	
 
 	/* TODO: Add more token types */
 
 };
-
 static struct rule {
 	char *regex;
 	int token_type;
@@ -25,15 +33,32 @@ static struct rule {
 	 */
 
 	{" +",	NOTYPE},				// white space
-	{"\\+", '+'},					// plus
-	{"-", '-'},                     // minus
-	{"\\*", '*'},                   // multiple
-	{"/", '/'},                     // divide
-	{"_", '_'},                     // NEG
-	{"\\(", '('},                   // left bracket
-	{"\\)", ')'},                   // right bracket
-	{"[0-9]+", NUM},                // numbers
-	{"==", EQ}						// equal
+	{"0x[0-9]+", HEX},              // heximal
+	{"[0-9]+", NUM},                // decimal
+	{"\\${eax,ecx,edx,ebx,esi,edi,esp,ebp,eip}", REG},
+	{"\\+", ADD},
+	{"-", SUB},
+	{"\\*", MUL},
+	{"/", DIV},
+	{"%", MOD},
+	{"<<", LSHIFT}.
+	{">>", RSHIFT},
+	{"<=", LE},
+	{">=", GE},
+	{"==", EQ},
+	{"!=", NE},
+	{"<", LS},
+	{">", GR},
+    {"&&", AND},
+	{"||", OR},
+	{"!", NOT},
+	{"&", BIT_AND},
+	{"|", BIT_OR},
+	{"^", BIT_XOR},
+	{"-", NEG},
+	{"*", POINTER},
+	{"\\(", LBRACKET},
+	{"\\)", RBRACKET}
 };
 
 /* the size of regex(s) */
@@ -101,14 +126,12 @@ static bool make_token(char *e) {
 					/* NEG */
 					if (temp_token->type == '-') {
 						if (nr_token == 0) { // -123+...
-							temp_token->type = '_';
-							strcpy(temp_token->str, "_");
+							temp_token->type = NEG;
 						}
 						else { // focus on pre character
 							int temp_type = tokens[nr_token-1].type;
 							if (!(temp_type == NUM || temp_type == ')')) {
-								temp_token->type = '_';
-								strcpy(temp_token->str, "_");
+								temp_token->type = NEG;
 							}
 						}
 					}
@@ -173,14 +196,11 @@ bool check_parentheses(int p, int q) {
 }
 
 int find_domn(int p, int q) {
-//	printf("In the find_domn: ");
-//	substr(p, q);
 	int i, j;
-	bool inParentheses = false;
+	bool inParentheses = false; // to jump expr in (...)
+	/* a long and bad travel
 	for (i = 0; i < NR_REGEX; i++) {
-//		printf("current compare op = %c\n", rules[i].token_type);
 		for (j = q; j >= p; j--) {
-//			Log("inParentheses %d", inParentheses);
 			if (tokens[j].type == ')') inParentheses = true;
 			else if (tokens[j].type == '(' && !inParentheses) assert(0);
 			else if (tokens[j].type == '(' && inParentheses) {
@@ -189,14 +209,31 @@ int find_domn(int p, int q) {
 			}
 			if (inParentheses) continue;
 			if (tokens[j].type == rules[i].token_type) {
-//				Log("The dominator is %c", tokens[j].type);
 				return j;
 			}
 		}
 	}
-	Log("Unreachable area!");
-	assert(0);
-	return -1;
+	*/
+	int which_token = -1;
+	int min_type = NOTYPE;
+	for (i = q; i >= p; i++) {
+		if (tokens[i].type == RBRACKET) {
+			inParentheses = true;
+			continue;
+		}
+		else if (tokens[j].type == LBRACKET && inParentheses) {
+			inParentheses = false;
+			continue;
+		}
+		if (inParentheses) continue;
+		if (tokens[i].type < min_type) {
+			min_type = tokens[i].type;
+			which_token = i;
+		}
+	}
+	
+	assert(min_type != NOTYPE);
+	return which_token;
 }
 
 int evaluate(int p, int q) {
@@ -206,7 +243,7 @@ int evaluate(int p, int q) {
 	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
 	else {
 		int op = find_domn(p, q);
-		if (tokens[op].type == '_') {
+		if (tokens[op].type == NEG) {
 			assert(op == p);
 			assert(op+1 <= q);
 			return -evaluate(op + 1, q);
