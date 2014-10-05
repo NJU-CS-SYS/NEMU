@@ -95,6 +95,12 @@ static bool make_token(char *e) {
 					if (substr_len < 32)
 						strncpy(temp_token->str, substr_start, substr_len);
 					else assert(0);
+					if (temp_token->str[0] == '0') {
+						int j;
+						for (j = 0; temp_token->str[j] != '\0'; j++)
+							if (temp_token->str[j] != '0') break;
+						if (temp_token->str[j] == '\0') temp_token->str[1] = '\0';
+					}
 					nr_token++;
 				}
 				/* why ?
