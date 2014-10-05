@@ -127,6 +127,12 @@ static bool make_token(char *e) {
 }
 
 
+void substr(int p, int q) {
+	int i;
+	for (i = p; i <= q; i++)
+		printf("%s", tokens[i].str);
+	putchar('\n');
+}
 
 /**
  * Functions to evaluate the expression
@@ -152,6 +158,7 @@ bool check_parentheses(int p, int q) {
 }
 
 int find_domn(int p, int q) {
+	substr(p, q);
 	int i, j;
 	bool inParentheses = false;
 	for (i = 0; i < NR_REGEX; i++) {
@@ -205,9 +212,6 @@ uint32_t expr(char *e, bool *success) {
 
 void test_tokens(char *e) {
 	make_token(e);
-	int i;
-	for (i = 0; i < nr_token; i++)
-		printf("%s", tokens[i].str);
-	putchar('\n');
+	substr(0, nr_token-1);
 	printf("%d\n", evaluate(0, nr_token-1));
 }
