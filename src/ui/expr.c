@@ -51,10 +51,10 @@ static struct rule {
 	{"<", LS},
 	{">", GT},
     {"&&", AND},
-	{"||", OR},
+	{"\\|\\|", OR},
 	{"!", NOT},
 	{"&", BIT_AND},
-	{"|", BIT_OR},
+	{"\\|", BIT_OR},
 	{"^", BIT_XOR},
 	{"-", NEG},
 	{"\\*", POINTER},
@@ -242,7 +242,38 @@ int find_domn(int p, int q) {
 
 int evaluate(int p, int q) {
 	if (p > q) assert(0); // bad expression!
-	else if (p == q) return atoi(tokens[p].str);
+	else if (p == q) {
+		switch (tokens[p].type) {
+			char* rec = NULL;
+			char temp[5];
+			case NUM: return atoi(tokens[p].str);
+			case HEX: 
+					  return strtol(tokens[p].str, &rec, 16);
+			case REG:
+					  strcpy(temp, tokens[p].str);
+					  if (!strcmp(temp, "$eax")) return cpu.eax;
+					  else if (!strcmp(temp, "$ecx")) return cpu.ecx;
+					  else if (!strcmp(temp, "$edx")) return cpu.edx;
+					  else if (!strcmp(temp, "$ebx")) return cpu.ebx;
+					  else if (!strcmp(temp, "$esp")) return cpu.esp;
+					  else if (!strcmp(temp, "$ebp")) return cpu.ebp;
+ 					  else if (!strcmp(temp, "$esi")) return cpu.esi;
+ 					  else if (!strcmp(temp, "$edi")) return cpu.edi;
+ 					  else if (!strcmp(temp, "$eip")) return cpu.eip;
+ 					  else if (!strcmp(temp, "$ax"))  return reg_w(R_AX);
+ 					  else if (!strcmp(temp, "$al"))  return reg_b(R_AL);
+ 					  else if (!strcmp(temp, "$ah"))  return reg_b(R_AH);
+ 					  else if (!strcmp(temp, "$cx"))  return reg_w(R_CX);
+ 					  else if (!strcmp(temp, "$cl"))  return reg_b(R_CL);
+ 					  else if (!strcmp(temp, "$ch"))  return reg_b(R_CH);
+ 					  else if (!strcmp(temp, "$dx"))  return reg_w(R_DX);
+ 					  else if (!strcmp(temp, "$dl"))  return reg_b(R_DL);
+ 					  else if (!strcmp(temp, "$dh"))  return reg_b(R_DH);
+ 					  else if (!strcmp(temp, "$bx"))  return reg_w(R_BX);
+ 					  else if (!strcmp(temp, "$bl"))  return reg_b(R_BL);
+ 					  else if (!strcmp(temp, "$bh"))  return reg_b(R_BH);
+		}
+	}
 	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
 	else {
 		int op = find_domn(p, q);
@@ -284,6 +315,7 @@ int evaluate(int p, int q) {
 			default: assert(0);
 		}
 	}
+	return 0;
 }
 
 uint32_t expr(char *e, bool *success) {
