@@ -223,6 +223,7 @@ int find_domn(int p, int q) {
 	*/
 	int which_token = -1;
 	int min_type = NOTYPE;
+	Log("alive");
 	for (i = q; i >= p; i++) {
 		if (tokens[i].type == RBRACKET) {
 			inParentheses = true;
@@ -239,6 +240,7 @@ int find_domn(int p, int q) {
 		}
 	}
 	
+	Log("alive");
 	assert(min_type != NOTYPE);
 	return which_token;
 }
