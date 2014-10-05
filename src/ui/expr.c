@@ -240,7 +240,7 @@ int find_domn(int p, int q) {
 	return which_token;
 }
 
-int evaluate(int p, int q) {
+uint32_t evaluate(int p, int q) {
 	if (p > q) assert(0); // bad expression!
 	else if (p == q) {
 		switch (tokens[p].type) {
