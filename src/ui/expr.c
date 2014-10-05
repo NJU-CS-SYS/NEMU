@@ -123,18 +123,24 @@ static bool make_token(char *e) {
 						strncpy(temp_token->str, substr_start, substr_len);
 					else assert(0);
 					
-					/* NEG */
-					if (temp_token->type == '-') {
-						if (nr_token == 0) { // -123+...
-							temp_token->type = NEG;
-						}
-						else { // focus on pre character
-							int temp_type = tokens[nr_token-1].type;
-							if (!(temp_type == NUM || temp_type == ')')) {
-								temp_token->type = NEG;
+					/* SINGLE */
+					if (temp_token->type == SUB
+							|| temp_token->type == MUL) {
+						if (nr_token == 0 
+								|| !(tokens[nr_token-1].type == NUM 
+										|| tokens[nr_token-1].type == HEX
+										|| tokens[nr_token-1].type == REG
+										|| tokens[nr_token-1].type == RBRACKET))
+							switch (temp_token->type) {
+								case SUB:
+									temp_token->type = NEG;
+									break;
+								case MUL:
+									temp_token->type = POINTER;
 							}
-						}
 					}
+
+
 					/* KISS !
 					if (temp_token->str[0] == '0') {
 						int j;
