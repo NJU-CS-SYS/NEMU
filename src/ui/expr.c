@@ -269,7 +269,7 @@ int evaluate(int p, int q) {
  					  else if (!strcmp(temp, "$dx"))  return reg_w(R_DX);
  					  else if (!strcmp(temp, "$dl"))  return reg_b(R_DL);
  					  else if (!strcmp(temp, "$dh"))  return reg_b(R_DH);
- 					  else if (!strcmp(temp, "$bx"))  {Log("alive!"); return reg_w(R_BX);}
+ 					  else if (!strcmp(temp, "$bx"))  return reg_w(R_BX);
  					  else if (!strcmp(temp, "$bl"))  return reg_b(R_BL);
  					  else if (!strcmp(temp, "$bh"))  return reg_b(R_BH);
 		}
@@ -283,7 +283,7 @@ int evaluate(int p, int q) {
 		switch (tokens[op].type) {
 			case NOT: return !eval2;
 			case NEG: return -eval2;
-			case POINTER: return swaddr_read(eval2, 1); // TODO how long?
+			case POINTER: return swaddr_read(eval2, 4); // TODO how long?
 			default: assert(op != p);
 		}
 
