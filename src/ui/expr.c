@@ -163,7 +163,7 @@ int find_domn(int p, int q) {
 			}
 			if (inParentheses) continue;
 			if (tokens[j].type == rules[i].token_type) {
-				Log("The dominator is %c\n", tokens[j].type);
+				Log("The dominator is %c", tokens[j].type);
 				return j;
 			}
 		}
