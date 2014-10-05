@@ -168,7 +168,7 @@ int find_domn(int p, int q) {
 			}
 		}
 	}
-	Log("Unreachable area!\n");
+	Log("Unreachable area!");
 	assert(0);
 	return -1;
 }
