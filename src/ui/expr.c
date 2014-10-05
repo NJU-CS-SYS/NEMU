@@ -157,12 +157,12 @@ int find_domn(int p, int q) {
 		for (j = nr_token-1; j >= 0; j--) {
 			if (tokens[j].type == ')') inParentheses = true;
 			else if (tokens[j].type == '(' && !inParentheses) assert(0);
-			else if (tokens[j].type == '(' && inParenthese) {
+			else if (tokens[j].type == '(' && inParentheses) {
 				inParentheses = false;
 				continue;
 			}
 			if (inParentheses) continue;
-			if (tokens[j].type == rulse[i].token_type) {
+			if (tokens[j].type == rules[i].token_type) {
 				Log("The dominator is %c\n", tokens[j].type);
 				return j;
 			}
