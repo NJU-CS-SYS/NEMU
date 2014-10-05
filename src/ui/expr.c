@@ -19,15 +19,15 @@ static struct rule {
 	int token_type;
 } rules[] = {
 
-	/* TODO: Add more rules.
+	/* TO-DO: Add more rules.
 	 * Pay attention to the precedence level of different rules.
 	 */
 
 	{" +",	NOTYPE},				// white space
 	{"\\+", '+'},					// plus
-	{"-", '-'},              // minus
+	{"-", '-'},                     // minus
 	{"\\*", '*'},                   // multiple
-	{"/", '/'},                   // divide
+	{"/", '/'},                     // divide
 	{"\\(", '('},                   // left bracket
 	{"\\)", ')'},                   // right bracket
 	{"[0-9]+", NUM},                // numbers
@@ -130,6 +130,7 @@ static bool make_token(char *e) {
 /**
  * Functions to evaluate the expression
  * check_parentheses(int,int) : check parentheses
+ * find_domn(int, int) : get dominator operator
  * expr(char*, bool*) : evaluate expressions
  */
 bool check_parentheses(int p, int q) {
@@ -149,6 +150,29 @@ bool check_parentheses(int p, int q) {
 	return false;
 }
 
+int find_domn(int p, int q) {
+	int i, j;
+	bool inParentheses = false;
+	for (i = 0; i < NR_REGEX; i++) {
+		for (j = nr_token-1; j >= 0; j--) {
+			if (tokens[j].type == ')') inParentheses = true;
+			else if (tokens[j].type == '(' && !inParentheses) assert(0);
+			else if (tokens[j].type == '(' && inParenthese) {
+				inParentheses = false;
+				continue;
+			}
+			if (inParentheses) continue;
+			if (tokens[j].type == rulse[i].token_type) {
+				Log("The dominator is %c\n", tokens[j].type);
+				return j;
+			}
+		}
+	}
+	Log("Unreachable area!\n");
+	assert(0);
+	return -1;
+}
+	
 
 uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
@@ -162,7 +186,6 @@ uint32_t expr(char *e, bool *success) {
 }
 
 
-
 void test_tokens(char *e) {
 	make_token(e);
 	printf("nr_tokens = %d\n", nr_token);
@@ -171,4 +194,5 @@ void test_tokens(char *e) {
 		printf("%s", tokens[i].str);
 	putchar('\n');
 	printf("%d\n", check_parentheses(0, nr_token-1));
+	find_domn(0, nr_token-1);
 }
