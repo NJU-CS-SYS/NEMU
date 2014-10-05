@@ -182,7 +182,7 @@ int evaluate(int p, int q) {
 		int op = find_domn(p, q);
 		int eval1 = evaluate(p, op - 1);
 		int eval2 = evaluate(op + 1, q);
-		switch(op) {
+		switch(tokens[op].type) {
 			case '+': return eval1 + eval2;
 			case '-': return eval1 - eval2;
 			case '*': return eval1 * eval2;
