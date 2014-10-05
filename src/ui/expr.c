@@ -257,6 +257,7 @@ int evaluate(int p, int q) {
 			assert(op+1 <= q);
 			return -evaluate(op + 1, q);
 		}
+		Log("op = %d", op);
 		int eval1 = evaluate(p, op - 1);
 		int eval2 = evaluate(op + 1, q);
 		Log("eval1 = %d, eval2 = %d", eval1, eval2);
