@@ -246,7 +246,7 @@ int find_domn(int p, int q) {
 }
 
 int evaluate(int p, int q) {
-//	Log("p = %d, q = %d", p, q);
+	Log("p = %d, q = %d", p, q);
 	if (p > q) assert(0); // bad expression!
 	else if (p == q) return atoi(tokens[p].str);
 	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
