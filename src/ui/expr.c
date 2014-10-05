@@ -293,7 +293,8 @@ uint32_t evaluate(int p, int q) {
 			case SUB: return eval1 - eval2;
 			case MUL: return eval1 * eval2;
 			case DIV: return eval1 / eval2;
-			case MOD: return eval1 % eval2;
+			case MOD: Log("eval1 = %u, eval2 = %u, res = %u", eval1, eval2, eval1 % eval2); 
+					  return eval1 % eval2;
 
 			case AND: return eval1 && eval2;
 			case OR:  return eval1 || eval2;
