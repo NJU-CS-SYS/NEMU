@@ -207,6 +207,7 @@ int evaluate(int p, int q) {
 		int op = find_domn(p, q);
 		if (op == '_') {
 			assert(op == p);
+			assert(op+1 <= q);
 			return -evaluate(op + 1, q);
 		}
 		int eval1 = evaluate(p, op - 1);
