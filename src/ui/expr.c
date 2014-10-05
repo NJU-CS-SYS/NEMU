@@ -158,6 +158,7 @@ bool check_parentheses(int p, int q) {
 }
 
 int find_domn(int p, int q) {
+	printf("In the find_domn: ");
 	substr(p, q);
 	int i, j;
 	bool inParentheses = false;
