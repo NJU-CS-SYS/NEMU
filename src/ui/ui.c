@@ -15,7 +15,7 @@ swaddr_t bp_backup = 0;
 void cpu_exec(uint32_t);
 void restart();
 void test_tokens(char* e);
-
+uint32_t calculate(char* e);
 /* We use the readline library to provide more flexibility to read from stdin. */
 char* rl_gets() { /* read line get string */
 	static char *line_read = NULL;
@@ -57,6 +57,7 @@ void init_signal() {
 	int ret = sigaction(SIGINT, &s, NULL);
 	assert(ret == 0);
 }
+
 
 static void cmd_c() {
 	if(nemu_state == END) {
@@ -127,10 +128,10 @@ static void cmd_info() {
 
 void cmd_x() {
 	char* _num = strtok(NULL, " ");
-	char* _addr = strtok(NULL, " ");
+	char* _addr = strtok(NULL, "");
 	if((_num != NULL) && (_addr != NULL)) {
 		int num = atoi(_num);
-		swaddr_t addr = strtol(_addr,&_addr,16);
+		swaddr_t addr = calculate(_addr);
 		int i;
 		for(i = 0; i < num; i++){
 			int j;
@@ -144,11 +145,9 @@ void cmd_x() {
 }
 
 void cmd_b() {
-	char* p = strtok(NULL, " ");
-	if (p[0] == '*') { /* what does * mean in this expression */
-		swaddr_t addr = strtol(p + 1, &p, 16);
-		add_bp(addr);
-	}
+	char* p = strtok(NULL, "");
+	swaddr_t addr = calculate(p);
+	add_bp(addr);
 }
 
 void cmd_d() {
@@ -161,7 +160,7 @@ void cmd_d() {
 		else
 			assert(0);
 	}
-/*
+/* 
 	BP *del = getHead();
 
 	if (opt == NULL) {
@@ -191,6 +190,10 @@ void cmd_e() {
 	test_tokens(expr);
 }
 
+void cmd_p() {
+	char *e = strtok(NULL, "");
+	printf("%u\n", calculate(e));
+}
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
@@ -207,6 +210,7 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "x") == 0) { cmd_x(); }
 		else if(strcmp(p, "b") == 0) { cmd_b(); }
 		else if(strcmp(p, "d") == 0) { cmd_d(); }
+		else if(strcmp(p, "p") == 0) { cmd_p(); }
 		/*remember to delete this test instr */
 		else if(strcmp(p, "e") == 0) { cmd_e(); }
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }

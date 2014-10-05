@@ -334,3 +334,8 @@ void test_tokens(char *e) {
 	substr(0, nr_token-1);
 	printf("%d\n", evaluate(0, nr_token-1));
 }
+
+uint32_t calculate(char *e) {
+	make_token(e);
+	return evaluate(0, nr_token-1);
+}
