@@ -173,14 +173,14 @@ bool check_parentheses(int p, int q) {
 }
 
 int find_domn(int p, int q) {
-	printf("In the find_domn: ");
-	substr(p, q);
+//	printf("In the find_domn: ");
+//	substr(p, q);
 	int i, j;
 	bool inParentheses = false;
 	for (i = 0; i < NR_REGEX; i++) {
-		printf("current compare op = %c\n", rules[i].token_type);
+//		printf("current compare op = %c\n", rules[i].token_type);
 		for (j = q; j >= p; j--) {
-			Log("inParentheses %d", inParentheses);
+//			Log("inParentheses %d", inParentheses);
 			if (tokens[j].type == ')') inParentheses = true;
 			else if (tokens[j].type == '(' && !inParentheses) assert(0);
 			else if (tokens[j].type == '(' && inParentheses) {
@@ -189,7 +189,7 @@ int find_domn(int p, int q) {
 			}
 			if (inParentheses) continue;
 			if (tokens[j].type == rules[i].token_type) {
-				Log("The dominator is %c", tokens[j].type);
+//				Log("The dominator is %c", tokens[j].type);
 				return j;
 			}
 		}
@@ -200,13 +200,13 @@ int find_domn(int p, int q) {
 }
 
 int evaluate(int p, int q) {
-	Log("p = %d, q = %d", p, q);
+//	Log("p = %d, q = %d", p, q);
 	if (p > q) assert(0); // bad expression!
 	else if (p == q) return atoi(tokens[p].str);
 	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
 	else {
 		int op = find_domn(p, q);
-		if (op == '_') {
+		if (tokens[op].type == '_') {
 			assert(op == p);
 			assert(op+1 <= q);
 			return -evaluate(op + 1, q);
