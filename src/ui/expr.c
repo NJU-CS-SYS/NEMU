@@ -164,6 +164,7 @@ int find_domn(int p, int q) {
 	bool inParentheses = false;
 	for (i = 0; i < NR_REGEX; i++) {
 		for (j = nr_token-1; j >= 0; j--) {
+			Log("inParentheses %d", inParentheses);
 			if (tokens[j].type == ')') inParentheses = true;
 			else if (tokens[j].type == '(' && !inParentheses) assert(0);
 			else if (tokens[j].type == '(' && inParentheses) {
