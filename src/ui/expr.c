@@ -259,6 +259,7 @@ int evaluate(int p, int q) {
 		}
 		int eval1 = evaluate(p, op - 1);
 		int eval2 = evaluate(op + 1, q);
+		Log("eval1 = %d, eval2 = %d", eval1, eval2);
 		switch(tokens[op].type) {
 			case ADD: return eval1 + eval2;
 			case SUB: return eval1 - eval2;
