@@ -206,6 +206,7 @@ int evaluate(int p, int q) {
 	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
 	else {
 		int op = find_domn(p, q);
+		Log("domn = %c", op);
 		if (op == '_') {
 			assert(op == p);
 			assert(op+1 <= q);
