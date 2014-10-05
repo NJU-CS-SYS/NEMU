@@ -6,6 +6,7 @@
 
 #include <sys/types.h>
 #include <regex.h>
+#include <stdlib.h>
 
 enum {
 	NOTYPE = 256, EQ, NUM
@@ -210,5 +211,5 @@ void test_tokens(char *e) {
 		printf("%s", tokens[i].str);
 	putchar('\n');
 	printf("%d\n", check_parentheses(0, nr_token-1));
-	printf("%d\n", evaluate(0, nr_token-1);
+	printf("%d\n", evaluate(0, nr_token-1));
 }
