@@ -9,7 +9,6 @@
 #include <stdlib.h>
 
 enum {
-	NUM, HEX, REG,
 	OR, AND, 
 	BIT_OR, BIT_XOR, BIT_AND,
 	NE, EQ, LE, LS, GE, GT,
@@ -18,6 +17,7 @@ enum {
 	MUL, DIV, MOD, 
 	NOT, POINTER, NEG,
 	LBRACKET, RBRACKET,
+	NUM, HEX, REG,
 	NOTYPE
 
 	/* TODO: Add more token types */
