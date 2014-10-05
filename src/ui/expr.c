@@ -1,4 +1,5 @@
 #include "common.h"
+#include "nemu.h"
 
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
@@ -107,7 +108,7 @@ static bool make_token(char *e) {
 			if(regexec(re + i, e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
-				Log("match regex[%d] at position %d with len %d: %.*s", i, position, substr_len, substr_len, substr_start);
+//				Log("match regex[%d] at position %d with len %d: %.*s", i, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 
 				/* TODO: Now a new token is recognized with rules[i]. 
@@ -194,6 +195,11 @@ bool check_parentheses(int p, int q) {
 }
 
 int find_domn(int p, int q) {
+	if (tokens[p].type == NOT
+			|| tokens[p].type == NEG
+			|| tokens[p].type == POINTER)
+		return p;
+
 	int i ;
 	bool inParentheses = false; // to jump expr in (...)
 	/* a long and bad travel
@@ -227,8 +233,6 @@ int find_domn(int p, int q) {
 		if (tokens[i].type < min_type) {
 			min_type = tokens[i].type;
 			which_token = i;
-		} else if (tokens[i].type == NEG && min_type == NEG) {
-			which_token = i;
 		}
 	}
 	
@@ -242,18 +246,41 @@ int evaluate(int p, int q) {
 	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
 	else {
 		int op = find_domn(p, q);
-		Log("op = %d", tokens[op].type);
-		if (tokens[op].type == NEG) {
-			assert(op < q);
-			return -evaluate(op + 1, q);
-		}
-		int eval1 = evaluate(p, op - 1);
+		
 		int eval2 = evaluate(op + 1, q);
+
+		switch (tokens[op].type) {
+			case NOT: return !eval2;
+			case NEG: return -eval2;
+			case POINTER: return swaddr_read(eval2, 1); // TODO how long?
+			default: assert(op != p);
+		}
+
+		int eval1 = evaluate(p, op - 1);
 		switch(tokens[op].type) {
 			case ADD: return eval1 + eval2;
 			case SUB: return eval1 - eval2;
 			case MUL: return eval1 * eval2;
 			case DIV: return eval1 / eval2;
+			case MOD: return eval1 % eval2;
+
+			case AND: return eval1 && eval2;
+			case OR:  return eval1 || eval2;
+
+			case BIT_OR:  return eval1 | eval2;
+			case BIT_XOR: return eval1 ^ eval2;
+			case BIT_AND: return eval1 & eval2;
+
+			case EQ: return eval1 == eval2;
+			case NE: return eval1 != eval2;
+			case LE: return eval1 <= eval2;
+			case LS: return eval1 <  eval2;
+			case GE: return eval1 >= eval2;
+			case GT: return eval1 >  eval2;
+
+			case RSHIFT: return eval1 >> eval2;
+			case LSHIFT: return eval1 << eval2;
+
 			default: assert(0);
 		}
 	}
