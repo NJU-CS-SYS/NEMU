@@ -35,7 +35,7 @@ static struct rule {
 	{" +",	NOTYPE},				// white space
 	{"0x[0-9]+", HEX},              // heximal
 	{"[0-9]+", NUM},                // decimal
-	{"$eax", REG},
+	{"$e(ax|cx|dx|bx|sp|bp|si|di|ip)", REG},
 	{"\\+", ADD},
 	{"-", SUB},
 	{"\\*", MUL},
