@@ -9,16 +9,16 @@
 #include <stdlib.h>
 
 enum {
-	OR, AND, 
-	BIT_OR, BIT_XOR, BIT_AND,
-	NE, EQ, LE, LS, GE, GT,
-	RSHIFT, LSHIFT,
-	ADD, SUB, 
-	MUL, DIV, MOD, 
-	NOT, POINTER, NEG,
-	LBRACKET, RBRACKET,
-	NUM, HEX, REG,
-	NOTYPE
+	OR, AND,                    // 0, 1 
+	BIT_OR, BIT_XOR, BIT_AND,   // 2, 3, 4
+	NE, EQ, LE, LS, GE, GT,     // 5, 6, 7, 8, 9, 10
+	RSHIFT, LSHIFT,             // 11, 12
+	ADD, SUB,                   // 13, 14
+	MUL, DIV, MOD,              // 15, 16, 17
+	NOT, POINTER, NEG,          // 18, 19, 20
+	LBRACKET, RBRACKET,         // 21, 22, 23
+	NUM, HEX, REG,              // 24, 25, 26
+	NOTYPE                      // 27
 
 	/* TODO: Add more token types */
 
@@ -107,11 +107,8 @@ static bool make_token(char *e) {
 			if(regexec(re + i, e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
-
 				Log("match regex[%d] at position %d with len %d: %.*s", i, position, substr_len, substr_len, substr_start);
-
 				position += substr_len;
-
 
 				/* TODO: Now a new token is recognized with rules[i]. 
 				 * Add codes to perform some actions with this token.
@@ -122,7 +119,6 @@ static bool make_token(char *e) {
 					if (substr_len < 32)
 						strncpy(temp_token->str, substr_start, substr_len);
 					else assert(0);
-					
 					/* SINGLE */
 					if (temp_token->type == SUB
 							|| temp_token->type == MUL) {
@@ -139,8 +135,6 @@ static bool make_token(char *e) {
 									temp_token->type = POINTER;
 							}
 					}
-
-
 					/* KISS !
 					if (temp_token->str[0] == '0') {
 						int j;
@@ -160,13 +154,11 @@ static bool make_token(char *e) {
 				break;
 			}
 		}
-
 		if(i == NR_REGEX) {
 			printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
 			return false;
 		}
 	}
-
 	return true; 
 }
 
@@ -232,7 +224,6 @@ int find_domn(int p, int q) {
 			continue;
 		}
 		if (inParentheses) continue;
-		Log("min type = %d, token.type = %d", min_type, tokens[i].type);
 		if (tokens[i].type < min_type) {
 			min_type = tokens[i].type;
 			which_token = i;
@@ -249,9 +240,9 @@ int evaluate(int p, int q) {
 	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
 	else {
 		int op = find_domn(p, q);
+		Log("op = %d", tokens[op].type);
 		if (tokens[op].type == NEG) {
-			assert(op == p);
-			assert(op+1 <= q);
+			assert(op < q);
 			return -evaluate(op + 1, q);
 		}
 		int eval1 = evaluate(p, op - 1);
@@ -278,6 +269,7 @@ uint32_t expr(char *e, bool *success) {
 
 
 void test_tokens(char *e) {
+	Log("No type = %d, neg = %d", NOTYPE, NEG);
 	make_token(e);
 	substr(0, nr_token-1);
 	printf("%d\n", evaluate(0, nr_token-1));
