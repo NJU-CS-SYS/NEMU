@@ -132,6 +132,7 @@ bool check_parentheses(int p, int q) {
 			else if (tokens[i].type == ')') {
 				if (j == 0) return false;
 				rec = buf[--j];
+			}
 		}
 		printf("p = %d, rec = %d\n", p, rec);
 		if (rec == p) return true;
