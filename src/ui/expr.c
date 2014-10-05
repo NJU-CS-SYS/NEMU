@@ -163,8 +163,8 @@ int find_domn(int p, int q) {
 	int i, j;
 	bool inParentheses = false;
 	for (i = 0; i < NR_REGEX; i++) {
-		printf("current compare op = %c", rules[i].token_type);
-		for (j = nr_token-1; j >= 0; j--) {
+		printf("current compare op = %c\n", rules[i].token_type);
+		for (j = q; j >= p; j--) {
 			Log("inParentheses %d", inParentheses);
 			if (tokens[j].type == ')') inParentheses = true;
 			else if (tokens[j].type == '(' && !inParentheses) assert(0);
