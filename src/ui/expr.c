@@ -9,7 +9,6 @@
 #include <stdlib.h>
 
 enum {
-	NOTYPE = 256, 
 	NUM, HEX, REG,
 	OR, AND, 
 	BIT_OR, BIT_XOR, BIT_AND,
@@ -18,7 +17,8 @@ enum {
 	ADD, SUB, 
 	MUL, DIV, MOD, 
 	NOT, POINTER, NEG,
-	LBRACKET, RBRACKET	
+	LBRACKET, RBRACKET,
+	NOTYPE
 
 	/* TODO: Add more token types */
 
@@ -167,7 +167,6 @@ static bool make_token(char *e) {
 		}
 	}
 
-	Log("alive!");
 	return true; 
 }
 
@@ -239,7 +238,6 @@ int find_domn(int p, int q) {
 		}
 	}
 	
-	Log("alive");
 	assert(min_type != NOTYPE);
 	return which_token;
 }
