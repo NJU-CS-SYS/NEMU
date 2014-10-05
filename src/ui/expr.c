@@ -143,29 +143,29 @@ void substr(int p, int q) {
 bool check_parentheses(int p, int q) {
 	if (tokens[p].type == '(' && tokens[q].type == ')') {
 		int buf[32];
-		int i, j, rec = -1;
-		for (i = j = 0; i <= q; i++) {
+		int i, j = 0, rec = -1;
+		for (i = p; i <= q; i++) {
 			if (tokens[i].type == '(') buf[j++] = i;
 			else if (tokens[i].type == ')') {
 				if (j == 0) return false;
 				rec = buf[--j];
 			}
 		}
-		printf("p = %d, rec = %d\n", p, rec);
+//		printf("p = %d, rec = %d\n", p, rec);
 		if (rec == p) return true;
 	}
 	return false;
 }
 
 int find_domn(int p, int q) {
-	printf("In the find_domn: ");
-	substr(p, q);
+//	printf("In the find_domn: ");
+//	substr(p, q);
 	int i, j;
 	bool inParentheses = false;
 	for (i = 0; i < NR_REGEX; i++) {
-		printf("current compare op = %c\n", rules[i].token_type);
+//		printf("current compare op = %c\n", rules[i].token_type);
 		for (j = q; j >= p; j--) {
-			Log("inParentheses %d", inParentheses);
+//			Log("inParentheses %d", inParentheses);
 			if (tokens[j].type == ')') inParentheses = true;
 			else if (tokens[j].type == '(' && !inParentheses) assert(0);
 			else if (tokens[j].type == '(' && inParentheses) {
@@ -174,7 +174,7 @@ int find_domn(int p, int q) {
 			}
 			if (inParentheses) continue;
 			if (tokens[j].type == rules[i].token_type) {
-				Log("The dominator is %c", tokens[j].type);
+//				Log("The dominator is %c", tokens[j].type);
 				return j;
 			}
 		}
