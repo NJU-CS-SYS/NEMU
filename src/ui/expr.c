@@ -269,7 +269,7 @@ int evaluate(int p, int q) {
  					  else if (!strcmp(temp, "$dx"))  return reg_w(R_DX);
  					  else if (!strcmp(temp, "$dl"))  return reg_b(R_DL);
  					  else if (!strcmp(temp, "$dh"))  return reg_b(R_DH);
- 					  else if (!strcmp(temp, "$bx"))  return reg_w(R_BX);
+ 					  else if (!strcmp(temp, "$bx"))  {Log("alive!"); return reg_w(R_BX);}
  					  else if (!strcmp(temp, "$bl"))  return reg_b(R_BL);
  					  else if (!strcmp(temp, "$bh"))  return reg_b(R_BH);
 		}
