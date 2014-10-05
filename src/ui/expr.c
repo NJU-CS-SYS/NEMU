@@ -13,7 +13,7 @@ enum {
 	NUM, HEX, REG,
 	OR, AND, 
 	BIT_OR, BIT_XOR, BIT_AND,
-	NE, EQ, LE, LS, GE, GS,
+	NE, EQ, LE, LS, GE, GT,
 	RSHIFT, LSHIFT,
 	ADD, SUB, 
 	MUL, DIV, MOD, 
@@ -41,14 +41,14 @@ static struct rule {
 	{"\\*", MUL},
 	{"/", DIV},
 	{"%", MOD},
-	{"<<", LSHIFT}.
+	{"<<", LSHIFT},
 	{">>", RSHIFT},
 	{"<=", LE},
 	{">=", GE},
 	{"==", EQ},
 	{"!=", NE},
 	{"<", LS},
-	{">", GR},
+	{">", GT},
     {"&&", AND},
 	{"||", OR},
 	{"!", NOT},
@@ -196,7 +196,7 @@ bool check_parentheses(int p, int q) {
 }
 
 int find_domn(int p, int q) {
-	int i, j;
+	int i ;
 	bool inParentheses = false; // to jump expr in (...)
 	/* a long and bad travel
 	for (i = 0; i < NR_REGEX; i++) {
@@ -221,7 +221,7 @@ int find_domn(int p, int q) {
 			inParentheses = true;
 			continue;
 		}
-		else if (tokens[j].type == LBRACKET && inParentheses) {
+		else if (tokens[i].type == LBRACKET && inParentheses) {
 			inParentheses = false;
 			continue;
 		}
