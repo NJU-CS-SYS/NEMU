@@ -227,6 +227,8 @@ int find_domn(int p, int q) {
 		if (tokens[i].type < min_type) {
 			min_type = tokens[i].type;
 			which_token = i;
+		} else if (tokens[i].type == NEG && min_type == NEG) {
+			which_token = i;
 		}
 	}
 	
