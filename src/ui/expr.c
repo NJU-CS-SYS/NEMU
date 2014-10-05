@@ -56,7 +56,7 @@ static struct rule {
 	{"|", BIT_OR},
 	{"^", BIT_XOR},
 	{"-", NEG},
-	{"*", POINTER},
+	{"\\*", POINTER},
 	{"\\(", LBRACKET},
 	{"\\)", RBRACKET}
 };
