@@ -205,11 +205,9 @@ uint32_t expr(char *e, bool *success) {
 
 void test_tokens(char *e) {
 	make_token(e);
-	printf("nr_tokens = %d\n", nr_token);
 	int i;
 	for (i = 0; i < nr_token; i++)
 		printf("%s", tokens[i].str);
 	putchar('\n');
-	printf("%d\n", check_parentheses(0, nr_token-1));
 	printf("%d\n", evaluate(0, nr_token-1));
 }
