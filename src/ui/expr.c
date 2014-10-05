@@ -106,8 +106,7 @@ static bool make_token(char *e) {
 						}
 						else { // focus on pre character
 							int temp_type = tokens[nr_token-1].type;
-							if (!(('0' <= temp_type && temp_type <= '9') || temp_type == ')')) {
-								Log("hit %dth with pre %c", nr_token, temp_type);
+							if (!(temp_type == NUM || temp_type == ')')) {
 								temp_token->type = '_';
 								strcpy(temp_token->str, "_");
 							}
