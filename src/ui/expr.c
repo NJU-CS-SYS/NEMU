@@ -223,8 +223,7 @@ int find_domn(int p, int q) {
 	*/
 	int which_token = -1;
 	int min_type = NOTYPE;
-	Log("alive");
-	for (i = q; i >= p; i++) {
+	for (i = q; i >= p; i--) {
 		if (tokens[i].type == RBRACKET) {
 			inParentheses = true;
 			continue;
@@ -234,7 +233,6 @@ int find_domn(int p, int q) {
 			continue;
 		}
 		if (inParentheses) continue;
-		Log("is enum's wrong");
 		if (tokens[i].type < min_type) {
 			min_type = tokens[i].type;
 			which_token = i;
@@ -247,7 +245,6 @@ int find_domn(int p, int q) {
 }
 
 int evaluate(int p, int q) {
-	Log("p = %d, q = %d", p, q);
 	if (p > q) assert(0); // bad expression!
 	else if (p == q) return atoi(tokens[p].str);
 	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
@@ -258,10 +255,8 @@ int evaluate(int p, int q) {
 			assert(op+1 <= q);
 			return -evaluate(op + 1, q);
 		}
-		Log("op = %d", op);
 		int eval1 = evaluate(p, op - 1);
 		int eval2 = evaluate(op + 1, q);
-		Log("eval1 = %d, eval2 = %d", eval1, eval2);
 		switch(tokens[op].type) {
 			case ADD: return eval1 + eval2;
 			case SUB: return eval1 - eval2;
