@@ -298,7 +298,6 @@ uint32_t expr(char *e, bool *success) {
 
 
 void test_tokens(char *e) {
-	Log("No type = %d, neg = %d", NOTYPE, NEG);
 	make_token(e);
 	substr(0, nr_token-1);
 	printf("%d\n", evaluate(0, nr_token-1));
