@@ -257,10 +257,10 @@ int evaluate(int p, int q) {
 		int eval1 = evaluate(p, op - 1);
 		int eval2 = evaluate(op + 1, q);
 		switch(tokens[op].type) {
-			case '+': return eval1 + eval2;
-			case '-': return eval1 - eval2;
-			case '*': return eval1 * eval2;
-			case '/': return eval1 / eval2;
+			case ADD: return eval1 + eval2;
+			case SUB: return eval1 - eval2;
+			case MUL: return eval1 * eval2;
+			case DIV: return eval1 / eval2;
 			default: assert(0);
 		}
 	}
