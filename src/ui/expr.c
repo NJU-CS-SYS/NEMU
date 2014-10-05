@@ -29,6 +29,7 @@ static struct rule {
 	{"-", '-'},                     // minus
 	{"\\*", '*'},                   // multiple
 	{"/", '/'},                     // divide
+	{"_", '_'}                      // NEG
 	{"\\(", '('},                   // left bracket
 	{"\\)", ')'},                   // right bracket
 	{"[0-9]+", NUM},                // numbers
@@ -97,6 +98,20 @@ static bool make_token(char *e) {
 						strncpy(temp_token->str, substr_start, substr_len);
 					else assert(0);
 					
+					/* NEG */
+					if (temp_token->type == '-') {
+						if (nr_token == 0) { // -123+...
+							temp_token->type = '_';
+							strcpy(temp_token->str, "_");
+						}
+						else { // focus on pre character
+							int temp_type = tokens[nr_token-1].type;
+							if (('0' <= temp_type && temp_type <= '9') || temp_type == ')') {
+								temp_token->type = '_';
+								srtcpy(temp_token->str, "_");
+							}
+						}
+					}
 					/* KISS !
 					if (temp_token->str[0] == '0') {
 						int j;
@@ -190,6 +205,10 @@ int evaluate(int p, int q) {
 	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
 	else {
 		int op = find_domn(p, q);
+		if (op == '_') {
+			assert(op == p);
+			return -evaluate(op + 1, q);
+		}
 		int eval1 = evaluate(p, op - 1);
 		int eval2 = evaluate(op + 1, q);
 		switch(tokens[op].type) {
