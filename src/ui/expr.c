@@ -232,7 +232,9 @@ int find_domn(int p, int q) {
 			continue;
 		}
 		if (inParentheses) continue;
+		Log("min type = %d, token.type = %d", min_type, tokens[i].type);
 		if (tokens[i].type < min_type) {
+			Log("hit!");
 			min_type = tokens[i].type;
 			which_token = i;
 		}
