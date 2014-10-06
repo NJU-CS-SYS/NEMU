@@ -244,12 +244,14 @@ uint32_t evaluate(int p, int q) {
 	if (p > q) assert(0); // bad expression!
 	else if (p == q) {
 		switch (tokens[p].type) {
+			Log("hex hit");
 			char* rec = NULL;
 			char temp[5];
 			case NUM:
 					  Log("why twice?");	
 					  return atoi(tokens[p].str);
 			case HEX: 
+					  Log("why seg??");
 					  Log("why seg? p = %d, exp = %s", p, tokens[p].str);
 					  return strtol(tokens[p].str, &rec, 16);
 			case REG:
