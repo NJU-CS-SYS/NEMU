@@ -1,5 +1,4 @@
 #include "ui/breakpoint.h"
-
 #include "nemu.h"
 
 #define NR_BP 32
@@ -22,10 +21,7 @@ void init_bp_pool() {
 	free_ = bp_pool;
 }
 
-/* TODO: Implement the function of breakpoint */
-
-BP* new_bp() {
-	/* modify free like a stack !? */
+static BP* new_bp() {
 	assert(free_ != NULL);
 	BP* temp = free_;
 	free_ = free_->next;
@@ -76,7 +72,7 @@ void add_bp(swaddr_t addr) {
 	swaddr_write(addr, 1, 0xcc);
 }
 
-BP* search_bp(swaddr_t addr) {
+static BP* search_bp(swaddr_t addr) {
 	BP* current = head;
 	while (current != NULL) {
 		if (current->addr == addr) return current;
