@@ -28,4 +28,5 @@ void restore_bp(swaddr_t adddr);
 BP* getHead();
 void add_watchpoint(char* expr);
 bool check_watchpoint(int result[], int* nr_changed);
+void print_watchpoint(const int result[], const int nr_changed);
 #endif

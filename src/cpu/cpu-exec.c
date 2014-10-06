@@ -69,9 +69,9 @@ void cpu_exec(volatile uint32_t n) {
 			int result[NR_BP] = { 0 };
 			int nr_changed;
 			if (check_watchpoint(result, &nr_changed)) {
-				Log("hit");
 				return;
 			}
+			print_watchpoint(result, nr_changed);
 		}
 		
 		switch(nemu_state) {
