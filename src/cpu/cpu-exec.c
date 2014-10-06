@@ -70,7 +70,7 @@ void cpu_exec(volatile uint32_t n) {
 			int nr_changed;
 			if (check_watchpoint(result, &nr_changed)) {
 			//	print_watchpoint(result, nr_changed);
-				putchar('\n');
+				fflush(stdout);
 				return;
 			}
 		}
