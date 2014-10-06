@@ -121,9 +121,13 @@ static void cmd_info() {
 	}
 	else if (strcmp(opt, "b") == 0) {
 		BP* current = getHead();
-		printf("%-6s%-15s%-10s\n", "NUM", "TYPE", "ADDRESS");
+		printf("%-6s%-15s%-10s%-10s\n", "NUM", "TYPE", "ADDRESS", "EXPRESSION");
 		while(current != NULL) {
-			printf("%-6d%-15s0x%-10x\n", current->NO, "breakpoint", current->addr);
+			if (current->expr[0] == '\0') {
+				printf("%-6d%-15s0x%-10x%-s\n", current->NO, "breakpoint", current->addr, current->expr);
+			} else {
+				printf("%-6d%-15s0x%-10x%-s\n", current->NO, "watchpoint", current->addr, current->expr);
+			}
 			current = current->next;
 		}
 	}
