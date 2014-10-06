@@ -4,7 +4,7 @@
 #include "common.h"
 
 #define INT3_CODE 0xcc
-
+#define NR_BP 32
 typedef struct breakpoint {
 	int NO;
 	swaddr_t addr;                 // use only for breakpoint
@@ -26,4 +26,6 @@ void add_bp(swaddr_t addr);
 void reset_bp(swaddr_t addr);
 void restore_bp(swaddr_t adddr);
 BP* getHead();
+void add_watchpoint(char* expr);
+bool check_watchpoint(int result[], int* nr_changed);
 #endif

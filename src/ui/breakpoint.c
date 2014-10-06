@@ -1,7 +1,7 @@
 #include "ui/breakpoint.h"
 #include "nemu.h"
 
-#define NR_BP 32
+uint32_t calculate(char* expr);
 
 static BP bp_pool[NR_BP];
 static BP *head, *free;
@@ -49,13 +49,13 @@ void free_bp(int n) {
 	free = temp;
 
 	/* breakpoint need to restore the memory value */
-	if (temp->str[0] == '\0')
+	if (temp->expr[0] == '\0')
 		swaddr_write(temp->addr, 1, temp->value);
 
 	/* init */
 	temp->addr = 0;
 	temp->value = 0;
-	temp->str[0] = '\0';
+	temp->expr[0] = '\0';
 }
 
 void free_all() {
@@ -66,13 +66,13 @@ void free_all() {
 		free = temp;
 
 		/* breakpoint need to restore the memory value */
-		if (temp->str[0] == '\0')
+		if (temp->expr[0] == '\0')
 			swaddr_write(temp->addr, 1, temp->value);
 
 		/* init */
 		temp->addr = 0;
 		temp->value = 0;
-		temp->str[0] = '\0';
+		temp->expr[0] = '\0';
 	}
 	bp_state = NORMAL;
 }
@@ -97,16 +97,16 @@ void add_bp(swaddr_t addr) {
 	temp->addr = addr;
 	temp->value = swaddr_read(addr, 1);
 	swaddr_write(addr, 1, INT3_CODE);
-	assert(temp->str[0] == '\0');
+	assert(temp->expr[0] == '\0');
 }
 
 /* add new watchpoint in the rear position */
-void add_wp(char* expr) {
+void add_watchpoint(char* expr) {
 	BP* new_wp = new_bp();
 
 	/* add to the rear */
 	if (head == NULL) {
-		head == new_wp;
+		head = new_wp;
 	} else {
 		/* travel to rear */
 		BP* rear = head;
@@ -119,7 +119,7 @@ void add_wp(char* expr) {
 	/* init */
 	new_wp->next = NULL;
 	new_wp->value = calculate(expr);
-	strncpy(new_wp->value, expr, 32);
+	strncpy(new_wp->expr, expr, 32);
 	assert(new_wp->addr == 0);
 }
 
@@ -162,25 +162,25 @@ void restore_bp(swaddr_t addr) {
  * consider it a very exhausting operation
  * we need a state to enable it :-)
  */
-bool check_watchpoint(char result[], int* nr_changed) {
+bool check_watchpoint(int result[], int* nr_changed) {
 	BP* current = head;
 	bool is_changed = false; /* record whether a wp changed */
-	nr_changed = 0; /* count of the watchpoints that have changed */
+	*nr_changed = 0; /* count of the watchpoints that have changed */
 
 	/* Evaluate every expression one by one */
 	while (current != NULL) {
-		if (current->str[0] != '\0') { /* Deal with watchpoint only */
-			const uint32_t current_value = calculate(current->str);
+		if (current->expr[0] != '\0') { /* Deal with watchpoint only */
+			const uint32_t current_value = calculate(current->expr);
 			if (current_value != current->value) {
-				result[nr_changed] = current->NO;
-				nr_changed++;
+				result[*nr_changed] = current->NO;
+				(*nr_changed)++;
 				is_changed = true;
 			}
 		}
 	}
 	
 	/* defense seg fault */
-	assert(nr_changed <= NR_BP);
+	assert((*nr_changed) <= NR_BP);
 
 	return is_changed;
 }

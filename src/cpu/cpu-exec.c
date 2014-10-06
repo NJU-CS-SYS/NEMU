@@ -54,7 +54,7 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* restore the breakpoint on the byte */
 		if (bp_state == RECOVER) { 
-			swaddr_write(bp_backup.addr, 1, INT3_CODE);
+			swaddr_write(bp_backup, 1, INT3_CODE);
 			bp_state = NORMAL;
 		}
 		
@@ -68,7 +68,7 @@ void cpu_exec(volatile uint32_t n) {
 		if (wp_state == ON) {
 			int result[NR_BP] = { 0 };
 			int nr_changed;
-			if (check_watchpoint(result, nr_changed)) {
+			if (check_watchpoint(result, &nr_changed)) {
 				nemu_state = INT;
 			}
 		}
