@@ -69,13 +69,13 @@ void cpu_exec(volatile uint32_t n) {
 			int result[NR_BP] = { 0 };
 			int nr_changed;
 			if (check_watchpoint(result, &nr_changed)) {
-			//	print_watchpoint(result, nr_changed);
-				printf("\n");
+				Log("$ecx %u", cpu.ecx);
+			//	print_watchpoint(result, nr_changed);	
 				return;
 			}
+			Log("hello");
 		}
 		
-		printf("\n");
 		switch(nemu_state) {
 			case INT:
 				printf("\n\nUser interrupt\n");
