@@ -10,13 +10,15 @@
 #include <readline/history.h>
 
 int nemu_state = END;
-enum _bp_state bp_state = NORMAL;
+int bp_state = NORMAL;
+int wp_state = OFF;
 swaddr_t bp_backup = 0;
 
 void cpu_exec(uint32_t);
 void restart();
 void test_tokens(char* e);
 uint32_t calculate(char* e);
+
 /* We use the readline library to provide more flexibility to read from stdin. */
 char* rl_gets() { /* read line get string */
 	static char *line_read = NULL;
@@ -153,37 +155,15 @@ void cmd_b() {
 
 void cmd_d() {
 	char *opt = strtok(NULL, " ");
-	if (opt == NULL) { free_all(); }
+	if (opt == NULL) { 
+		free_all(); 
+		wp_state = OFF;
+	}
 	else {
 		int no = atoi(opt);
-		if (0 <= no && no < 33)
-			free_bp(no);
-		else
-			assert(0);
+		if (0 <= no && no < NR_BP) free_bp(no);
+		else assert(0);
 	}
-/* 
-	BP *del = getHead();
-
-	if (opt == NULL) {
-		while (del != NULL) {
-			swaddr_write(del->addr, 1, del->value);
-			BP *temp = del;
-			del = del->next;
-			free_bp(temp);
-		}
-		return;
-	}
-
-	int i = 1;
-	int n = atoi(opt);
-	while (i < n) { del = del->next; }
-	while(i < n) {
-		del = del->next;
-		i++;
-	}
-	swaddr_write(del->addr, 1, del->value);
-	free_bp(del);
-	*/
 }
 
 void cmd_e() {
@@ -195,6 +175,12 @@ void cmd_p() {
 	char *e = strtok(NULL, "");
 	printf("%u\n", calculate(e));
 }
+
+void cmd_w() {
+	char *expr = strtok(NULL, "");
+	add_watchpoint(expr);
+	wp_state = ON;
+}
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
@@ -204,19 +190,20 @@ void main_loop() { /* oh, main loop ! */
 
 		if(p == NULL) { continue; }
 
-		if(strcmp(p, "c") == 0) { cmd_c(); }
+		if(strcmp(p, "q") == 0) { return; }
+		else if(strcmp(p, "c") == 0) { cmd_c(); }
 		else if(strcmp(p, "r") == 0) { cmd_r(); }
-		else if(strcmp(p, "si") == 0) { cmd_si(); }
-		else if(strcmp(p, "info") == 0) { cmd_info(); }
 		else if(strcmp(p, "x") == 0) { cmd_x(); }
 		else if(strcmp(p, "b") == 0) { cmd_b(); }
 		else if(strcmp(p, "d") == 0) { cmd_d(); }
 		else if(strcmp(p, "p") == 0) { cmd_p(); }
+		else if(strcmp(p, "w") == 0) { cmd_w(); }
+		else if(strcmp(p, "si") == 0) { cmd_si(); }
+		else if(strcmp(p, "info") == 0) { cmd_info(); }
+
 		/*remember to delete this test instr */
 		else if(strcmp(p, "e") == 0) { cmd_e(); }
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
-		else if(strcmp(p, "q") == 0) { return; }
-		/* TODO: Add more commands */
 
 		else { printf("Unknown command '%s'\n", p); }
 	}

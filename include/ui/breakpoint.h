@@ -14,8 +14,10 @@ typedef struct breakpoint {
 } BP;
 
 enum _bp_state{ NORMAL, RECOVER };
+enum _wp_state{ ON, OFF };
 
-extern enum _bp_state bp_state;
+extern int bp_state;
+extern int wp_state;
 extern swaddr_t bp_backup;
 
 void free_bp(int no);

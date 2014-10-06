@@ -9,7 +9,6 @@
 int exec(swaddr_t);
 void load_prog();
 void init_dram();
-void free_all(); /* for breakpoint */
 
 char assembly[40];
 jmp_buf jbuf;	/* Make it easy to perform exception handling */
@@ -55,7 +54,7 @@ void cpu_exec(volatile uint32_t n) {
 
 		/* restore the breakpoint on the byte */
 		if (bp_state == RECOVER) { 
-			reset_bp(bp_backup);
+			swaddr_write(bp_backup.addr, 1, INT3_CODE);
 			bp_state = NORMAL;
 		}
 		
@@ -65,20 +64,22 @@ void cpu_exec(volatile uint32_t n) {
 			print_bin_instr(eip_temp, instr_len);
 			puts(assembly);
 		}
-/*
-		if(nemu_state == INT) {
-			printf("\n\nUser interrupt\n");
-			cpu.eip--;
-			return;
-		} 
-		else if(nemu_state == END) { return; }
-*/
+
+		if (wp_state == ON) {
+			int result[NR_BP] = { 0 };
+			int nr_changed;
+			if (check_watchpoint(result, nr_changed)) {
+				nemu_state = INT;
+			}
+		}
+		
 		switch(nemu_state) {
 			case INT:
 				printf("\n\nUser interrupt\n");
 				restore_bp(--cpu.eip);
 				bp_state = RECOVER;
 				bp_backup = cpu.eip;
+				
 				return;
 			case END:
 				return;
