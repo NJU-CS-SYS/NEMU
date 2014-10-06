@@ -69,6 +69,7 @@ void cpu_exec(volatile uint32_t n) {
 			int result[NR_BP] = { 0 };
 			int nr_changed;
 			if (check_watchpoint(result, &nr_changed)) {
+				Log("hit");
 				nemu_state = STOP;
 				return;
 			}
@@ -80,7 +81,6 @@ void cpu_exec(volatile uint32_t n) {
 				restore_bp(--cpu.eip);
 				bp_state = RECOVER;
 				bp_backup = cpu.eip;
-				
 				return;
 			case END:
 				return;
