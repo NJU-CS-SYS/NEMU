@@ -34,7 +34,7 @@ static struct rule {
 	 */
 
 	{" +",	NOTYPE},				// white space
-	{"0x[0-9]+", HEX},              // heximal
+	{"0x[0-9a-f]+", HEX},              // heximal
 	{"[0-9]+", NUM},                // decimal
 	{"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip|ax|cx|dx|bx|al|ah|cl|ch|dl|dh|bl|bh)", REG},
 	{"\\+", ADD},
