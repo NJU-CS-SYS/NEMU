@@ -124,9 +124,9 @@ static void cmd_info() {
 		printf("%-6s%-12s%-10s%s\n", "NUM", "TYPE", "ADDRESS", "EXPRESSION");
 		while(current != NULL) {
 			if (current->expr[0] == '\0') {
-				printf("%-6d%-12s%#-10x%s\n", current->NO, "breakpoint", current->addr, current->expr);
+				printf("%-6d%-12s%#-12x%s\n", current->NO, "breakpoint", current->addr, current->expr);
 			} else {
-				printf("%-6d%-12s%#-10x%s\n", current->NO, "watchpoint", current->addr, current->expr);
+				printf("%-6d%-12s%#-12x%s\n", current->NO, "watchpoint", current->addr, current->expr);
 			}
 			current = current->next;
 		}
