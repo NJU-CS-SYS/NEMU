@@ -246,8 +246,11 @@ uint32_t evaluate(int p, int q) {
 		switch (tokens[p].type) {
 			char* rec = NULL;
 			char temp[5];
-			case NUM: return atoi(tokens[p].str);
+			case NUM:
+					  Log("why twice?");	
+					  return atoi(tokens[p].str);
 			case HEX: 
+					  Log("why seg? p = %d, exp = %s", p, tokens[p].str);
 					  return strtol(tokens[p].str, &rec, 16);
 			case REG:
 					  strcpy(temp, tokens[p].str);
