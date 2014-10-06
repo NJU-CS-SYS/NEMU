@@ -70,7 +70,6 @@ void cpu_exec(volatile uint32_t n) {
 			int nr_changed;
 			if (check_watchpoint(result, &nr_changed)) {
 				Log("hit");
-				nemu_state = STOP;
 				return;
 			}
 		}
