@@ -12,6 +12,7 @@ void init_bp_pool() {
 		bp_pool[i].NO = i;
 		bp_pool[i].addr = 0;
 		bp_pool[i].value = 0;
+		bp_pool[i].expr[0] = "";
 		bp_pool[i].next = &bp_pool[i + 1];
 	}
 	bp_pool[i].NO = NR_BP - 1;

@@ -7,17 +7,14 @@
 
 typedef struct breakpoint {
 	int NO;
-	swaddr_t addr;
-	uint32_t value;
-	char expr[32];
+	swaddr_t addr;                 // use only for breakpoint
+	uint32_t value;                // use both for breakpoint and watchpoint
+	char expr[32];                 // use only for watchpoint
 	struct breakpoint *next;
-
-	/* TODO: Add more members if necessary */
-
-
 } BP;
 
 enum _bp_state{ NORMAL, RECOVER };
+
 extern enum _bp_state bp_state;
 extern swaddr_t bp_backup;
 
