@@ -121,7 +121,7 @@ static void cmd_info() {
 	}
 	else if (strcmp(opt, "b") == 0) {
 		BP* current = getHead();
-		printf("%-6s%-12s%-10s%s\n", "NUM", "TYPE", "ADDRESS", "EXPRESSION");
+		printf("%-6s%-12s%-12s%s\n", "NUM", "TYPE", "ADDRESS", "EXPRESSION");
 		while(current != NULL) {
 			if (current->expr[0] == '\0') {
 				printf("%-6d%-12s%#-12x%s\n", current->NO, "breakpoint", current->addr, current->expr);
