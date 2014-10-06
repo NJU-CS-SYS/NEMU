@@ -135,19 +135,6 @@ static BP* search_bp(swaddr_t addr) {
 	return NULL;
 }
 
-/* reset the INT3_CODE
- * after the instruction being executed
- *******************************************
- * WAIT! WHY DO WE NEED IT?
- */
-void reset_bp(swaddr_t addr) {
-	BP* dest = search_bp(addr);
-	
-	if (dest == NULL) return;
-	
-	swaddr_write(addr, 1, INT3_CODE);
-}
-
 /* restore the value of the address
  * after the breakpoint being triggered
  */
@@ -186,5 +173,15 @@ bool check_watchpoint(int result[], int* nr_changed) {
 	return is_changed;
 }
 				
-/* for the outside to travel bp to print */
+/* print the changed watchpoint */
+void print_watchpoint(const int result[], const int nr_changed) {
+	int i;
+	for (i = 0; i < nr_changed; i++) {
+		BP* current = &bp_pool[result[i]];
+		printf("%-4s%10s%10s  %s\n", "NO", "OLD VALUE", "NEW VALUE", "EXPRESSION");
+		printf("%-4d%10d", current->NO, current->value);
+		current->value = calculate(current->expr);
+		printf("%10d  %-s\n", current->value, current->expr);
+	}
+}
 BP* getHead() { return head; }
