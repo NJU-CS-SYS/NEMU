@@ -69,7 +69,8 @@ void cpu_exec(volatile uint32_t n) {
 			int result[NR_BP] = { 0 };
 			int nr_changed;
 			if (check_watchpoint(result, &nr_changed)) {
-				nemu_state = INT;
+				nemu_state = STOP;
+				return;
 			}
 		}
 		
