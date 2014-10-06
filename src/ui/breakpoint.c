@@ -163,7 +163,6 @@ void restore_bp(swaddr_t addr) {
  * we need a state to enable it :-)
  */
 bool check_watchpoint(int result[], int* nr_changed) {
-	Log("alive!");
 	BP* current = head;
 	bool is_changed = false; /* record whether a wp changed */
 	*nr_changed = 0; /* count of the watchpoints that have changed */
@@ -178,6 +177,7 @@ bool check_watchpoint(int result[], int* nr_changed) {
 				is_changed = true;
 			}
 		}
+		current = current->next;
 	}
 	
 	/* defense seg fault */
