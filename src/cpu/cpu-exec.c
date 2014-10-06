@@ -75,6 +75,7 @@ void cpu_exec(volatile uint32_t n) {
 			}
 		}
 		
+		printf("\n");
 		switch(nemu_state) {
 			case INT:
 				printf("\n\nUser interrupt\n");
