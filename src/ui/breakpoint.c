@@ -178,10 +178,10 @@ void print_watchpoint(const int result[], const int nr_changed) {
 	int i;
 	for (i = 0; i < nr_changed; i++) {
 		BP* current = &bp_pool[result[i]];
-		printf("%-4s%10s%10s  %s\n", "NO", "OLD VALUE", "NEW VALUE", "EXPRESSION");
-		printf("%-4d%10d", current->NO, current->value);
+		printf("%-4s%-10s%-10s%s\n", "NO", "OLD", "NEW", "EXPRESSION");
+		printf("%-4d%#-10x", current->NO, current->value);
 		current->value = calculate(current->expr);
-		printf("%10d  %-s\n", current->value, current->expr);
+		printf("%#-10x%s\n", current->value, current->expr);
 	}
 }
 BP* getHead() { return head; }
