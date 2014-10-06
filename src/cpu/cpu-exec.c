@@ -27,7 +27,6 @@ void restart() {
 	init_dram();
 
 	/* clear the breakpoint */
-	free_all();
 }
 
 static void print_bin_instr(swaddr_t eip, int len) {
@@ -69,11 +68,9 @@ void cpu_exec(volatile uint32_t n) {
 			int result[NR_BP] = { 0 };
 			int nr_changed;
 			if (check_watchpoint(result, &nr_changed)) {
-				Log("$ecx %u", cpu.ecx);
-			//	print_watchpoint(result, nr_changed);	
+				print_watchpoint(result, nr_changed);	
 				return;
 			}
-			Log("hello");
 		}
 		
 		switch(nemu_state) {
@@ -84,6 +81,7 @@ void cpu_exec(volatile uint32_t n) {
 				bp_backup = cpu.eip;
 				return;
 			case END:
+				free_all();
 				return;
 		}
 	}
