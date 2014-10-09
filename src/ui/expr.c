@@ -246,7 +246,7 @@ static uint32_t evaluate(int p, int q) {
 
 		switch (tokens[op].type) {
 			case NOT: return !eval2;
-			case NEG: return -eval2;
+			case NEG: Log("Hit");return -eval2;
 			case POINTER: return swaddr_read(eval2, 4); //how long?
 			default: assert(op != p);
 		}
@@ -279,7 +279,6 @@ static uint32_t evaluate(int p, int q) {
 			default: assert(0);
 		}
 	}
-	Log("Hit");
 	return 0;
 }
 /*
