@@ -210,10 +210,12 @@ static bool check_parentheses() {
 }
 
 static int find_domn(int p, int q) {
-	if (tokens[p].type == NOT
-			|| tokens[p].type == NEG
-			|| tokens[p].type == POINTER)
-		return p;
+	switch (tokens[p].type) {
+		case NOT:
+		case NEG:
+		case POINTER:
+			return p;
+	}
 
 	int i ;
 	int which_token = -1;
