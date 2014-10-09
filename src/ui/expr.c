@@ -230,7 +230,10 @@ static int find_domn(int p, int q) {
 }
 
 static uint32_t evaluate(int p, int q) {
-	if (p > q) assert(0); // bad expression!
+	if (p > q) {
+		Log("bad expression!");
+		assert(0); // bad expression!
+	}
 	else if (p == q) {
 		switch (tokens[p].type) {
 			char* rec = NULL;
