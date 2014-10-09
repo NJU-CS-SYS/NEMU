@@ -193,7 +193,7 @@ static bool check_parentheses() {
 		else if (tokens[i].type == RBRACKET) {
 			count--;
 			parent[i] = stack[j--];
-			assert(tokens[parent[i]].type == RBRACKET);
+			assert(tokens[parent[i]].type == LBRACKET);
 		}
 		
 		if (count < 0) {
