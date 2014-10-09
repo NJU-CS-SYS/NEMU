@@ -279,6 +279,7 @@ static uint32_t evaluate(int p, int q) {
 			default: assert(0);
 		}
 	}
+	Log("Hit");
 	return 0;
 }
 /*
