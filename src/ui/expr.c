@@ -188,10 +188,12 @@ static bool check_parentheses() {
 		if (tokens[i].type == '(') {
 			count++;
 			stack[++j] = i;
+			assert(tokens[stack[j-1]].type == LBRACKET);
 		}
 		else if (tokens[i].type == ')') {
 			count--;
 			parent[i] = stack[j--];
+			assert(tokens[parent[i]].type == RBRACKET);
 		}
 		
 		if (count < 0) {
@@ -199,6 +201,7 @@ static bool check_parentheses() {
 			return false;
 		}
 	}
+
 	if (count > 0) {
 		memset(parent, 33, 32);
 		return false;
