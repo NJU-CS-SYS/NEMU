@@ -185,6 +185,7 @@ static bool check_parentheses() {
 	int stack[32] = {0};       // to pair parentheses
 	int i, j;
 	for (i = 0, j = -1; i < 32; i++) {
+		Log("count=%d", count);
 		if (tokens[i].type == LBRACKET) {
 			count++;
 			stack[++j] = i;
