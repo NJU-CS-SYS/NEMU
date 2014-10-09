@@ -185,16 +185,15 @@ static bool check_parentheses() {
 	int stack[32] = {0};       // to pair parentheses
 	int i, j;
 	for (i = 0, j = -1; i < 32; i++) {
-		if (tokens[i].type == '(') {
+		if (tokens[i].type == LBRACKET) {
 			count++;
 			stack[++j] = i;
 			assert(tokens[stack[j-1]].type == LBRACKET);
 		}
-		else if (tokens[i].type == ')') {
+		else if (tokens[i].type == RBRACKET) {
 			count--;
 			parent[i] = stack[j--];
 			assert(tokens[parent[i]].type == RBRACKET);
-			Log("new pair %d", parent[i]);
 		}
 		
 		if (count < 0) {
@@ -203,11 +202,6 @@ static bool check_parentheses() {
 		}
 	}
 
-	if (count > 0) {
-		memset(parent, 33, 32);
-		return false;
-	}
-	
 	for (i = 0; i < 10; i++) {
 		Log("%d", parent[i]);
 	}
