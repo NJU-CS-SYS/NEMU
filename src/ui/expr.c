@@ -195,15 +195,10 @@ static bool check_parentheses() {
 			parent[i] = stack[j--];
 			assert(tokens[parent[i]].type == LBRACKET);
 		}
-		
 		if (count < 0) {
 			memset(parent, 33, 32);
 			return false;
 		}
-	}
-
-	for (i = 0; i < 10; i++) {
-		Log("%d", parent[i]);
 	}
 	assert(count == 0);
 	return true;
@@ -221,6 +216,7 @@ static int find_domn(int p, int q) {
 	int which_token = -1;
 	int min_type = NOTYPE;
 	for (i = q; i >= p; i--) {
+		Log("%d token=%d min=%d", i, tokens[i].type, min_type);
 		if (tokens[i].type == RBRACKET) {
 			i = parent[i];
 			assert(tokens[i].type == LBRACKET);
