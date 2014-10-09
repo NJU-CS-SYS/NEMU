@@ -194,6 +194,7 @@ static bool check_parentheses() {
 			count--;
 			parent[i] = stack[j--];
 			assert(tokens[parent[i]].type == RBRACKET);
+			Log("new pair %d", parent[i]);
 		}
 		
 		if (count < 0) {
