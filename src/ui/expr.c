@@ -253,7 +253,9 @@ static uint32_t evaluate(int p, int q) {
 								Log("Hit");
 				return !eval2;
 			case NEG: Log("HHHHHHHHHHH");return -eval2;
-			case POINTER: return swaddr_read(eval2, 4); //how long?
+			case POINTER: 
+								Log("Hit");
+					  return swaddr_read(eval2, 4); //how long?
 			default: assert(op != p);
 		}
 
