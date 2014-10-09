@@ -163,7 +163,7 @@ void substr(int p, int q) {
 
 // check parentheses paired right
 // use a parentheses buffer to store paired index of )
-static parent[32];
+static int parent[32];
 static bool check_parentheses() {
 	/*
 	if (tokens[p].type == '(' && tokens[q].type == ')') {
@@ -183,8 +183,8 @@ static bool check_parentheses() {
 	*/
 	int count = 0;             // +1 when ( and -1 when ) should be 0 at the end
 	int stack[32] = {0};       // to pair parentheses
-	int i, j, k;
-	for (i = 0, j = -1, k = 0; i < 32; i++) {
+	int i, j;
+	for (i = 0, j = -1; i < 32; i++) {
 		if (tokens[i].type == '(') {
 			count++;
 			stack[++j] = i;
@@ -214,7 +214,6 @@ static int find_domn(int p, int q) {
 		return p;
 
 	int i ;
-	bool inParentheses = false; // to jump expr in (...)
 	int which_token = -1;
 	int min_type = NOTYPE;
 	for (i = q; i >= p; i--) {
@@ -309,7 +308,7 @@ static uint32_t evaluate(int p, int q) {
 	}
 	return 0;
 }
-
+/*
 static uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
@@ -318,7 +317,7 @@ static uint32_t expr(char *e, bool *success) {
 
 	return evaluate(0, nr_token-1);
 }
-
+*/
 void test_tokens(char *e) {
 	make_token(e);
 	substr(0, nr_token-1);
