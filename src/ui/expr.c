@@ -120,9 +120,10 @@ static bool make_token(char *e) {
 						strncpy(temp_token->str, substr_start, substr_len);
 					else assert(0);
 
-					if (nr_token == 0 || tokens[nr_token-1].type < NUM) {
+					if (nr_token == 0 || tokens[nr_token-1].type < RBRACKET) {
 						switch (temp_token->type) {
 							case SUB:
+								Log("Hit");
 								temp_token->type = NEG;
 							case MUL:
 								temp_token->type = POINTER;
