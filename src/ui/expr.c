@@ -245,6 +245,7 @@ static uint32_t evaluate(int p, int q) {
 		int op = find_domn(p, q);
 		
 		Log("Hittttttttttttttt");
+		Log("op=%d, p=%d", op,p);
 		int eval2 = evaluate(op + 1, q);
 
 		switch (tokens[op].type) {
