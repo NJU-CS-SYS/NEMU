@@ -119,29 +119,17 @@ static bool make_token(char *e) {
 					if (substr_len < 32)
 						strncpy(temp_token->str, substr_start, substr_len);
 					else assert(0);
-					/* SINGLE */
-					if (temp_token->type == SUB
-							|| temp_token->type == MUL) {
-						if (nr_token == 0 
-								|| !(tokens[nr_token-1].type == NUM 
-										|| tokens[nr_token-1].type == HEX
-										|| tokens[nr_token-1].type == REG
-										|| tokens[nr_token-1].type == RBRACKET))
-							switch (temp_token->type) {
-								case SUB:
-									temp_token->type = NEG;
-									break;
-								case MUL:
-									temp_token->type = POINTER;
-							}
+
+					if (nr_token == 0 || tokens[nr_token-1].type < LBRACKET) {
+						switch (temp_token->type) {
+							case SUB:
+								temp_token->type = NEG;
+							case MUL:
+								temp_token->type = POINTER;
+						}
 					}
 					nr_token++;
 				}
-				/* why ?
-				switch(rules[i].token_type) {
-					default: assert(0);
-				}
-				*/
 				break;
 			}
 		}
