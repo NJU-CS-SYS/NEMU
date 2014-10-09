@@ -203,6 +203,10 @@ static bool check_parentheses() {
 		memset(parent, 33, 32);
 		return false;
 	}
+	
+	for (i = 0; i < 10; i++) {
+		Log("%d", parent[i]);
+	}
 	assert(count == 0);
 	return true;
 }
