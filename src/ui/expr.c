@@ -256,6 +256,8 @@ static uint32_t evaluate(int p, int q) {
 			default: assert(op != p);
 		}
 
+		
+		Log("DDDDDDDDD");
 		int eval1 = evaluate(p, op - 1);
 		switch(tokens[op].type) {
 			case ADD: return eval1 + eval2;
