@@ -123,7 +123,6 @@ static bool make_token(char *e) {
 					if (nr_token == 0 || tokens[nr_token-1].type < RBRACKET) {
 						switch (temp_token->type) {
 							case SUB:
-								Log("Hit");
 								temp_token->type = NEG;
 							case MUL:
 								temp_token->type = POINTER;
@@ -250,7 +249,9 @@ static uint32_t evaluate(int p, int q) {
 
 		Log("DDDDDDDDD");
 		switch (tokens[op].type) {
-			case NOT: return !eval2;
+			case NOT: 
+								Log("Hit");
+				return !eval2;
 			case NEG: Log("HHHHHHHHHHH");return -eval2;
 			case POINTER: return swaddr_read(eval2, 4); //how long?
 			default: assert(op != p);
