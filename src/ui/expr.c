@@ -246,7 +246,7 @@ static uint32_t evaluate(int p, int q) {
 
 		switch (tokens[op].type) {
 			case NOT: return !eval2;
-			case NEG: Log("Hit");return -eval2;
+			case NEG: return -eval2;
 			case POINTER: return swaddr_read(eval2, 4); //how long?
 			default: assert(op != p);
 		}
@@ -299,6 +299,7 @@ void test_tokens(char *e) {
 
 uint32_t calculate(char *e) {
 	make_token(e);
+	Log("Hit");
 	if (check_parentheses()) {
 		return evaluate(0, nr_token-1);
 	}
