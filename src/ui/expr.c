@@ -187,7 +187,6 @@ static bool check_parentheses() {
 	for (i = 0, j = -1; i < nr_token; i++) {
 		Log("count=%d", count);
 		if (tokens[i].type == LBRACKET) {
-			count++;
 			stack[++j] = i;
 			assert(tokens[stack[j]].type == LBRACKET);
 		}
