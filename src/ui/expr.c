@@ -113,9 +113,6 @@ static bool make_token(char *e) {
 				//Log("match regex[%d] at position %d with len %d: %.*s", i, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 
-				/* TODO: Now a new token is recognized with rules[i]. 
-				 * Add codes to perform some actions with this token.
-				 */
 				if (rules[i].token_type != NOTYPE) {
 					Token* temp_token = &tokens[nr_token];
 					temp_token->type = rules[i].token_type;
@@ -138,14 +135,6 @@ static bool make_token(char *e) {
 									temp_token->type = POINTER;
 							}
 					}
-					/* KISS !
-					if (temp_token->str[0] == '0') {
-						int j;
-						for (j = 0; temp_token->str[j] != '\0'; j++)
-							if (temp_token->str[j] != '0') break;
-						if (temp_token->str[j] == '\0') temp_token->str[1] = '\0';
-					}
-					*/
 					nr_token++;
 				}
 				/* why ?
@@ -153,7 +142,6 @@ static bool make_token(char *e) {
 					default: assert(0);
 				}
 				*/
-
 				break;
 			}
 		}
@@ -173,13 +161,11 @@ void substr(int p, int q) {
 	putchar('\n');
 }
 
-/**
- * Functions to evaluate the expression
- * check_parentheses(int,int) : check parentheses
- * find_domn(int, int) : get dominator operator
- * expr(char*, bool*) : evaluate expressions
- */
-bool check_parentheses(int p, int q) {
+// check parentheses paired right
+// use a parentheses buffer to store paired index of )
+static parent[32];
+static bool check_parentheses() {
+	/*
 	if (tokens[p].type == '(' && tokens[q].type == ')') {
 		int buf[32];
 		int i, j = 0, rec = -1;
@@ -194,9 +180,34 @@ bool check_parentheses(int p, int q) {
 		if (rec == p) return true;
 	}
 	return false;
+	*/
+	int count = 0;             // +1 when ( and -1 when ) should be 0 at the end
+	int stack[32] = {0};       // to pair parentheses
+	int i, j, k;
+	for (i = 0, j = -1, k = 0; i < 32; i++) {
+		if (tokens[i].type == '(') {
+			count++;
+			stack[++j] = i;
+		}
+		else if (tokens[i].type == ')') {
+			count--;
+			parent[i] = stack[j--];
+		}
+		
+		if (count < 0) {
+			memset(parent, 33, 32);
+			return false;
+		}
+	}
+	if (count > 0) {
+		memset(parent, 33, 32);
+		return false;
+	}
+	assert(count == 0);
+	return true;
 }
 
-int find_domn(int p, int q) {
+static int find_domn(int p, int q) {
 	if (tokens[p].type == NOT
 			|| tokens[p].type == NEG
 			|| tokens[p].type == POINTER)
@@ -204,45 +215,23 @@ int find_domn(int p, int q) {
 
 	int i ;
 	bool inParentheses = false; // to jump expr in (...)
-	/* a long and bad travel
-	for (i = 0; i < NR_REGEX; i++) {
-		for (j = q; j >= p; j--) {
-			if (tokens[j].type == ')') inParentheses = true;
-			else if (tokens[j].type == '(' && !inParentheses) assert(0);
-			else if (tokens[j].type == '(' && inParentheses) {
-				inParentheses = false;
-				continue;
-			}
-			if (inParentheses) continue;
-			if (tokens[j].type == rules[i].token_type) {
-				return j;
-			}
-		}
-	}
-	*/
 	int which_token = -1;
 	int min_type = NOTYPE;
 	for (i = q; i >= p; i--) {
 		if (tokens[i].type == RBRACKET) {
-			inParentheses = true;
-			continue;
+			i = parent[i];
+			assert(tokens[i].type == LBRACKET);
 		}
-		else if (tokens[i].type == LBRACKET && inParentheses) {
-			inParentheses = false;
-			continue;
-		}
-		if (inParentheses) continue;
-		if (tokens[i].type < min_type) {
+		else if (tokens[i].type < min_type) {
 			min_type = tokens[i].type;
 			which_token = i;
 		}
 	}
-	
 	assert(min_type != NOTYPE);
 	return which_token;
 }
 
-uint32_t evaluate(int p, int q) {
+static uint32_t evaluate(int p, int q) {
 	if (p > q) assert(0); // bad expression!
 	else if (p == q) {
 		switch (tokens[p].type) {
@@ -277,7 +266,7 @@ uint32_t evaluate(int p, int q) {
  					  else if (!strcmp(temp, "$bh"))  return reg_b(R_BH);
 		}
 	}
-	else if (check_parentheses(p, q)) return evaluate(p + 1, q - 1);
+	else if (tokens[p].type == LBRACKET && tokens[p].type == RBRACKET) return evaluate(p + 1, q - 1);
 	else {
 		int op = find_domn(p, q);
 		
@@ -286,7 +275,7 @@ uint32_t evaluate(int p, int q) {
 		switch (tokens[op].type) {
 			case NOT: return !eval2;
 			case NEG: return -eval2;
-			case POINTER: return swaddr_read(eval2, 4); // TODO how long?
+			case POINTER: return swaddr_read(eval2, 4); //how long?
 			default: assert(op != p);
 		}
 
@@ -321,16 +310,14 @@ uint32_t evaluate(int p, int q) {
 	return 0;
 }
 
-uint32_t expr(char *e, bool *success) {
+static uint32_t expr(char *e, bool *success) {
 	if(!make_token(e)) {
 		*success = false;
 		return 0;
 	}
 
-	/* TODO: Implement code to evaluate the expression. */
 	return evaluate(0, nr_token-1);
 }
-
 
 void test_tokens(char *e) {
 	make_token(e);
@@ -340,5 +327,9 @@ void test_tokens(char *e) {
 
 uint32_t calculate(char *e) {
 	make_token(e);
-	return evaluate(0, nr_token-1);
+	if (check_parentheses()) {
+		return evaluate(0, nr_token-1);
+	}
+	printf("Invalid Expression\n");
+	return 0;
 }
