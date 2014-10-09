@@ -163,45 +163,28 @@ void substr(int p, int q) {
 
 // check parentheses paired right
 // use a parentheses buffer to store paired index of )
-static int parent[32];
+static int pair[32];
 static bool check_parentheses() {
-	/*
-	if (tokens[p].type == '(' && tokens[q].type == ')') {
-		int buf[32];
-		int i, j = 0, rec = -1;
-		for (i = p; i <= q; i++) {
-			if (tokens[i].type == '(') buf[j++] = i;
-			else if (tokens[i].type == ')') {
-				if (j == 0) return false;
-				rec = buf[--j];
-			}
-		}
-//		printf("p = %d, rec = %d\n", p, rec);
-		if (rec == p) return true;
-	}
-	return false;
-	*/
-	int count = 0;             // +1 when ( and -1 when ) should be 0 at the end
-	int stack[32] = {0};       // to pair parentheses
+	int count = 0;				// +1 when ( and -1 when ) should be 0 at the end
+	int stack[32];				// to pair parentheses
+	memset(stack, -1, 32);
 	int i, j;
-	for (i = 0, j = -1; i < nr_token; i++) {
+	for (i = j = 0; i < nr_token; i++) {
 		if (tokens[i].type == LBRACKET) {
 			count++;
-			stack[++j] = i;
+			stack[j++] = i;
 			assert(tokens[stack[j]].type == LBRACKET);
 		}
 		else if (tokens[i].type == RBRACKET) {
 			count--;
-			parent[i] = stack[j--];
-			assert(tokens[parent[i]].type == LBRACKET);
-		}
-		if (count < 0) {
-			memset(parent, 33, 32);
-			return false;
+			pair[i] = stack[--j];
+			stack[j] = -1;
+			assert(tokens[pair[i]].type == LBRACKET);
 		}
 	}
-	assert(count == 0);
-	return true;
+	if (count == 0 && stack[0] == -1) return true;
+	memset(pair, -1, 32);
+	return false;
 }
 
 static int find_domn(int p, int q) {
@@ -211,13 +194,12 @@ static int find_domn(int p, int q) {
 		case POINTER:
 			return p;
 	}
-
 	int i ;
 	int which_token = -1;
 	int min_type = NOTYPE;
 	for (i = q; i >= p; i--) {
 		if (tokens[i].type == RBRACKET) {
-			i = parent[i];
+			i = pair[i];
 			assert(tokens[i].type == LBRACKET);
 		}
 		else if (tokens[i].type < min_type) {
