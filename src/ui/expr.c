@@ -188,7 +188,7 @@ static bool check_parentheses() {
 		if (tokens[i].type == LBRACKET) {
 			count++;
 			stack[++j] = i;
-			assert(tokens[stack[j-1]].type == LBRACKET);
+			assert(tokens[stack[j]].type == LBRACKET);
 		}
 		else if (tokens[i].type == RBRACKET) {
 			count--;
