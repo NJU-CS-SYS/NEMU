@@ -120,7 +120,7 @@ static bool make_token(char *e) {
 						strncpy(temp_token->str, substr_start, substr_len);
 					else assert(0);
 
-					if (nr_token == 0 || tokens[nr_token-1].type < LBRACKET) {
+					if (nr_token == 0 || tokens[nr_token-1].type < NUM) {
 						switch (temp_token->type) {
 							case SUB:
 								temp_token->type = NEG;
