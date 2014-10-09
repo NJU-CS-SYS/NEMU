@@ -124,6 +124,7 @@ static bool make_token(char *e) {
 						switch (temp_token->type) {
 							case SUB:
 								temp_token->type = NEG;
+								break;
 							case MUL:
 								temp_token->type = POINTER;
 						}
@@ -182,7 +183,6 @@ static int find_domn(int p, int q) {
 		case POINTER:
 			return p;
 	}
-	Log("Hit");
 	int i ;
 	int which_token = -1;
 	int min_type = NOTYPE;
@@ -240,27 +240,15 @@ static uint32_t evaluate(int p, int q) {
 	}
 	else if (tokens[p].type == LBRACKET && tokens[q].type == RBRACKET) return evaluate(p + 1, q - 1);
 	else {
-		Log("Hit");
 		int op = find_domn(p, q);
-		
-		Log("Hittttttttttttttt");
-		Log("op=%d, q=%d", op,q);
 		int eval2 = evaluate(op + 1, q);
-
-		Log("DDDDDDDDD");
 		switch (tokens[op].type) {
-			case NOT: 
-								Log("Hit");
-				return !eval2;
-			case NEG: Log("HHHHHHHHHHH");return -eval2;
-			case POINTER: 
-								Log("Hit");
-					  return swaddr_read(eval2, 4); //how long?
+			case NOT: return !eval2;
+			case NEG: return -eval2;
+			case POINTER: return swaddr_read(eval2, 4); //how long?
 			default: assert(op != p);
 		}
-
 		
-		Log("DDDDDDDDD");
 		int eval1 = evaluate(p, op - 1);
 		switch(tokens[op].type) {
 			case ADD: return eval1 + eval2;
@@ -309,7 +297,6 @@ void test_tokens(char *e) {
 
 uint32_t calculate(char *e) {
 	make_token(e);
-	Log("Hit");
 	if (check_parentheses()) {
 		return evaluate(0, nr_token-1);
 	}
