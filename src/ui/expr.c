@@ -245,12 +245,12 @@ static uint32_t evaluate(int p, int q) {
 		int op = find_domn(p, q);
 		
 		Log("Hittttttttttttttt");
-		Log("op=%d, p=%d", op,q);
+		Log("op=%d, q=%d", op,q);
 		int eval2 = evaluate(op + 1, q);
 
 		switch (tokens[op].type) {
 			case NOT: return !eval2;
-			case NEG: return -eval2;
+			case NEG: Log("HHHHHHHHHHH");return -eval2;
 			case POINTER: return swaddr_read(eval2, 4); //how long?
 			default: assert(op != p);
 		}
