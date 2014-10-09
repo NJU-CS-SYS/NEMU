@@ -240,6 +240,7 @@ static uint32_t evaluate(int p, int q) {
 	}
 	else if (tokens[p].type == LBRACKET && tokens[q].type == RBRACKET) return evaluate(p + 1, q - 1);
 	else {
+		Log("Hit");
 		int op = find_domn(p, q);
 		
 		int eval2 = evaluate(op + 1, q);
