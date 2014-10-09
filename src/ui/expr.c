@@ -213,12 +213,9 @@ static int find_domn(int p, int q) {
 	}
 
 	int i ;
-	
-	for (i=0; i<10; i++) Log("%d",parent[i]);
 	int which_token = -1;
 	int min_type = NOTYPE;
 	for (i = q; i >= p; i--) {
-		Log("%d token=%d min=%d", i, tokens[i].type, min_type);
 		if (tokens[i].type == RBRACKET) {
 			i = parent[i];
 			assert(tokens[i].type == LBRACKET);
@@ -267,7 +264,7 @@ static uint32_t evaluate(int p, int q) {
  					  else if (!strcmp(temp, "$bh"))  return reg_b(R_BH);
 		}
 	}
-	else if (tokens[p].type == LBRACKET && tokens[p].type == RBRACKET) return evaluate(p + 1, q - 1);
+	else if (tokens[p].type == LBRACKET && tokens[q].type == RBRACKET) return evaluate(p + 1, q - 1);
 	else {
 		int op = find_domn(p, q);
 		
