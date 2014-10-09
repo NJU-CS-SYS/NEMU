@@ -248,6 +248,7 @@ static uint32_t evaluate(int p, int q) {
 		Log("op=%d, q=%d", op,q);
 		int eval2 = evaluate(op + 1, q);
 
+		Log("DDDDDDDDD");
 		switch (tokens[op].type) {
 			case NOT: return !eval2;
 			case NEG: Log("HHHHHHHHHHH");return -eval2;
