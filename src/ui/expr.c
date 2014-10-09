@@ -179,7 +179,7 @@ static bool check_parentheses() {
 static int find_domn(int p, int q) {
 	switch (tokens[p].type) {
 		case NOT:
-		case NEG:
+		case NEG: Log("Hit");
 		case POINTER:
 			return p;
 	}
