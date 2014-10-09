@@ -214,7 +214,7 @@ static int find_domn(int p, int q) {
 
 	int i ;
 	
-	for (i=0; i<10; i++) Log("%d",i);
+	for (i=0; i<10; i++) Log("%d",parent[i]);
 	int which_token = -1;
 	int min_type = NOTYPE;
 	for (i = q; i >= p; i--) {
