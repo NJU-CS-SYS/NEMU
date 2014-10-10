@@ -103,7 +103,6 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 				position += substr_len;
-				Log("opt=%d, len=%d", rules[i].token_type, substr_len);
 				if (rules[i].token_type != NOTYPE) {
 					Token* temp_token = &tokens[nr_token];
 					temp_token->type = rules[i].token_type;
@@ -136,13 +135,6 @@ static bool make_token(char *e) {
 	return true; 
 }
 
-
-void substr(int p, int q) {
-	int i;
-	for (i = p; i <= q; i++)
-		printf("%s", tokens[i].str);
-	putchar('\n');
-}
 
 // check parentheses paired right
 // use a parentheses buffer to store paired index of )
@@ -196,7 +188,6 @@ static int find_domn(int p, int q) {
 }
 
 static uint32_t evaluate(int p, int q) {
-	substr(p,q);
 	if (p > q) {
 		Log("bad expression!");
 		assert(0); // bad expression!
@@ -288,7 +279,6 @@ static uint32_t expr(char *e, bool *success) {
 */
 void test_tokens(char *e) {
 	make_token(e);
-	substr(0, nr_token-1);
 	printf("%d\n", evaluate(0, nr_token-1));
 }
 
