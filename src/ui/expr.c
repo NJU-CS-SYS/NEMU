@@ -103,7 +103,7 @@ static bool make_token(char *e) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
 				position += substr_len;
-
+				Log("opt=%d, len=%d", rules[i].token_type, substr_len);
 				if (rules[i].token_type != NOTYPE) {
 					Token* temp_token = &tokens[nr_token];
 					temp_token->type = rules[i].token_type;
