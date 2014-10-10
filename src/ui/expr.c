@@ -101,15 +101,17 @@ static bool make_token(char *e) {
 			if(regexec(re + i, e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
 				char *substr_start = e + position;
 				int substr_len = pmatch.rm_eo;
-				//Log("match regex[%d] at position %d with len %d: %.*s", i, position, substr_len, substr_len, substr_start);
 				position += substr_len;
 
 				if (rules[i].token_type != NOTYPE) {
 					Token* temp_token = &tokens[nr_token];
 					temp_token->type = rules[i].token_type;
 					if (substr_len < 32)
-						strncpy(temp_token->str, substr_start, substr_len);
-					else assert(0);
+						strcpy(temp_token->str, substr_start);
+					else {
+						Log("Too long input");
+						return false;
+					};
 
 					if (nr_token == 0 || tokens[nr_token-1].type < RBRACKET) {
 						switch (temp_token->type) {
