@@ -28,11 +28,6 @@ static struct rule {
 	char *regex;
 	int token_type;
 } rules[] = {
-
-	/* TO-DO: Add more rules.
-	 * Pay attention to the precedence level of different rules.
-	 */
-
 	{" +",	NOTYPE},				// white space
 	{"0x[0-9a-f]+", HEX},              // heximal
 	{"[0-9]+", NUM},                // decimal
@@ -95,15 +90,11 @@ typedef struct token {
 Token tokens[32];
 int nr_token; /* the number of token that have been recognized */
 
-
-
 static bool make_token(char *e) {
 	int position = 0;
 	int i;
 	regmatch_t pmatch;
-	
 	nr_token = 0;
-
 	while(e[position] != '\0') {
 		/* Try all rules one by one. */
 		for(i = 0; i < NR_REGEX; i++) {
@@ -201,6 +192,7 @@ static int find_domn(int p, int q) {
 }
 
 static uint32_t evaluate(int p, int q) {
+	substr(p,q);
 	if (p > q) {
 		Log("bad expression!");
 		assert(0); // bad expression!
