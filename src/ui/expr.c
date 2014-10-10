@@ -16,10 +16,10 @@ enum {
 	RSHIFT, LSHIFT,             // 11, 12
 	ADD, SUB,                   // 13, 14
 	MUL, DIV, MOD,              // 15, 16, 17
-	NOT, POINTER, NEG,          // 18, 19, 20
-	LBRACKET, RBRACKET,         // 21, 22, 23
-	NUM, HEX, REG,              // 24, 25, 26
-	NOTYPE                      // 27
+	NOT, POINTER, NEG, BIT_NOT, // 18, 19, 20, 21
+	LBRACKET, RBRACKET,         // 22, 23
+	NUM, HEX, REG,              // 25, 26, 27
+	NOTYPE                      // 28
 
 	/* TODO: Add more token types */
 
@@ -52,6 +52,7 @@ static struct rule {
 	{"\\|", BIT_OR},
 	{"\\^", BIT_XOR},
 	{"-", NEG},
+	{"\\~", BIT_NOT},
 	{"\\*", POINTER},
 	{"\\(", LBRACKET},
 	{"\\)", RBRACKET}
