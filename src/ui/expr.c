@@ -174,6 +174,7 @@ static int find_domn(int p, int q) {
 	switch (tokens[p].type) {
 		case NOT:
 		case NEG: 
+		case BIT_NOT:
 		case POINTER:
 			return p;
 	}
@@ -240,6 +241,7 @@ static uint32_t evaluate(int p, int q) {
 		switch (tokens[op].type) {
 			case NOT: return !eval2;
 			case NEG: return -eval2;
+			case BIT_NOT: return ~eval2;
 			case POINTER: return swaddr_read(eval2, 4); //how long?
 			default: assert(op != p);
 		}
