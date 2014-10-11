@@ -153,8 +153,10 @@ void cmd_x() {
 
 void cmd_b() {
 	char* p = strtok(NULL, "");
-	swaddr_t addr = calculate(p);
-	add_bp(addr);
+	if (p[0] == '*') {
+		swaddr_t addr = calculate(p+1);
+		add_bp(addr);
+	}
 }
 
 void cmd_d() {
