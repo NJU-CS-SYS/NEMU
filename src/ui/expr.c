@@ -107,7 +107,7 @@ static bool make_token(char *e) {
 					Token* temp_token = &tokens[nr_token];
 					temp_token->type = rules[i].token_type;
 					if (substr_len < 32)
-						strcpy(temp_token->str, substr_start);
+						strncpy(temp_token->str, substr_start, substr_len + 1);
 					else {
 						Log("Too long input");
 						return false;
