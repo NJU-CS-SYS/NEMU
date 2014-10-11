@@ -106,8 +106,10 @@ static bool make_token(char *e) {
 				if (rules[i].token_type != NOTYPE) {
 					Token* temp_token = &tokens[nr_token];
 					temp_token->type = rules[i].token_type;
-					if (substr_len < 32)
-						strncpy(temp_token->str, substr_start, substr_len + 1);
+					if (substr_len < 32) {
+						strncpy(temp_token->str, substr_start, substr_len);
+						temp_token->str[substr_len] = '\0';
+					}
 					else {
 						Log("Too long input");
 						return false;
