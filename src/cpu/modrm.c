@@ -12,6 +12,7 @@ char ModR_M_asm[MODRM_ASM_BUF_SIZE];
 int read_ModR_M(swaddr_t eip, swaddr_t *addr) {
 	ModR_M m;
 	m.val = instr_fetch(eip, 1);
+	/* ModR_M follows the opcode */
 	int32_t disp;
 	int instr_len, disp_offset, disp_size;
 	int base_reg = -1, index_reg = -1, scale = 0;
@@ -21,7 +22,7 @@ int read_ModR_M(swaddr_t eip, swaddr_t *addr) {
 	 * Therefore, m.mod should not be 3 here.
 	 */
 	assert(m.mod != 3);
-	disp_size = 4;
+	disp_size = 4; // 32 bits
 	if(m.R_M == R_ESP) {
 		SIB s;
 		s.val = instr_fetch(eip + 1, 1);
@@ -82,4 +83,3 @@ int read_ModR_M(swaddr_t eip, swaddr_t *addr) {
 
 	return instr_len;
 }
-

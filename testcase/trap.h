@@ -6,6 +6,8 @@
 
 #ifndef __ASSEMBLER__
 
+#include "link.h"
+
 #define HIT_GOOD_TRAP \
 	asm volatile(".byte 0x82" : : "a" (0))
 
