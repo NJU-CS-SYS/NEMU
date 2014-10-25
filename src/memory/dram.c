@@ -79,7 +79,6 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 }
 
 static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
-	Log("HW_SIZE %x", HW_MEM_SIZE);
 	test(addr < HW_MEM_SIZE, "addr = %x\n", addr);
 
 	dram_addr temp;
