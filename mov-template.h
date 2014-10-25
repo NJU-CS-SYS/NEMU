@@ -2,14 +2,6 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 
-
-/* this head file will be included three times,
- * with the ``concat'' macro,
- * each function will be defined three times
- * different SUFFIX,
- * which really reduce the code length!
- */
-
 make_helper(concat(mov_i2r_, SUFFIX)) {
 	int reg_code = instr_fetch(eip, 1) & 0x7;
 	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
