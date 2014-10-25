@@ -23,7 +23,7 @@ make_helper(concat(push_, SUFFIX)) {
 	 */
 	Log("R_ESP is %x and DATA_BYTE is %d at EIP %x instr %x", REG(R_ESP), DATA_BYTE, eip, MEM_R(eip));
 	MEM_W( REG(R_ESP) - DATA_BYTE, REG(reg_code) );
-	REG(R_ESP) += DATA_BYTE;
+	REG(R_ESP) -= DATA_BYTE;
 
 	print_asm("push" str(SUFFIX) " %%%s", REG_NAME(reg_code));
 	return 1;
