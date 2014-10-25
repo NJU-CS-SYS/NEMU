@@ -13,6 +13,7 @@ make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 	if (m.reg == 7) {
 		if(m.mod == 3) {
 			imm = instr_fetch(eip + 1 + 1, 1);
+			len += 1;
 			sub = REG(m.R_M);
 			print_asm("cmp" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 		}
