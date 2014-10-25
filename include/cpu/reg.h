@@ -35,6 +35,22 @@ typedef union {
 	struct {
 		uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
 		swaddr_t eip;
+		uint32_t eflags;
+		/*
+		 * 0x 00 00 00 01, CF, Carry Flag
+		 * 0x 00 00 00 04, PF, Parity Flag
+		 * 0x 00 00 00 10, AF, Auxiliary Carry
+		 * 0x 00 00 00 40, ZF, Zero Flag
+		 * 0x 00 00 00 80, SF, Sign Flag
+		 * 0x 00 00 01 00, TF, Trap Flag
+		 * 0x 00 00 02 00, IF, Interrupt Enable
+		 * 0x 00 00 04 00, DF, Direction Flag
+		 * 0x 00 00 08 00, OF, Overflow Flag
+		 * 0x 00 00 30 00, IO PL, I/O Privilege Level
+		 * 0x 00 00 40 00, NT, Nested Task Flag
+		 * 0x 00 01 00 00, RF, Resume Flag
+		 * 0x 00 02 00 00, VM, Virtual 8086 Mode
+		 */
 	};
 } CPU_state;
 
