@@ -1,3 +1,4 @@
+#include "common.h"
 bool parity(uint32_t val) {
 	val = 0xff & val;
 	int c = 0;
