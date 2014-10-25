@@ -7,4 +7,6 @@
 
 #include "control-transfer/jcc.h"
 
+#include "binary-arithmetic/cmp.h"
+
 #include "misc/misc.h"
