@@ -1,7 +1,5 @@
 #include "exec/helper.h"
 
-extern char suffix;
-
 #define DATA_BYTE 1
 #include "jcc-template.h"
 #undef DATA_BYTE
@@ -17,6 +15,7 @@ extern char suffix;
 
 /* for instruction encoding overloading */
 
+extern char suffix;
 
 make_helper(je_v) {
 	return (suffix == 'l' ? je_l(eip) : je_w(eip));
