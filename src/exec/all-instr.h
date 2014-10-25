@@ -5,4 +5,6 @@
 
 #include "logical/test.h"
 
+#include "control-transfer/jcc.h"
+
 #include "misc/misc.h"
