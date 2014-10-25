@@ -59,10 +59,13 @@ extern CPU_state cpu;
 enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
 enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
+enum { CF, CONSERVE_1_1, PF, CONSERVE_0_2, AF, CONSERV_0_3, ZF, SF, TF, IF, DF, OF, IOPL, IOPL_CON, NT, CONSERV_O_4, RF, VM};
 
 #define reg_l(index) (cpu.gpr[index]._32)
 #define reg_w(index) (cpu.gpr[index]._16)
 #define reg_b(index) (cpu.gpr[index & 0x3]._8[index >> 2])
+#define FLAG_VAL(index) ((cpu.eflags & (0x1 << index)) == (0x1 << index))
+#define FLAG_CHG(index, val) (cpu.eflags = (val) ? (cpu.eflags | (0x1 << index)) : (cpu.eflags & (~(0x1 << index))))
 
 extern const char* regsl[];
 extern const char* regsw[];
