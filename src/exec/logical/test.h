@@ -5,4 +5,6 @@ make_helper(test_r_rm_b);
 make_helper(test_r_rm_w);
 make_helper(test_r_rm_l);
 
+make_helper(test_r_rm_v);
+
 #endif
