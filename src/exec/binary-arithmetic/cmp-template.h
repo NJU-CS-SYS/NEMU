@@ -30,7 +30,7 @@ make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 		FLAG_CHG(AF, ADJUST(imm, sub));
 		FLAG_CHG(PF, PARITY(result));
 		FLAG_CHG(CF, (sub - imm) < 0);
-		return len + DATA_BYTE + 1; // 1 for opcode
+		return len + 1; // 1 for opcode
 	}
 	assert(0);
 	return 1;
