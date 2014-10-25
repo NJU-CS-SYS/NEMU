@@ -21,7 +21,7 @@ make_helper(concat(push_, SUFFIX)) {
 	 * so we minus esp first by not store its result.
 	 * Due to little endian, esp should get smaller.
 	 */
-	Log("R_ESP is %x and DATA_BYTE is %d at EIP %x instr %d", REG(R_ESP), DATA_BYTE, eip, MEM_R(eip));
+	Log("R_ESP is %x and DATA_BYTE is %d at EIP %x instr %x", REG(R_ESP), DATA_BYTE, eip, MEM_R(eip));
 	MEM_W( REG(R_ESP) - DATA_BYTE, REG(reg_code) );
 	REG(R_ESP) += DATA_BYTE;
 
