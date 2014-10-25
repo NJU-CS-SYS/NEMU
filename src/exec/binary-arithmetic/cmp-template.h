@@ -5,12 +5,12 @@
 
 make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 	ModR_M m;
+	uint8_t imm;
+	uint32_t len = 1; // 1 for imm8
+	DATA_TYPE sub;
+	DATA_TYPE result;
+	m.val = instr_fetch(eip + 1, 1);
 	if (m.reg == 7) {
-		uint8_t imm;
-		uint32_t len = 1; // 1 for imm8
-		DATA_TYPE sub;
-		DATA_TYPE result;
-		m.val = instr_fetch(eip + 1, 1);
 		if(m.mod == 3) {
 			imm = instr_fetch(eip + 1 + 1, 1);
 			sub = REG(m.R_M);
@@ -25,7 +25,7 @@ make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 		}
 		result = sub - imm;
 		FLAG_CHG(OF, OVERFLOW(imm, sub, result));
-		FLAG_CHG(SF, MSB(reuslt));
+		FLAG_CHG(SF, MSB(result));
 		FLAG_CHG(ZF, result == 0);
 		FLAG_CHG(AF, ADJUST(imm, sub));
 		FLAG_CHG(PF, PARITY(result));
