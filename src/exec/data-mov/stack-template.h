@@ -21,7 +21,8 @@ make_helper(concat(push_, SUFFIX)) {
 	 * Due to little endian, esp should get smaller.
 	 */
 	Log("R_ESP is %x and DATA_BYTE is %d at EIP %x instr %x", REG(R_ESP), DATA_BYTE, eip, MEM_R(eip));
-	//MEM_W( REG(4) - DATA_BYTE, REG(reg_code) );
+	if (REG(4) - DATA_BYTE < 0x80000000) Log("fuck");
+	MEM_W( REG(4) - DATA_BYTE, REG(reg_code) );
 	REG(R_ESP) -= DATA_BYTE;
 
 	print_asm("push" str(SUFFIX) " %%%s", REG_NAME(reg_code));
