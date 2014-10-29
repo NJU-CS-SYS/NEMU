@@ -20,3 +20,5 @@ extern char suffix;
 make_helper(cmp_i8_rm_v) {
 	return (suffix == 'l' ? cmp_i8_rm_l(eip) : cmp_i8_rm_w(eip));
 }
+
+#include "reg.h"
