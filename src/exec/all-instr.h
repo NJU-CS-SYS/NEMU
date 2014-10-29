@@ -8,5 +8,7 @@
 #include "control-transfer/jcc.h"
 
 #include "binary-arithmetic/cmp.h"
+
 #include "binary-arithmetic/reg.h"
+
 #include "misc/misc.h"
