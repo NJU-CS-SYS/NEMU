@@ -13,8 +13,10 @@ make_helper(concat(sub_i2r_, SUFFIX)) {
 		default: reg_code = R_EAX; assert(0);
 	}
 	DATA_TYPE dest = REG(reg_code);
-	TEMP_SUB_I(imm, dest);
-	REG(reg_code) = dest;
+	DATA_TYPE result = dest;
+	TEMP_SUB_I(imm, result);
+	REG(reg_code) = result;
+	TEMP_SUB_FLAG(imm, dest, result);
 
 	print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(reg_code));
 	return DATA_BYTE + 1;
