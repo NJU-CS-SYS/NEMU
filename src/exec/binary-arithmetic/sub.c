@@ -23,3 +23,6 @@ make_helper(sub_i2r_v) {
 make_helper(sub_i2rm_v) {
 	return (suffix == 'l' ? sub_i2rm_l(eip) : sub_i2rm_w(eip));
 }
+make_helper(sub_i82rm_v) {
+	return (suffix == 'l' ? sub_i82rm_l(eip) : sub_i82rm_w(eip));
+}

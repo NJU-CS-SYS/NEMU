@@ -52,6 +52,34 @@ make_helper(concat(sub_i2rm_, SUFFIX)) {
 	}
 }
 
+make_helper(concat(sub_i82rm_, SUFFIX)) {
+	ModR_M m;
+	DATA_TYPE imm;
+	DATA_TYPE dest;
+	DATA_TYPE result;
+	m.val = instr_fetch(eip + 1, 1);
+	if(m.mod == 3) {
+		imm = instr_fetch(eip + 1 + 1, 1);
+		dest = REG(m.R_M);
+		result = dest;
+		TEMP_SUB_I(imm, result);
+		TEMP_SUB_FLAG(imm, dest, result);
+		print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
+		return 1 + DATA_BYTE + 1;
+	}
+	else {
+		swaddr_t addr;
+		int len = read_ModR_M(eip + 1, &addr);
+		imm = instr_fetch(eip + 1 + len, 1);
+		dest = MEM_R(addr);
+		result = dest;
+		TEMP_SUB_I(imm, result);
+		TEMP_SUB_FLAG(imm, dest, result);
+		MEM_W(addr, result);
+		print_asm("sub" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
+		return len + DATA_BYTE + 1;
+	}
+}
 /*
 make_helper(concat(mov_r2rm_, SUFFIX)) {
 	ModR_M m;
