@@ -65,7 +65,7 @@ make_helper(concat(sub_i82rm_, SUFFIX)) {
 		TEMP_SUB_I(imm, result);
 		TEMP_SUB_FLAG(imm, dest, result);
 		print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
-		return 1 + DATA_BYTE + 1;
+		return 1 + 1  + 1;
 	}
 	else {
 		swaddr_t addr;
@@ -77,7 +77,7 @@ make_helper(concat(sub_i82rm_, SUFFIX)) {
 		TEMP_SUB_FLAG(imm, dest, result);
 		MEM_W(addr, result);
 		print_asm("sub" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
-		return len + DATA_BYTE + 1;
+		return len + 1 + 1;
 	}
 }
 /*
