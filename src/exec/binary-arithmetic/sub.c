@@ -20,3 +20,6 @@ extern char suffix;
 make_helper(sub_i2r_v) {
 	return (suffix == 'l' ? sub_i2r_l(eip) : sub_i2r_w(eip));
 }
+make_helper(sub_i2rm_v) {
+	return (suffix == 'l' ? sub_i2rm_l(eip) : sub_i2rm_w(eip));
+}
