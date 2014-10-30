@@ -8,6 +8,6 @@ make_helper(reg_83_v) {
 	switch (m.reg) {
 		case 7: return cmp_i8_rm_v(eip);
 	}
-	assert(0);
+	test(0, "Invalid modrm reg domain with this opcode");
 	return 0;
 }
