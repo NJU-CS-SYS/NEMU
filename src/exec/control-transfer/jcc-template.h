@@ -9,4 +9,11 @@ make_helper(concat(je_, SUFFIX)) {
 	print_asm("je %x", cpu.eip + DATA_BYTE + 1);
 	return DATA_BYTE + 1;
 }
+
+make_helper(concat(jmp_rel_, SUFFIX)) {
+	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
+	eip += imm;
+	print_asm("jmp %x", eip + DATA_BYTE + 1);
+	return 1 + DATA_BYTE;
+}
 #include "exec/template-end.h"
