@@ -1,5 +1,5 @@
 #include "exec/helper.h"
-#include "reg.h"
+#include "dispatch.h"
 #include "cpu/modrm.h"
 make_helper(cmp_i8_rm_v);
 make_helper(reg_83_v) {
@@ -8,5 +8,6 @@ make_helper(reg_83_v) {
 	switch (m.reg) {
 		case 7: return cmp_i8_rm_v(eip);
 	}
-	return 2;
+	assert(0);
+	return 0;
 }
