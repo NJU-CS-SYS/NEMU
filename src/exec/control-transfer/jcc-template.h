@@ -28,4 +28,15 @@ make_helper(concat(jbe_rel_,SUFFIX)) {
 	print_asm("jbe %x", eip + DATA_BYTE + 1);
 	return 1 + DATA_BYTE;
 }
+
+make_helper(concat(jle_rel_,SUFFIX)) {
+	int32_t imm = instr_fetch(eip + 1, DATA_BYTE);
+	eip += imm;
+	if (DATA_BYTE == 2) eip &= 0x0000ffff;
+	if ((FLAG_VAL(OF) != FLAG_VAL(SF)) || FLAG_VAL(ZF)) {
+		cpu.eip += eip;
+	}
+	print_asm("jle %x", eip + DATA_BYTE + 1);
+	return 1 + DATA_BYTE;
+}
 #include "exec/template-end.h"

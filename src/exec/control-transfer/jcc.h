@@ -7,6 +7,7 @@ make_helper(je_w);
 make_helper(jmp_rel_b);
 make_helper(jmp_rel_w);
 make_helper(jbe_rel_b);
+make_helper(jle_rel_b);
 
 make_helper(je_v);
 
