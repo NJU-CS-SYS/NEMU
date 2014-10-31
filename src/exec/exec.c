@@ -1,6 +1,8 @@
 #include "exec/helper.h"
+#include "cpu/modrm.h"
 
 #include "all-instr.h"
+#include "group/group.h"
 
 typedef int (*helper_fun)(swaddr_t);
 
@@ -40,7 +42,7 @@ helper_fun opcode_table [256] = {
 /* 0x74 */	je_b, inv, jbe_rel_b, inv,
 /* 0x78 */	inv, inv, inv, inv, 
 /* 0x7c */	inv, inv, jle_rel_b, inv, 
-/* 0x80 */	reg_80_v, reg_81_v, nemu_trap, reg_83_v, 
+/* 0x80 */	group_80, group_81, nemu_trap, group_83, 
 /* 0x84 */	test_r_rm_b, test_r_rm_v, test_r_rm_v, inv, 
 /* 0x88 */	mov_r2rm_b, mov_r2rm_v, mov_rm2r_b, mov_rm2r_v,
 /* 0x8c */	inv, inv, inv, inv, 
@@ -139,6 +141,21 @@ helper_fun opcode_table_2 [256] = {
 /* 0xf4 */	inv, inv, inv, inv,
 /* 0xf8 */	inv, inv, inv, inv,
 /* 0xfc */	inv, inv, inv, inv
+};
+
+helper_fun group_table_80[8] = {
+	inv, inv, inv, inv,
+	inv, inv, inv, inv
+};
+
+helper_fun group_table_81[8] = {
+	inv, inv, inv, inv,
+	inv, inv, inv, inv
+};
+
+helper_fun group_table_83[8] = {
+	inv, inv, inv, inv,
+	inv, inv, inv, inv
 };
 
 make_helper(exec) {
