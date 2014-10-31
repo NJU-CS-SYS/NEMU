@@ -6,6 +6,7 @@ extern char suffix;
 #define JCC_LEN_DEF int len = DATA_BYTE + (DATA_BYTE == 1 ? 1 : 2);
 
 #define JCC_COMMON_REL(condition, name) \
+Log("size = %d", len);\
 int32_t imm = instr_fetch(eip + 1, DATA_BYTE);\
 eip += imm;\
 if (suffix == 'w') eip &= 0x0000ffff;\
