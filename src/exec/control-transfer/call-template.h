@@ -17,4 +17,12 @@ make_helper(concat(call_rel_, SUFFIX)) {
 	return 1 + DATA_BYTE;
 }
 
+/* leave */
+make_helper(concat(leave_, SUFFIX)) {
+	cpu.esp = cpu.ebp;
+	POP(concat(reg_, SUFFIX)(R_ESP));
+	print_asm("leave");
+	return 1;
+}
+
 #include "exec/template-end.h"

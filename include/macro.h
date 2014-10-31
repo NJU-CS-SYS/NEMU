@@ -30,4 +30,8 @@
 MEM_W( REG(R_ESP) - DATA_BYTE, src_data );\
 REG(R_ESP) -= DATA_BYTE
 
+#define POP(x)\
+x = MEM_R(concat(reg_, SUFFIX)(R_ESP));\
+concat(reg_, SUFFIX)(R_ESP) -= DATA_BYTE
+
 #endif

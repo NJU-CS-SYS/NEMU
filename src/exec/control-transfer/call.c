@@ -17,3 +17,7 @@ extern char suffix;
 make_helper(call_rel_v) {
 	return (suffix == 'l' ? call_rel_l(eip) : call_rel_w(eip));
 }
+
+make_helper(leave_v) {
+	return (suffix == 'l' ? leave_l(eip) : leave_w(eip));
+}
