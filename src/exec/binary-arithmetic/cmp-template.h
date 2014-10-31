@@ -1,7 +1,7 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
-#include "cpu/parity.h"
+#include "template.h"
 
 make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 	ModR_M m;
@@ -23,13 +23,7 @@ make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 		sub = MEM_R(addr);
 		print_asm("cmp" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 	}
-	result = sub - imm;
-	FLAG_CHG(OF, OVERFLOW(imm, sub, result));
-	FLAG_CHG(SF, MSB(result));
-	FLAG_CHG(ZF, result == 0);
-	FLAG_CHG(AF, ADJUST(imm, sub));
-	FLAG_CHG(PF, PARITY(result));
-	FLAG_CHG(CF, (sub - imm) < 0);
+	TEMP_SUB_I(imm, sub, result);
 	return len + 1; // 1 for opcode
 }
 
