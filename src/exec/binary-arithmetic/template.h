@@ -55,9 +55,9 @@ if (m.mod == 3) {\
 } else {\
 	len += read_ModR_M(eip + 1, &addr);\
 	src = instr_fetch(eip + len, size);\
-	len++;\
+	len += size;\
 	dest = MEM_R(addr);\
-	print_asm(str(name) str(SUFFIX) " $0x%x, %s", src, ModR_M_asm);\
+	print_asm(str(name) str(SUFFIX) " $0x%x,%s", src, ModR_M_asm);\
 }
 
 #define TEMP_I82RM_RES \
