@@ -10,9 +10,8 @@ make_helper(concat(add_r2rm_, SUFFIX)) {
 
 	TEMP_ADD_I(src, dest, result);
 
-	Log("src = %d, dest = %d, result = %d", src, dest, result);
 	if (addr) MEM_W(addr, result);
-	else REG(m.reg) = result;
+	else REG(m.R_M) = result;
 
 	return len;
 }
@@ -25,7 +24,7 @@ make_helper(concat(add_i82rm_, SUFFIX)) {
 	TEMP_ADD_I(src, dest, result);
 
 	if (addr) MEM_W(addr, result);
-	else REG(m.reg) = result;
+	else REG(m.R_M) = result;
 
 	return len;
 }
