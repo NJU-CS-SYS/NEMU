@@ -7,9 +7,11 @@ make_helper(concat(call_rel_, SUFFIX)) {
 	if (DATA_BYTE == 2) {
 		PUSH((DATA_TYPE)(eip & 0x0000ffff));
 		eip = (eip + imm) & 0x0000ffff;
+		cpu.eip = eip;
 	} else {
 		PUSH(eip);
-		eip = eip + imm;
+		eip += imm;
+		cpu.eip = eip;
 	}
 	print_asm("call" " $0x%x", eip + 1 + DATA_BYTE);
 	return 1 + DATA_BYTE;
