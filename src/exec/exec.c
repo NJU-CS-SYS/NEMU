@@ -150,7 +150,7 @@ helper_fun group_table_80[8] = {
 
 helper_fun group_table_81[8] = {
 	inv, inv, inv, inv,
-	inv, sub_i2rm_v, inv, inv
+	inv, sub_i2rm_v, inv, cmp_i2rm_v
 };
 
 helper_fun group_table_83[8] = {
