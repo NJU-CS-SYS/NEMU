@@ -3,11 +3,11 @@
 #include "cpu/modrm.h"
 
 make_helper(concat(je_, SUFFIX)) {
-	DATA_TYPE disp = instr_fetch(eip + 1, DATA_BYTE);
+	DATA_TYPE_S disp = instr_fetch(eip + 1, DATA_BYTE);
 	Log("disp = %d", disp);
-	if (FLAG_VAL(ZF)) cpu.eip += (int32_t)disp; /* sign extended */
+	if (FLAG_VAL(ZF)) cpu.eip += disp; /* sign extended */
 	if (DATA_BYTE == 2) cpu.eip &= 0x0000ffff;
-	print_asm("je %x", cpu.eip + DATA_BYTE + 1);
+	print_asm("je %x", eip + disp + DATA_BYTE + 1);
 	return DATA_BYTE + 1;
 }
 
