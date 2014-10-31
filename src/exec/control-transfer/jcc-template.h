@@ -3,7 +3,7 @@
 #include "cpu/modrm.h"
 extern char suffix;
 
-#define JCC_LEN_DEF int len = DATA_BYTE + (suffix == 'b' ? 1 : 2)
+#define JCC_LEN_DEF int len = DATA_BYTE + (DATA_BYTE == 1 ? 1 : 2);
 
 #define JCC_COMMON_REL(condition, name) \
 int32_t imm = instr_fetch(eip + 1, DATA_BYTE);\
