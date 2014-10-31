@@ -11,6 +11,7 @@ make_helper(concat(call_rel_, SUFFIX)) {
 		PUSH(eip);
 		eip = eip + imm;
 	}
+	print_asm("call" " $0x%x", imm);
 	return 1 + DATA_BYTE;
 }
 
