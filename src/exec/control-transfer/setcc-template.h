@@ -14,7 +14,7 @@ if (m.mod == 3) {\
 	swaddr_t addr;\
 	len += read_ModR_M(eip + 2, &addr);\
 	MEM_W(addr, (x));\
-	print_asm(str(name) str(SUFFIX) " %s", ModR_M_asm);\
+	print_asm(str(name) " %s", ModR_M_asm);\
 	return len;\
 }
 
