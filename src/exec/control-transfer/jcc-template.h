@@ -13,7 +13,6 @@ if ((condition)) cpu.eip = eip;\
 print_asm(str(name) " %x", eip + len);\
 return len
 
-
 make_helper(concat(je_, SUFFIX)) {
 	JCC_LEN_DEF;
 	JCC_COMMON_REL(FLAG_VAL(ZF), je);
