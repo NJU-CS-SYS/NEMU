@@ -118,6 +118,17 @@ static void cmd_info() {
 		printf("%-15s%#-15X%u\n","esi", cpu.esi, cpu.esi); 
 		printf("%-15s%#-15X%u\n","edi", cpu.edi, cpu.edi); 
 		printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip); 
+		printf("CF %d PF %d AF %d ZF %d SF %d TF %d IF %d DF %d OF %d",
+				FLAG_VAL(CF),
+				FLAG_VAL(PF),
+				FLAG_VAL(AF),
+				FLAG_VAL(ZF),
+				FLAG_VAL(SF),
+				FLAG_VAL(TF),
+				FLAG_VAL(IF),
+				FLAG_VAL(DF),
+				FLAG_VAL(OF)
+		      );
 	}
 	else if (strcmp(opt, "b") == 0) {
 		BP* current = getHead();
