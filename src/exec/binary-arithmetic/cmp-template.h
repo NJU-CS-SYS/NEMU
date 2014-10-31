@@ -23,8 +23,8 @@ make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 		sub = MEM_R(addr);
 		print_asm("cmp" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 	}
-	Log("src = %d, dest = %d, result = %d", imm, sub, result);
 	TEMP_SUB_I(imm, sub, result);
+	Log("src = %d, dest = %d, result = %d", imm, sub, result);
 	return len + 1; // 1 for opcode
 }
 
@@ -37,7 +37,7 @@ make_helper(concat(cmp_r2rm_, SUFFIX)) {
 	TEMP_R2RM(cmp);
 	TEMP_SUB_I(src, dest, result);
 
-	Log("src = %d, dest = %d, result = %d", imm, sub, result);
+	Log("src = %d, dest = %d, result = %d", src, dest, result);
 	return len;
 }
 
