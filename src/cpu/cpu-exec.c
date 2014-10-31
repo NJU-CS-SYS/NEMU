@@ -26,6 +26,9 @@ void restart() {
 	cpu.ebp = 0;
 	cpu.esp = 0x800000;
 	cpu.eflags = 0x2;
+	cpu.eax = 0;
+	cpu.ecx = 0;
+	cpu.edx = 0;
 
 	init_dram();
 
