@@ -1,11 +1,14 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
+extern char suffix;
 
 #define JCC_COMMON_REL(condition, name) \
 int32_t imm = instr_fetch(eip + 1, DATA_BYTE);\
 int len = DATA_BYTE + (DATA_BYTE == 1 ? 1 : 2);\
 eip += imm;\
+Log("suffix = %c", suffix);\
+if (DATA_BYTE == 2) eip &= 0x0000ffff;\
 if ((condition)) cpu.eip = eip;\
 print_asm(str(name) " %x", eip + len);\
 return len
@@ -17,6 +20,7 @@ make_helper(concat(je_, SUFFIX)) {
 
 make_helper(concat(jmp_rel_, SUFFIX)) {
 	JCC_COMMON_REL(1, jmp);
+
 }
 
 make_helper(concat(jbe_rel_, SUFFIX)) {
