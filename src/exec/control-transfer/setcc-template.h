@@ -19,7 +19,7 @@ if (m.mod == 3) {\
 }
 
 make_helper(set_ne_nz) {
-	SET_CONDITION(FLAG_VAL(ZF), setne);
+	SET_CONDITION(!FLAG_VAL(ZF), setne);
 }
 
 #include "exec/template-end.h"
