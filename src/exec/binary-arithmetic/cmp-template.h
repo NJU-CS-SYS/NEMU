@@ -22,7 +22,7 @@ make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 	else {
 		swaddr_t addr;
 		len += read_ModR_M(eip + 1, &addr);
-		imm = instr_fetch(eip + 1 + len, 1);
+		imm = instr_fetch(eip + len, 1);
 		sub = MEM_R(addr);
 		print_asm("cmp" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 	}
