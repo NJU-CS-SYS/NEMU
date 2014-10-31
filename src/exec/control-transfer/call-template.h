@@ -37,7 +37,7 @@ if (DATA_BYTE == 2) {\
 make_helper(concat(ret_near_, SUFFIX)) {
 	RET_COMMON;
 	print_asm("ret");
-	return 1;
+	return 0;
 }
 
 #undef RET_COMMON
