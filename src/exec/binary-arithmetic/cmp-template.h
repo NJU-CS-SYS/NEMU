@@ -3,7 +3,10 @@
 #include "cpu/modrm.h"
 #include "template.h"
 
+extern char suffix;
 make_helper(concat(cmp_i8_rm_, SUFFIX)) {
+	Log("suffix = %c", suffix);
+	Log("size = %d", DATA_BYTE);
 	ModR_M m;
 	uint8_t imm;
 	uint32_t len = 1; // 1 for imm8
