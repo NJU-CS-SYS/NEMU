@@ -11,6 +11,12 @@ int ans[] = {0, 0x1, 0x2, 0x7fffffff, 0x80000000, 0x80000001, 0xfffffffe, 0xffff
 #define NR_DATA (sizeof(test_data) / sizeof(test_data[0]))
 
 int main() {
+	nemu_assert(add(0,1) == 1);
+	nemu_assert(add(1,1) == 2);
+	nemu_assert(add(0,2) == 2);
+	nemu_assert(add(0,3) == 3);
+	nemu_assert(add(3,1) == 4);
+	nemu_assert(add(2,1) == 3);
 	int i, j, ans_idx = 0;
 	for(i = 0; i < NR_DATA; i ++) {
 		for(j = 0; j < NR_DATA; j ++) {
