@@ -20,7 +20,7 @@ make_helper(concat(add_r2rm_, SUFFIX)) {
 make_helper(concat(add_i82rm_, SUFFIX)) {
 	TEMP_VALUES_S;
 	TEMP_MOD_RM;
-	TEMP_I82RM(add);
+	TEMP_I2RM(add, 1);
 
 	TEMP_ADD_I(src, dest, result);
 
