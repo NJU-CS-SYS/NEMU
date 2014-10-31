@@ -17,6 +17,13 @@ FLAG_CHG(AF, ADJUST(src, dest));\
 FLAG_CHG(PF, PARITY(result));\
 FLAG_CHG(CF, (DATA_TYPE)result < (DATA_TYPE)dest)
 
+#define AND_FLAG(src, dest, result)\
+FLAG_CHG(OF,0);\
+FLAG_CHG(SF, MSB(result));\
+FLAG_CHG(ZF, result==0);\
+FLAG_CHG(PF, PARITY(result));\
+FLAG_CHG(CF, 0)
+
 #define TEMP_ADD_I(src, dest, result)\
 result = dest + (DATA_TYPE_S)src;\
 TEMP_FLAG(src, dest, result)
@@ -50,6 +57,10 @@ if (m.mod == 3) {\
 	dest = MEM_R(addr);\
 	print_asm(str(name) str(SUFFIX) " $0x%x, %s", src, ModR_M_asm);\
 }
+
+#define TEMP_I82RM_RES \
+if (addr == 0) REG(m.R_M) = result;\
+else MEM_W(addr, result)
 
 #define TEMP_VALUES \
 DATA_TYPE src, dest, result;\
