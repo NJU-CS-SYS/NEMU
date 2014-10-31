@@ -5,7 +5,7 @@
 make_helper(concat(call_rel_, SUFFIX)) {
 	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
 	if (DATA_BYTE == 2) {
-		PUSH((DATA_TYPE)(eip & 0x0000ffff + 1 + DATA_BYTE));
+		PUSH((DATA_TYPE)((eip & 0x0000ffff) + 1 + DATA_BYTE));
 		eip = (eip + imm) & 0x0000ffff;
 		cpu.eip = eip;
 	} else {
