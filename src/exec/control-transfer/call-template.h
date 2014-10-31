@@ -37,9 +37,9 @@ if (DATA_BYTE == 2) {\
 #ifndef __RET_C3__
 #define __RET_C3__
 make_helper(ret_near) {
-	log(cpu.eip);
+	Log("eip is %x", cpu.eip);
 	RET_COMMON;
-	log(cpu.eip);
+	Log("eip is %x", cpu.eip);
 	test(0, "...");
 	print_asm("ret");
 	return 1;
