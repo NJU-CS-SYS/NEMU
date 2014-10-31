@@ -6,7 +6,4 @@
 #include "add.h"
 #include "and.h"
 
-/* modrm reg domain variety */
-#include "dispatch.h"
-
 #endif
