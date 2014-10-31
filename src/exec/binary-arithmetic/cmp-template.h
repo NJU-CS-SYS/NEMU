@@ -24,7 +24,7 @@ make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 		print_asm("cmp" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 	}
 	TEMP_SUB_I(imm, sub, result);
-//	Log("src = %d, dest = %d, result = %d", imm, sub, result);
+	Log("src = %d, dest = %d, result = %d", imm, sub, result);
 	return len + 1; // 1 for opcode
 }
 
