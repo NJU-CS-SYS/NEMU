@@ -3,6 +3,7 @@
 
 #include "cmp.h"
 #include "sub.h"
+#include "add.h"
 
 /* modrm reg domain variety */
 #include "dispatch.h"

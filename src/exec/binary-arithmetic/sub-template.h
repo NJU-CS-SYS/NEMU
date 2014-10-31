@@ -16,7 +16,7 @@ make_helper(concat(sub_i2r_, SUFFIX)) {
 	DATA_TYPE result = dest;
 	TEMP_SUB_I(imm, result);
 	REG(reg_code) = result;
-	TEMP_SUB_FLAG(imm, dest, result);
+	TEMP_FLAG(imm, dest, result);
 
 	print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(reg_code));
 	return DATA_BYTE + 1;
@@ -34,7 +34,7 @@ make_helper(concat(sub_i2rm_, SUFFIX)) {
 		dest = REG(m.R_M);
 		result = dest;
 		TEMP_SUB_I(imm, result);
-		TEMP_SUB_FLAG(imm, dest, result);
+		TEMP_FLAG(imm, dest, result);
 		print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 		return 1 + DATA_BYTE + 1;
 	}
@@ -45,7 +45,7 @@ make_helper(concat(sub_i2rm_, SUFFIX)) {
 		dest = MEM_R(addr);
 		result = dest;
 		TEMP_SUB_I(imm, result);
-		TEMP_SUB_FLAG(imm, dest, result);
+		TEMP_FLAG(imm, dest, result);
 		MEM_W(addr, result);
 		print_asm("sub" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 		return len + DATA_BYTE + 1;
@@ -63,7 +63,7 @@ make_helper(concat(sub_i82rm_, SUFFIX)) {
 		dest = REG(m.R_M);
 		result = dest;
 		TEMP_SUB_I(imm, result);
-		TEMP_SUB_FLAG(imm, dest, result);
+		TEMP_FLAG(imm, dest, result);
 		print_asm("sub" str(SUFFIX) " $0x%x,%%%s", imm, REG_NAME(m.R_M));
 		return 1 + 1  + 1;
 	}
@@ -74,7 +74,7 @@ make_helper(concat(sub_i82rm_, SUFFIX)) {
 		dest = MEM_R(addr);
 		result = dest;
 		TEMP_SUB_I(imm, result);
-		TEMP_SUB_FLAG(imm, dest, result);
+		TEMP_FLAG(imm, dest, result);
 		MEM_W(addr, result);
 		print_asm("sub" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 		return len + 1 + 1;
