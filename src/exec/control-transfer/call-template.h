@@ -25,4 +25,24 @@ make_helper(concat(leave_, SUFFIX)) {
 	return 1;
 }
 
+#define RET_COMMON \
+if (DATA_BYTE == 2) {\
+	DATA_TYPE ip;\
+	POP(ip);\
+	cpu.eip = ip & 0x0000ffff;\
+} else {\
+	POP(cpu.eip);\
+}
+
+#ifndef __RET_C3__
+#define __RET_C3__
+make_helper(ret_near) {
+	RET_COMMON;
+	print_asm("ret");
+	return 1;
+}
+#endif
+
+#undef RET_COMMON
+
 #include "exec/template-end.h"
