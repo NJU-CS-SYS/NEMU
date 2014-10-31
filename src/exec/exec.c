@@ -74,6 +74,77 @@ helper_fun opcode_table [256] = {
 /* 0xfc */	inv, inv, inv, inv
 };
 
+helper_fun opcode_table_2 [256] = {
+/* 0x00 */	inv, inv, inv, inv,
+/* 0x04 */	inv, inv, inv, inv, 
+/* 0x08 */	inv, inv, inv, inv, 
+/* 0x0c */	inv, inv, inv, inv, 
+/* 0x10 */	inv, inv, inv, inv, 
+/* 0x14 */	inv, inv, inv, inv, 
+/* 0x18 */	inv, inv, inv, inv, 
+/* 0x1c */	inv, inv, inv, inv, 
+/* 0x20 */	inv, inv, inv, inv, 
+/* 0x24 */	inv, inv, inv, inv,
+/* 0x28 */	inv, inv, inv, inv, 
+/* 0x2c */	inv, inv, inv, inv,
+/* 0x30 */	inv, inv, inv, inv, 
+/* 0x34 */	inv, inv, inv, inv,
+/* 0x38 */	inv, inv, inv, inv, 
+/* 0x3c */	inv, inv, inv, inv, 
+/* 0x40 */	inv, inv, inv, inv, 
+/* 0x44 */	inv, inv, inv, inv,
+/* 0x48 */	inv, inv, inv, inv, 
+/* 0x4c */	inv, inv, inv, inv, 
+/* 0x50 */	inv, inv, inv, inv,	
+/* 0x54 */	inv, inv, inv, inv,
+/* 0x58 */	inv, inv, inv, inv, 
+/* 0x5c */	inv, inv, inv, inv, 
+/* 0x60 */	inv, inv, inv, inv,
+/* 0x64 */	inv, inv, inv, inv,
+/* 0x68 */	inv, inv, inv, inv, 
+/* 0x6c */	inv, inv, inv, inv, 
+/* 0x70 */	inv, inv, inv, inv,
+/* 0x74 */	inv, inv, inv, inv,
+/* 0x78 */	inv, inv, inv, inv, 
+/* 0x7c */	inv, inv, inv, inv, 
+/* 0x80 */	inv, inv, inv, inv,
+/* 0x84 */	inv, inv, inv, inv,
+/* 0x88 */	inv, inv, inv, inv,
+/* 0x8c */	inv, inv, inv, inv, 
+/* 0x90 */	inv, inv, inv, inv,
+/* 0x94 */	inv, set_ne_nz, inv, inv,
+/* 0x98 */	inv, inv, inv, inv, 
+/* 0x9c */	inv, inv, inv, inv, 
+/* 0xa0 */	inv, inv, inv, inv,
+/* 0xa4 */	inv, inv, inv, inv,
+/* 0xa8 */	inv, inv, inv, inv,
+/* 0xac */	inv, inv, inv, inv,
+/* 0xb0 */	inv, inv, inv, inv,
+/* 0xb4 */	inv, inv, inv, inv,
+/* 0xb8 */	inv, inv, inv, inv,
+/* 0xbc */	inv, inv, inv, inv,
+/* 0xc0 */	inv, inv, inv, inv,
+/* 0xc4 */	inv, inv, inv, inv,
+/* 0xc8 */	inv, inv, inv, inv,
+/* 0xcc */	inv, inv, inv, inv,
+/* 0xd0 */	inv, inv, inv, inv,
+/* 0xd4 */	inv, inv, inv, inv,
+/* 0xd8 */	inv, inv, inv, inv,
+/* 0xdc */	inv, inv, inv, inv,
+/* 0xe0 */	inv, inv, inv, inv,
+/* 0xe4 */	inv, inv, inv, inv,
+/* 0xe8 */	inv, inv, inv, inv,
+/* 0xec */	inv, inv, inv, inv,
+/* 0xf0 */	inv, inv, inv, inv,
+/* 0xf4 */	inv, inv, inv, inv,
+/* 0xf8 */	inv, inv, inv, inv,
+/* 0xfc */	inv, inv, inv, inv
+};
+
 make_helper(exec) {
-	return opcode_table[ instr_fetch(eip, 1) ](eip);
+	uint8_t instr = instr_fetch(eip, 1);
+	switch (instr) {
+		case 0x0f: return opcode_table_2[instr_fetch(eip + 1, 1)](eip);
+		default: return opcode_table[instr](eip);
+	}
 }

@@ -1,7 +1,7 @@
 #ifndef __TEMPLATE__
 #define __TEMPLATE__
 #include "exec/helper.h"
-//#include "exec/flag.h"
+
 #define _TEMP_SUB_I(src, dest, result)\
 if (sizeof(src) == 1 && sizeof(dest) > 1) {\
 	result = dest - (DATA_TYPE_S)src;\
