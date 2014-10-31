@@ -4,7 +4,7 @@
 
 make_helper(concat(je_, SUFFIX)) {
 	DATA_TYPE_S disp = instr_fetch(eip + 1, DATA_BYTE);
-	Log("disp = %d", disp);
+	Log("zf = %d", FLAG_VAL(ZF));
 	if (FLAG_VAL(ZF)) cpu.eip += disp; /* sign extended */
 	if (DATA_BYTE == 2) cpu.eip &= 0x0000ffff;
 	print_asm("je %x", eip + disp + DATA_BYTE + 1);
