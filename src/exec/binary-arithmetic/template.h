@@ -47,7 +47,7 @@ if (m.mod == 3) {\
 #define TEMP_I82RM(name) \
 if (m.mod == 3) {\
 	dest = REG(m.R_M);\
-	src = instr_fetch(eip + 2, 1);\
+	src = (DATA_TYPE_S)instr_fetch(eip + 2, 1);\
 	len += 2;\
 	print_asm(str(name) str(SUFFIX) " $0x%x, %%%s", src, REG_NAME(m.R_M));\
 } else {\
