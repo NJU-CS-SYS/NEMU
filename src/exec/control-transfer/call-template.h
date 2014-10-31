@@ -5,11 +5,11 @@
 make_helper(concat(call_rel_, SUFFIX)) {
 	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
 	if (DATA_BYTE == 2) {
-		PUSH((DATA_TYPE)((eip & 0x0000ffff) + 1 + DATA_BYTE));
+		PUSH((DATA_TYPE)((eip & 0x0000ffff) + DATA_BYTE));
 		eip = (eip + imm) & 0x0000ffff;
 		cpu.eip = eip;
 	} else {
-		PUSH(eip + 1 + DATA_BYTE);
+		PUSH(eip + DATA_BYTE);
 		eip += imm;
 		cpu.eip = eip;
 	}
@@ -37,7 +37,7 @@ if (DATA_BYTE == 2) {\
 make_helper(concat(ret_near_, SUFFIX)) {
 	RET_COMMON;
 	print_asm("ret");
-	return 0;
+	return 1;
 }
 
 #undef RET_COMMON
