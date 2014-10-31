@@ -5,8 +5,9 @@
 #define JCC_COMMON_REL(condition, name) \
 int32_t imm = instr_fetch(eip + 1, DATA_BYTE);\
 int len = DATA_BYTE + (DATA_BYTE == 1 ? 1 : 2);\
-Log("len = %d", len);\
+Log("eip 0 = %x", eip);\
 eip += imm;\
+Log("eip 1 = %x", eip);\
 if (DATA_BYTE == 2) eip &= 0x0000ffff;\
 if ((condition)) cpu.eip = eip;\
 print_asm(str(name) " %x", eip + len);\
