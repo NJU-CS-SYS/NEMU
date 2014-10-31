@@ -9,7 +9,7 @@ make_helper(concat(and_i82rm_, SUFFIX)) {
 	int len = 1;
 	TEMP_MOD_RM;
 	TEMP_I82RM(and);
-	Log("src %x", src);
+	Log("src %x", (uint32_t)src);
 	
 	result = dest & src;
 
