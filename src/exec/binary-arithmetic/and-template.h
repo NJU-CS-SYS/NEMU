@@ -4,9 +4,7 @@
 #include "template.h"
 
 make_helper(concat(and_i82rm_, SUFFIX)) {
-	DATA_TYPE dest, result;
-	DATA_TYPE_S src;
-	int len = 1;
+	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	TEMP_I82RM(and);
 	
