@@ -41,10 +41,10 @@ if (m.mod == 3) {\
 if (m.mod == 3) {\
 	dest = REG(m.R_M);\
 	src = instr_fetch(eip + 2, 1);\
-	len++;\
+	len += 2;\
 	print_asm(str(name) str(SUFFIX) " $0x%x, %%%s", src, REG_NAME(m.R_M));\
 } else {\
-	len += read_ModR_M(eip + 1, &addr);\
+	len += read_ModR_M(eip + 1, &addr) + 1;\
 	src = instr_fetch(eip + len, 1);\
 	dest = MEM_R(addr);\
 	print_asm(str(name) str(SUFFIX) " $0x%x, %s", src, ModR_M_asm);\
