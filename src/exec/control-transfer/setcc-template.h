@@ -8,7 +8,7 @@ ModR_M m;\
 m.val = instr_fetch(eip + 2, 1);\
 if (m.mod == 3) {\
 	REG(m.reg) = (x);\
-	print_asm(str(name) str(SUFFIX) " %%%s", REG_NAME(m.reg));\
+	print_asm(str(name) " %%%s", REG_NAME(m.reg));\
 	return len + 1;\
 } else {\
 	swaddr_t addr;\
