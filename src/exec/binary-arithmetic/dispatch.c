@@ -31,9 +31,11 @@ make_helper(reg_81_v) {
 
 make_helper(cmp_i8_rm_v);
 make_helper(sub_i82rm_v);
+make_helper(add_i82rm_v);
 make_helper(reg_83_v) {
 	GET_REG;
 	switch (m.reg) {
+		case 0: return add_i82rm_v(eip);
 		case 5: return sub_i82rm_v(eip);
 		case 7: return cmp_i8_rm_v(eip);
 	}

@@ -16,3 +16,7 @@ extern char suffix;
 make_helper(add_r2rm_v) {
 	return (suffix == 'l' ? add_r2rm_l(eip) : add_r2rm_w(eip));
 }
+
+make_helper(add_i82rm_v) {
+	return (suffix == 'l' ? add_i82rm_l(eip) : add_i82rm_w(eip));
+}
