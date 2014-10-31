@@ -145,17 +145,17 @@ helper_fun opcode_table_2 [256] = {
 
 helper_fun group_table_80[8] = {
 	inv, inv, inv, inv,
-	inv, inv, inv, inv
+	inv, sub_i2rm_b, inv, cmp_i8_rm_b
 };
 
 helper_fun group_table_81[8] = {
 	inv, inv, inv, inv,
-	inv, inv, inv, inv
+	inv, sub_i2rm_v, inv, inv
 };
 
 helper_fun group_table_83[8] = {
-	inv, inv, inv, inv,
-	inv, inv, inv, inv
+	add_i82rm_v, inv, inv, inv,
+	and_i82rm_v, sub_i82rm_v, inv, cmp_i8_rm_v
 };
 
 make_helper(exec) {

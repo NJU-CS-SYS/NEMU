@@ -4,7 +4,10 @@
 make_helper(add_r2rm_b);
 make_helper(add_r2rm_w);
 make_helper(add_r2rm_l);
+make_helper(add_i82rm_w);
+make_helper(add_i82rm_l);
 
 make_helper(add_r2rm_v);
+make_helper(add_i82rm_v);
 
 #endif
