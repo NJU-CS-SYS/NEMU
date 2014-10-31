@@ -28,25 +28,14 @@ make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 }
 
 make_helper(concat(cmp_r2rm_, SUFFIX)) {
-	ModR_M m;
-	DATA_TYPE src, dest, result;
-	int len = 1;
+	TEMP_VALUES;
+	TEMP_MOD_RM;
 
-	m.val = instr_fetch(eip + 1, 1);
 	src = REG(m.reg);
 	
-	if (m.mod == 3) {
-		dest = REG(m.R_M);
-		len++;
-		print_asm("cmp" str(SUFFIX) " %%%s,%%%s", REG_NAME(m.reg), REG_NAME(m.R_M));
-	} else {
-		swaddr_t addr;
-		len += read_ModR_M(eip + 1, &addr);
-		dest = MEM_R(addr);
-		print_asm("cmp" str(SUFFIX) " %%%s,%s", REG_NAME(m.reg), ModR_M_asm);
-	}
-
+	TEMP_R2RM(cmp);
 	TEMP_SUB_I(src, dest, result);
+
 	return len;
 }
 

@@ -25,4 +25,24 @@ TEMP_FLAG(src, dest, result)
 _TEMP_SUB_I(src, dest, result);\
 TEMP_FLAG(src, dest, result)
 
+#define TEMP_R2RM(name) \
+if (m.mod == 3) {\
+	dest = REG(m.R_M);\
+	len++;\
+	print_asm(str(name) str(SUFFIX) " %%%s, %%%s", REG_NAME(m.reg), REG_NAME(m.R_M));\
+} else {\
+	len += read_ModR_M(eip + 1, &addr);\
+	dest = MEM_R(addr);\
+	print_asm(str(name) str(SUFFIX) " %%%s, %s", REG_NAME(m.reg), ModR_M_asm);\
+}	
+
+#define TEMP_VALUES \
+DATA_TYPE src, dest, result;\
+int len = 1;
+
+#define TEMP_MOD_RM \
+ModR_M m;\
+m.val = instr_fetch(eip + 1, 1);\
+swaddr_t addr
+	
 #endif
