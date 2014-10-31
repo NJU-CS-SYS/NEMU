@@ -34,18 +34,13 @@ if (DATA_BYTE == 2) {\
 	POP(cpu.eip);\
 }
 
-#ifndef __RET_C3__
-#define __RET_C3__
-make_helper(ret_near) {
-	Log("data byte %d", DATA_BYTE);
+make_helper(concat(ret_near_, SUFFIX)) {
 	Log("eip is %x", cpu.eip);
 	RET_COMMON;
 	Log("eip is %x", cpu.eip);
-	test(0, "...");
 	print_asm("ret");
 	return 1;
 }
-#endif
 
 #undef RET_COMMON
 

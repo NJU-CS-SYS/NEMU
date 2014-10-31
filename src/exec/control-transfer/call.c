@@ -21,3 +21,7 @@ make_helper(call_rel_v) {
 make_helper(leave_v) {
 	return (suffix == 'l' ? leave_l(eip) : leave_w(eip));
 }
+
+make_helper(ret_near_v) {
+	return (suffix == 'l' ? ret_near_l(eip) : ret_near_w(eip));
+}
