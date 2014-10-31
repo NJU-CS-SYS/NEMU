@@ -4,10 +4,12 @@
 #include "template.h"
 
 make_helper(concat(and_i82rm_, SUFFIX)) {
-	TEMP_VALUES_S;
+	DATA_TYPE dest, result;
+	DATA_TYPE_S src;
+	int len = 1;
 	TEMP_MOD_RM;
 	TEMP_I82RM(and);
-	Log("src %x", (int32_t)src);
+	Log("src %x", src);
 	
 	result = dest & src;
 
