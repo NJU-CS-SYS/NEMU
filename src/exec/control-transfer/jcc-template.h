@@ -2,41 +2,30 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 
+#define JCC_COMMON_REL(condition, name) \
+int32_t imm = instr_fetch(eip + 1, DATA_BYTE);\
+int len = DATA_BYTE + (DATA_BYTE == 1 ? 1 : 2);\
+eip += imm;\
+if (DATA_BYTE == 2) eip &= 0x0000ffff;\
+if ((condition)) cpu.eip = eip;\
+print_asm(str(name) " %x", eip + len);\
+return len
+
+
 make_helper(concat(je_, SUFFIX)) {
-	int32_t disp = instr_fetch(eip + 1, DATA_BYTE);
-	//Log("zf = %d", FLAG_VAL(ZF));
-	if (FLAG_VAL(ZF)) cpu.eip += disp; /* sign extended */
-	if (DATA_BYTE == 2) cpu.eip &= 0x0000ffff;
-	print_asm("je %x", eip + disp + DATA_BYTE + 1);
-	return DATA_BYTE + 1;
+	JCC_COMMON_REL(FLAG_VAL(ZF), je);
 }
 
 make_helper(concat(jmp_rel_, SUFFIX)) {
-	int32_t imm = instr_fetch(eip + 1, DATA_BYTE);
-	cpu.eip += imm;
-	print_asm("jmp %x", eip + DATA_BYTE + 1 + imm);
-	return 1 + DATA_BYTE;
+	JCC_COMMON_REL(1, jmp);
 }
 
-make_helper(concat(jbe_rel_,SUFFIX)) {
-	int32_t imm = instr_fetch(eip + 1, DATA_BYTE);
-	eip += imm;
-	if (DATA_BYTE == 2) eip &= 0x0000ffff;
-	if (FLAG_VAL(CF) || FLAG_VAL(ZF)) {
-		cpu.eip += eip;
-	}
-	print_asm("jbe %x", eip + DATA_BYTE + 1);
-	return 1 + DATA_BYTE;
+make_helper(concat(jbe_rel_, SUFFIX)) {
+	JCC_COMMON_REL((FLAG_VAL(CF) || FLAG_VAL(ZF)), jbe);
 }
 
-make_helper(concat(jle_rel_,SUFFIX)) {
-	int32_t imm = instr_fetch(eip + 1, DATA_BYTE);
-	eip += imm;
-	if (DATA_BYTE == 2) eip &= 0x0000ffff;
-	if ((FLAG_VAL(OF) != FLAG_VAL(SF)) || FLAG_VAL(ZF)) {
-		cpu.eip += eip;
-	}
-	print_asm("jle %x", eip + DATA_BYTE + 1);
-	return 1 + DATA_BYTE;
+make_helper(concat(jle_rel_, SUFFIX)) {
+	JCC_COMMON_REL(((FLAG_VAL(OF) != FLAG_VAL(SF)) || FLAG_VAL(ZF)), jle);
 }
+
 #include "exec/template-end.h"

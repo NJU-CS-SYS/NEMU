@@ -13,7 +13,7 @@ helper_fun opcode_table [256] = {
 /* 0x00 */	add_r2rm_b, add_r2rm_v, add_r2rm_v, inv, 
 /* 0x04 */	inv, inv, inv, inv, 
 /* 0x08 */	inv, inv, inv, inv, 
-/* 0x0c */	inv, inv, inv, inv, 
+/* 0x0c */	inv, inv, inv, opcode_2, 
 /* 0x10 */	inv, inv, inv, inv, 
 /* 0x14 */	inv, inv, inv, inv, 
 /* 0x18 */	inv, inv, inv, inv, 
@@ -110,7 +110,7 @@ helper_fun opcode_table_2 [256] = {
 /* 0x78 */	inv, inv, inv, inv, 
 /* 0x7c */	inv, inv, inv, inv, 
 /* 0x80 */	inv, inv, inv, inv,
-/* 0x84 */	inv, inv, inv, inv,
+/* 0x84 */	inv, inv, jbe_rel_v, inv,
 /* 0x88 */	inv, inv, inv, inv,
 /* 0x8c */	inv, inv, inv, inv, 
 /* 0x90 */	inv, inv, inv, inv,
@@ -159,9 +159,5 @@ helper_fun group_table_83[8] = {
 };
 
 make_helper(exec) {
-	uint8_t instr = instr_fetch(eip, 1);
-	switch (instr) {
-		case 0x0f: return opcode_table_2[instr_fetch(eip + 1, 1)](eip);
-		default: return opcode_table[instr](eip);
-	}
+	return opcode_table[instr_fetch(eip, 1)](eip);
 }

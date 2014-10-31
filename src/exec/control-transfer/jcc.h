@@ -10,5 +10,6 @@ make_helper(jbe_rel_b);
 make_helper(jle_rel_b);
 
 make_helper(je_v);
+make_helper(jbe_rel_v);
 
 #endif
