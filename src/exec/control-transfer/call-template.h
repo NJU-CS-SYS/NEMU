@@ -35,9 +35,7 @@ if (DATA_BYTE == 2) {\
 }
 
 make_helper(concat(ret_near_, SUFFIX)) {
-	Log("eip is %x", cpu.eip);
 	RET_COMMON;
-	Log("eip is %x", cpu.eip);
 	print_asm("ret");
 	return 1;
 }
