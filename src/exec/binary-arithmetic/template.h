@@ -38,11 +38,11 @@ if (m.mod == 3) {\
 
 #define TEMP_VALUES \
 DATA_TYPE src, dest, result;\
-int len = 1;
+int len = 1
 
 #define TEMP_MOD_RM \
 ModR_M m;\
 m.val = instr_fetch(eip + 1, 1);\
 swaddr_t addr
-	
+
 #endif
