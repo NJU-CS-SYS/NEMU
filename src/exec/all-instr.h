@@ -4,7 +4,7 @@
 
 #include "logical/test.h"
 
-#include "control-transfer/jcc.h"
+#include "control-transfer/collection.h"
 
 #include "binary-arithmetic/collection.h"
 

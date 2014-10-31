@@ -25,4 +25,9 @@
 #define ADJUST(sub, past_sub) \
 	(((uint32_t)past_sub & 0xf) - ((uint32_t)sub & 0xf) < 0) \
 	|| (((uint32_t)past_sub & 0xf) + ((uint32_t)sub & 0xf) > 0)
+
+#define PUSH(src_data)\
+MEM_W( REG(R_ESP) - DATA_BYTE, src_data );\
+REG(R_ESP) -= DATA_BYTE
+
 #endif
