@@ -12,4 +12,15 @@ uint32_t instr_fetch(swaddr_t addr, size_t len);
 extern char assembly[];
 #define print_asm(...) assert(snprintf(assembly, 40, __VA_ARGS__) < 40)
 
+#define v_helper(name) \
+make_helper(concat(name_, v)) {\
+	return (suffix == 'l' ? concat(name_, l)(eip) : concat(name_, w)(eip));\
+}
+
+#define all_helper(name) \
+make_helper(concat(name_, b));\
+make_helper(concat(name_, w));\
+make_helper(concat(name_, l));\
+make_helper(concat(name_, v))
+
 #endif
