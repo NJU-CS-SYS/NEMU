@@ -33,4 +33,9 @@ make_helper(concat(jle_rel_, SUFFIX)) {
 	JCC_COMMON_REL(((FLAG_VAL(OF) != FLAG_VAL(SF)) || FLAG_VAL(ZF)), jle);
 }
 
+make_helper(concat(jl_rel_, SUFFIX)) {
+	JCC_LEN_DEF;
+	JCC_COMMON_REL((FLAG_VAL(OF) != FLAG_VAL(SF)), jl);
+}
+
 #include "exec/template-end.h"
