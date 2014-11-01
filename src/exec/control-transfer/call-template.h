@@ -2,7 +2,10 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 
+#define DEBUG(name) \
+Log("esp in " str(name) " %x", cpu.esp)
 make_helper(concat(call_rel_, SUFFIX)) {
+	DEBUG(call);
 	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
 	if (DATA_BYTE == 2) {
 		PUSH((DATA_TYPE)((eip & 0x0000ffff) + DATA_BYTE));
@@ -13,16 +16,18 @@ make_helper(concat(call_rel_, SUFFIX)) {
 		eip += imm;
 		cpu.eip = eip;
 	}
-	Log("eip = %x", MEM_R(REG(R_ESP)));
-	Log("esp = %x", cpu.esp);
+	DEBUG(call);
 	print_asm("call" " $0x%x", eip + 1 + DATA_BYTE);
 	return 1 + DATA_BYTE;
 }
 
 /* leave */
 make_helper(concat(leave_, SUFFIX)) {
+	DEBUG(leave);
 	cpu.esp = cpu.ebp;
+	DEBUG(leave after ebp);
 	POP(concat(reg_, SUFFIX)(R_EBP));
+	DEBUG(leave_after_pop);
 	print_asm("leave");
 	return 1;
 }
@@ -37,7 +42,9 @@ if (DATA_BYTE == 2) {\
 }
 
 make_helper(concat(ret_near_, SUFFIX)) {
+	DEBUG(ret);
 	RET_COMMON;
+	DEBUG(after_ret);
 	print_asm("ret");
 	return 1;
 }
