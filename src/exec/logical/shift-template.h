@@ -65,5 +65,12 @@ make_helper(concat(sal_i8_, SUFFIX)) {
 	return len;
 }
 
+make_helper(concat(sar_i8_, SUFFIX)) {
+	SHIFT_HEAD_IMM;
+	SHIFT_PROCESS('r', 'i');
+	SHIFT_PRINT(sal);
+	return len;
+}
+
 
 #include "exec/template-end.h"

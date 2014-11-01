@@ -13,6 +13,10 @@
 #include "group-template.h"
 #undef OPCODE
 
+#define OPCODE c0
+#include "group-template.h"
+#undef OPCODE
+
 #define OPCODE c1
 #include "group-template.h"
 #undef OPCODE

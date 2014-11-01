@@ -158,14 +158,19 @@ helper_fun group_table_83[8] = {
 	and_i82rm_v, sub_i82rm_v, inv, cmp_i8_rm_v
 };
 
+helper_fun group_table_c0[8] = {
+	inv, inv, inv, inv,
+	sal_i8_b, inv, inv, sar_i8_b
+};
+
 helper_fun group_table_c1[8] = {
 	inv, inv, inv, inv,
-	sal_i8_v, inv, inv, inv
+	sal_i8_v, inv, inv, sal_i8_v 
 };
 
 helper_fun group_table_d0[8] = {
 	inv, inv, inv, inv,
-	sal_i8_b, inv, inv, inv
+	inv, inv, inv, inv
 };
 
 make_helper(exec) {

@@ -14,3 +14,4 @@
 
 extern char suffix;
 v_helper(sal_i8);
+v_helper(sar_i8);
