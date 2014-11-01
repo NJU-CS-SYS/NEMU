@@ -1,19 +1,10 @@
 #ifndef __JCC_H__
 #define __JCC_H__
 
-make_helper(je_b);
-make_helper(je_l);
-make_helper(je_w);
-make_helper(jmp_rel_b);
-make_helper(jmp_rel_w);
-make_helper(jbe_rel_b);
-make_helper(jle_rel_b);
-make_helper(jl_rel_b);
-make_helper(jl_rel_w);
-make_helper(jl_rel_l);
-
-make_helper(je_v);
-make_helper(jbe_rel_v);
-make_helper(jl_rel_v);
+all_helper(je);
+all_helper(jbe_rel);
+all_helper(jle_rel);
+all_helper(jl_rel);
+all_helper(jmp_rel);
 
 #endif
