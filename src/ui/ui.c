@@ -118,7 +118,8 @@ static void cmd_info() {
 		printf("%-15s%#-15X%u\n","esi", cpu.esi, cpu.esi); 
 		printf("%-15s%#-15X%u\n","edi", cpu.edi, cpu.edi); 
 		printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip); 
-		printf("CF %d PF %d AF %d ZF %d SF %d TF %d IF %d DF %d OF %d",
+		printf("CF PF AF ZF SF TF IF DF OF\n"
+		       "%2d %2d %2d %2d %2d %2d %2d %2d %2d\n",
 				FLAG_VAL(CF),
 				FLAG_VAL(PF),
 				FLAG_VAL(AF),
