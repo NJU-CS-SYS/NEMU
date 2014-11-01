@@ -13,8 +13,8 @@ extern char assembly[];
 #define print_asm(...) assert(snprintf(assembly, 40, __VA_ARGS__) < 40)
 
 #define v_helper(name) \
-make_helper(concat(name_, v)) {\
-	return (suffix == 'l' ? concat(name_, l)(eip) : concat(name_, w)(eip));\
+make_helper(concat(name##_, v)) {\
+	return (suffix == 'l' ? concat(name##_, l)(eip) : concat(name##_, w)(eip));\
 }
 
 #define all_helper(name) \

@@ -17,9 +17,7 @@
 
 extern char suffix;
 
-make_helper(je_v) {
-	return (suffix == 'l' ? je_l(eip) : je_w(eip));
-}
+v_helper(je);
 make_helper(jbe_rel_v) {
 	return (suffix == 'l' ? jbe_rel_l(eip) : jbe_rel_w(eip));
 }
