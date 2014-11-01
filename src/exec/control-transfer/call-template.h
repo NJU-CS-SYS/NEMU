@@ -13,6 +13,7 @@ make_helper(concat(call_rel_, SUFFIX)) {
 		eip += imm;
 		cpu.eip = eip;
 	}
+	Log("eip = %x", MEM_R(REG(R_ESP)));
 	print_asm("call" " $0x%x", eip + 1 + DATA_BYTE);
 	return 1 + DATA_BYTE;
 }
@@ -36,6 +37,8 @@ if (DATA_BYTE == 2) {\
 
 make_helper(concat(ret_near_, SUFFIX)) {
 	RET_COMMON;
+	Log("size "str(DATA_BYTE));
+	Log("eip = %x", cpu.eip);
 	print_asm("ret");
 	return 1;
 }
