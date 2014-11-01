@@ -23,8 +23,8 @@ make_helper(concat(call_rel_, SUFFIX)) {
 make_helper(concat(leave_, SUFFIX)) {
 	Log("esp 0 = %x", cpu.esp);
 	cpu.esp = cpu.ebp;
-	Log("esp 1 = %x", cpu.esp);
 	POP(concat(reg_, SUFFIX)(R_EBP));
+	Log("esp 1 = %x", cpu.esp);
 	print_asm("leave");
 	return 1;
 }
