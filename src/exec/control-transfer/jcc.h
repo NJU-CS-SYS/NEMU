@@ -6,5 +6,6 @@ all_helper(jbe_rel);
 all_helper(jle_rel);
 all_helper(jl_rel);
 all_helper(jmp_rel);
+all_helper(jg_rel);
 
 #endif
