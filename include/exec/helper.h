@@ -18,9 +18,9 @@ make_helper(concat(name##_, v)) {\
 }
 
 #define all_helper(name) \
-make_helper(concat(name_, b));\
-make_helper(concat(name_, w));\
-make_helper(concat(name_, l));\
-make_helper(concat(name_, v))
+make_helper(concat(name##_, b));\
+make_helper(concat(name##_, w));\
+make_helper(concat(name##_, l));\
+make_helper(concat(name##_, v))
 
 #endif
