@@ -36,6 +36,7 @@ if (DATA_BYTE == 2) {\
 }
 
 make_helper(concat(ret_near_, SUFFIX)) {
+	Log("stack = %x", MEM_R(REG(R_ESP)));
 	RET_COMMON;
 	Log("size "str(DATA_BYTE));
 	Log("eip = %x", cpu.eip);
