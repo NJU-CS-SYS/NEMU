@@ -31,3 +31,4 @@
 #define MEM_W(addr, data) swaddr_write(addr, DATA_BYTE, data)
 
 #define MSB(n) ((DATA_TYPE)(n) >> ((DATA_BYTE << 3) - 1))
+#define LSB(n) ((n & 0x1) == 0x1)

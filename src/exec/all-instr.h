@@ -2,7 +2,7 @@
 
 #include "data-mov/collection.h"
 
-#include "logical/test.h"
+#include "logical/collection.h"
 
 #include "control-transfer/collection.h"
 

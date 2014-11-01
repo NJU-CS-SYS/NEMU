@@ -6,3 +6,4 @@
 #undef MEM_R
 #undef MEM_W
 #undef MSB
+#undef LSB

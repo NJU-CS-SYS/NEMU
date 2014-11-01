@@ -4,6 +4,5 @@
 #include "cmp.h"
 #include "sub.h"
 #include "add.h"
-#include "and.h"
 
 #endif
