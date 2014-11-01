@@ -24,7 +24,7 @@ make_helper(concat(cmp_rm2r_, SUFFIX)) {
 	TEMP_VALUES;
 	TEMP_MOD_RM;
 	src = REG(m.reg);
-	TEMP_R2RM(cmp);
+	TEMP_RM2R(cmp);
 	TEMP_SUB_I(dest, src, result);
 	return len;
 }
