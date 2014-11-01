@@ -49,11 +49,11 @@ src = REG(m.reg);\
 if (m.mod == 3) {\
 	dest = REG(m.R_M);\
 	len++;\
-	print_asm(str(name) str(SUFFIX) " %%%s, %%%s", REG_NAME(m.R_M), REG_NAME(m.reg));\
+	print_asm(str(name) str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));\
 } else {\
 	len += read_ModR_M(eip + 1, &addr);\
 	dest = MEM_R(addr);\
-	print_asm(str(name) str(SUFFIX) " %%%s, %s", ModR_M_asm, REG_NAME(m.reg));\
+	print_asm(str(name) str(SUFFIX) " %%%s,%s", ModR_M_asm, REG_NAME(m.reg));\
 }
 
 #define TEMP_I2RM(name, size) \
