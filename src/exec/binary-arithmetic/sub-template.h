@@ -91,6 +91,15 @@ make_helper(concat(sub_i82rm_, SUFFIX)) {
 	TEMP_RESULT2RM(result);
 	return len;
 }
+
+make_helper(concat(sub_r2rm_, SUFFIX)) {
+	TEMP_VALUES;
+	TEMP_MOD_RM;
+	TEMP_R2RM(sub);
+	TEMP_SUB_I(src, dest, result);
+	TEMP_RESULT2RM(result);
+	return len;
+}
 /*
 make_helper(concat(mov_r2rm_, SUFFIX)) {
 	ModR_M m;
