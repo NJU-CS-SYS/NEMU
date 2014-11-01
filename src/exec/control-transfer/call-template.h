@@ -21,11 +21,8 @@ make_helper(concat(call_rel_, SUFFIX)) {
 
 /* leave */
 make_helper(concat(leave_, SUFFIX)) {
-	Log("esp 0 = %x", cpu.esp);
-	Log("ebp 0 = %x", MEM_R(cpu.ebp));
 	cpu.esp = cpu.ebp;
 	POP(concat(reg_, SUFFIX)(R_EBP));
-	Log("esp 1 = %x", cpu.esp);
 	print_asm("leave");
 	return 1;
 }
@@ -40,11 +37,7 @@ if (DATA_BYTE == 2) {\
 }
 
 make_helper(concat(ret_near_, SUFFIX)) {
-	Log("esp = %x", cpu.esp);
-	Log("stack = %x", MEM_R(REG(R_ESP)));
 	RET_COMMON;
-	Log("size "str(DATA_BYTE));
-	Log("eip = %x", cpu.eip);
 	print_asm("ret");
 	return 1;
 }
