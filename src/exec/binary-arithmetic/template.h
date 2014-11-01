@@ -30,7 +30,7 @@ TEMP_FLAG(src, dest, result)
 
 #define TEMP_SUB_I(src, dest, result) \
 _TEMP_SUB_I(src, dest, result);\
-TEMP_FLAG(src, dest, result)
+TEMP_FLAG(((~src)+1), dest, result)
 
 #define TEMP_R2RM(name) \
 src = REG(m.reg);\
@@ -60,7 +60,7 @@ if (m.mod == 3) {\
 	print_asm(str(name) str(SUFFIX) " $0x%x,%s", src, ModR_M_asm);\
 }
 
-#define TEMP_I82RM_RES \
+#define TEMP_RESULT2RM(result) \
 if (addr == 0) REG(m.R_M) = result;\
 else MEM_W(addr, result)
 

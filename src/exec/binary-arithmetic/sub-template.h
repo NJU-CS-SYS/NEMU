@@ -23,6 +23,7 @@ make_helper(concat(sub_i2r_, SUFFIX)) {
 
 
 make_helper(concat(sub_i2rm_, SUFFIX)) {
+	/*
 	ModR_M m;
 	DATA_TYPE imm;
 	DATA_TYPE dest;
@@ -47,6 +48,13 @@ make_helper(concat(sub_i2rm_, SUFFIX)) {
 		print_asm("sub" str(SUFFIX) " $0x%x,%s", imm, ModR_M_asm);
 		return len + DATA_BYTE + 1;
 	}
+	*/
+	TEMP_VALUES_S;
+	TEMP_MOD_RM;
+	TEMP_I2RM(sub, DATA_BYTE);
+	TEMP_SUB_I(src, dest, result);
+	TEMP_RESULT2RM(result);
+	return len;
 }
 
 make_helper(concat(sub_i82rm_, SUFFIX)) {
