@@ -12,3 +12,11 @@
 #define OPCODE 83
 #include "group-template.h"
 #undef OPCODE
+
+#define OPCODE c1
+#include "group-template.h"
+#undef OPCODE
+
+#define OPCODE d0
+#include "group-template.h"
+#undef OPCODE

@@ -158,6 +158,16 @@ helper_fun group_table_83[8] = {
 	and_i82rm_v, sub_i82rm_v, inv, cmp_i8_rm_v
 };
 
+helper_fun group_table_c1[8] = {
+	inv, inv, inv, inv,
+	sal_i8_v, inv, inv, inv
+};
+
+helper_fun group_table_d0[8] = {
+	inv, inv, inv, inv,
+	sal_i8_b, inv, inv, inv
+};
+
 make_helper(exec) {
 	return opcode_table[instr_fetch(eip, 1)](eip);
 }
