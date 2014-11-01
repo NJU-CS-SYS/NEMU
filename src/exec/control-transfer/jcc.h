@@ -8,8 +8,12 @@ make_helper(jmp_rel_b);
 make_helper(jmp_rel_w);
 make_helper(jbe_rel_b);
 make_helper(jle_rel_b);
+make_helper(jl_rel_b);
+make_helper(jl_rel_w);
+make_helper(jl_rel_l);
 
 make_helper(je_v);
 make_helper(jbe_rel_v);
+make_helper(jl_rel_v);
 
 #endif

@@ -23,3 +23,6 @@ make_helper(je_v) {
 make_helper(jbe_rel_v) {
 	return (suffix == 'l' ? jbe_rel_l(eip) : jbe_rel_w(eip));
 }
+make_helper(jl_rel_v) {
+	return (suffix == 'l' ? jl_rel_l(eip) : jl_rel_w(eip));
+}
