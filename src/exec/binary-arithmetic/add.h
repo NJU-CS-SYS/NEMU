@@ -10,4 +10,6 @@ make_helper(add_i82rm_l);
 make_helper(add_r2rm_v);
 make_helper(add_i82rm_v);
 
+all_helper(add_i2r);
+
 #endif

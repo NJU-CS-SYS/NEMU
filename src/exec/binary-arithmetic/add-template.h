@@ -29,6 +29,15 @@ make_helper(concat(add_i82rm_, SUFFIX)) {
 
 //	Log("src = %d, dest = %d, result = %d", src, dest, result);
 	return len;
-}
+} 
 
+make_helper(concat(add_i2r_, SUFFIX)) {
+	TEMP_VALUES_S;
+	src = instr_fetch(eip + 1, 1);
+	dest = REG(R_EAX); // al, ax, eax
+	TEMP_ADD_I(src, dest, result);
+	REG(R_EAX) = result;
+	len = 1 + DATA_BYTE;
+	return len;
+}
 #include "exec/template-end.h"

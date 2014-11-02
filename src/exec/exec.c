@@ -11,7 +11,7 @@ typedef int (*helper_fun)(swaddr_t);
 
 helper_fun opcode_table [256] = {
 /* 0x00 */	add_r2rm_b, add_r2rm_v, add_r2rm_v, inv, 
-/* 0x04 */	inv, inv, inv, inv, 
+/* 0x04 */	add_i2r_b, add_i2r_v, add_i2r_v, inv, 
 /* 0x08 */	inv, inv, inv, inv, 
 /* 0x0c */	inv, inv, inv, opcode_2, 
 /* 0x10 */	inv, inv, inv, inv, 
