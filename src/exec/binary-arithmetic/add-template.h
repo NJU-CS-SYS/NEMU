@@ -40,4 +40,14 @@ make_helper(concat(add_i2r_, SUFFIX)) {
 	len = 1 + DATA_BYTE;
 	return len;
 }
+
+make_helper(concat(add_i2rm_, SUFFIX)) {
+	TEMP_VALUES_S;
+	TEMP_MOD_RM;
+	test(m.reg == 0, "wrong dispatching in 83, add");
+	TEMP_I2RM(add, DATA_BYTE);
+	TEMP_ADD_I(src, dest, result);
+	TEMP_RESULT2RM(result);
+	return len;
+}
 #include "exec/template-end.h"

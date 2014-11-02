@@ -92,7 +92,7 @@ do{\
 do{\
 	if (addr == 0) REG(m.R_M) = result;\
 	else MEM_W(addr, result);\
-}while(0);
+}while(0)
 
 #define TEMP_VALUES \
 DATA_TYPE src, dest, result;\
