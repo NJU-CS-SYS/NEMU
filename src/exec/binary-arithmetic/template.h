@@ -3,26 +3,32 @@
 #include "exec/helper.h"
 
 #define _TEMP_SUB_I(src, dest, result)\
-if (sizeof(src) == 1 && sizeof(dest) > 1) {\
-	result = dest - (DATA_TYPE_S)src;\
-} else {\
-	result = dest - src;\
-}
+	do {\
+		if (sizeof(src) == 1 && sizeof(dest) > 1) {\
+			result = dest - (DATA_TYPE_S)src;\
+		} else {\
+			result = dest - src;\
+		}\
+	}while(0)
 
 #define TEMP_FLAG(src, dest, result)\
-FLAG_CHG(OF,OVERFLOW(src, dest, result));\
-FLAG_CHG(SF, MSB(result));\
-FLAG_CHG(ZF, result==0);\
-FLAG_CHG(AF, ADJUST(src, dest));\
-FLAG_CHG(PF, PARITY(result));\
-FLAG_CHG(CF, (DATA_TYPE)result < (DATA_TYPE)dest)
+	do {\
+		FLAG_CHG(OF,OVERFLOW(src, dest, result));\
+		FLAG_CHG(SF, MSB(result));\
+		FLAG_CHG(ZF, result==0);\
+		FLAG_CHG(AF, ADJUST(src, dest));\
+		FLAG_CHG(PF, PARITY(result));\
+		FLAG_CHG(CF, (DATA_TYPE)result < (DATA_TYPE)dest);\
+	}while(0)
 
 #define AND_FLAG(src, dest, result)\
-FLAG_CHG(OF,0);\
-FLAG_CHG(SF, MSB(result));\
-FLAG_CHG(ZF, result==0);\
-FLAG_CHG(PF, PARITY(result));\
-FLAG_CHG(CF, 0)
+	do {\
+		FLAG_CHG(OF,0);\
+		FLAG_CHG(SF, MSB(result));\
+		FLAG_CHG(ZF, result==0);\
+		FLAG_CHG(PF, PARITY(result));\
+		FLAG_CHG(CF, 0);\
+	}while(0)
 
 #define TEMP_ADD_I(src, dest, result)\
 result = dest + (DATA_TYPE_S)src;\
