@@ -15,5 +15,5 @@ make_helper(sub_i2rm_v);
 make_helper(sub_i82rm_v);
 
 all_helper(sub_r2rm);
-
+all_helper(sub_rm2r);
 #endif
