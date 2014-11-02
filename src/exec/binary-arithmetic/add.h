@@ -12,5 +12,6 @@ make_helper(add_i82rm_v);
 
 all_helper(add_i2r);
 all_helper(add_i2rm);
+all_helper(add_rm2r);
 
 #endif

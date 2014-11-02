@@ -54,4 +54,14 @@ make_helper(concat(add_i2rm_, SUFFIX)) {
 	TEMP_RESULT2RM(result);
 	return len;
 }
+
+make_helper(concat(add_rm2r_, SUFFIX)) {
+	TEMP_VALUES_S;
+	TEMP_MOD_RM;
+	TEMP_RM2R(add);
+	TEMP_ADD_I(dest, src, result);
+	REG(m.reg) = result;
+	return len;
+}
+
 #include "exec/template-end.h"

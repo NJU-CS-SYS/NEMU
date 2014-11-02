@@ -23,3 +23,4 @@ make_helper(add_i82rm_v) {
 
 v_helper(add_i2r);
 v_helper(add_i2rm);
+v_helper(add_rm2r);
