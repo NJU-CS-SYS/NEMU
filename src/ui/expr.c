@@ -9,6 +9,8 @@
 #include <regex.h>
 #include <stdlib.h>
 
+swaddr_t get_sym_addr(char*);
+
 enum {
 	OR, AND,                    // 0, 1 
 	BIT_OR, BIT_XOR, BIT_AND,   // 2, 3, 4
@@ -19,7 +21,8 @@ enum {
 	NOT, POINTER, NEG, BIT_NOT, // 18, 19, 20, 21
 	LBRACKET, RBRACKET,         // 22, 23
 	NUM, HEX, REG,              // 25, 26, 27
-	NOTYPE                      // 28
+	IDENTIFIER,                 // 28
+	NOTYPE                      // 29
 
 	/* TODO: Add more token types */
 
@@ -32,6 +35,7 @@ static struct rule {
 	{"0x[0-9a-f]+", HEX},              // heximal
 	{"[0-9]+", NUM},                // decimal
 	{"\\$(eax|ecx|edx|ebx|esp|ebp|esi|edi|eip|ax|cx|dx|bx|al|ah|cl|ch|dl|dh|bl|bh)", REG},
+	{"[A-Za-z_][A-Za-z_0-9]*", IDENTIFIER},
 	{"\\+", ADD},
 	{"-", SUB},
 	{"\\*", MUL},
@@ -195,13 +199,12 @@ static uint32_t evaluate(int p, int q) {
 		assert(0); // bad expression!
 	}
 	else if (p == q) {
+		char temp[32];
 		switch (tokens[p].type) {
-			char* rec = NULL;
-			char temp[5];
 			case NUM:
 					  return atoi(tokens[p].str);
 			case HEX: 
-					  return strtol(tokens[p].str, &rec, 16);
+					  return strtol(tokens[p].str, NULL, 16);
 			case REG:
 					  strcpy(temp, tokens[p].str);
 					  if (!strcmp(temp, "$eax")) return cpu.eax;
@@ -225,6 +228,8 @@ static uint32_t evaluate(int p, int q) {
  					  else if (!strcmp(temp, "$bx"))  return reg_w(R_BX);
  					  else if (!strcmp(temp, "$bl"))  return reg_b(R_BL);
  					  else if (!strcmp(temp, "$bh"))  return reg_b(R_BH);
+			case IDENTIFIER:
+					  return get_sym_addr(tokens[p].str);
 		}
 	}
 	else if (tokens[q].type == RBRACKET && pair[q] == p) return evaluate(p + 1, q - 1);

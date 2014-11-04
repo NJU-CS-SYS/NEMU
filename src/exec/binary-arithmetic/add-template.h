@@ -5,7 +5,7 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
-#include "template.h"
+#include "../template.h"
 
 make_helper(concat(add_r2rm_, SUFFIX)) {
 	TEMP_VALUES;

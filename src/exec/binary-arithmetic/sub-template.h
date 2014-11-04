@@ -5,7 +5,7 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
-#include "template.h"
+#include "../template.h"
 
 make_helper(concat(sub_i2r_, SUFFIX)) {
 	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);

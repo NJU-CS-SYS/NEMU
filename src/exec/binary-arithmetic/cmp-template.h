@@ -1,7 +1,7 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
-#include "template.h"
+#include "../template.h"
 
 make_helper(concat(cmp_i8_rm_, SUFFIX)) {
 	TEMP_VALUES_S;
