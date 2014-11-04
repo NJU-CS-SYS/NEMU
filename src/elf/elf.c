@@ -106,7 +106,8 @@ uint32_t get_sym_addr(char* str) {
 	int len = strlen(str);
 	int i;
 	for (i = 0; i < nr_symtab_entry; i++)
-		if (strcmp(str, strtab + symtab[i].st_name) == 0) {
+		if (strncmp(str, strtab + symtab[i].st_name, len) == 0
+				&& symtab[i].st_info != STT_FILE) {
 			Log("%s 0x%x len=%d", str, symtab[i].st_value, len);
 			return (uint32_t)symtab[i].st_value;
 		}
