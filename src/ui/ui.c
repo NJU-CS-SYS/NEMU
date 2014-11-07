@@ -203,7 +203,6 @@ static void cmd_bt() {
 
 	//TODO why at the start of func will lose some frame?
 	while (ebp != 0) {
-		Log("head %p, temp %p, i %d", head, temp, i);
 		if (head == NULL) { // empty list
 			temp = (frame_node*)malloc(sizeof(frame_node));
 			temp->name = read_func_name(eip);
@@ -218,6 +217,7 @@ static void cmd_bt() {
 		eip = swaddr_read(ebp + 4, 4);
 		ebp = swaddr_read(ebp, 4);
 		i++;
+		Log("head %p, temp %p, i %d, ebp %x, eip %x", head, temp, i, ebp, eip);
 	}
 	for (temp = head; i >= 0; i--) {
 		printf("#%d %s at %x\n", 
