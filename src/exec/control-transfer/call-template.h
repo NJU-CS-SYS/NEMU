@@ -2,7 +2,7 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 
-swaddr_t read_func_name(swaddr_t);
+swaddr_t read_func_name(swaddr_t addr, swaddr_t *value);
 
 #define DEBUG(name) \
 Log("esp in " str(name) " %x", cpu.esp)
@@ -19,7 +19,7 @@ make_helper(concat(call_rel_, SUFFIX)) {
 		cpu.eip = eip;
 	}
 
-	swaddr_t func_name = read_func_name(eip);
+	swaddr_t func_name = read_func_name(eip, NULL);
 	print_asm("call" " %x <%s+0x%x>",
 					eip + 1 + DATA_BYTE,
 					(char*)func_name,

@@ -18,10 +18,11 @@ void cpu_exec(uint32_t);
 void restart();
 void test_tokens(char* e);
 uint32_t calculate(char* e);
-swaddr_t read_func_name(swaddr_t);
+swaddr_t read_func_name(swaddr_t addr, swaddr_t *value);
 
 struct _frame_node {
 	swaddr_t name;
+	swaddr_t addr;
 	struct _frame_node *next;
 };
 typedef struct _frame_node frame_node;
@@ -199,7 +200,7 @@ static void _put_bt (frame_node* cur, int i) {
 	_put_bt(cur->next, i + 1);
 	printf("#%d %-10s %x\n", i,
 				(char*)cur->name,
-				cur->name);
+				cur->addr);
 }
 static void cmd_bt() {
 	swaddr_t eip = cpu.eip;
@@ -207,13 +208,12 @@ static void cmd_bt() {
 	frame_node *head = 
 			(frame_node*)malloc(sizeof(frame_node));
 	head->name = (swaddr_t)"head";
+	head->addr = 0;
 	head->next = NULL;
 	frame_node *temp = NULL;
 	while (ebp != 0) {
-		Log("ebp = %x, eip = %x, func %s", ebp, eip,
-				(char*)read_func_name(eip));
 		temp = (frame_node*)malloc(sizeof(frame_node));
-		temp->name = read_func_name(eip);
+		temp->name = read_func_name(eip, &(temp->addr));
 		temp->next = head->next;
 		head->next = temp;
 		eip = swaddr_read(ebp + 4, 4);
