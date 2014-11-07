@@ -81,7 +81,6 @@ void load_table() {
 
 	/* Double check */
 	assert(strtab != NULL && symtab != NULL);
-
 	fclose(fp);
 }
 
@@ -106,11 +105,17 @@ uint32_t get_sym_addr(char* str) {
 	int len = strlen(str);
 	int i;
 	for (i = 0; i < nr_symtab_entry; i++)
-		if (strncmp(str, strtab + symtab[i].st_name, len) == 0
-				&& symtab[i].st_info != STT_FILE) {
-			Log("%s 0x%x len=%d", str, symtab[i].st_value, len);
+		if (strncmp(str, strtab + symtab[i].st_name, len) == 0 && symtab[i].st_info != STT_FILE) {
 			return (uint32_t)symtab[i].st_value;
 		}
 	printf("No identifier found.\n");
 	return 0;
+}
+
+swaddr_t read_sym_name(swaddr_t ptr) {
+	int i;
+	for (i = 0; i < nr_symtab_entry; i++)
+		if (symtab[i].st_value == ptr)
+			return (swaddr_t)(symtab[i].st_name + strtab);
+	return (swaddr_t)"no symbol found";
 }
