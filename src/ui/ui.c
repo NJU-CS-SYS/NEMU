@@ -203,6 +203,8 @@ static void cmd_bt() {
 	frame_node *temp;
 	int i = -1;
 	while (ebp != 0) {
+		Log("ebp = %x, eip = %x, func %s", ebp, eip,
+				(char*)read_func_name(eip));
 		temp = (frame_node*)malloc(sizeof(frame_node));
 		temp->name = read_func_name(eip);
 		temp->next = head->next;
