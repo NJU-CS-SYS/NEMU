@@ -20,7 +20,7 @@ make_helper(concat(call_rel_, SUFFIX)) {
 	}
 
 	swaddr_t func_name = read_func_name(eip);
-	print_asm("call" " %x <%s+%x",
+	print_asm("call" " %x <%s+0x%x>",
 					eip + 1 + DATA_BYTE,
 					(char*)func_name,
 					eip + 1 + DATA_BYTE - func_name
