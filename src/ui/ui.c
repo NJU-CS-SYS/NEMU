@@ -201,7 +201,9 @@ static void cmd_bt() {
 	frame_node *temp = NULL;
 	int i = -1;
 
+	//TODO why at the start of func will lose some frame?
 	while (ebp > 0) {
+		Log("head %p, temp %p", head, temp);
 		if (head == NULL) { // empty list
 			temp = (frame_node*)malloc(sizeof(frame_node));
 			temp->name = read_func_name(eip);
