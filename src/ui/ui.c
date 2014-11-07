@@ -194,38 +194,36 @@ void cmd_w() {
 	wp_state = ON;
 }
 
+static void _put_bt (frame_node* cur, int i) {
+	if (cur == NULL) return;
+	_put_bt(cur->next, i + 1);
+	printf("#%d %10s %x", i,
+				(char*)cur->name,
+				cur->name);
+}
 static void cmd_bt() {
 	swaddr_t eip = cpu.eip;
 	uint32_t ebp = cpu.ebp;
-	frame_node *head = NULL;
+	frame_node *head = 
+			(frame_node*)malloc(sizeof(frame_node));
+	head->name = (swaddr_t)"head";
+	head->next = NULL;
 	frame_node *temp = NULL;
-	int i = -1;
-
-	//TODO why at the start of func will lose some frame?
 	while (ebp != 0) {
-		if (head == NULL) { // empty list
-			temp = (frame_node*)malloc(sizeof(frame_node));
-			temp->name = read_func_name(eip);
-			head = temp;
-			temp->next = NULL;
-		} else {
-			temp->next = 
-					(frame_node*)malloc(sizeof(frame_node));
-			temp = temp->next;
-			temp->next = NULL;
-		}
+		Log("ebp = %x, eip = %x, func %s", ebp, eip,
+				(char*)read_func_name(eip));
+		temp = (frame_node*)malloc(sizeof(frame_node));
+		temp->name = read_func_name(eip);
+		temp->next = head->next;
+		head->next = temp;
 		eip = swaddr_read(ebp + 4, 4);
 		ebp = swaddr_read(ebp, 4);
-		i++;
-		Log("head %p, temp %p, i %d, ebp %x, eip %x", head, temp, i, ebp, eip);
 	}
-	for (temp = head; i >= 0; i--) {
-		printf("#%d %s at %x\n", 
-					i,
-					(char*)temp->name,
-					temp->name);
-		temp = temp->next;
-	}
+
+	test(temp == head->next, "wrong loop end");
+
+	_put_bt(head->next, 0);
+
 	while (head != NULL) {
 		temp = head;
 		head = head->next;
