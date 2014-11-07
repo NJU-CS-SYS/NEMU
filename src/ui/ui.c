@@ -18,7 +18,13 @@ void cpu_exec(uint32_t);
 void restart();
 void test_tokens(char* e);
 uint32_t calculate(char* e);
+swaddr_t read_func_name(swaddr_t);
 
+struct _frame_node {
+	swaddr_t name;
+	struct _frame_node *next;
+};
+typedef struct _frame_node frame_node;
 /* We use the readline library to provide more flexibility to read from stdin. */
 char* rl_gets() { /* read line get string */
 	static char *line_read = NULL;
@@ -40,7 +46,6 @@ char* rl_gets() { /* read line get string */
 
 	return line_read;
 }
-
 /* This function will be called when you press <C-c>. And it will return to 
  * where you press <C-c>. If you are interesting in how it works, please
  * search for "Unix signal" in the Internet.
@@ -50,7 +55,6 @@ static void control_C(int signum) {
 		nemu_state = INT;
 	}
 }
-
 void init_signal() {
 	/* Register a signal handler. */
 	struct sigaction s;
@@ -60,7 +64,6 @@ void init_signal() {
 	int ret = sigaction(SIGINT, &s, NULL);
 	assert(ret == 0);
 }
-
 
 static void cmd_c() {
 	if(nemu_state == END) {
@@ -72,7 +75,6 @@ static void cmd_c() {
 	cpu_exec(-1);
 	if(nemu_state != END) { nemu_state = STOP; }
 }
-
 static void cmd_r() {
 	if(nemu_state != END) { 
 		char c;
@@ -93,7 +95,6 @@ restart_:
 	nemu_state = STOP; /* HIT good trap here !? */
 	cmd_c();
 }
-
 static void cmd_si() {
 	char* p = strtok(NULL, " ");
 	int run_times = 1;
@@ -105,7 +106,6 @@ static void cmd_si() {
 	cpu_exec(run_times);
 	if(nemu_state != END) { nemu_state = STOP; }
 }
-
 static void cmd_info() {
 	char* opt = strtok(NULL, " ");
 	if (strcmp(opt, "r") == 0) {
@@ -144,7 +144,6 @@ static void cmd_info() {
 		}
 	}
 }
-
 void cmd_x() {
 	char* _num = strtok(NULL, " ");
 	char* _addr = strtok(NULL, "");
@@ -162,7 +161,6 @@ void cmd_x() {
 		}
 	}
 }
-
 void cmd_b() {
 	char* p = strtok(NULL, "");
 	if (p[0] == '*') {
@@ -170,7 +168,6 @@ void cmd_b() {
 		add_bp(addr);
 	}
 }
-
 void cmd_d() {
 	char *opt = strtok(NULL, " ");
 	if (opt == NULL) { 
@@ -183,22 +180,52 @@ void cmd_d() {
 		else assert(0);
 	}
 }
-
 void cmd_e() {
 	char *expr = strtok(NULL, "");
 	test_tokens(expr);
 }
-
 void cmd_p() {
 	char *e = strtok(NULL, "");
 	printf("%u\n", calculate(e));
 }
-
 void cmd_w() {
 	char *expr = strtok(NULL, "");
 	add_watchpoint(expr);
 	wp_state = ON;
 }
+
+static void cmd_bt() {
+	swaddr_t eip = cpu.eip;
+	uint32_t ebp = cpu.ebp;
+	frame_node *head = (frame_node*)malloc(sizeof(frame_node));
+	head->next = NULL;
+	head->name = (swaddr_t)"head";
+	frame_node *temp;
+	int i = -1;
+	while (ebp != 0) {
+		temp = (frame_node*)malloc(sizeof(frame_node));
+		temp->name = read_func_name(eip);
+		temp->next = head->next;
+		head->next = temp;
+		eip = ebp - 4;
+		ebp = swaddr_read(ebp, 4);
+		i++;
+	}
+	for (; i >= 0; i--) {
+		printf("#%d %s at %x\n", 
+					i,
+					(char*)temp->name,
+					temp->name);
+		temp = temp->next;
+	}
+	while (head != NULL) {
+		temp = head;
+		head = head->next;
+		free(temp);
+	}
+}
+
+		
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
@@ -217,6 +244,7 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "p") == 0) { cmd_p(); }
 		else if(strcmp(p, "w") == 0) { cmd_w(); }
 		else if(strcmp(p, "si") == 0) { cmd_si(); }
+		else if(strcmp(p, "bt") == 0) { cmd_bt(); }
 		else if(strcmp(p, "info") == 0) { cmd_info(); }
 
 		/*remember to delete this test instr */
