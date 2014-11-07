@@ -209,7 +209,7 @@ static void cmd_bt() {
 		temp->name = read_func_name(eip);
 		temp->next = head->next;
 		head->next = temp;
-		eip = ebp - 4;
+		eip = ebp + 4;
 		ebp = swaddr_read(ebp, 4);
 		i++;
 	}
