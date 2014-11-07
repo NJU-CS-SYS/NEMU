@@ -197,23 +197,26 @@ void cmd_w() {
 static void cmd_bt() {
 	swaddr_t eip = cpu.eip;
 	uint32_t ebp = cpu.ebp;
-	frame_node *head = (frame_node*)malloc(sizeof(frame_node));
-	head->next = NULL;
-	head->name = (swaddr_t)"head";
-	frame_node *temp;
+	frame_node *head = NULL;
+	frame_node *temp = NULL;
 	int i = -1;
-	while (ebp != 0) {
-		Log("ebp = %x, eip = %x, func %s", ebp, eip,
-				(char*)read_func_name(eip));
-		temp = (frame_node*)malloc(sizeof(frame_node));
-		temp->name = read_func_name(eip);
-		temp->next = head->next;
-		head->next = temp;
-		eip = swaddr_read(ebp + 4, 4);
-		ebp = swaddr_read(ebp, 4);
+
+	while (ebp > 0) {
+		if (head == NULL) { // empty list
+			temp = (frame_node*)malloc(sizeof(frame_node));
+			temp->name = read_func_name(eip);
+			head = temp;
+			temp->next = NULL;
+		} else {
+			temp->next = (frame_node*)malloc(sizeof(frame_node));
+			temp = temp->next;
+			temp->next = NULL;
+		}
+			eip = swaddr_read(ebp + 4, 4);
+			ebp = swaddr_read(ebp, 4);
 		i++;
 	}
-	for (; i >= 0; i--) {
+	for (temp = head; i >= 0; i--) {
 		printf("#%d %s at %x\n", 
 					i,
 					(char*)temp->name,
