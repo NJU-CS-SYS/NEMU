@@ -112,10 +112,11 @@ uint32_t get_sym_addr(char* str) {
 	return 0;
 }
 
-swaddr_t read_sym_name(swaddr_t ptr) {
+swaddr_t read_func_name(swaddr_t addr) {
 	int i;
 	for (i = 0; i < nr_symtab_entry; i++)
-		if (symtab[i].st_value == ptr)
+		if (symtab[i].st_value <= addr
+			&& addr < symtab[i].st_value + symtab[i].st_size)
 			return (swaddr_t)(symtab[i].st_name + strtab);
 	return (swaddr_t)"no symbol found";
-}
+}	

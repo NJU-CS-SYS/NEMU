@@ -15,7 +15,7 @@ make_helper(concat(call_rel_, SUFFIX)) {
 		eip += imm;
 		cpu.eip = eip;
 	}
-	print_asm("call" " $0x%x", eip + 1 + DATA_BYTE);
+	print_asm("call" " %x", eip + 1 + DATA_BYTE );
 	return 1 + DATA_BYTE;
 }
 
