@@ -2,8 +2,11 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 
+swaddr_t read_func_name(swaddr_t);
+
 #define DEBUG(name) \
 Log("esp in " str(name) " %x", cpu.esp)
+
 make_helper(concat(call_rel_, SUFFIX)) {
 	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
 	if (DATA_BYTE == 2) {
@@ -15,7 +18,13 @@ make_helper(concat(call_rel_, SUFFIX)) {
 		eip += imm;
 		cpu.eip = eip;
 	}
-	print_asm("call" " %x", eip + 1 + DATA_BYTE );
+
+	swaddr_t func_name = read_func_name(eip);
+	print_asm("call" " %x <%s+%x",
+					eip + 1 + DATA_BYTE,
+					(char*)func_name,
+					eip + 1 + DATA_BYTE - func_name
+					);
 	return 1 + DATA_BYTE;
 }
 
