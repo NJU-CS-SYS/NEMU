@@ -197,7 +197,7 @@ void cmd_w() {
 static void _put_bt (frame_node* cur, int i) {
 	if (cur == NULL) return;
 	_put_bt(cur->next, i + 1);
-	printf("#%d %10s %x", i,
+	printf("#%d %-10s %x\n", i,
 				(char*)cur->name,
 				cur->name);
 }
