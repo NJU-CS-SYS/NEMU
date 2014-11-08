@@ -30,7 +30,6 @@ void loader() {
 	}
 
 	/* Hei wei gou! */
-	nemu_assert(elf->e_entry == 0x800000);
 	((void(*)(void))elf->e_entry)();
 
 	/* When returning from the program, it is executed successfully */
