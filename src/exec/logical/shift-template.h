@@ -34,7 +34,9 @@ do {\
 	}\
 } while (0)
 
-make_helper(concat(concat(s, concat(SIGN, concat(DIR, _i8_))), SUFFIX)) {
+#define make_shift(mod) make_helper(concat(concat(s, concat(SIGN, concat(DIR, _##mod##_))), SUFFIX))
+//make_helper(concat(concat(s, concat(SIGN, concat(DIR, _i8_))), SUFFIX)) {
+make_shift(i8) {
 	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	TEMP_I2RM(sal, 1);
@@ -62,5 +64,5 @@ make_helper(concat(concat(s, concat(SIGN, concat(DIR, _12rm_))), SUFFIX)) {
 	result = dest;
 	TEMP_RESULT2RM(result);
 	return len;
-} 
+}
 #include "exec/template-end.h"
