@@ -7,15 +7,13 @@ void loader() {
 
 	Elf32_Phdr *ph = (void*)elf->e_phoff;
 	uint16_t step = elf->e_phentsize;
-	uint16_t phnum = elf->e_phnum;
+	//uint16_t phnum = elf->e_phnum;
 
 	nemu_assert(1);
 	int i;
-	for (i = 0; i < phnum; i++) {
-		HIT_GOOD_TRAP;
+	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
-			HIT_GOOD_TRAP;
 			char *dest = (char*)ph->p_vaddr;
 			char *src = (char*)ph->p_offset;
 			uint16_t filesz = ph->p_filesz;
