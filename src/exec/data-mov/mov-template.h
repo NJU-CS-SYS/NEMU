@@ -1,6 +1,7 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
+#include "../template.h"
 
 make_helper(concat(mov_i2r_, SUFFIX)) {
 	int reg_code = instr_fetch(eip, 1) & 0x7;
@@ -83,4 +84,46 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 	return 5;
 }
 
+make_helper(concat(movz_b2_, SUFFIX)) {
+	uint8_t src;
+	int len = 2;
+	ModR_M m;
+	m.val = instr_fetch(eip + 2, 1);
+	if (m.mod == 3) {// reg
+		src = REG(m.R_M);
+		print_asm("movzb" str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));
+		len++;
+	} else {
+		swaddr_t addr;
+		len += read_ModR_M(eip + 2, &addr);
+		src = MEM_R(addr); 
+		
+		print_asm("movzb" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
+	}
+	REG(m.reg) = src;
+	REG(m.reg) &= 0x000000ff;
+	return len;
+}
+
+make_helper(concat(movz_w2_, SUFFIX)) {
+	uint16_t src;
+	int len = 2;
+	ModR_M m;
+	m.val = instr_fetch(eip + 2, 1);
+	if (m.mod == 3) { // reg
+		src = REG(m.R_M);
+		len++;
+
+		print_asm("movzw" str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));
+	} else {
+		swaddr_t addr;
+		len += read_ModR_M(eip + 2, &addr);
+		src = MEM_R(addr);
+		
+		print_asm("movzw" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
+	}
+	REG(m.reg) = src;
+	REG(m.reg) &= 0x0000ffff;
+	return len;
+}
 #include "exec/template-end.h"

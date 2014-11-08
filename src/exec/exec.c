@@ -78,7 +78,7 @@ helper_fun opcode_table [256] = {
 
 helper_fun opcode_table_2 [256] = {
 /* 0x00 */	inv, inv, inv, inv,
-/* 0x04 */	inv, inv, inv, inv, 
+/* 0x04 */	inv, inv, movz_b2_v, movz_w2_l, 
 /* 0x08 */	inv, inv, inv, inv, 
 /* 0x0c */	inv, inv, inv, inv, 
 /* 0x10 */	inv, inv, inv, inv, 
