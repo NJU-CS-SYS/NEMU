@@ -31,7 +31,7 @@ void loader() {
 		ph += step;
 	}
 
-	nemu_assert(i == 1);
+	nemu_assert(i == 3);
 	/* Hei wei gou! */
 	((void(*)(void))elf->e_entry)();
 	/* When returning from the program, it is executed successfully */
