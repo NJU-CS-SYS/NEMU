@@ -57,7 +57,7 @@ do{\
 	} else {\
 		len += read_ModR_M(eip + 1, &addr);\
 		dest = MEM_R(addr);\
-		print_asm(str(name) str(SUFFIX) " %%%s,%s", ModR_M_asm, REG_NAME(m.reg));\
+		print_asm(str(name) str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));\
 	}\
 }while(0)
 
