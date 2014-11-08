@@ -58,11 +58,11 @@ helper_fun opcode_table [256] = {
 /* 0xb4 */	mov_i2r_b, mov_i2r_b, mov_i2r_b, mov_i2r_b,
 /* 0xb8 */	mov_i2r_v, mov_i2r_v, mov_i2r_v, mov_i2r_v, 
 /* 0xbc */	mov_i2r_v, mov_i2r_v, mov_i2r_v, mov_i2r_v, 
-/* 0xc0 */	inv, group_c1, inv, ret_near_v,
+/* 0xc0 */	group_c0, group_c1, inv, ret_near_v,
 /* 0xc4 */	inv, inv, mov_i2rm_b, mov_i2rm_v,
 /* 0xc8 */	inv, leave_l, inv, inv,
 /* 0xcc */	int3, inv, inv, inv,
-/* 0xd0 */	group_d0, inv, inv, inv,
+/* 0xd0 */	group_d0, group_d1, group_d2, group_d3,
 /* 0xd4 */	inv, inv, inv, inv,
 /* 0xd8 */	inv, inv, inv, inv,
 /* 0xdc */	inv, inv, inv, inv,
@@ -160,17 +160,32 @@ helper_fun group_table_83[8] = {
 
 helper_fun group_table_c0[8] = {
 	inv, inv, inv, inv,
-	sal_i8_b, inv, inv, sar_i8_b
+	sal_i8_b, shr_i8_b, inv, sar_i8_b
 };
 
 helper_fun group_table_c1[8] = {
 	inv, inv, inv, inv,
-	sal_i8_v, inv, inv, sal_i8_v 
+	sal_i8_v, shr_i8_v, inv, sar_i8_v 
 };
 
 helper_fun group_table_d0[8] = {
 	inv, inv, inv, inv,
-	inv, inv, inv, inv
+	sal_12rm_b, shr_12rm_b, inv, sar_12rm_b
+};
+
+helper_fun group_table_d1[8] = {
+	inv, inv, inv, inv,
+	sal_12rm_v, shr_12rm_v, inv, sar_12rm_v
+};
+
+helper_fun group_table_d2[8] = {
+	inv, inv, inv, inv,
+	sal_r2rm_b, shr_r2rm_b, inv, sar_r2rm_b
+};
+
+helper_fun group_table_d3[8] = {
+	inv, inv, inv, inv,
+	sal_r2rm_v, shr_r2rm_v, inv, sar_r2rm_v
 };
 
 make_helper(exec) {

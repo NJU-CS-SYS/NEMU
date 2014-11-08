@@ -24,3 +24,15 @@
 #define OPCODE d0
 #include "group-template.h"
 #undef OPCODE
+
+#define OPCODE d1
+#include "group-template.h"
+#undef OPCODE
+
+#define OPCODE d2
+#include "group-template.h"
+#undef OPCODE
+
+#define OPCODE d3
+#include "group-template.h"
+#undef OPCODE
