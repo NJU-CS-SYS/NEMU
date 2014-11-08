@@ -11,7 +11,7 @@ void loader() {
 
 	uint16_t i;
 	int k = 0;
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
 			k++;
