@@ -21,6 +21,16 @@ do {\
 	FLAG_CHG(CF, (DATA_TYPE)result < (DATA_TYPE)dest);\
 }while(0)
 
+#define TEMP_SUB_FLAG(src, dest, result)\
+do {\
+	FLAG_CHG(OF,OVERFLOW(src, dest, result));\
+	FLAG_CHG(SF, MSB(result));\
+	FLAG_CHG(ZF, result==0);\
+	FLAG_CHG(AF, ADJUST(src, dest));\
+	FLAG_CHG(PF, PARITY(result));\
+	FLAG_CHG(CF, !((DATA_TYPE)result < (DATA_TYPE)dest));\
+}while(0)
+
 #define TEMP_ADD_I(src, dest, result)\
 do{\
 	result = dest + (DATA_TYPE_S)src;\
@@ -30,7 +40,7 @@ do{\
 #define TEMP_SUB_I(src, dest, result) \
 do{\
 	_TEMP_SUB_I(src, dest, result);\
-	TEMP_FLAG(((~src)+1), dest, result);\
+	TEMP_SUB_FLAG(((~src)+1), dest, result);\
 }while(0)
 
 #define TEMP_R2RM(name) \
