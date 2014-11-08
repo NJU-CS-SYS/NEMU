@@ -68,7 +68,7 @@ do{\
 		src = instr_fetch(eip + 2, size);\
 		if (size < DATA_BYTE)\
 			src = (src << (DATA_BYTE*8 - 8)) >> (DATA_BYTE*8-8);\
-		len += 2;\
+		len += 1 + size;\
 		print_asm(str(name) str(SUFFIX) " $0x%x, %%%s", src, REG_NAME(m.R_M));\
 	} else {\
 		len += read_ModR_M(eip + 1, &addr);\
