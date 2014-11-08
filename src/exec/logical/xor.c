@@ -17,3 +17,4 @@ extern char suffix;
 v_helper(xor_i2r);
 v_helper(xor_i2rm);
 v_helper(xor_r2rm);
+v_helper(xor_rm2r);
