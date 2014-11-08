@@ -4,5 +4,5 @@
 #include "and.h"
 #include "test.h"
 #include "shift.h"
-
+#include "xor.h"
 #endif
