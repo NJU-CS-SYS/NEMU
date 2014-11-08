@@ -30,7 +30,7 @@ make_helper(concat(je_, SUFFIX)) {
 }
 make_helper(concat(jne_rel_, SUFFIX)) {
 	JCC_LEN_DEF;
-	JCC_COMMON_REL(FLAG_VAL(ZF) != 0, jne);
+	JCC_COMMON_REL(FLAG_VAL(ZF) == 0, jne);
 }
 
 make_helper(concat(jb_rel_, SUFFIX)) {
