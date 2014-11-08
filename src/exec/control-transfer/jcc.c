@@ -21,3 +21,4 @@ v_helper(je);
 v_helper(jbe_rel);
 v_helper(jl_rel);
 v_helper(jg_rel);
+v_helper(jmp_rel);
