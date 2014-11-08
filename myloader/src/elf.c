@@ -31,11 +31,9 @@ void loader() {
 		ph += step;
 	}
 
-	nemu_assert(i >= 2);
+	nemu_assert(i == 3);
 	/* Hei wei gou! */
 	((void(*)(void))elf->e_entry)();
-
-	nemu_assert(elf->e_phnum != 4);
 	/* When returning from the program, it is executed successfully */
 	HIT_GOOD_TRAP;
 }
