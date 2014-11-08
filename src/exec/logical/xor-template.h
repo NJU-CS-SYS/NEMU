@@ -38,7 +38,7 @@ make_helper(concat(xor_i2rm_, SUFFIX)) {
 	return len;
 }
 
- make_helper(concat(xor_r2rm_, SUFFIX)) {
+make_helper(concat(xor_r2rm_, SUFFIX)) {
 	TEMP_VALUES;
 	TEMP_MOD_RM;
 	TEMP_R2RM(xor);
@@ -55,6 +55,16 @@ make_helper(concat(xor_rm2r_, SUFFIX)) {
 	result = dest ^ src;
 	TEMP_XOR_FLAG(dest, src, result);
 	REG(m.reg) = result; 
+	return len;
+}
+
+make_helper(concat(xor_i82rm_, SUFFIX)) {
+	TEMP_VALUES;
+	TEMP_MOD_RM;
+	TEMP_I2RM(xor, 1);
+	result = dest ^ src;
+	TEMP_XOR_FLAG(src, dest, result);
+	TEMP_RESULT2RM(result);
 	return len;
 }
 #include "exec/template-end.h"
