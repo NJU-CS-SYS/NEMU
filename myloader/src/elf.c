@@ -12,6 +12,7 @@ void loader() {
 	nemu_assert(1);
 	int i;
 	for (i = 0; i < phnum; i++) {
+		HIT_GOOD_TRAP;
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
 			HIT_GOOD_TRAP;
