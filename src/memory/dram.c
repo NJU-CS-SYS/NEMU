@@ -1,5 +1,6 @@
 #include "common.h"
 #include "lib/misc.h"
+#include "cpu/reg.h"
 
 /* Simulate the (main) behavor of DRAM. Although this will lower the performace of NEMU,
  * it makes you clear about how DRAM is read/written.
@@ -58,7 +59,7 @@ void init_dram() {
 }
 
 static void ddr3_read(hwaddr_t addr, void *data) {
-	test(addr < HW_MEM_SIZE, "addr = %x\n", addr);
+	test(addr < HW_MEM_SIZE, "addr = %x\n, eip = %x", addr, cpu.eip);
 
 	dram_addr temp;
 	temp.addr = addr & ~BURST_MASK;
