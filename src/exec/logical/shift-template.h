@@ -45,8 +45,7 @@ make_shift(i8) {
 	TEMP_RESULT2RM(result);
 	return len;
 }
-
-make_helper(concat(concat(s, concat(SIGN, concat(DIR, _12rm_))), SUFFIX)) {
+make_shift(12rm) {
 	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	test(m.reg == 4, "wrong dispatching");
