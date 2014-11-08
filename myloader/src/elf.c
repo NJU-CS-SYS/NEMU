@@ -10,9 +10,11 @@ void loader() {
 	//uint16_t phnum = elf->e_phnum;
 
 	uint16_t i;
+	int k = 0;
 	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
+			k++;
 			char *dest = (char*)ph->p_vaddr;
 			char *src = (char*)ph->p_offset;
 			uint16_t filesz = ph->p_filesz;
@@ -29,6 +31,7 @@ void loader() {
 		ph += step;
 	}
 
+	nemu_assert(i >= 2);
 	/* Hei wei gou! */
 	((void(*)(void))elf->e_entry)();
 
