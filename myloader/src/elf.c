@@ -5,7 +5,6 @@ void loader() {
 	/* The ELF file is located at memory address 0 */
 	Elf32_Ehdr *elf = (void*)0;
 
-	nemu_assert(0);
 	Elf32_Phdr *ph = (void*)elf->e_phoff;
 	uint16_t step = elf->e_phentsize;
 	uint16_t phnum = elf->e_phnum;
