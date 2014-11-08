@@ -8,7 +8,6 @@ void loader() {
 	Elf32_Phdr *ph = (void*)elf->e_phoff;
 	uint16_t step = elf->e_phentsize;
 	//uint16_t phnum = elf->e_phnum;
-	nemu_assert(step == 32);
 
 	uint16_t i;
 	int k = 0;
@@ -29,10 +28,11 @@ void loader() {
 			for (; j < memsz; j++)
 				dest[j] = 0;
 		}
-		ph += step;
+		ph = (Elf32_Phdr*)((uint32_t)ph + step);
 	}
 
 	nemu_assert(i == elf->e_phnum);
+	nemu_assert(k >= 2);
 	/* Hei wei gou! */
 	((void(*)(void))elf->e_entry)();
 	/* When returning from the program, it is executed successfully */
