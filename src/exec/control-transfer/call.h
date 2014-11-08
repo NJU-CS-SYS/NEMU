@@ -13,4 +13,5 @@ make_helper(call_rel_v);
 make_helper(leave_v);
 make_helper(ret_near_v);
 
+all_helper(call_rm);
 #endif

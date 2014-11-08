@@ -36,3 +36,7 @@
 #define OPCODE d3
 #include "group-template.h"
 #undef OPCODE
+
+#define OPCODE ff
+#include "group-template.h"
+#undef OPCODE

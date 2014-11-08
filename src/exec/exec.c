@@ -72,7 +72,7 @@ helper_fun opcode_table [256] = {
 /* 0xf0 */	inv, inv, inv, inv,
 /* 0xf4 */	inv, inv, inv, inv,
 /* 0xf8 */	inv, inv, inv, inv,
-/* 0xfc */	inv, inv, inv, inv
+/* 0xfc */	inv, inv, inv, group_ff
 };
 
 helper_fun opcode_table_2 [256] = {
@@ -185,6 +185,11 @@ helper_fun group_table_d2[8] = {
 helper_fun group_table_d3[8] = {
 	inv, inv, inv, inv,
 	sal_r2rm_v, shr_r2rm_v, inv, sar_r2rm_v
+};
+
+helper_fun group_table_ff[8] = {
+	inv, inv, call_rm_l, inv,
+	inv, inv, inv, inv
 };
 
 make_helper(exec) {
