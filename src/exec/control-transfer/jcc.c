@@ -19,6 +19,7 @@ extern char suffix;
 
 v_helper(je)
 v_helper(jne_rel)
+v_helper(jb_rel)
 v_helper(jbe_rel)
 v_helper(jl_rel)
 v_helper(jle_rel)

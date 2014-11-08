@@ -6,7 +6,6 @@
 
 typedef int (*helper_fun)(swaddr_t);
 
-
 /* TODO: Add more instructions!!! */
 
 helper_fun opcode_table [256] = {
@@ -38,10 +37,10 @@ helper_fun opcode_table [256] = {
 /* 0x64 */	inv, inv, data_size, inv,
 /* 0x68 */	inv, inv, inv, inv, 
 /* 0x6c */	inv, inv, inv, inv, 
-/* 0x70 */	inv, inv, inv, inv,
-/* 0x74 */	je_b, inv, jbe_rel_b, inv,
-/* 0x78 */	inv, inv, inv, inv, 
-/* 0x7c */	jl_rel_b, inv, jle_rel_b, jg_rel_b, 
+/* 0x70 */	jo_rel_b, jno_rel_b, jb_rel_b, jae_rel_b,
+/* 0x74 */	je_b, jne_rel_b, jbe_rel_b, ja_rel_b,
+/* 0x78 */	js_rel_b, jns_rel_b, jp_rel_b, jnp_rel_b, 
+/* 0x7c */	jl_rel_b, jge_rel_b, jle_rel_b, jg_rel_b, 
 /* 0x80 */	group_80, group_81, nemu_trap, group_83, 
 /* 0x84 */	test_r_rm_b, test_r_rm_v, test_r_rm_v, inv, 
 /* 0x88 */	mov_r2rm_b, mov_r2rm_v, mov_rm2r_b, mov_rm2r_v,
@@ -66,7 +65,7 @@ helper_fun opcode_table [256] = {
 /* 0xd4 */	inv, inv, inv, inv,
 /* 0xd8 */	inv, inv, inv, inv,
 /* 0xdc */	inv, inv, inv, inv,
-/* 0xe0 */	inv, inv, inv, inv,
+/* 0xe0 */	inv, inv, inv, jcxz_rel_v,
 /* 0xe4 */	inv, inv, inv, inv,
 /* 0xe8 */	call_rel_v, jmp_rel_v, inv, jmp_rel_b,
 /* 0xec */	inv, inv, inv, inv,
@@ -109,10 +108,10 @@ helper_fun opcode_table_2 [256] = {
 /* 0x74 */	inv, inv, inv, inv,
 /* 0x78 */	inv, inv, inv, inv, 
 /* 0x7c */	inv, inv, inv, inv, 
-/* 0x80 */	inv, inv, inv, inv,
-/* 0x84 */	inv, inv, jbe_rel_v, inv,
-/* 0x88 */	inv, inv, inv, inv,
-/* 0x8c */	jl_rel_v, inv, inv, jg_rel_v, 
+/* 0x80 */	jo_rel_v, jno_rel_v, jb_rel_v, jae_rel_v,
+/* 0x84 */	je_v, jne_rel_v, jbe_rel_v, ja_rel_v,
+/* 0x88 */	inv, jns_rel_v, jp_rel_v, jnp_rel_v,
+/* 0x8c */	jl_rel_v, jge_rel_v, jle_rel_v, jg_rel_v, 
 /* 0x90 */	inv, inv, inv, inv,
 /* 0x94 */	inv, set_ne_nz, inv, inv,
 /* 0x98 */	inv, inv, inv, inv, 
