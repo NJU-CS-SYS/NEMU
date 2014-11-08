@@ -2,6 +2,8 @@
 #include "trap.h"
 
 void loader() {
+	nemu_assert(1>0);
+	nemu_assert(2<3);
 	/* The ELF file is located at memory address 0 */
 	Elf32_Ehdr *elf = (void*)0;
 
@@ -9,7 +11,6 @@ void loader() {
 	uint16_t step = elf->e_phentsize;
 	//uint16_t phnum = elf->e_phnum;
 
-	nemu_assert(step > 0);
 	int i;
 	for (i = 0; i < elf->e_phnum; i++) {
 		HIT_GOOD_TRAP;
