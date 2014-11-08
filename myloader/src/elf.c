@@ -9,7 +9,7 @@ void loader() {
 	uint16_t step = elf->e_phentsize;
 	uint16_t phnum = elf->e_phnum;
 
-	nemu_assert(phnum > 0);
+	nemu_assert(phnum == 0);
 	int i;
 	for (i = 0; i < 3; i++) {
 		/* Scan the program header table, loader each segment into memory */
