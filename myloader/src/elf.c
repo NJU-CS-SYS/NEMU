@@ -2,8 +2,6 @@
 #include "trap.h"
 
 void loader() {
-	nemu_assert(1>0);
-	nemu_assert(2<3);
 	/* The ELF file is located at memory address 0 */
 	Elf32_Ehdr *elf = (void*)0;
 
@@ -35,6 +33,7 @@ void loader() {
 	/* Hei wei gou! */
 	((void(*)(void))elf->e_entry)();
 
+	nemu_assert(elf->e_phnum != 4);
 	/* When returning from the program, it is executed successfully */
 	HIT_GOOD_TRAP;
 }
