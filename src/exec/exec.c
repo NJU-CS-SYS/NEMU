@@ -3,6 +3,7 @@
 
 #include "all-instr.h"
 #include "group/group.h"
+make_helper(nop);
 
 typedef int (*helper_fun)(swaddr_t);
 
@@ -45,7 +46,7 @@ helper_fun opcode_table [256] = {
 /* 0x84 */	test_r_rm_b, test_r_rm_v, test_r_rm_v, inv, 
 /* 0x88 */	mov_r2rm_b, mov_r2rm_v, mov_rm2r_b, mov_rm2r_v,
 /* 0x8c */	inv, inv, inv, inv, 
-/* 0x90 */	inv, inv, inv, inv,
+/* 0x90 */	nop, inv, inv, inv,
 /* 0x94 */	inv, inv, inv, inv,
 /* 0x98 */	inv, inv, inv, inv, 
 /* 0x9c */	inv, inv, inv, inv, 
@@ -194,4 +195,9 @@ helper_fun group_table_ff[8] = {
 
 make_helper(exec) {
 	return opcode_table[instr_fetch(eip, 1)](eip);
+}
+
+make_helper(nop) {
+	print_asm("nop");
+	return 1;
 }
