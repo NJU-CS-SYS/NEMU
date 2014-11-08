@@ -9,9 +9,9 @@ void loader() {
 	uint16_t step = elf->e_phentsize;
 	uint16_t phnum = elf->e_phnum;
 
-	nemu_assert(phnum < 0);
+	nemu_assert(1);
 	int i;
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
 			HIT_GOOD_TRAP;
