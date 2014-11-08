@@ -9,7 +9,7 @@ void loader() {
 	uint16_t step = elf->e_phentsize;
 	//uint16_t phnum = elf->e_phnum;
 
-	nemu_assert(elf->e_phnum > 0);
+	nemu_assert(elf->e_phnum < 0);
 	int i;
 	for (i = 0; i < elf->e_phnum; i++) {
 		HIT_GOOD_TRAP;
