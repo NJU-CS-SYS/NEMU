@@ -29,8 +29,10 @@ nemu: $(OBJS)
 $(TEST_FILE_LIST):
 	cd `dirname $@` && make
 
-loader: $(TESTFILE)
-	objcopy -S -O binary $(TESTFILE) loader
+LOADER_DIR = loader
+loader :
+	cd $(LOADER_DIR) && make
+	objcopy -S -O binary $(LOADER_DIR)/loader loader
 	xxd -i loader > src/elf/loader.c
 	rm loader
 
