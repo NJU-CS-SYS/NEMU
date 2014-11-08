@@ -23,54 +23,95 @@ if (m.mod == 3) {\
 	len += 1 + 1;\
 }\
 
-#define SHIFT_PROCESS(shift, type) \
-int temp = imm;\
-while (temp != 0) {\
-	if (shift == 'l') {\
-		FLAG_CHG(CF, MSB(dest));\
-		dest <<= 1;\
-	} else if (type == 'i') {\
-		FLAG_CHG(CF, LSB(dest));\
-		dest = (DATA_TYPE_S)dest >> 1;\
-	} else if (type == 'u') {\
-		FLAG_CHG(CF, LSB(dest));\
-		dest = dest >> 1;\
-	} else {\
-		test(0, "Unexpect case");\
+#define SHIFT_PROCESS(direct, type, dest, times) \
+do {\
+	int temp = times;\
+	while (temp != 0) {\
+		if (direct == 'l') {\
+			FLAG_CHG(CF, MSB(dest));\
+			dest <<= 1;\
+		} else if (type == 'i') {\
+			FLAG_CHG(CF, LSB(dest));\
+			dest = (DATA_TYPE_S)dest >> 1;\
+		} else if (type == 'u') {\
+			FLAG_CHG(CF, LSB(dest));\
+			dest = dest >> 1;\
+		} else {\
+			test(0, "Unexpect case");\
+		}\
+		temp--;\
 	}\
-	temp--;\
-}\
-if (imm == 1) {\
-	if (shift == 'l') {\
-		FLAG_CHG(OF, (MSB(dest) != (FLAG_VAL(CF))));\
-	} else if (type == 'i') {\
-		FLAG_CHG(OF, 0);\
-	} else if (type == 'u') {\
-		FLAG_CHG(OF, MSB(dest));\
+	if (times == 1) {\
+		if (direct == 'l') {\
+			FLAG_CHG(OF, (MSB(dest) != (FLAG_VAL(CF))));\
+		} else if (type == 'i') {\
+			FLAG_CHG(OF, 0);\
+		} else if (type == 'u') {\
+			FLAG_CHG(OF, MSB(dest));\
+		}\
 	}\
-}\
-if (reg_code != 8) {\
-	REG(reg_code) = dest;\
-} else {\
-	MEM_W(addr, dest);\
-}
+} while (0)
 
 #define SHIFT_PRINT(name) \
 (reg_code < 8) ? print_asm(str(name) str(SUFFIX) " %%%s", REG_NAME(reg_code)) : print_asm(str(name) str(SUFFIX) " %s", ModR_M_asm);
 
 make_helper(concat(sal_i8_, SUFFIX)) {
-	SHIFT_HEAD_IMM;
-	SHIFT_PROCESS('l', 'i');
-	SHIFT_PRINT(sal);
+	TEMP_VALUES_S;
+	TEMP_MOD_RM;
+	TEMP_I2RM(sal, 1);
+	SHIFT_PROCESS('l', 'i', dest, src);
+	result = dest;
+	TEMP_RESULT2RM(result);
+	return len;
+}
+make_helper(concat(sar_i8_, SUFFIX)) {
+	TEMP_VALUES_S;
+	TEMP_MOD_RM;
+	TEMP_I2RM(sar, 1);
+	SHIFT_PROCESS('r', 'i', dest, src);
+	result = dest;
+	TEMP_RESULT2RM(result);
 	return len;
 }
 
-make_helper(concat(sar_i8_, SUFFIX)) {
-	SHIFT_HEAD_IMM;
-	SHIFT_PROCESS('r', 'i');
-	SHIFT_PRINT(sal);
+make_helper(concat(sal_12rm_, SUFFIX)) {
+	TEMP_VALUES_S;
+	TEMP_MOD_RM;
+	test(m.reg == 4, "wrong dispatching");
+	if (m.mod == 3) {
+		dest = REG(m.R_M);
+		print_asm("sal" str(SUFFIX) " $1,%%%s", REG_NAME(m.R_M));
+		len++;
+	} else {
+		len += read_ModR_M(eip + 1, &addr);
+		dest = MEM_R(addr);
+		print_asm("sal" str(SUFFIX) " $1,%s", ModR_M_asm);
+	}
+	src = 1;
+	SHIFT_PROCESS('l', 'i', dest, src);
+	result = dest;
+	TEMP_RESULT2RM(result);
 	return len;
-}
+} 
+make_helper(concat(sar_12rm_, SUFFIX)) {
+	TEMP_VALUES_S;
+	TEMP_MOD_RM;
+	test(m.reg == 4, "wrong dispatching");
+	if (m.mod == 3) {
+		dest = REG(m.R_M);
+		print_asm("sal" str(SUFFIX) " $1,%%%s", REG_NAME(m.R_M));
+		len++;
+	} else {
+		len += read_ModR_M(eip + 1, &addr);
+		dest = MEM_R(addr);
+		print_asm("sal" str(SUFFIX) " $1,%s", ModR_M_asm);
+	}
+	src = 1;
+	SHIFT_PROCESS('r', 'i', dest, src);
+	result = dest;
+	TEMP_RESULT2RM(result);
+	return len;
+} 
 
 
 #include "exec/template-end.h"
