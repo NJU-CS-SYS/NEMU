@@ -29,6 +29,8 @@ void loader() {
 		ph += step;
 	}
 
+	nemu_assert(i>=2);
+
 	/* Hei wei gou! */
 	((void(*)(void))elf->e_entry)();
 
