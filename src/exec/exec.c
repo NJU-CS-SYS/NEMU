@@ -78,7 +78,7 @@ helper_fun opcode_table [256] = {
 
 helper_fun opcode_table_2 [256] = {
 /* 0x00 */	inv, inv, inv, inv,
-/* 0x04 */	inv, inv, movz_b2_v, movz_w2_l, 
+/* 0x04 */	inv, inv, inv, inv, 
 /* 0x08 */	inv, inv, inv, inv, 
 /* 0x0c */	inv, inv, inv, inv, 
 /* 0x10 */	inv, inv, inv, inv, 
@@ -123,7 +123,7 @@ helper_fun opcode_table_2 [256] = {
 /* 0xac */	inv, inv, inv, inv,
 /* 0xb0 */	inv, inv, inv, inv,
 /* 0xb4 */	inv, inv, inv, inv,
-/* 0xb8 */	inv, inv, inv, inv,
+/* 0xb8 */	movz_b2_v, movz_w2_l, inv, inv,
 /* 0xbc */	inv, inv, inv, inv,
 /* 0xc0 */	inv, inv, inv, inv,
 /* 0xc4 */	inv, inv, inv, inv,
