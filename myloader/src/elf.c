@@ -12,7 +12,7 @@ void loader() {
 	//uint16_t phnum = elf->e_phnum;
 
 	nemu_assert(elf->e_phnum == 3);
-	int i;
+	uint16_t i;
 	for (i = 0; i < elf->e_phnum; i++) {
 		HIT_GOOD_TRAP;
 		/* Scan the program header table, loader each segment into memory */
