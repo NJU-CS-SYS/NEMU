@@ -9,10 +9,13 @@ void loader() {
 	uint16_t step = elf->e_phentsize;
 	uint16_t phnum = elf->e_phnum;
 
+	nemu_assert(phnum > 0);
+	nemu_assert(step > 0);
 	int i;
 	for (i = 0; i < 3; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
+			HIT_GOOD_TRAP;
 			char *dest = (char*)ph->p_vaddr;
 			char *src = (char*)ph->p_offset;
 			uint16_t filesz = ph->p_filesz;
