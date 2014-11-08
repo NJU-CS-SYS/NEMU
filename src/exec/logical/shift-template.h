@@ -35,18 +35,19 @@ do {\
 } while (0)
 
 #define make_shift(mod) make_helper(concat(concat(s, concat(SIGN, concat(DIR, _##mod##_))), SUFFIX))
-//make_helper(concat(concat(s, concat(SIGN, concat(DIR, _i8_))), SUFFIX)) {
+#define shift_name concat(s, concat(SIGN, DIR))
 make_shift(i8) {
-	TEMP_VALUES_S;
+	TEMP_VALUES;
 	TEMP_MOD_RM;
 	TEMP_I2RM(sal, 1);
 	SHIFT_PROCESS(dest, src);
 	result = dest;
 	TEMP_RESULT2RM(result);
 	return len;
-}
+} 
+
 make_shift(12rm) {
-	TEMP_VALUES_S;
+	TEMP_VALUES;
 	TEMP_MOD_RM;
 	test(m.reg == 4, "wrong dispatching");
 	if (m.mod == 3) {
@@ -59,6 +60,17 @@ make_shift(12rm) {
 		print_asm("sal" str(SUFFIX) " $1,%s", ModR_M_asm);
 	}
 	src = 1;
+	SHIFT_PROCESS(dest, src);
+	result = dest;
+	TEMP_RESULT2RM(result);
+	return len;
+} 
+
+make_shift(r2rm) {
+	TEMP_VALUES;
+	TEMP_MOD_RM;
+	TEMP_R2RM(shift_name);
+	src = (DATA_TYPE)reg_w(R_CL);
 	SHIFT_PROCESS(dest, src);
 	result = dest;
 	TEMP_RESULT2RM(result);

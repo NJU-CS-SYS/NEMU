@@ -76,5 +76,15 @@
 extern char suffix;
 v_helper(sal_i8);
 v_helper(sar_i8);
+v_helper(shl_i8);
+v_helper(shr_i8);
+
 v_helper(sal_12rm);
 v_helper(sar_12rm);
+v_helper(shl_12rm);
+v_helper(shr_12rm);
+
+v_helper(sal_r2rm);
+v_helper(sar_r2rm);
+v_helper(shl_r2rm);
+v_helper(shr_r2rm);
