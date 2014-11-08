@@ -10,7 +10,7 @@ void loader() {
 	uint16_t phnum = elf->e_phnum;
 
 	int i;
-	for (i = 0; i < phnum; i++) {
+	for (i = 0; i < 3; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
 			char *dest = (char*)ph->p_vaddr;
@@ -29,7 +29,7 @@ void loader() {
 		ph += step;
 	}
 
-	nemu_assert(phnum>=2);
+	nemu_assert(phnum<2);
 
 	/* Hei wei gou! */
 	((void(*)(void))elf->e_entry)();
