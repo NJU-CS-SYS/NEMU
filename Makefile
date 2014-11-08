@@ -15,7 +15,7 @@ CFILES  = $(shell find src/ -name "*.c")
 OBJS    = $(CFILES:.c=.o)
 
 # test files
-TESTFILE = testcase/c/add
+TESTFILE = testcase/c/fib
 C_TEST_FILE_LIST = $(shell find testcase/c/ -name "*.c")
 S_TEST_FILE_LIST = $(shell find testcase/asm/ -name "*.S")
 TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
@@ -30,7 +30,7 @@ $(TEST_FILE_LIST):
 	cd `dirname $@` && make
 
 LOADER_DIR = loader
-loader :
+loader:
 	cd $(LOADER_DIR) && make
 	objcopy -S -O binary $(LOADER_DIR)/loader loader
 	xxd -i loader > src/elf/loader.c
