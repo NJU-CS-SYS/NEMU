@@ -23,7 +23,11 @@ do {\
 
 #define TEMP_SUB_FLAG(src, dest, result)\
 do {\
-	FLAG_CHG(OF,OVERFLOW(src, dest, result));\
+	if (MSB(((~src)+1)) == MSB(dest)) { /* here src and dest is the same sign actually */ \
+		FLAG_CHG(OF,0);\
+	} else {\
+		FLAG_CHG(OF,MSB(dest) != MSB(result));\
+	}\
 	FLAG_CHG(SF, MSB(result));\
 	FLAG_CHG(ZF, result==0);\
 	FLAG_CHG(AF, ADJUST(src, dest));\

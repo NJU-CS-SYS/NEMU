@@ -42,6 +42,7 @@ make_helper(concat(add_i2r_, SUFFIX)) {
 	TEMP_ADD_I(src, dest, result);
 	REG(R_EAX) = result;
 	len = 1 + DATA_BYTE;
+	print_asm("add" str(SUFFIX) " $0x%x,%%%s", src,REG_NAME(R_EAX));
 	return len;
 }
 

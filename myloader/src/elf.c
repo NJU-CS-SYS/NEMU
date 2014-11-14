@@ -31,8 +31,6 @@ void loader() {
 		ph = (Elf32_Phdr*)((uint32_t)ph + step);
 	}
 
-	nemu_assert(i == elf->e_phnum);
-	nemu_assert(k >= 2);
 	/* Hei wei gou! */
 	((void(*)(void))elf->e_entry)();
 	/* When returning from the program, it is executed successfully */

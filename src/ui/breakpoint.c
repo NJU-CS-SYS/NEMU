@@ -145,6 +145,18 @@ void restore_bp(swaddr_t addr) {
 	}
 }
 
+void enable_all_bp() {
+	BP* current = head;
+	while (current != NULL) {
+		if (current->expr[0] == '\0') {
+			Log("addr = %x, value = %x", current->addr, current->value);
+			current->value = swaddr_read(current->addr, 1);
+			swaddr_write(current->addr, 1, INT3_CODE);
+		}
+		current = current->next;
+	}
+}
+
 /* oversee the value of the watchpoint
  * consider it a very exhausting operation
  * we need a state to enable it :-)

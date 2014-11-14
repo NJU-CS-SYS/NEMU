@@ -10,7 +10,7 @@
 #include <readline/history.h>
 
 int nemu_state = END;
-int bp_state = NORMAL;
+int bp_state = INIT;
 int wp_state = OFF;
 swaddr_t bp_backup = 0;
 

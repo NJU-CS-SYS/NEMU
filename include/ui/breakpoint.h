@@ -13,7 +13,7 @@ typedef struct breakpoint {
 	struct breakpoint *next;
 } BP;
 
-enum _bp_state{ NORMAL, RECOVER };
+enum _bp_state{ NORMAL, RECOVER, INIT };
 enum _wp_state{ ON, OFF };
 
 extern int bp_state;
@@ -24,7 +24,8 @@ void free_bp(int no);
 void free_all();
 void add_bp(swaddr_t addr);
 void reset_bp(swaddr_t addr);
-void restore_bp(swaddr_t adddr);
+void restore_bp(swaddr_t addr);
+void enable_all_bp();
 BP* getHead();
 void add_watchpoint(char* expr);
 bool check_watchpoint(int result[], int* nr_changed);

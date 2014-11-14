@@ -32,7 +32,8 @@ void restart() {
 
 	init_dram();
 
-	/* clear the breakpoint */
+	/* enable the breakpoint */
+	bp_state = INIT;
 }
 
 static void print_bin_instr(swaddr_t eip, int len) {
@@ -54,8 +55,15 @@ void cpu_exec(volatile uint32_t n) {
 
 	setjmp(jbuf);
 	for(; n > 0; n --) {
+		/* enable the breakpoint when enter loaded program */
+		if (cpu.eip > 0x800000 && bp_state == INIT) {
+			enable_all_bp();
+			bp_state = NORMAL;
+		}
+
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
+
 
 		/* restore the breakpoint on the byte */
 		if (bp_state == RECOVER) { 
