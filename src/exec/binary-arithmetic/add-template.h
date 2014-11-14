@@ -37,7 +37,7 @@ make_helper(concat(add_i82rm_, SUFFIX)) {
 
 make_helper(concat(add_i2r_, SUFFIX)) {
 	TEMP_VALUES_S;
-	src = instr_fetch(eip + 1, 1);
+	src = instr_fetch(eip + 1, DATA_BYTE);
 	dest = REG(R_EAX); // al, ax, eax
 	TEMP_ADD_I(src, dest, result);
 	REG(R_EAX) = result;
