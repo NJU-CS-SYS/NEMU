@@ -102,8 +102,6 @@ void load_prog() {
 }
 
 uint32_t get_sym_addr(char* str) {
-	Log("%s", strtab);
-	//int len = strlen(str);
 	int i;
 	for (i = 0; i < nr_symtab_entry; i++)
 		if (strcmp(str, strtab + symtab[i].st_name) == 0 && symtab[i].st_info != STT_FILE) {
