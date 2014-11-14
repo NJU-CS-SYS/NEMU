@@ -5,14 +5,8 @@ extern char suffix;
 
 #define JCC_LEN_DEF int len = DATA_BYTE + (DATA_BYTE == 1 ? 1 : 2);
 
-#if DATA_BYTE == 1
-#define OFFSET 1
-#else
-#define OFFSET 2
-#endif
-
 #define JCC_COMMON_REL(condition, name) \
-DATA_TYPE_S imm = instr_fetch(eip + OFFSET, DATA_BYTE);\
+DATA_TYPE_S imm = instr_fetch(eip + 1, DATA_BYTE);\
 eip += imm;\
 if (suffix == 'w') eip &= 0x0000ffff;\
 if ((condition)) cpu.eip = eip;\
