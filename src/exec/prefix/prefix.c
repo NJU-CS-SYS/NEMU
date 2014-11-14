@@ -18,5 +18,5 @@ make_helper(data_size) {
 }
 
 make_helper(opcode_2) {
-	return opcode_table_2[ instr_fetch(eip + 1, 1) ](eip + 1);
+	return opcode_table_2[ instr_fetch(eip + 1, 1) ](eip + 1) + 1;
 }
