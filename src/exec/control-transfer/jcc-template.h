@@ -10,6 +10,7 @@ DATA_TYPE_S imm = instr_fetch(eip + 1, DATA_BYTE);\
 eip += imm;\
 if (suffix == 'w') eip &= 0x0000ffff;\
 if ((condition)) cpu.eip = eip;\
+Log("eip = 0x%x, imm = %d", eip, imm);\
 print_asm(str(name) " %x", eip + len);\
 return len
 
