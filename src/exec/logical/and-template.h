@@ -4,9 +4,11 @@
 #include "../template.h"
 
 make_helper(concat(and_i82rm_, SUFFIX)) {
-	TEMP_VALUES;
+	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	TEMP_I2RM(and, 1);
+	int shift_len = (DATA_BYTE - 1) * 8;
+	src = (src << shift_len) >> shift_len;
 	result = dest & src;
 	TEMP_AND_FLAG(src, dest, result);
 	TEMP_RESULT2RM(result);
