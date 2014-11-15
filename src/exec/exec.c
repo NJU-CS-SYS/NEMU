@@ -32,7 +32,7 @@ helper_fun opcode_table [256] = {
 /* 0x4c */	inv, inv, inv, inv, 
 /* 0x50 */	push_v, push_v, push_v, push_v, 
 /* 0x54 */	push_v, push_v, push_v, push_v,
-/* 0x58 */	inv, inv, inv, inv, 
+/* 0x58 */	pop_stack2r_v, inv, inv, inv, 
 /* 0x5c */	inv, inv, inv, inv, 
 /* 0x60 */	inv, inv, inv, inv,
 /* 0x64 */	inv, inv, data_size, inv,
@@ -45,7 +45,7 @@ helper_fun opcode_table [256] = {
 /* 0x80 */	group_80, group_81, nemu_trap, group_83, 
 /* 0x84 */	test_r_rm_b, test_r_rm_v, test_r_rm_v, inv, 
 /* 0x88 */	mov_r2rm_b, mov_r2rm_v, mov_rm2r_b, mov_rm2r_v,
-/* 0x8c */	inv, lea_v, inv, inv, 
+/* 0x8c */	inv, lea_v, inv, group_8f, 
 /* 0x90 */	nop, inv, inv, inv,
 /* 0x94 */	inv, inv, inv, inv,
 /* 0x98 */	inv, inv, inv, inv, 
@@ -186,6 +186,11 @@ helper_fun group_table_d2[8] = {
 helper_fun group_table_d3[8] = {
 	inv, inv, inv, inv,
 	sal_r2rm_v, shr_r2rm_v, inv, sar_r2rm_v
+};
+
+helper_fun group_table_8f[8] = {
+	pop_stack2m_v, inv, inv, inv,
+	inv, inv, inv, inv
 };
 
 helper_fun group_table_ff[8] = {

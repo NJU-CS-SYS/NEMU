@@ -27,4 +27,29 @@ make_helper(concat(push_, SUFFIX)) {
 	return 1;
 }
 
+make_helper(concat(pop_stack2m_, SUFFIX)) {
+	ModR_M m;
+	int len;
+	DATA_TYPE buf = MEM_R(REG(R_ESP));; // to receive the top of stack
+	m.val = instr_fetch(eip + 1, 1);
+	test(m.reg == 0, "wrong dispatch");
+	if (m.mod == 3) {
+		REG(m.R_M) = buf;
+		len = 2;
+		print_asm("pop" str(SUFFIX) " %s", REG_NAME(m.R_M));	
+	} else {
+		swaddr_t addr;
+		len = 1 + read_ModR_M(eip + 1, &addr);
+		MEM_W(buf, addr);
+	}
+	cpu.esp -= DATA_BYTE;
+	return len;
+}
+
+make_helper(concat(pop_stack2r_, SUFFIX)) {
+	int regcode = instr_fetch(eip, 1) & 0x7;
+	REG(regcode) = MEM_R(REG(R_ESP));
+	cpu.esp -= DATA_BYTE;
+	return 1;
+}
 #include "exec/template-end.h"

@@ -37,6 +37,9 @@
 #include "group-template.h"
 #undef OPCODE
 
+#define OPCODE 8f
+#include "group-template.h"
+#undef OPCODE
 #define OPCODE ff
 #include "group-template.h"
 #undef OPCODE

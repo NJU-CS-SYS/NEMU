@@ -10,6 +10,7 @@ make_helper(group_d0);
 make_helper(group_d1);
 make_helper(group_d2);
 make_helper(group_d3);
+make_helper(group_8f);
 make_helper(group_ff);
 
 #endif
