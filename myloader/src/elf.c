@@ -27,6 +27,7 @@ void loader() {
 			/* Memory clear */
 			for (; j < memsz; j++)
 				dest[j] = 0;
+			nemu_assert(j == 0x27128);
 		}
 		ph = (Elf32_Phdr*)((uint32_t)ph + step);
 	}
