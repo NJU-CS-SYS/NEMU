@@ -39,7 +39,7 @@ do {\
 make_shift(i8) {
 	TEMP_VALUES;
 	TEMP_MOD_RM;
-	TEMP_I2RM(sal, 1);
+	TEMP_I2RM(shift_name, 1);
 	SHIFT_PROCESS(dest, src);
 	result = dest;
 	TEMP_RESULT2RM(result);
@@ -52,12 +52,12 @@ make_shift(12rm) {
 	test(m.reg == 4, "wrong dispatching");
 	if (m.mod == 3) {
 		dest = REG(m.R_M);
-		print_asm("sal" str(SUFFIX) " $1,%%%s", REG_NAME(m.R_M));
+		print_asm(str(shift_name) str(SUFFIX) " $1,%%%s", REG_NAME(m.R_M));
 		len++;
 	} else {
 		len += read_ModR_M(eip + 1, &addr);
 		dest = MEM_R(addr);
-		print_asm("sal" str(SUFFIX) " $1,%s", ModR_M_asm);
+		print_asm(str(shift_name) str(SUFFIX) " $1,%s", ModR_M_asm);
 	}
 	src = 1;
 	SHIFT_PROCESS(dest, src);
