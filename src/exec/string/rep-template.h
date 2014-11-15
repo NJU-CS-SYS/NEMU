@@ -5,12 +5,11 @@
 make_helper(exec);
 
 make_helper(concat(rep_, SUFFIX)) {
-	DATA_TYPE count = REG(R_ECX);
 	int len = 0;
 	print_asm("rep");
-	while (count != 0) {
+	while (REG(R_ECX) != 0) {
 		len = exec(eip+1);
-		count --;
+		REG(R_ECX) --;
 	}
 	return len + 1;
 }
