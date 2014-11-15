@@ -210,7 +210,7 @@ helper_fun group_table_fe[8] = {
 
 helper_fun group_table_ff[8] = {
 	inc_rm_v, dec_rm_v, call_rm_l, inv,
-	inv, inv, inv, inv
+	jmp_rm_v, inv, inv, inv
 };
 
 make_helper(exec) {
