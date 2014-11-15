@@ -10,6 +10,8 @@ int i;
 int a;
 int y;
 int main() {
+	int m = 2000;
+	nemu_assert((m % 400) == 0);
 	for(i = 0; i < 125; i ++) {
 		y = is_leap_year(i + 1890);
 		a = ans[i];

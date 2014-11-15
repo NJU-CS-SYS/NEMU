@@ -41,7 +41,7 @@
 }while(0)
 
 #define MUL_RST(rst) do{\
-	reg_w(R_DX) = (DATA_TYPE)(rst >> DATA_BYTE);\
+	reg_w(R_DX) = (DATA_TYPE)(rst >> 16);\
 	reg_w(R_AX) = (DATA_TYPE)(rst);\
 }while(0)
 
@@ -62,7 +62,7 @@
 }while(0)
 
 #define MUL_RST(rst) do {\
-	reg_l(R_EDX) = (DATA_TYPE)(rst >> DATA_BYTE);\
+	reg_l(R_EDX) = (DATA_TYPE)(rst >> 32);\
 	reg_l(R_EAX) = (DATA_TYPE)(rst);\
 }while(0)
 
