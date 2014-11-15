@@ -62,4 +62,31 @@ make_helper(concat(sub_rm2r_, SUFFIX)) {
 	REG(m.reg) = result;
 	return len;
 }
+
+make_helper(concat(neg_rm_, SUFFIX)) {
+	ModR_M m;
+	int len = 1;
+	int buf;
+	m.val = instr_fetch(eip + 1, 1);
+	test(m.reg == 3, "wrong dispatch");
+	if (m.mod == 3) {
+		FLAG_CHG(CF, REG(m.R_M) != 0);
+		buf = -REG(m.R_M);
+		REG(m.R_M) = buf;
+		print_asm("neg" str(SUFFIX) " %%%s", REG_NAME(m.R_M));
+		len ++;
+	} else {
+		swaddr_t addr;
+		len += read_ModR_M(eip + 1, &addr);
+		FLAG_CHG(CF, MEM_R(addr));
+		buf = -MEM_R(addr);
+		MEM_W(buf, addr);
+		print_asm("neg" str(SUFFIX) " %s", ModR_M_asm);
+	}
+	FLAG_CHG(OF, buf == 0x80000000);
+	FLAG_CHG(SF, MSB(buf));
+	FLAG_CHG(ZF, buf == 0);
+	FLAG_CHG(PF, PARITY(buf));
+	return len;
+}
 #include "exec/template-end.h"

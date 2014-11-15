@@ -28,3 +28,4 @@ make_helper(sub_i82rm_v) {
 }
 v_helper(sub_r2rm);
 v_helper(sub_rm2r);
+v_helper(neg_rm);
