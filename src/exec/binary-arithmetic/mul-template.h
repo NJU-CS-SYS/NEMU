@@ -72,6 +72,10 @@
 }while(0)
 #endif
 
+#define LOG do{\
+	Log("multiplier = %d multiplicat = %d result = %d", (int)src, (int)dst, (int)rst);\
+}while(0)
+
 make_helper(concat(mul_rm2r_, SUFFIX)) {
 	uint64_t src, dst, rst;
 	int len = 1;
@@ -81,6 +85,7 @@ make_helper(concat(mul_rm2r_, SUFFIX)) {
 	rst = src * dst;
 	MUL_FLAG;
 	MUL_RST(rst);
+	LOG;
 	return len;
 }
 
@@ -93,6 +98,7 @@ make_helper(concat(imul_rm2imp_, SUFFIX)) {
 	rst = src * dst;
 	CLEAR_FLAG;
 	IMUL_RST(rst);
+	LOG;
 	return len;
 }
 
@@ -106,6 +112,7 @@ make_helper(concat(imul_rm2r_, SUFFIX)) {
 	rst = src * dst;
 	REG(m.reg) = rst;
 	CLEAR_FLAG;
+	LOG;
 	return len + 1;
 }
 
@@ -119,6 +126,7 @@ make_helper(concat(imul_i8rm2r_, SUFFIX)) {
 	rst = src * dst;
 	REG(m.reg) = rst;
 	IMUL_FLAG(rst);
+	LOG;
 	return len + 1;
 }
 
@@ -131,6 +139,7 @@ make_helper(concat(imul_irm2r_, SUFFIX)) {
 	rst = src * dst;
 	REG(m.reg) = rst;
 	CLEAR_FLAG;
+	LOG;
 	return len + DATA_BYTE;
 }
 #undef MUL_FLAG
