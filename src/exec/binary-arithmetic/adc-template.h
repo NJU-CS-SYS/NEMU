@@ -13,7 +13,6 @@ make_helper(concat(adc_r2rm_, SUFFIX)) {
 	if (addr) MEM_W(addr, result);
 	else REG(m.R_M) = result;
 
-//	Log("src = %d, dest = %d, result = %d", src, dest, result);
 	return len;
 }
 
@@ -27,7 +26,6 @@ make_helper(concat(adc_i82rm_, SUFFIX)) {
 	if (addr) MEM_W(addr, result);
 	else REG(m.R_M) = result;
 
-//	Log("src = %d, dest = %d, result = %d", src, dest, result);
 	return len;
 } 
 

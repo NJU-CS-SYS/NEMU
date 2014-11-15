@@ -43,7 +43,7 @@ do{\
 
 #define TEMP_ADC_I(src, dest, result)\
 do{\
-	result = dest + (DATA_TYPE_S)src + 1;\
+	result = dest + (DATA_TYPE_S)src + FLAG_VAL(CF);\
 	TEMP_FLAG(src, dest, result);\
 }while(0)
 

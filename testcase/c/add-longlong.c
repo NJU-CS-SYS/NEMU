@@ -2,6 +2,7 @@
 
 int test_i;
 int test_j;
+long long result;
 long long add(long long a, long long b) {
 	long long c = a + b;
 	return c;
@@ -18,7 +19,8 @@ int main() {
 		test_i = i;
 		for(j = 0; j < NR_DATA; j ++) {
 			test_j = j;
-			nemu_assert(add(test_data[i], test_data[j]) == ans[ans_idx ++]);
+			result = add(test_data[i], test_data[j]);
+			nemu_assert(result == ans[ans_idx ++]);
 		}
 	}
 
