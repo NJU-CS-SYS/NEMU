@@ -46,7 +46,7 @@
 }while(0)
 
 #define IMUL_RST(rst) do{\
-	reg_w(R_DX) = ((rst) << 32) >> 48;\
+	reg_w(R_DX) = (rst) >> 16;\
 	reg_w(R_AX) = (rst);\
 }while(0)
 
