@@ -71,7 +71,7 @@ helper_fun opcode_table [256] = {
 /* 0xe8 */	call_rel_v, jmp_rel_v, inv, jmp_rel_b,
 /* 0xec */	inv, inv, inv, inv,
 /* 0xf0 */	inv, inv, inv, inv,
-/* 0xf4 */	inv, inv, inv, inv,
+/* 0xf4 */	inv, inv, group_f6, group_f7,
 /* 0xf8 */	inv, inv, inv, inv,
 /* 0xfc */	inv, inv, inv, group_ff
 };
@@ -190,6 +190,16 @@ helper_fun group_table_d3[8] = {
 
 helper_fun group_table_8f[8] = {
 	pop_stack2m_v, inv, inv, inv,
+	inv, inv, inv, inv
+};
+
+helper_fun group_table_f6[8] = {
+	inv, inv, not_rm_b, inv,
+	inv, inv, inv, inv
+};
+
+helper_fun group_table_f7[8] = {
+	inv, inv, not_rm_v, inv,
 	inv, inv, inv, inv
 };
 

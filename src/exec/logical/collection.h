@@ -5,4 +5,5 @@
 #include "test.h"
 #include "shift.h"
 #include "xor.h"
+#include "not.h"
 #endif

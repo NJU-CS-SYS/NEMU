@@ -40,6 +40,15 @@
 #define OPCODE 8f
 #include "group-template.h"
 #undef OPCODE
+
+#define OPCODE f6
+#include "group-template.h"
+#undef OPCODE
+
+#define OPCODE f7
+#include "group-template.h"
+#undef OPCODE
+
 #define OPCODE ff
 #include "group-template.h"
 #undef OPCODE

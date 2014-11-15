@@ -11,6 +11,8 @@ make_helper(group_d1);
 make_helper(group_d2);
 make_helper(group_d3);
 make_helper(group_8f);
+make_helper(group_f6);
+make_helper(group_f7);
 make_helper(group_ff);
 
 #endif
