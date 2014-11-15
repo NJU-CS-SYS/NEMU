@@ -11,7 +11,6 @@ void loader() {
 
 	uint16_t i;
 	int k = 0;
-	nemu_assert(elf->e_phnum == 3);
 	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
