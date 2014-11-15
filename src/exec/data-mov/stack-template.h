@@ -36,11 +36,12 @@ make_helper(concat(pop_stack2m_, SUFFIX)) {
 	if (m.mod == 3) {
 		REG(m.R_M) = buf;
 		len = 2;
-		print_asm("pop" str(SUFFIX) " %s", REG_NAME(m.R_M));	
+		print_asm("pop" str(SUFFIX) " %%%s", REG_NAME(m.R_M));	
 	} else {
 		swaddr_t addr;
 		len = 1 + read_ModR_M(eip + 1, &addr);
 		MEM_W(buf, addr);
+		print_asm("pop" str(SUFFIX) " %s", REG_NAME(m.R_M));	
 	}
 	cpu.esp -= DATA_BYTE;
 	return len;
@@ -50,6 +51,7 @@ make_helper(concat(pop_stack2r_, SUFFIX)) {
 	int regcode = instr_fetch(eip, 1) & 0x7;
 	REG(regcode) = MEM_R(REG(R_ESP));
 	cpu.esp -= DATA_BYTE;
+	print_asm("pop" str(SUFFIX) " %%%s", REG_NAME(regcode));	
 	return 1;
 }
 #include "exec/template-end.h"
