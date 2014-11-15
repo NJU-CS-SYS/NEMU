@@ -43,7 +43,7 @@ helper_fun opcode_table [256] = {
 /* 0x78 */	js_rel_b, jns_rel_b, jp_rel_b, jnp_rel_b, 
 /* 0x7c */	jl_rel_b, jge_rel_b, jle_rel_b, jg_rel_b, 
 /* 0x80 */	group_80, group_81, nemu_trap, group_83, 
-/* 0x84 */	test_r_rm_b, test_r_rm_v, test_r_rm_v, inv, 
+/* 0x84 */	test_r_rm_b, test_r_rm_v, inv, inv, 
 /* 0x88 */	mov_r2rm_b, mov_r2rm_v, mov_rm2r_b, mov_rm2r_v,
 /* 0x8c */	inv, lea_v, inv, group_8f, 
 /* 0x90 */	nop, inv, inv, inv,
@@ -194,12 +194,12 @@ helper_fun group_table_8f[8] = {
 };
 
 helper_fun group_table_f6[8] = {
-	inv, inv, not_rm_b, inv,
+	inv, inv, not_rm_b, neg_rm_b,
 	inv, inv, inv, inv
 };
 
 helper_fun group_table_f7[8] = {
-	inv, inv, not_rm_v, inv,
+	inv, inv, not_rm_v, neg_rm_v,
 	inv, inv, inv, inv
 };
 
