@@ -177,6 +177,7 @@ make_helper(concat(movs_w2r_, SUFFIX)) {
 make_helper(concat(movs_m2m_, SUFFIX)) {
 	DATA_TYPE buf = MEM_R(REG(R_ESI));
 	MEM_W(REG(R_EDI), buf);
+	Log("buf = %d %c", buf, buf);
 	print_asm("movs ES:%%%s,ES:%%%s", REG_NAME(R_ESI), REG_NAME(R_EDI));
 	return 1;
 }
