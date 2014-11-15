@@ -19,4 +19,5 @@ make_helper(cmp_r2rm_v);
 make_helper(cmp_i2rm_v);
 make_helper(cmp_rm2r_v);
 
+all_helper(cmp_i2r);
 #endif

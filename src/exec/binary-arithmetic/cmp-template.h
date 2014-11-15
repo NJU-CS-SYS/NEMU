@@ -38,4 +38,13 @@ make_helper(concat(cmp_i2rm_, SUFFIX)) {
 	return len;
 }
 
+make_helper(concat(cmp_i2r_, SUFFIX)) {
+	TEMP_VALUES;
+	len = 1;
+	src = instr_fetch(eip + 1, DATA_BYTE);
+	len ++;
+	dest = REG(R_EAX);
+	TEMP_SUB_I(src, dest, result);
+	return len;
+}
 #include "exec/template-end.h"

@@ -31,3 +31,4 @@ make_helper(cmp_i2rm_v) {
 make_helper(cmp_rm2r_v) {
 	return (suffix == 'l' ? cmp_rm2r_l(eip) : cmp_rm2r_w(eip));
 }
+v_helper(cmp_i2r);
