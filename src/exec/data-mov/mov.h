@@ -19,5 +19,6 @@ all_helper(movz_b2);
 all_helper(movz_w2);
 all_helper(movs_b2r);
 all_helper(movs_w2r);
+all_helper(movs_m2m);
 
 #endif

@@ -43,3 +43,4 @@ make_helper(mov_moffs2a_v) {
 
 v_helper(movz_b2);
 v_helper(movs_b2r);
+v_helper(movs_m2m);

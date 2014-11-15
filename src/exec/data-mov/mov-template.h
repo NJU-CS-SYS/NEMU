@@ -173,4 +173,11 @@ make_helper(concat(movs_w2r_, SUFFIX)) {
 	REG(m.reg) = src;
 	return len;
 }
+
+make_helper(concat(movs_m2m_, SUFFIX)) {
+	DATA_TYPE buf = MEM_R(REG(R_ESI));
+	MEM_W(buf, REG(R_EDI));
+	print_asm("movs");
+	return 1;
+}
 #include "exec/template-end.h"
