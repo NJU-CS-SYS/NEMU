@@ -147,7 +147,7 @@ make_helper(concat(imul_irm2r_, SUFFIX)) {
 	int len = 1;
 	ModR_M m;
 	MOD_RM2R(imul, src, len);
-	dst = instr_fetch(eip + len, 1);
+	dst = instr_fetch(eip + len, DATA_BYTE);
 	rst = src * dst;
 	REG(m.reg) = rst;
 	CLEAR_FLAG;
