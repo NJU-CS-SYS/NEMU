@@ -43,14 +43,14 @@ make_helper(concat(pop_stack2m_, SUFFIX)) {
 		MEM_W(buf, addr);
 		print_asm("pop" str(SUFFIX) " %s", REG_NAME(m.R_M));	
 	}
-	cpu.esp -= DATA_BYTE;
+	cpu.esp += DATA_BYTE;
 	return len;
 }
 
 make_helper(concat(pop_stack2r_, SUFFIX)) {
 	int regcode = instr_fetch(eip, 1) & 0x7;
 	REG(regcode) = MEM_R(REG(R_ESP));
-	cpu.esp -= DATA_BYTE;
+	cpu.esp += DATA_BYTE;
 	Log("(esp) = %x", MEM_R(REG(R_ESP)));
 	print_asm("pop" str(SUFFIX) " %%%s", REG_NAME(regcode));	
 	return 1;
