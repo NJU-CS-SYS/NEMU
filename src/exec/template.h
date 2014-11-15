@@ -142,6 +142,18 @@ do{\
 	}\
 }while(0)
 
+#define GET_RM(dst, len) do{\
+	m.val = instr_fetch(eip + 1, 1);\
+	if (m.mod == 3) {\
+		dst = REG(m.R_M);\
+		len++;\
+	} else {\
+		swaddr_t addr;\
+		len += read_ModR_M(eip + 1, &addr);\
+		dst = MEM_R(addr);\
+	}\
+}while(0)
+
 #endif
 
 
