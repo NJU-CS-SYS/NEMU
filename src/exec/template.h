@@ -69,8 +69,7 @@ do{\
 	}\
 }while(0)
 
-#define TEMP_RM2R(name) \
-do{\
+#define TEMP_RM2R(name) do{\
 	src = REG(m.reg);\
 	if (m.mod == 3) {\
 		dest = REG(m.R_M);\
@@ -127,6 +126,20 @@ do{\
 	FLAG_CHG(ZF, result==0);\
 	FLAG_CHG(PF, PARITY(result));\
 	FLAG_CHG(CF, 0);\
+}while(0)
+
+#define MOD_RM2R(name, dst, len) do{\
+	m.val = instr_fetch(eip + 1, 1);\
+	if (m.mod == 3) {\
+		dst = REG(m.R_M);\
+		len++;\
+		print_asm(str(name) str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));\
+	} else {\
+		swaddr_t addr;\
+		len += read_ModR_M(eip + 1, &addr);\
+		dst = MEM_R(addr);\
+		print_asm(str(name) str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));\
+	}\
 }while(0)
 
 #endif
