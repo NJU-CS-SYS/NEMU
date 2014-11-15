@@ -3,6 +3,7 @@
 int test_i;
 int test_j;
 long long result;
+int total;
 long long add(long long a, long long b) {
 	long long c = a + b;
 	return c;
@@ -14,6 +15,7 @@ long long ans[] = {0L, 0x1L, 0x2L, 0x7fffffffffffffffL, 0x8000000000000000L, 0x8
 #define NR_DATA (sizeof(test_data) / sizeof(test_data[0]))
 
 int main() {
+	total = NR_DATA;
 	int i, j, ans_idx = 0;
 	for(i = 0; i < NR_DATA; i ++) {
 		test_i = i;

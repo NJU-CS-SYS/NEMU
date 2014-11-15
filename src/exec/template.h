@@ -32,9 +32,8 @@ do {\
 	FLAG_CHG(ZF, result==0);\
 	FLAG_CHG(AF, ADJUST(src, dest));\
 	FLAG_CHG(PF, PARITY(result));\
-	src = ~src + 1;\
 	Log("hit");\
-	FLAG_CHG(CF, (DATA_TYPE)src > (DATA_TYPE)dest);\
+	FLAG_CHG(CF, result < src);\
 }while(0)
 
 #define TEMP_ADD_I(src, dest, result)\
