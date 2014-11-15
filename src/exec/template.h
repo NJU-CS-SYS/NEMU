@@ -41,6 +41,12 @@ do{\
 	TEMP_FLAG(src, dest, result);\
 }while(0)
 
+#define TEMP_ADC_I(src, dest, result)\
+do{\
+	result = dest + (DATA_TYPE_S)src + 1;\
+	TEMP_FLAG(src, dest, result);\
+}while(0)
+
 #define TEMP_SUB_I(src, dest, result) \
 do{\
 	_TEMP_SUB_I(src, dest, result);\
