@@ -42,7 +42,7 @@ make_helper(concat(jmp_rm_, SUFFIX)) {
 	ModR_M m;
 	GET_RM(src, len);
 
-	cpu.eip += MEM_R(src);
+	cpu.eip += src;
 
 	if (m.mod == 3) {
 		print_asm("jmp *%%%s", REG_NAME(m.R_M));
