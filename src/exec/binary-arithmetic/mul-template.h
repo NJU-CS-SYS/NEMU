@@ -106,7 +106,7 @@ make_helper(concat(imul_rm2r_, SUFFIX)) {
 	rst = src * dst;
 	REG(m.reg) = rst;
 	CLEAR_FLAG;
-	return len;
+	return len + 1;
 }
 
 make_helper(concat(imul_i8rm2r_, SUFFIX)) {
