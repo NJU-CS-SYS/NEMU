@@ -42,14 +42,14 @@ make_helper(concat(jmp_rm_, SUFFIX)) {
 	ModR_M m;
 	GET_RM(src, len);
 
-	cpu.eip += src;
+	cpu.eip = src - len;
 
 	if (m.mod == 3) {
 		print_asm("jmp *%%%s", REG_NAME(m.R_M));
-		Log("addr = %x dest = %x", REG(m.R_M), MEM_R(REG(m.R_M)));
 	} else {
 		print_asm("jmp *%s", ModR_M_asm);
 	}
+	Log("addr = %x dest = %x", src, MEM_R(src));
 	return len;
 }
 
