@@ -36,7 +36,7 @@ helper_fun opcode_table [256] = {
 /* 0x5c */	pop_stack2r_v, pop_stack2r_v, pop_stack2r_v, pop_stack2r_v, 
 /* 0x60 */	inv, inv, inv, inv,
 /* 0x64 */	inv, inv, data_size, inv,
-/* 0x68 */	inv, inv, inv, inv, 
+/* 0x68 */	inv, imul_irm2r_v, inv, imul_i8rm2r_v, 
 /* 0x6c */	inv, inv, inv, inv, 
 /* 0x70 */	jo_rel_b, jno_rel_b, jb_rel_b, jae_rel_b,
 /* 0x74 */	je_b, jne_rel_b, jbe_rel_b, ja_rel_b,
@@ -120,7 +120,7 @@ helper_fun opcode_table_2 [256] = {
 /* 0xa0 */	inv, inv, inv, inv,
 /* 0xa4 */	inv, inv, inv, inv,
 /* 0xa8 */	inv, inv, inv, inv,
-/* 0xac */	inv, inv, inv, inv,
+/* 0xac */	inv, inv, inv, imul_rm2r_v,
 /* 0xb0 */	inv, inv, inv, inv,
 /* 0xb4 */	inv, inv, movz_b2_v, movz_w2_l,
 /* 0xb8 */	inv, inv, inv, inv,
@@ -195,12 +195,12 @@ helper_fun group_table_8f[8] = {
 
 helper_fun group_table_f6[8] = {
 	test_i2rm_b, inv, not_rm_b, neg_rm_b,
-	mul_rm2r_b, inv, inv, inv
+	mul_rm2r_b, imul_rm2imp_b, inv, inv
 };
 
 helper_fun group_table_f7[8] = {
 	test_i2rm_v, inv, not_rm_v, neg_rm_v,
-	mul_rm2r_v, inv, inv, inv
+	mul_rm2r_v, imul_rm2imp_v, inv, inv
 };
 
 helper_fun group_table_fe[8] = {
