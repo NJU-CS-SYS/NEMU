@@ -18,8 +18,8 @@ void loader() {
 			k++;
 			char *dest = (char*)ph->p_vaddr;
 			char *src = (char*)ph->p_offset;
-			uint16_t filesz = ph->p_filesz;
-			uint16_t memsz = ph->p_memsz;
+			uint32_t filesz = ph->p_filesz;
+			uint32_t memsz = ph->p_memsz;
 			int j;
 			/* Memory copy */
 			if (i == 2) { nemu_assert(src[20000] == 27825); }
