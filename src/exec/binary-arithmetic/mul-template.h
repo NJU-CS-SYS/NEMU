@@ -130,7 +130,7 @@ make_helper(concat(imul_irm2r_, SUFFIX)) {
 	rst = src * dst;
 	REG(m.reg) = rst;
 	CLEAR_FLAG;
-	return len;
+	return len + DATA_BYTE;
 }
 #undef MUL_FLAG
 #undef MUL_RST
