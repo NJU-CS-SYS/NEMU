@@ -19,6 +19,7 @@ void loader() {
 			char *src = (char*)ph->p_offset;
 			uint16_t filesz = ph->p_filesz;
 			uint16_t memsz = ph->p_memsz;
+			nemu_assert(i != 1 || memsz == 0x27128);
 			int j;
 			/* Memory copy */
 			for (j = 0; j < filesz; j++)
@@ -27,7 +28,6 @@ void loader() {
 			/* Memory clear */
 			for (; j < memsz; j++)
 				dest[j] = 0;
-			nemu_assert(i != 1 || j == 0x27128);
 		}
 		ph = (Elf32_Phdr*)((uint32_t)ph + step);
 	}
