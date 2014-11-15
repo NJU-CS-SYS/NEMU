@@ -33,6 +33,7 @@ do {\
 	FLAG_CHG(AF, ADJUST(src, dest));\
 	FLAG_CHG(PF, PARITY(result));\
 	src = ~src + 1;\
+	Log("hit");\
 	FLAG_CHG(CF, (DATA_TYPE)src > (DATA_TYPE)dest);\
 }while(0)
 
