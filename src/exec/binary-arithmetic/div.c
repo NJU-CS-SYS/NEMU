@@ -15,3 +15,4 @@
 extern char suffix;
 
 v_helper(div_rm2imp);
+v_helper(idiv_rm2imp);
