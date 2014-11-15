@@ -40,7 +40,7 @@ make_helper(concat(pop_stack2m_, SUFFIX)) {
 	} else {
 		swaddr_t addr;
 		len = 1 + read_ModR_M(eip + 1, &addr);
-		MEM_W(buf, addr);
+		MEM_W(addr, buf);
 		print_asm("pop" str(SUFFIX) " %s", REG_NAME(m.R_M));	
 	}
 	cpu.esp += DATA_BYTE;

@@ -28,7 +28,7 @@ make_helper(concat(dec_rm_, SUFFIX)) {
 		swaddr_t addr;
 		len += read_ModR_M(eip + 1, &addr);
 		dest = MEM_R(addr);
-		MEM_W(dest - 1, addr);
+		MEM_W(addr, dest = 1);
 		print_asm("dec %s", ModR_M_asm);
 	}	
 	result = dest - 1;

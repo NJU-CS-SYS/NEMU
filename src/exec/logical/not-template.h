@@ -19,7 +19,7 @@ make_helper(concat(not_rm_, SUFFIX)) {
 		swaddr_t addr;
 		len += read_ModR_M(eip + 1, &addr);
 		buf = MEM_R(addr);
-		MEM_W(~buf, addr);
+		MEM_W(addr, ~buf);
 		print_asm("not" str(SUFFIX) " %s", ModR_M_asm);
 	}
 

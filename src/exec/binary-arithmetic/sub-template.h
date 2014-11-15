@@ -80,7 +80,7 @@ make_helper(concat(neg_rm_, SUFFIX)) {
 		len += read_ModR_M(eip + 1, &addr);
 		FLAG_CHG(CF, MEM_R(addr));
 		buf = -MEM_R(addr);
-		MEM_W(buf, addr);
+		MEM_W(addr, buf);
 		print_asm("neg" str(SUFFIX) " %s", ModR_M_asm);
 	}
 	FLAG_CHG(OF, buf == 0x80000000);
