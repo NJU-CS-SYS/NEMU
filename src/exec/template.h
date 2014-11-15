@@ -32,7 +32,7 @@ do {\
 	FLAG_CHG(ZF, result==0);\
 	FLAG_CHG(AF, ADJUST(src, dest));\
 	FLAG_CHG(PF, PARITY(result));\
-	FLAG_CHG(CF, (DATA_TYPE)dest < (DATA_TYPE)src);\
+	FLAG_CHG(CF, !((DATA_TYPE)result <= (DATA_TYPE)dest));\
 }while(0)
 
 #define TEMP_ADD_I(src, dest, result)\
