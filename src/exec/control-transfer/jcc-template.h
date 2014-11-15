@@ -1,6 +1,7 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
+#include "../template.h"
 extern char suffix;
 
 #define JCC_LEN_DEF int len = DATA_BYTE + (DATA_BYTE == 1 ? 1 : 2);
@@ -32,6 +33,22 @@ make_helper(concat(jmp_rel_, SUFFIX)) {
 	if (suffix == 'w') eip &= 0x0000ffff;
 	cpu.eip = eip;
 	print_asm("jmp %x", eip + len);
+	return len;
+}
+
+make_helper(concat(jmp_rm_, SUFFIX)) {
+	int len = 1;
+	DATA_TYPE src;
+	ModR_M m;
+	GET_RM(src, len);
+
+	cpu.eip += MEM_R(src);
+
+	if (m.mod == 3) {
+		print_asm("jmp *%%%s", REG_NAME(m.R_M));
+	} else {
+		print_asm("jmp *%s", ModR_M_asm);
+	}
 	return len;
 }
 

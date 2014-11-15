@@ -37,4 +37,5 @@ all_helper(jo_rel);
 all_helper(jp_rel);
 all_helper(js_rel);
 
+all_helper(jmp_rm);
 #endif
