@@ -179,6 +179,13 @@ make_helper(concat(movs_m2m_, SUFFIX)) {
 	MEM_W(REG(R_EDI), buf);
 	Log("buf = %d %c", buf, buf);
 	print_asm("movs ES:%%%s,ES:%%%s", REG_NAME(R_ESI), REG_NAME(R_EDI));
+	if (FLAG_VAL(DF)) {
+		REG(R_EDI) -= DATA_BYTE;
+		REG(R_ESI) -= DATA_BYTE;
+	} else {
+		REG(R_EDI) += DATA_BYTE;
+		REG(R_ESI) += DATA_BYTE;
+	}
 	return 1;
 }
 #include "exec/template-end.h"
