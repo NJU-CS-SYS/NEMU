@@ -42,7 +42,7 @@ make_helper(concat(cmp_i2r_, SUFFIX)) {
 	TEMP_VALUES;
 	len = 1;
 	src = instr_fetch(eip + 1, DATA_BYTE);
-	len ++;
+	len += DATA_BYTE;
 	dest = REG(R_EAX);
 	TEMP_SUB_I(src, dest, result);
 	return len;
