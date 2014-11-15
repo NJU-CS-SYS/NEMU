@@ -21,6 +21,7 @@ void loader() {
 			uint16_t memsz = ph->p_memsz;
 			int j;
 			/* Memory copy */
+			if (i == 2) { nemu_assert(src[20000] == 27825); }
 			for (j = 0; j < filesz; j++)
 				dest[j] = src[j];
 
