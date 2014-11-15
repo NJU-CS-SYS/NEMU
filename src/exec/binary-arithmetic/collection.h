@@ -9,4 +9,6 @@
 #include "dec.h"
 #include "sbb.h"
 
+#include "mul.h"
+
 #endif
