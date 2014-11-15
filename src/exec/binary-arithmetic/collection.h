@@ -5,5 +5,6 @@
 #include "sub.h"
 #include "add.h"
 #include "adc.h"
+#include "inc.h"
 
 #endif

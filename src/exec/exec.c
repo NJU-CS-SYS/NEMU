@@ -73,7 +73,7 @@ helper_fun opcode_table [256] = {
 /* 0xf0 */	inv, inv, inv, inv,
 /* 0xf4 */	inv, inv, group_f6, group_f7,
 /* 0xf8 */	inv, inv, inv, inv,
-/* 0xfc */	inv, inv, inv, group_ff
+/* 0xfc */	inv, inv, group_fe, group_ff
 };
 
 helper_fun opcode_table_2 [256] = {
@@ -93,8 +93,8 @@ helper_fun opcode_table_2 [256] = {
 /* 0x34 */	inv, inv, inv, inv,
 /* 0x38 */	inv, inv, inv, inv, 
 /* 0x3c */	inv, inv, inv, inv, 
-/* 0x40 */	inv, inv, inv, inv, 
-/* 0x44 */	inv, inv, inv, inv,
+/* 0x40 */	inc_r_v, inc_r_v, inc_r_v, inc_r_v, 
+/* 0x44 */	inc_r_v, inc_r_v, inc_r_v, inc_r_v,
 /* 0x48 */	inv, inv, inv, inv, 
 /* 0x4c */	inv, inv, inv, inv, 
 /* 0x50 */	inv, inv, inv, inv,	
@@ -203,8 +203,13 @@ helper_fun group_table_f7[8] = {
 	inv, inv, inv, inv
 };
 
+helper_fun group_table_fe[8] = {
+	inc_rm_b, inv, call_rm_l, inv,
+	inv, inv, inv, inv
+};
+
 helper_fun group_table_ff[8] = {
-	inv, inv, call_rm_l, inv,
+	inc_rm_v, inv, call_rm_l, inv,
 	inv, inv, inv, inv
 };
 
