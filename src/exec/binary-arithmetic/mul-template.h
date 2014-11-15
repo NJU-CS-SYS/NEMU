@@ -97,6 +97,7 @@ make_helper(concat(imul_rm2imp_, SUFFIX)) {
 }
 
 make_helper(concat(imul_rm2r_, SUFFIX)) {
+	eip++; // 2 bytes opcode !
 	int64_t src, dst, rst;
 	int len = 1;
 	ModR_M m;
