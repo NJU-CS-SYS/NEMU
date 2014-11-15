@@ -11,3 +11,5 @@
 #include "misc/misc.h"
 
 #include "other/lea.h"
+
+#include "string/collection.h"
