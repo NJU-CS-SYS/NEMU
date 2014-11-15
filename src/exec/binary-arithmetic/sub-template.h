@@ -38,6 +38,8 @@ make_helper(concat(sub_i82rm_, SUFFIX)) {
 	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	TEMP_I2RM(sub, 1);
+	int shift_len = (DATA_BYTE - 1) * 8;
+	src = (src << shift_len) >> shift_len;
 	TEMP_SUB_I(src, dest, result);
 	TEMP_RESULT2RM(result);
 	return len;

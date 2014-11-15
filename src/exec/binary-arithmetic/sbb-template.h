@@ -33,6 +33,8 @@ make_helper(concat(sbb_i82rm_, SUFFIX)) {
 	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	TEMP_I2RM(sbb, 1);
+	int shift_len = (DATA_BYTE - 1) * 8;
+	src = (src << shift_len) >> shift_len;
 	SBB(src, dest, result);
 	TEMP_RESULT2RM(result);
 	return len;

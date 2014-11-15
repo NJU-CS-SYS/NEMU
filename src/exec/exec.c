@@ -16,8 +16,8 @@ helper_fun opcode_table [256] = {
 /* 0x0c */	or_i2r_b, or_i2r_v, inv, opcode_2, 
 /* 0x10 */	adc_r2rm_b, adc_r2rm_v, adc_rm2r_b, adc_rm2r_v, 
 /* 0x14 */	adc_i2r_b, adc_i2r_v, inv, inv, 
-/* 0x18 */	inv, inv, inv, inv, 
-/* 0x1c */	inv, inv, inv, inv, 
+/* 0x18 */	sbb_r2rm_b, sbb_r2rm_v, sbb_rm2r_b, sbb_rm2r_v, 
+/* 0x1c */	sbb_i2r_b, sbb_i2r_v, inv, inv, 
 /* 0x20 */	inv, inv, inv, inv, 
 /* 0x24 */	and_i2r_b, and_i2r_v, inv, inv,
 /* 0x28 */	sub_r2rm_b, sub_r2rm_v, sub_rm2r_b, sub_rm2r_v, 
@@ -144,17 +144,17 @@ helper_fun opcode_table_2 [256] = {
 };
 
 helper_fun group_table_80[8] = {
-	add_i2rm_b, or_i2rm_b, adc_i2rm_b, inv,
+	add_i2rm_b, or_i2rm_b, adc_i2rm_b, sbb_i2rm_b,
 	and_i2rm_b, sub_i2rm_b, xor_i2rm_b, cmp_i8_rm_b
 };
 
 helper_fun group_table_81[8] = {
-	add_i2rm_v, or_i2rm_v, adc_i2rm_v, inv,
+	add_i2rm_v, or_i2rm_v, adc_i2rm_v, sbb_i2rm_v,
 	and_i2rm_v, sub_i2rm_v, xor_i2rm_v, cmp_i2rm_v
 };
 
 helper_fun group_table_83[8] = {
-	add_i82rm_v, or_i82rm_v, adc_i82rm_v, inv,
+	add_i82rm_v, or_i82rm_v, adc_i82rm_v, sbb_i82rm_v,
 	and_i82rm_v, sub_i82rm_v, xor_i82rm_v, cmp_i8_rm_v
 };
 
