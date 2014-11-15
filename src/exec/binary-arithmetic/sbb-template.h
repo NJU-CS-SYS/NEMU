@@ -3,10 +3,23 @@
 #include "cpu/modrm.h"
 #include "../template.h"
 
-#define SBB(src, dest, result)\
-	do {\
+#define SBB_FLAG(src, dest, result) do {\
+	DATA_TYPE add_src = ~src + 1;\
+	if (MSB(src) == MSB(dest)) { /* here src and dest is the same sign actually */ \
+		FLAG_CHG(OF,0);\
+	} else {\
+		FLAG_CHG(OF,MSB(dest) != MSB(result));\
+	}\
+	FLAG_CHG(SF, MSB(result));\
+	FLAG_CHG(ZF, result==0);\
+	FLAG_CHG(AF, ADJUST(add_src, dest));\
+	FLAG_CHG(PF, PARITY(result));\
+	FLAG_CHG(CF, (DATA_TYPE)src + FLAG_VAL(CF) > (DATA_TYPE)dest);\
+}while(0)
+
+#define SBB(src, dest, result) do {\
 		result = dest - (src + FLAG_VAL(CF));\
-		TEMP_SUB_FLAG((~src + 1), dest, result);\
+		SBB_FLAG(src, dest, result);\
 	} while (0)
 
 make_helper(concat(sbb_i2r_, SUFFIX)) {
