@@ -33,7 +33,7 @@ do {\
 	FLAG_CHG(AF, ADJUST(src, dest));\
 	FLAG_CHG(PF, PARITY(result));\
 	Log("hit");\
-	FLAG_CHG(CF, result < src);\
+	FLAG_CHG(CF, result < dest);\
 }while(0)
 
 #define TEMP_ADD_I(src, dest, result)\
