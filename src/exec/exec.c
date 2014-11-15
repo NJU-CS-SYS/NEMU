@@ -195,12 +195,12 @@ helper_fun group_table_8f[8] = {
 
 helper_fun group_table_f6[8] = {
 	test_i2rm_b, inv, not_rm_b, neg_rm_b,
-	mul_rm2r_b, imul_rm2imp_b, inv, inv
+	mul_rm2r_b, imul_rm2imp_b, div_rm2imp_b, inv
 };
 
 helper_fun group_table_f7[8] = {
 	test_i2rm_v, inv, not_rm_v, neg_rm_v,
-	mul_rm2r_v, imul_rm2imp_v, inv, inv
+	mul_rm2r_v, imul_rm2imp_v, div_rm2imp_v, inv
 };
 
 helper_fun group_table_fe[8] = {

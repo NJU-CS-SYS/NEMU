@@ -10,5 +10,6 @@
 #include "sbb.h"
 
 #include "mul.h"
+#include "div.h"
 
 #endif

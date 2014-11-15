@@ -1,13 +1,13 @@
 #include "exec/helper.h"
 #include "cpu/modrm.h"
 #include "exec/template-start.h"
-#include "../tempalte.h"
+#include "../template.h"
 
-make_helper(concat(div_i2imp_, SUFFIX)) {
+make_helper(concat(div_rm2imp_, SUFFIX)) {
 	uint64_t src, dst , quo, rem;
 	int len = 1;
 	ModR_M m;
-	GET_RM(div, src, len);
+	GET_RM(src, len);
 
 	int quo_reg, rem_reg;
 #if DATA_BYTE == 1
