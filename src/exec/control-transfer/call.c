@@ -27,3 +27,4 @@ make_helper(ret_near_v) {
 }
 
 v_helper(call_rm);
+v_helper(ret_imm16);

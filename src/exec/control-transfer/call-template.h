@@ -17,10 +17,10 @@ make_helper(concat(call_rel_, SUFFIX)) {
 		PUSH(eip + DATA_BYTE);
 		eip += imm;
 		cpu.eip = eip;
-	}
+ 	}
 
 	swaddr_t func_name = read_func_name(eip + 1 + DATA_BYTE, NULL);
-	/*
+  	/*
 	print_asm("call" " %x <%s+0x%x>",
 					eip + 1 + DATA_BYTE,
 					(char*)func_name,
@@ -79,6 +79,23 @@ make_helper(concat(ret_near_, SUFFIX)) {
 	print_asm("ret");
 	return 1;
 }
+
+#if DATA_BYTE != 1
+make_helper(concat(ret_imm16_, SUFFIX)) {
+	uint16_t imm16 = instr_fetch(eip + 1, 2);
+#if DATA_BYTE == 2
+	DATA_TYPE pc;
+	POP(pc);
+	cpu.eip = pc & 0x0000ffffU;
+#elif DATA_BYTE == 4
+	POP(cpu.eip);
+#endif
+	cpu.esp -= imm16;
+	
+	print_asm("ret");
+	return 1;
+}
+#endif
 
 #undef RET_COMMON
 

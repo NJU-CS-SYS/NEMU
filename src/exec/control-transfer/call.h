@@ -14,4 +14,5 @@ make_helper(leave_v);
 make_helper(ret_near_v);
 
 all_helper(call_rm);
+all_helper(ret_imm16);
 #endif
