@@ -94,11 +94,23 @@ make_helper(concat(imul_rm2imp_, SUFFIX)) {
 	int len = 1;
 	ModR_M m;
 	dst = REG(R_EAX);
-	MOD_RM2R(mul, src, len);
+	m.val = instr_fetch(eip + 1, 1);
+	if (m.mod == 3) {
+		src = REG(m.R_M);
+		len++;
+	} else {
+		swaddr_t addr;
+		len += read_ModR_M(eip + 1, &addr);
+		src = MEM_R(addr);
+	}
 	rst = src * dst;
 	CLEAR_FLAG;
 	IMUL_RST(rst);
 	LOG;
+
+	if (m.mod == 3) print_asm("imul" str(SUFFIX) " %%%s", REG_NAME(m.R_M));
+	else print_asm("imul" str(SUFFIX) " %s", ModR_M_asm);
+
 	return len;
 }
 
