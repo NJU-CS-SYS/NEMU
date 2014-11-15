@@ -46,6 +46,7 @@ make_helper(concat(jmp_rm_, SUFFIX)) {
 
 	if (m.mod == 3) {
 		print_asm("jmp *%%%s", REG_NAME(m.R_M));
+		Log("addr = %x dest = %x", REG(m.R_M), MEM_R(REG(m.R_M)));
 	} else {
 		print_asm("jmp *%s", ModR_M_asm);
 	}
