@@ -6,4 +6,5 @@
 #include "shift.h"
 #include "xor.h"
 #include "not.h"
+#include "or.h"
 #endif
