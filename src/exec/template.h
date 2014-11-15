@@ -23,12 +23,13 @@ do {\
 
 #define TEMP_SUB_FLAG(src, dest, result)\
 do {\
-	if (MSB(((~src)+1)) == MSB(dest)) { /* here src and dest is the same sign actually */ \
-		FLAG_CHG(OF,0);\
+	if (!MSB(src) && MSB(dest) && !MSB(result)) { /* src is pos and dest is neg but result is pos */\
+		FLAG_CHG(OF, 1);\
+	} else if (MSB(src) && !MSB(dest) && MSB(result)) { /* src is neg and dest is pos but result is neg */\
+		FLAG_CHG(OF, 1);\
 	} else {\
-		FLAG_CHG(OF,MSB(dest) != MSB(result));\
+		FLAG_CHG(OF, 0);\
 	}\
-	FLAG_CHG(OF, OVERFLOW((~src+1), dest, result));\
 	FLAG_CHG(SF, MSB(result));\
 	FLAG_CHG(ZF, result==0);\
 	FLAG_CHG(AF, ADJUST(src, dest));\
