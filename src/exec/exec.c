@@ -12,8 +12,8 @@ typedef int (*helper_fun)(swaddr_t);
 helper_fun opcode_table [256] = {
 /* 0x00 */	add_r2rm_b, add_r2rm_v, add_rm2r_b, add_rm2r_v, 
 /* 0x04 */	add_i2r_b, add_i2r_v, inv, inv, 
-/* 0x08 */	inv, inv, inv, inv, 
-/* 0x0c */	inv, inv, inv, opcode_2, 
+/* 0x08 */  or_r2rm_b, or_r2rm_v, or_rm2r_b, or_rm2r_v, 
+/* 0x0c */	or_i2r_b, or_i2r_v, inv, opcode_2, 
 /* 0x10 */	adc_r2rm_b, adc_r2rm_v, adc_rm2r_b, adc_rm2r_v, 
 /* 0x14 */	adc_i2r_b, adc_i2r_v, inv, inv, 
 /* 0x18 */	inv, inv, inv, inv, 
@@ -144,17 +144,17 @@ helper_fun opcode_table_2 [256] = {
 };
 
 helper_fun group_table_80[8] = {
-	add_i2rm_b, inv, adc_i2rm_b, inv,
+	add_i2rm_b, or_i2rm_b, adc_i2rm_b, inv,
 	and_i2rm_b, sub_i2rm_b, xor_i2rm_b, cmp_i8_rm_b
 };
 
 helper_fun group_table_81[8] = {
-	add_i2rm_v, inv, adc_i2rm_v, inv,
+	add_i2rm_v, or_i2rm_v, adc_i2rm_v, inv,
 	and_i2rm_v, sub_i2rm_v, xor_i2rm_v, cmp_i2rm_v
 };
 
 helper_fun group_table_83[8] = {
-	add_i82rm_v, inv, adc_i82rm_v, inv,
+	add_i82rm_v, or_i82rm_v, adc_i82rm_v, inv,
 	and_i82rm_v, sub_i82rm_v, xor_i82rm_v, cmp_i8_rm_v
 };
 
