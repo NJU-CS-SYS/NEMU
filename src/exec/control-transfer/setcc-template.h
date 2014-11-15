@@ -8,7 +8,7 @@
 		ModR_M m;\
 		m.val = instr_fetch(eip + 2, 1);\
 		if (m.mod == 3) {\
-			REG(m.reg) = (x);\
+			REG(m.R_M) = (x);\
 			print_asm(str(name) " %%%s", REG_NAME(m.reg));\
 			return len + 1;\
 		} else {\
