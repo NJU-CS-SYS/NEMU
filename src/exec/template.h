@@ -28,6 +28,7 @@ do {\
 	} else {\
 		FLAG_CHG(OF,MSB(dest) != MSB(result));\
 	}\
+	FLAG_CHG(OF, OVERFLOW((~src+1), dest, result));\
 	FLAG_CHG(SF, MSB(result));\
 	FLAG_CHG(ZF, result==0);\
 	FLAG_CHG(AF, ADJUST(src, dest));\
