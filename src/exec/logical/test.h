@@ -7,4 +7,7 @@ make_helper(test_r_rm_l);
 
 make_helper(test_r_rm_v);
 
+all_helper(test_i2r);
+all_helper(test_i2rm);
+
 #endif
