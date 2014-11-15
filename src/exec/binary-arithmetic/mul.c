@@ -14,3 +14,7 @@
 
 extern char suffix;
 v_helper(mul_rm2r);
+v_helper(imul_rm2imp);
+v_helper(imul_i8rm2r);
+v_helper(imul_rm2r);
+v_helper(imul_irm2r);

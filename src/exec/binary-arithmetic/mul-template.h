@@ -121,7 +121,7 @@ make_helper(concat(imul_i8rm2r_, SUFFIX)) {
 	return len + 1;
 }
 
-make_helper(concat(imul_i2rm_, SUFFIX)) {
+make_helper(concat(imul_irm2r_, SUFFIX)) {
 	int64_t src, dst, rst;
 	int len = 1;
 	ModR_M m;
