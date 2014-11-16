@@ -10,7 +10,8 @@
 uint32_t instr_fetch(swaddr_t addr, size_t len);
 
 extern char assembly[];
-#define print_asm(...) assert(snprintf(assembly, 40, __VA_ARGS__) < 40)
+extern char *asm_string;
+#define print_asm(...) assert(snprintf(asm_string, 40, __VA_ARGS__) < 40)
 
 #define v_helper(name) \
 make_helper(concat(name##_, v)) {\

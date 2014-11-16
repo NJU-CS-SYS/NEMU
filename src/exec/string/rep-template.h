@@ -7,12 +7,13 @@ make_helper(exec);
 
 make_helper(concat(rep_, SUFFIX)) {
 	int len = 0;
-	printf("rep ");
-	fflush(stdout);
+	print_asm("rep ");
+	asm_string += 4;
 	while (REG(R_ECX) != 0) {
 		len = exec(eip+1);
 		REG(R_ECX) --;
 	}
+	asm_string -= 4;
 	return len + 1;
 }
 
