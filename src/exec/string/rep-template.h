@@ -7,7 +7,7 @@ make_helper(exec);
 
 make_helper(concat(rep_, SUFFIX)) {
 	int len = 0;
-	print_asm("rep");
+	printf("rep ");
 	fflush(stdout);
 	while (REG(R_ECX) != 0) {
 		len = exec(eip+1);
