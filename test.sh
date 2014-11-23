@@ -7,4 +7,3 @@ for file in $@; do
 	echo -e $cmd | ./nemu $file | grep 'nemu:'
 	echo ""
 done
-
