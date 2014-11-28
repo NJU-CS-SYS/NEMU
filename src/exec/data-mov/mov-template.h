@@ -61,7 +61,6 @@ make_helper(concat(mov_rm2r_, SUFFIX)) {
 	else {
 		swaddr_t addr;
 		int len = read_ModR_M(eip + 1, &addr);
-		Log("addr = %x, value = %x", addr, MEM_R(addr));
 		REG(m.reg) = MEM_R(addr);
 
 		print_asm("mov" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
@@ -177,7 +176,6 @@ make_helper(concat(movs_w2r_, SUFFIX)) {
 make_helper(concat(movs_m2m_, SUFFIX)) {
 	DATA_TYPE buf = MEM_R(REG(R_ESI));
 	MEM_W(REG(R_EDI), buf);
-	Log("buf = %d %c", buf, buf);
 	print_asm("movs ES:%%%s,ES:%%%s", REG_NAME(R_ESI), REG_NAME(R_EDI));
 	if (FLAG_VAL(DF)) {
 		REG(R_EDI) -= DATA_BYTE;
