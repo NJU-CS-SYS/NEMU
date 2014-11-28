@@ -38,6 +38,7 @@ make_helper(concat(call_rm_, SUFFIX)) {
 	swaddr_t addr = 0;
 	m.val = instr_fetch(eip + 1, 1);
 	test(m.reg == 2, "wrong dispatching");
+
 	if (m.mod == 3) {
 		dest = REG(m.R_M);
 		len++; // for modrm byte
@@ -47,10 +48,12 @@ make_helper(concat(call_rm_, SUFFIX)) {
 		dest = MEM_R(addr);
 		print_asm("call *0x%s", ModR_M_asm);
 	}
+
 	if (DATA_BYTE == 2) {
 		PUSH((DATA_TYPE)((eip & 0x0000ffff) + len -1)); // 1 for ret to return 1
 		cpu.eip = dest & 0x0000ffff;
 	} else {
+		PUSH(eip + len - 1); // 1 for ret to return 1
 		cpu.eip = dest;
 	}
 	cpu.eip -= len;
