@@ -16,8 +16,8 @@ addr:
 [0 - 9]    col
 [10 - 19]  raw
 [20 - 22]  bank
-[22 - 25]  rank
-[26 - 31]
+[23 - 26]  rank
+[27 - 31]  5?
 #endif
 typedef union {
 	struct {
@@ -87,10 +87,10 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 
 #define TEST(temp, addr) do{\
 	Log("temp.addr = %x, addr = %x", temp.addr, addr);\
-	Log("temp.rank = %d", temp.rank);\
-	Log("temp.bank = %d", temp.bank);\
-	Log("temp.row = %d", temp.row);\
-	Log("temp.col = %d", temp.col);\
+	Log("temp.rank = %x", temp.rank);\
+	Log("temp.bank = %x", temp.bank);\
+	Log("temp.row = %x", temp.row);\
+	Log("temp.col = %x", temp.col);\
 	int a;\
 	while (scanf("%d",&a)) if (a == 0) break;\
 }while(0)
