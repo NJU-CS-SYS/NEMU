@@ -87,8 +87,8 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 
 #define TEST(temp, addr) do{\
 	Log("temp.addr = %x, addr = %x", temp.addr, addr);\
-	Log("temp.rank = %x", temp.rank);\
-	Log("temp.bank = %x", temp.bank);\
+	Log("temp.rank = %d", temp.rank);\
+	Log("temp.bank = %d", temp.bank);\
 	Log("temp.row = %x", temp.row);\
 	Log("temp.col = %d", temp.col);\
 	int a;\
