@@ -85,18 +85,26 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 	memcpy(data, rowbufs[rank][bank].buf + col, BURST_LEN);
 }
 
+#define TEST(temp, addr) do{\
+	Log("temp.addr = %x, addr = %x", temp.addr, addr);\
+	Log("temp.rank = %d", temp.rank);\
+	Log("temp.bank = %d", temp.bank);\
+	Log("temp.row = %d", temp.row);\
+	Log("temp.col = %d", temp.col);\
+	int a;\
+	while (scanf("%d",&a)) if (a == 0) break;\
+}while(0)
+
 static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	test(addr < HW_MEM_SIZE, "addr = %x\n", addr);
 
 	dram_addr temp;
 	temp.addr = addr & ~BURST_MASK;
-	Log("temp.addr = %x, addr = %x", temp.addr, addr);
-	int a;
-	while (scanf("%d",&a)) if (a == 0) break;
 	uint32_t rank = temp.rank;
 	uint32_t bank = temp.bank;
 	uint32_t row = temp.row;
 	uint32_t col = temp.col;
+	TEST(temp,addr);
 
 	if(!(rowbufs[rank][bank].valid && rowbufs[rank][bank].row_idx == row) ) {
 		/* read a row into row buffer */
