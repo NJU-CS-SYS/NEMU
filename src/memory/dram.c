@@ -68,6 +68,7 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 	test(addr < HW_MEM_SIZE, "addr = %x\n, eip = %x", addr, cpu.eip);
 
 	dram_addr temp;
+	// the low 3 bits are cleared to 0, but why?
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t rank = temp.rank;
 	uint32_t bank = temp.bank;
