@@ -92,7 +92,7 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	temp.addr = addr & ~BURST_MASK;
 	Log("temp.addr = %x, addr = %x", temp.addr, addr);
 	int a;
-	while (scanf("%d",&a));
+	while (scanf("%d",&a)) if (a == 0) break;
 	uint32_t rank = temp.rank;
 	uint32_t bank = temp.bank;
 	uint32_t row = temp.row;
