@@ -10,9 +10,15 @@
 #define ROW_WIDTH 10
 #define BANK_WIDTH 3
 #define RANK_WIDTH (27 - COL_WIDTH - ROW_WIDTH - BANK_WIDTH)
-/*
- * member addr can have the same value of col!?
- */
+
+#if 0
+addr:
+[0 - 9]    col
+[10 - 19]  raw
+[20 - 22]  bank
+[22 - 25]  rank
+[26 - 31]
+#endif
 typedef union {
 	struct {
 		uint32_t col	: COL_WIDTH;
@@ -23,23 +29,21 @@ typedef union {
 	uint32_t addr;
 } dram_addr;
 
-/*
- * what does NR means?
- */
 #define NR_COL (1 << COL_WIDTH)
 #define NR_ROW (1 << ROW_WIDTH)
 #define NR_BANK (1 << BANK_WIDTH)
 #define NR_RANK (1 << RANK_WIDTH)
-/*
- * 4 dimensions !?
- */
+
 #define HW_MEM_SIZE (1 << (COL_WIDTH + ROW_WIDTH + BANK_WIDTH + RANK_WIDTH))
 
+// burst means the number of bits
+// that read and write at the same time
 #define BURST_LEN 8
 #define BURST_MASK (BURST_LEN - 1)
 
 uint8_t dram[NR_RANK][NR_BANK][NR_ROW][NR_COL];
 uint8_t *hw_mem = (void *)dram;
+
 
 typedef struct {
 	uint8_t buf[NR_COL];
@@ -47,6 +51,8 @@ typedef struct {
 	bool valid;
 } RB;
 
+// every chip or matrix has row buf,
+// the chip is an element of matrix rank and bank
 RB rowbufs[NR_RANK][NR_BANK];
 
 void init_dram() {
@@ -84,6 +90,8 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 
 	dram_addr temp;
 	temp.addr = addr & ~BURST_MASK;
+	Log("temp.addr = %x, addr = %x", temp.addr, addr);
+	assert(0);
 	uint32_t rank = temp.rank;
 	uint32_t bank = temp.bank;
 	uint32_t row = temp.row;
