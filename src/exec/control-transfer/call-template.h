@@ -71,6 +71,7 @@ if (DATA_BYTE == 2) {\
 	POP(ip);\
 	cpu.eip = ip & 0x0000ffff;\
 } else {\
+	Log("hit");\
 	POP(cpu.eip);\
 }
 
