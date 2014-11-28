@@ -91,8 +91,6 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 	Log("temp.bank = %d", temp.bank);\
 	Log("temp.row = %x", temp.row);\
 	Log("temp.col = %d", temp.col);\
-	int a;\
-	while (scanf("%d",&a)) if (a == 0) break;\
 }while(0)
 
 static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
