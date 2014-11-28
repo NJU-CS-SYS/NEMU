@@ -4,7 +4,7 @@ CFLAGS += -I./include
 
 ASFLAGS = -m32
 
-CSRC = $(shell find src/ -name "*.c")
+CSRC = $(wildcard src/*.c)
 
 OBJS = $(CSRC:.c=.o)
 
