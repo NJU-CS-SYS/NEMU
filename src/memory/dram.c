@@ -90,8 +90,7 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 	Log("temp.rank = %x", temp.rank);\
 	Log("temp.bank = %x", temp.bank);\
 	Log("temp.row = %x", temp.row);\
-	Log("temp.col = %x", temp.col);\
-	fflush(stdout);\
+	Log("temp.col = %d", temp.col);\
 	int a;\
 	while (scanf("%d",&a)) if (a == 0) break;\
 }while(0)
