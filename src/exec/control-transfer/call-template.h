@@ -74,13 +74,17 @@ if (DATA_BYTE == 2) {\
 	POP(ip);\
 	cpu.eip = ip & 0x0000ffff;\
 } else {\
-	Log("hit: cpu.eip = %x, esp = %x", cpu.eip, cpu.esp);\
 	POP(cpu.eip);\
-	Log("hit: cpu.eip = %x, esp = %x", cpu.eip, cpu.esp);\
 }
 
 make_helper(concat(ret_near_, SUFFIX)) {
-	RET_COMMON;
+#if DATA_BYTE == 2
+	DATA_TYPE ip;
+	POP(ip);
+	cpu.eip = ip & 0x0000ffff;
+#else
+	POP(cpu.eip);
+#endif
 	print_asm("ret");
 	return 1;
 }
