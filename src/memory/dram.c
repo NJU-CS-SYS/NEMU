@@ -36,8 +36,12 @@ typedef union {
 
 #define HW_MEM_SIZE (1 << (COL_WIDTH + ROW_WIDTH + BANK_WIDTH + RANK_WIDTH))
 
-// burst means the number of bits
+// burst means the number of bytes
 // that read and write at the same time
+// it is 32bits, or 4 bytes,
+// which is just the length of 'int'
+// and the maximum length of the databus
+// which can be read at a time
 #define BURST_LEN 8
 #define BURST_MASK (BURST_LEN - 1)
 
@@ -86,14 +90,6 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 	memcpy(data, rowbufs[rank][bank].buf + col, BURST_LEN);
 }
 
-#define TEST(temp, addr) do{\
-	Log("temp.addr = %x, addr = %x", temp.addr, addr);\
-	Log("temp.rank = %x", temp.rank);\
-	Log("temp.bank = %x", temp.bank);\
-	Log("temp.row = %x", temp.row);\
-	Log("temp.col = %x", temp.col);\
-}while(0)
-
 static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	test(addr < HW_MEM_SIZE, "addr = %x\n", addr);
 
@@ -103,7 +99,6 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	uint32_t bank = temp.bank;
 	uint32_t row = temp.row;
 	uint32_t col = temp.col;
-	TEST(temp,addr);
 
 	if(!(rowbufs[rank][bank].valid && rowbufs[rank][bank].row_idx == row) ) {
 		/* read a row into row buffer */
@@ -116,6 +111,7 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	memcpy_with_mask(rowbufs[rank][bank].buf + col, data, BURST_LEN, mask);
 
 	/* write back to dram */
+	// not all 8 bytes need to be write, so we have a mask
 	memcpy(dram[rank][bank][row], rowbufs[rank][bank].buf, NR_COL);
 }
 
