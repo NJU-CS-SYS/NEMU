@@ -163,8 +163,5 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 	// buf
 	uint8_t temp[ BURST_LEN ];
 	memcpy(temp, head->cache[set][way].block + offset, BURST_LEN);
-	int i;
-	for (i = 0; i < 8; i ++)
-		Log("%x", temp[i]);
 	return *(uint32_t*)temp & (~0u >> ((4 - len) << 3));
 }
