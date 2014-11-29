@@ -166,7 +166,6 @@ void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
 	uint32_t set = (addr & head->mask_set) >> head->bit_block;
 	uint32_t offset = addr & head->mask_block;
 
-	Log("cache write: tag=%x, set=%x, offset=%x", tag, set, offset);
 	// search the block
 	int way;
 	for (way = 0; way < head->nr_way; way ++)
@@ -214,7 +213,6 @@ void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
 // this function handle the situation
 // when the data is cross the boundary
 uint32_t cache_read(swaddr_t addr, size_t len) {
-	Log("input addr is %x", addr);
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
@@ -223,15 +221,12 @@ uint32_t cache_read(swaddr_t addr, size_t len) {
 
 	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
 		// data cross the burst boundary
-		Log("override addr will be %x", addr + BURST_LEN);
 		sram_read(addr + BURST_LEN, temp + BURST_LEN);
 	}
 	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
 }
 
 void cache_write(swaddr_t addr, size_t len, uint32_t data) {
-	Log("the data to be write is %x", data);
-	Log("the addr is %x", addr);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
 	uint8_t mask[2 * BURST_LEN];
@@ -243,7 +238,6 @@ void cache_write(swaddr_t addr, size_t len, uint32_t data) {
 	sram_write(addr, temp, mask);
 
 	if ( (addr ^ (addr + len - 1)) & (~BURST_MASK) ) {
-		Log("boundary override");
 		// data cross the boundary
 		sram_write(addr, temp, mask);
 	}
@@ -261,7 +255,7 @@ void print_cache(swaddr_t addr) {
 	printf("set %d\n", set);
 	for (way = 0; way < head->nr_way; way ++) {
 		if (tag == head->cache[set][way].tag && head->cache[set][way].valid) {
-			printf("%d : tag = %x\n", way, head->cache[set][way].tag);
+			printf("way %x: tag = %x\n", way, head->cache[set][way].tag);
 			for (blck = 0; blck < head->nr_block; blck ++) {
 				printf(" %02x", head->cache[set][way].block[blck]);
 				if (blck == 31) printf("\n");
