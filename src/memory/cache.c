@@ -185,7 +185,7 @@ void print_cache(swaddr_t addr) {
 	int way, blck;
 	printf("set %d\n", set);
 	for (way = 0; way < head->nr_way; way ++) {
-		printf("%d :", way);
+		printf("%d :\n", way);
 		for (blck = 0; blck < head->nr_block; blck ++) {
 			printf(" %02x", head->cache[set][way].block[blck]);
 			if (blck == 31) printf("\n");
