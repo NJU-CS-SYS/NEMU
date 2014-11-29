@@ -119,6 +119,7 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 uint32_t dram_read(hwaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t offset = addr & BURST_MASK;
+	Log("offset = %x, while addr = %x", offset, addr);
 	uint8_t temp[2 * BURST_LEN];
 	
 	ddr3_read(addr, temp);

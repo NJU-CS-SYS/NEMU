@@ -119,11 +119,8 @@ void delete_cache() {
 	}
 }
 
-#if 0
-bool hit_cache(cache *pcache, swaddr_t addr, void* data) {
-	int bit_set, bit_block;
-	int nr_set, nr_way, nr_bloc;
-	nr_set = pcache->nr_set;
-	nr_way = pcache->nr_way;
-	nr_block = pcache->nr_block;
-#endif
+
+void read_cache(swaddr_t addr, void* data) {
+	return;
+}
+
