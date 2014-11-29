@@ -20,9 +20,9 @@ uint32_t swaddr_read(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t cache_data = read_cache(addr, len);
 	uint32_t hw_data = hwaddr_read(addr, len);
-	Log("cache : %x, hw : %x, len : %d", cache_data, hw_data, len);
-	//test(cache_data == hw_data, "cache wrong, len = %x", len);
-	return cache_data;
+	//Log("cache : %x, hw : %x, len : %d", cache_data, hw_data, len);
+	test(cache_data == hw_data, "cache wrong, len = %x", len);
+	return hw_data;
 }
 
 void swaddr_write(swaddr_t addr, size_t len, uint32_t data) {

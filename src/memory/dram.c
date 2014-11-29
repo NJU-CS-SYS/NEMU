@@ -83,7 +83,7 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 
 	if(!(rowbufs[rank][bank].valid && rowbufs[rank][bank].row_idx == row) ) {
 		/* read a row into row buffer */
-		Log("cross hit");
+		//Log("cross hit");
 		memcpy(rowbufs[rank][bank].buf, dram[rank][bank][row], NR_COL);
 		rowbufs[rank][bank].row_idx = row;
 		rowbufs[rank][bank].valid = true;

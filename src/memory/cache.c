@@ -53,26 +53,26 @@ bool init_cache (cache *pcache) {
 	int bit_set = 0;
 
 	pcache->mask_block = (nr_block - 1);
-	Log("mask_block = %x", pcache->mask_block);
+	//Log("mask_block = %x", pcache->mask_block);
 
 	while (nr_block > 1) {
 		nr_block = nr_block >> 1;
 		bit_block ++;
 	}
-	Log("nr_block = %d, bit_block = %x", pcache->nr_block, bit_block);
+	//Log("nr_block = %d, bit_block = %x", pcache->nr_block, bit_block);
 
 	pcache->bit_block = bit_block;
 	pcache->mask_set = (nr_set - 1) << bit_block;
-	Log("mask_set = %x", pcache->mask_set);	
+	//Log("mask_set = %x", pcache->mask_set);	
 
 	while (nr_set > 1) {
 		nr_set = nr_set >> 1;
 		bit_set ++;
 	}
-	Log("nr_set = %d, bit_set = %x", pcache->nr_set, bit_set);
+	//Log("nr_set = %d, bit_set = %x", pcache->nr_set, bit_set);
 
 	pcache->mask_tag = (~0u >> (bit_set + bit_block)) << (bit_set + bit_block);
-	Log("mask_tag = %x", pcache->mask_tag);
+	//Log("mask_tag = %x", pcache->mask_tag);
 
 	// data init
 	int i, j, k;
