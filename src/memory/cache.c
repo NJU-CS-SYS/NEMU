@@ -138,6 +138,7 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 	
 	// miss
 	if (way == head->nr_way) {
+		Log("miss");
 		// find a empty block in this set
 		for (way = 0; way < head->nr_way; way++)
 			if (!head->cache[set][way].valid)
@@ -149,8 +150,10 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 		head->cache[set][way].valid = 1;
 		swaddr_t load_addr = tag | set;
 		int idx;
-		for (idx = 0; idx < head->nr_block; idx ++)
+		for (idx = 0; idx < head->nr_block; idx ++) {
 			head->cache[set][way].block[idx] = dram_read(load_addr + offset, 1);
+			Log("%x ", head->cache[set][way].block[idx]);
+		}
 	}
 
 	// buf
