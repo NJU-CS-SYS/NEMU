@@ -45,7 +45,6 @@ void delete_cache();
 static cache *head;
 
 void init_nemu_cache() {
-	assert(0);
 	head = create_cache(128, 8, 64, 0, 0);
 	//head->next = create_cache(4096, 16, 64, 1, 1);
 }
@@ -88,6 +87,7 @@ bool init_cache (cache *pcache) {
 }
 
 cache* create_cache(uint32_t x, uint32_t y, uint32_t z, uint8_t en_wrt_alloc, uint8_t en_wrt_back) {
+	assert(0);
 	cache *pcache = (cache*)malloc(sizeof(cache));
 	pcache->nr_set = x;
 	pcache->nr_way = y;
