@@ -66,7 +66,6 @@ bool init_cache (cache *pcache) {
 		nr_set = nr_set >> 1;
 		bit_set ++;
 	}
-	Log("bit set = %d", bit_set);
 	pcache->mask_tag = (~0u >> (bit_set + bit_block)) << (bit_set + bit_block);
 	// data init
 	int i, j, k;
@@ -222,6 +221,8 @@ uint32_t cache_read(swaddr_t addr, size_t len) {
 }
 
 void cache_write(swaddr_t addr, size_t len, uint32_t data) {
+	Log("the data to be write is %x", data);
+	Log("the addr is %x", addr);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
 	uint8_t mask[2 * BURST_LEN];
@@ -233,6 +234,7 @@ void cache_write(swaddr_t addr, size_t len, uint32_t data) {
 	sram_write(addr, temp, mask);
 
 	if ( (addr ^ (addr + len - 1)) & (~BURST_MASK) ) {
+		Log("boundary override");
 		// data cross the boundary
 		sram_write(addr, temp, mask);
 	}
