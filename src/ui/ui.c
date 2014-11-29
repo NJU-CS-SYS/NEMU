@@ -19,6 +19,7 @@ void restart();
 void test_tokens(char* e);
 uint32_t calculate(char* e);
 void print_cache(swaddr_t addr);
+uint32_t hwaddr_read(hwaddr_t,int);
 swaddr_t read_func_name(swaddr_t addr, swaddr_t *value);
 
 struct _frame_node {
@@ -157,7 +158,7 @@ void cmd_x() {
 			int j;
 			printf("%8x:   ", addr+i*4);
 			for(j = 0; j < 4; j++) {
-			printf("%02x ", swaddr_read(addr+i*4+j, 1));
+			printf("%02x ", hwaddr_read(addr+i*4+j, 1));
 			}
 			putchar('\n');
 		}
