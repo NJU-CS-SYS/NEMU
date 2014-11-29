@@ -145,6 +145,7 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 			uint8_t* blk = cache[set][way].block;
 
 			int i;
+#if 0
 			if (p->next == NULL) { // access physical memory
 				for (i = 0; i < p->nr_block; i ++)
 					dram_write(back_addr + i, 1, blk[i]);
@@ -152,6 +153,11 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 				for (i = 0; i < p->nr_block; i ++)
 					in_cache_write(back_addr + i, 1, blk[i], p->next);
 			}
+#endif
+#if 1
+			for (i = 0; i < p->nr_block; i ++)
+			in_cache_write(back_addr + i, 1, blk[i], p->next);
+#endif
 		}
 	}
 
@@ -160,6 +166,7 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 	p->cache[set][way].valid = 1;
 	p->cache[set][way].tag = tag;
 	uint8_t *blk = p->cache[set][way].block;
+#if 0
 	if (p->next == NULL) { // access physical memory
 		for (i = 0; i < p->nr_block; i ++)
 			blk[i] = dram_read(addr + i, 1);
@@ -168,6 +175,11 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 		for (i = 0; i < p->nr_block; i ++)
 			blk[i] = in_cache_read(addr + i, 1, p->next);
 	}
+#endif
+#if 1
+	for (i = 0; i < p->nr_block; i ++)
+		blk[i] = in_cache_read(addr + i, 1, p->next);
+#endif
 
 	return way;
 }
