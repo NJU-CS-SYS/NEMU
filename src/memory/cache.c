@@ -16,3 +16,7 @@ struct _cache_ {
 };
 typedef struct _cache_ cache;
 
+bool create_cache(cache **ppcache, int x, int y, int z) {
+	(*ppcache) = (cache*)malloc(sizeof(cache));
+	return 0;
+}
