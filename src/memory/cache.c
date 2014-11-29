@@ -226,6 +226,7 @@ void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask, cache *p) {
 
 	// burst write
 	Log("survive");
+	fflush(stdout);
 	memcpy_with_mask(p->cache[set][way].block + offset, data, BURST_LEN, mask);
 }
 
