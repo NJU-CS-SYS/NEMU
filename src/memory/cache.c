@@ -125,30 +125,36 @@ void delete_cache() {
 	}
 }
 
-
 uint32_t read_cache(swaddr_t addr, size_t len) {
 	uint32_t tag = addr & head->mask_tag;
 	uint32_t set = addr & head->mask_set;
-	uint32_t block_offset = addr & head->mask_block;
+	uint32_t offset = addr & head->mask_block;
 
+	// search the cached data
 	int way;
 	for (way = 0; way < head->nr_way; way ++) {
 		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) break;
 	}
 	
-	if (way == head->nr_way) { // miss
+	// miss
+	if (way == head->nr_way) {
+		// find a empty block in this set
 		for (way = 0; way < head->nr_way; way++)
 			if (!head->cache[set][way].valid)
 				break;
+		// if full, just take the first one
+		if (way == head->nr_way)
+			way = 0;
+		// load from dram
 		head->cache[set][way].valid = 1;
 		swaddr_t load_addr = tag | set;
-		int offset;
-		for (offset = 0; offset < head->nr_block; offset ++)
-			head->cache[set][way].block[offset] = dram_read(load_addr + offset, 1);
+		int idx;
+		for (idx = 0; idx < head->nr_block; idx ++)
+			head->cache[set][way].block[idx] = dram_read(load_addr + offset, 1);
 	}
 
-	uint8_t *temp = (uint8_t*)malloc(sizeof(uint8_t) * BURST_LEN);
-	memcpy(temp, head->cache[set][way].block + block_offset, BURST_LEN);
-	return tag;
+	// buf
+	uint8_t temp[ BURST_LEN ];
+	memcpy(temp, head->cache[set][way].block + offset, BURST_LEN);
+	return *(uint32_t*)temp & (~0u >> ((4 - len) << 3));
 }
-

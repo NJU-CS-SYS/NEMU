@@ -1,5 +1,6 @@
 #include "common.h"
 
+uint32_t read_cache(swaddr_t, size_t len);
 uint32_t dram_read(hwaddr_t addr, size_t len);
 void dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
@@ -17,7 +18,10 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) {
 
 uint32_t swaddr_read(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
-	return hwaddr_read(addr, len);
+	uint32_t cache_data = read_cache(addr, len);
+	uint32_t hw_data = hwaddr_read(addr, len);
+	Log("cache data : %x, hw data : %x", cache_data, hw_data);
+	return hw_data;
 }
 
 void swaddr_write(swaddr_t addr, size_t len, uint32_t data) {
