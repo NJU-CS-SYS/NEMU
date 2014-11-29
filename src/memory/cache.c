@@ -183,7 +183,7 @@ void print_cache() {
 		for (j = 0; j < head->nr_way; j ++) {
 			printf("%d :\n", j);
 			for (k = 0; k < head->nr_block; k ++) {
-				printf(" %d", head->cache[i][j].block[k]);
+				printf(" %x", head->cache[i][j].block[k]);
 			}
 			printf("\n");
 		}
