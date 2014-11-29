@@ -9,6 +9,7 @@ uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
  * it makes you clear about how CACHE is read/written.
  */
 typedef struct {
+	uint32_t tag;
 	uint8_t *block;
 	uint8_t valid;
 	uint8_t used;
@@ -122,7 +123,8 @@ void delete_cache() {
 }
 
 
-void read_cache(swaddr_t addr, void* data) {
-	return;
+uint32_t read_cache(swaddr_t addr, size_t len) {
+	uint32_t temp_tag = addr & head->mask_tag;
+	return temp_tag;
 }
 
