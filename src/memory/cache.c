@@ -7,6 +7,10 @@
 #include "cpu/reg.h"
 #include "stdlib.h"
 
+uint32_t dram_read(hwaddr_t addr, size_t len);
+uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
+
+
 #define BURST_LEN 8
 #define BURST_MASK (BURST_LEN - 1)
 
@@ -16,12 +20,12 @@
 
 typedef union {
 	struct {
-		uint32_t block : BLOCK_WIDTH;
+		uint32_t offset : BLOCK_WIDTH;
 		uint32_t set   : SET_WIDTH;
 		uint32_t tag   : TAG_WIDTH;
 	};
 	uint32_t addr;
-} cache_addr;
+} L1_addr;
 
 #define NR_BLOCK (1 << BLOCK_WIDTH)
 #define NR_SET   (1 << SET_WIDTH)
@@ -34,6 +38,61 @@ typedef struct {
 } L1_cache;
 
 L1_cache L1[NR_SET][NR_WAY];
+
+void init_L1() {
+	int i, j;
+	for (i = 0; i < NR_SET; i ++) {
+		for (j = 0; j < NR_WAY; j ++) {
+			L1[i][j].valid = false;
+		}
+	}
+}
+
+static void L1_read(swaddr_t addr, void *data) {
+	
+	L1_addr temp;
+	temp.addr = addr & ~BURST_MASK;
+	uint32_t set = temp.set;
+	uint32_t tag = temp.tag;
+	uint32_t offset = temp.offset;
+
+	uint32_t way;
+	for (way = 0; way < NR_WAY; way ++) { // search by tag
+		if (L1[set][way].tag == tag && L1[set][way].valid) {
+			break;
+		}
+	}
+	if (way == NR_WAY) { // miss
+		// TODO load from mem
+		for (way = 0; way < NR_WAY; way ++)
+			if (!L1[set][way].valid) // empty block
+				break;
+		if (way == NR_WAY) // full
+			way = rand() % NR_WAY;
+
+		int i;
+		for (i = 0; i < NR_BLOCK; i ++)
+			L1[set][way].blk[i] = dram_read(addr + i, 1);
+		L1[set][way].valid = true;
+	}
+
+	// burst read
+	memcpy(data, L1[set][way].blk + offset, BURST_LEN);
+}
+uint32_t L1_cache_read(swaddr_t addr, size_t len) {
+	assert(len == 1 || len == 2 || len == 4);
+	uint32_t offset = addr & BURST_MASK;
+	uint8_t temp[ 2 * BURST_LEN ];
+
+	L1_read(addr, temp);
+
+	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
+		L1_read(addr + BURST_LEN, temp + BURST_LEN);
+	}
+
+	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
+}
+
 
 typedef struct {
 	uint32_t tag;
@@ -55,10 +114,6 @@ struct _cache_ {
 	struct _cache_ *next;
 };
 typedef struct _cache_ cache;
-
-uint32_t dram_read(hwaddr_t addr, size_t len);
-uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
-
 
 void init_nemu_cache();
 bool init_cache();
@@ -109,11 +164,6 @@ bool init_cache (cache *pcache) {
 	}
 
 
-	for (i = 0; i < NR_SET; i ++) {
-		for (j = 0; j < NR_WAY; j ++) {
-			L1[i][j].valid = false;
-		}
-	}
 	return true;
 }
 
