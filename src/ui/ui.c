@@ -18,6 +18,7 @@ void cpu_exec(uint32_t);
 void restart();
 void test_tokens(char* e);
 uint32_t calculate(char* e);
+void print_cache(swaddr_t addr);
 swaddr_t read_func_name(swaddr_t addr, swaddr_t *value);
 
 struct _frame_node {
@@ -231,6 +232,10 @@ static void cmd_bt() {
 	}
 }
 
+static void cmd_pc() {
+	swaddr_t addr = strtol(strtok(NULL,""),NULL,16);
+	print_cache(addr);
+}
 		
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
@@ -252,7 +257,7 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "si") == 0) { cmd_si(); }
 		else if(strcmp(p, "bt") == 0) { cmd_bt(); }
 		else if(strcmp(p, "info") == 0) { cmd_info(); }
-
+		else if(strcmp(p, "pc") == 0) { cmd_pc(); }
 		/*remember to delete this test instr */
 		else if(strcmp(p, "e") == 0) { cmd_e(); }
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
