@@ -159,10 +159,8 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 		Log("hit");
 	}
 
-	Log("survive");
 	// buf
-	uint8_t temp[ BURST_LEN ];
+	uint8_t temp[ BURST_LEN * 2 ];
 	memcpy(temp, head->cache[set][way].block + offset, BURST_LEN);
-	Log("survive2");
 	return *(uint32_t*)temp & (~0u >> ((4 - len) << 3));
 }
