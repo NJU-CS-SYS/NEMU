@@ -87,7 +87,6 @@ bool init_cache (cache *pcache) {
 }
 
 cache* create_cache(uint32_t x, uint32_t y, uint32_t z, uint8_t en_wrt_alloc, uint8_t en_wrt_back) {
-	assert(0);
 	cache *pcache = (cache*)malloc(sizeof(cache));
 	pcache->nr_set = x;
 	pcache->nr_way = y;
@@ -108,6 +107,7 @@ cache* create_cache(uint32_t x, uint32_t y, uint32_t z, uint8_t en_wrt_alloc, ui
 
 	// init
 	init_cache(pcache);
+	assert(0);
 	return pcache;
 }
 
