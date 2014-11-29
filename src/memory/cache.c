@@ -78,6 +78,7 @@ static void L1_read(swaddr_t addr, void *data) {
 		for (i = 0; i < NR_BLOCK; i ++)
 			L1[set][way].blk[i] = dram_read(addr + i, 1);
 		L1[set][way].valid = true;
+		L1[set][way].tag = tag;
 	}
 
 	// burst read
