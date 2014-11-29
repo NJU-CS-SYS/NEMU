@@ -153,7 +153,7 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 		// load from dram
 		head->cache[set][way].valid = 1;
 		head->cache[set][way].tag = tag;
-		swaddr_t load_addr = tag | set;
+		swaddr_t load_addr = tag | (set << head->bit_block);;
 		Log("load addr = %x", load_addr);
 		int idx;
 		for (idx = 0; idx < head->nr_block; idx ++) {
