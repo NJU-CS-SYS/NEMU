@@ -152,7 +152,7 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 		int idx;
 		for (idx = 0; idx < head->nr_block; idx ++) {
 			head->cache[set][way].block[idx] = dram_read(load_addr + idx, 1);
-			Log("%x ", head->cache[set][way].block[idx]);
+			//Log("%x ", head->cache[set][way].block[idx]);
 		}
 	}
 
