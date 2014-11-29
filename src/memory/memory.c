@@ -24,6 +24,9 @@ uint32_t swaddr_read(swaddr_t addr, size_t len) {
 	//Log("cache : %x, hw : %x, len : %d", cache_data, hw_data, len);
 	if(cache_data != hw_data) {
 		print_cache();
+		int i = 0;
+		for (i = 0; i < 16; i ++)
+			printf("%x ", hwaddr_read(addr+i,1));
 		test(0, "cache wrong, addr = %x, len = %x, cache = %x, hw = %x", addr, len, cache_data, hw_data);
 	}
 	return cache_data;
