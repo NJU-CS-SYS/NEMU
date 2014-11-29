@@ -128,21 +128,17 @@ void delete_cache() {
 }
 
 uint32_t read_cache(swaddr_t addr, size_t len) {
-	Log("into");
 	uint32_t tag = addr & head->mask_tag;
 	uint32_t set = (addr & head->mask_set) >> head->bit_block;
 	uint32_t offset = addr & head->mask_block;
 	Log("tag = %x, set = %x, offset = %x, addr = %x", tag, set, offset, addr);
 
 	int way = head->nr_way;
-	Log("survive233, way = %x, set = %d", way, set);
 	// search the cached data
-	Log("233");
 	for (way = 0; way < head->nr_way; way ++) {
 		Log("set : %x, way : %x, valid : %x, tag : %x %x", set, way, head->cache[set][way].valid, head->cache[set][way].tag, tag);
 		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) break;
 	}
-	Log("survive233");
 	// miss
 	if (way == head->nr_way) {
 		Log("miss");
