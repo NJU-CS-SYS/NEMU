@@ -249,7 +249,7 @@ void print_cache(swaddr_t addr) {
 	int way, blck;
 	printf("set %d\n", set);
 	for (way = 0; way < head->nr_way; way ++) {
-		if (tag == head->cache[set][way].tag) {
+		if (tag == head->cache[set][way].tag && head->cache[set][way].valid) {
 			printf("%d : tag = %x\n", way, head->cache[set][way].tag);
 			for (blck = 0; blck < head->nr_block; blck ++) {
 				printf(" %02x", head->cache[set][way].block[blck]);
