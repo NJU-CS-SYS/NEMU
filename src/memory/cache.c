@@ -136,16 +136,18 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 	int way = head->nr_way;
 	// search the cached data
 	for (way = 0; way < head->nr_way; way ++) {
-		Log("set : %x, way : %x, valid : %x, tag : %x %x", set, way, head->cache[set][way].valid, head->cache[set][way].tag, tag);
+	//	Log("set : %x, way : %x, valid : %x, tag : %x %x", set, way, head->cache[set][way].valid, head->cache[set][way].tag, tag);
 		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) break;
 	}
 	// miss
 	if (way == head->nr_way) {
 		Log("miss");
 		// find a empty block in this set
-		for (way = 0; way < head->nr_way; way++)
+		for (way = 0; way < head->nr_way; way++) {
+			Log("hit hit");
 			if (!head->cache[set][way].valid)
 				break;
+		}
 		// if full, just take the first one
 		if (way == head->nr_way)
 			way = 0;
