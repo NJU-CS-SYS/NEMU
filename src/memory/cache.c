@@ -131,7 +131,7 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 	uint32_t tag = addr & head->mask_tag;
 	uint32_t set = (addr & head->mask_set) >> head->bit_block;
 	uint32_t offset = addr & head->mask_block;
-	Log("tag = %x, set = %x, offset = %x, addr = %x", tag, set, offset, addr);
+	//Log("tag = %x, set = %x, offset = %x, addr = %x", tag, set, offset, addr);
 
 	int way = head->nr_way;
 	// search the cached data
@@ -141,7 +141,7 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 	}
 	// miss
 	if (way == head->nr_way) {
-		Log("miss");
+		//Log("miss");
 		// find a empty block in this set
 		for (way = 0; way < head->nr_way; way++) {
 			if (!head->cache[set][way].valid)
@@ -154,7 +154,7 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 		head->cache[set][way].valid = 1;
 		head->cache[set][way].tag = tag;
 		swaddr_t load_addr = tag | (set << head->bit_block);;
-		Log("load addr = %x", load_addr);
+		//Log("load addr = %x", load_addr);
 		int idx;
 		for (idx = 0; idx < head->nr_block; idx ++) {
 			head->cache[set][way].block[idx] = dram_read(load_addr + idx, 1);
