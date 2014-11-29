@@ -205,7 +205,6 @@ void sram_read(swaddr_t raw_addr, void* data, cache *p) {
 }
 
 void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask, cache *p) {
-	test(p != NULL, "seg!");
 	block** cache = p->cache;
 	swaddr_t addr = raw_addr & (~BURST_MASK);
 	uint32_t tag = addr & p->mask_tag;
