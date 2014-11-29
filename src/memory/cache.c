@@ -158,12 +158,14 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 		int idx;
 		for (idx = 0; idx < head->nr_block; idx ++) {
 			head->cache[set][way].block[idx] = dram_read(load_addr + idx, 1);
-			Log("%x ", head->cache[set][way].block[idx]);
 		}
 	} else {
 		Log("hit");
 	}
 
+	int i;
+	for (i = 0; i < head->nr_block; i ++)
+		Log("set %x way %x block %x : %x", set, way, i, head->cache[set][way].block[i]);
 	// buf
 	uint8_t temp[ BURST_LEN ];
 	memcpy(temp, head->cache[set][way].block + offset, BURST_LEN);
