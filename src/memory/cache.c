@@ -14,7 +14,7 @@ typedef struct {
 	uint32_t tag;
 	uint8_t *block;
 	uint8_t valid;
-	uint8_t used;
+	uint8_t dirty;
 } block;
 struct _cache_ {
 	block **cache;
@@ -25,6 +25,8 @@ struct _cache_ {
 	int mask_block;
 	int bit_block;
 	int mask_tag;
+	uint8_t en_wrt_alloc;
+	uint8_t en_wrt_back;
 	struct _cache_ *next;
 };
 typedef struct _cache_ cache;
@@ -35,13 +37,13 @@ uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
 void init_nemu_cache();
 bool init_cache();
-cache* create_cache();
+cache* create_cache(uint32_t,uint32_t,uint32_t,uint8_t,uint8_t);
 void delete_cache();
 
 static cache *head;
 
 void init_nemu_cache() {
-	head = create_cache(128, 8, 64);
+	head = create_cache(128, 8, 64, 0, 1);
 }
 
 bool init_cache (cache *pcache) {
@@ -69,23 +71,25 @@ bool init_cache (cache *pcache) {
 	}
 	pcache->mask_tag = (~0u >> (bit_set + bit_block)) << (bit_set + bit_block);
 	// data init
-	int i, j, k;
+	int i, j;
 	for (i = 0; i < pcache->nr_set; i ++) {
 		for (j = 0; j < pcache->nr_way; j ++) {
 			pcache->cache[i][j].valid = 0;
-			for (k = 0; k < pcache->nr_block; k ++) {
-				pcache->cache[i][j].block[k] = 0;
-			}
+			pcache->cache[i][j].dirty = 1;
+			memset(pcache->cache[i][j].block, 0, pcache->nr_block);
 		}
 	}
+
 	return true;
 }
 
-cache* create_cache(int x, int y, int z) {
+cache* create_cache(uint32_t x, uint32_t y, uint32_t z, uint8_t en_wrt_alloc, uint8_t en_wrt_back) {
 	cache *pcache = (cache*)malloc(sizeof(cache));
 	pcache->nr_set = x;
 	pcache->nr_way = y;
 	pcache->nr_block = z;
+	pcache->en_wrt_alloc = en_wrt_alloc;
+	pcache->en_wrt_back = en_wrt_back;
 	pcache->next = NULL;
 
 	// allocate the mem for data
