@@ -20,7 +20,7 @@ uint32_t swaddr_read(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t cache_data = read_cache(addr, len);
 	uint32_t hw_data = hwaddr_read(addr, len);
-	Log("cache data : %x, hw data : %x", cache_data, hw_data);
+	Log("cache data : %x, hw data : %x, addr = %x, len = %d", cache_data, hw_data, addr, len);
 	return hw_data;
 }
 
