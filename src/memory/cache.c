@@ -119,45 +119,54 @@ void delete_cache() {
 	}
 }
 
+uint32_t cache_miss_allocate(uint32_t tag, uint32_t set) { // allocate when miss cache
+	int way;
+	swaddr_t addr = tag | (set << head->bit_block);
+
+	// find an empty block
+	for (way = 0; way < head->nr_way; way++) {
+		if (!head->cache[set][way].valid) {
+			break;
+		}
+	}
+
+	// replacement
+	// using rand algorithm
+	if (way == head->nr_way) {
+		srand(addr);
+		way = rand() % head->nr_way;
+	}
+
+	// load from dram
+	int i;
+	head->cache[set][way].valid = 1;
+	head->cache[set][way].tag = tag;
+	for (i = 0; i < head->nr_block; i ++) {
+		head->cache[set][way].block[i] = dram_read(addr + i, 1);
+	}
+
+	return way;
+}
+
+
 void sram_read(swaddr_t raw_addr, void* data) {
+	block** cache = head->cache;
 	swaddr_t addr = raw_addr & (~BURST_MASK); // aligned addr, if this is not found, the part we want also miss
 	uint32_t tag = addr & head->mask_tag;
 	uint32_t set = (addr & head->mask_set) >> head->bit_block; // note that set is a numeric data
 	uint32_t offset = addr & head->mask_block; // used to locate data in block
 
-	// search the cached data
+	// search
 	int way;
-	for (way = 0; way < head->nr_way; way ++) {
-		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) {
+	for (way = 0; way < head->nr_way; way ++)
+		if (cache[set][way].valid && cache[set][way].tag == tag)
 			break;
-		}
-	}
 
-	// if miss
-	if (way == head->nr_way) {
-		// find a empty block in this set
-		for (way = 0; way < head->nr_way; way++) {
-			if (!head->cache[set][way].valid) {
-				break;
-			}
-		}
-		// if full, just take the first one
-		// TODO use fake lru algo !
-		if (way == head->nr_way) {
-			way = 0;
-		}
+	// miss
+	if (way == head->nr_way) 
+		way = cache_miss_allocate(tag, set);
 
-		// load from dram
-		head->cache[set][way].valid = 1;
-		head->cache[set][way].tag = tag;
-		swaddr_t load_addr = tag | (set << head->bit_block);
-		Log("the addr to be loaded is %x", load_addr);
-		int i;
-		for (i = 0; i < head->nr_block; i ++) {
-			head->cache[set][way].block[i] = dram_read(load_addr + i, 1);
-		}
-	}
-	memcpy(data, head->cache[set][way].block + offset, BURST_LEN);
+	memcpy(data, cache[set][way].block + offset, BURST_LEN);
 }
 
 void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
