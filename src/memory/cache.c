@@ -16,15 +16,24 @@ struct _cache_ {
 };
 typedef struct _cache_ cache;
 
-#if 0
+
 bool init_cache (cache **ppcache) {
 	cache *pcache = *ppcache;
 	test(pcache != NULL, "the cache isn's allocated!");
 	
 	int i, j, k;
 	for (i = 0; i < pcache->nr_set; i ++) {
-		for (kj
-#endif
+		for (j = 0; j < pcache->nr_way; j ++) {
+			pcache->valid[i][j] = 0;
+			for (k = 0; k < pcache->nr_block; k ++) {
+				pcache->data[i][j][k] = 0;
+			}
+		}
+	}
+
+	return true;
+}
+
 bool create_cache(cache **ppcache, int x, int y, int z) {
 	(*ppcache) = (cache*)malloc(sizeof(cache));
 	cache* pcache = *ppcache;
