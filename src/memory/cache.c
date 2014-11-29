@@ -128,7 +128,6 @@ void delete_cache() {
 }
 
 static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allocate when miss cache
-	assert(0);
 	int way;
 	block** cache = p->cache;
 	swaddr_t addr = tag | (set << p->bit_block);
@@ -138,6 +137,7 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 		if (!p->cache[set][way].valid) break;
 	
 	if (way == p->nr_way) { // replacement, using rand algorithm
+	assert(0);
 		srand(addr);
 		way = rand() % p->nr_way;
 
