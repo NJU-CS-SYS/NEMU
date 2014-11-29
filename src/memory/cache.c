@@ -1,23 +1,21 @@
+/* Simulate the (main) behavor of CACHE. Although this will lower the performace of NEMU,
+ * it makes you clear about how CACHE is read/written.
+ */
+
 #include "common.h"
 #include "lib/misc.h"
 #include "cpu/reg.h"
 #include "stdlib.h"
 
-uint32_t dram_read(hwaddr_t addr, size_t len);
-uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
-/* Simulate the (main) behavor of CACHE. Although this will lower the performace of NEMU,
- * it makes you clear about how CACHE is read/written.
- */
-
 #define BURST_LEN 8
 #define BURST_MASK (BURST_LEN - 1)
+
 typedef struct {
 	uint32_t tag;
 	uint8_t *block;
 	uint8_t valid;
 	uint8_t used;
 } block;
-
 struct _cache_ {
 	block **cache;
 	int nr_set;
@@ -29,15 +27,18 @@ struct _cache_ {
 	int mask_tag;
 	struct _cache_ *next;
 };
-
 typedef struct _cache_ cache;
 
-static cache * head;
+uint32_t dram_read(hwaddr_t addr, size_t len);
+uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
+
 
 void init_nemu_cache();
 bool init_cache();
 cache* create_cache();
 void delete_cache();
+
+static cache *head;
 
 void init_nemu_cache() {
 	head = create_cache(128, 8, 64);
@@ -147,7 +148,6 @@ uint32_t cache_miss_allocate(uint32_t tag, uint32_t set) { // allocate when miss
 	return way;
 }
 
-
 void sram_read(swaddr_t raw_addr, void* data) {
 	block** cache = head->cache;
 	swaddr_t addr = raw_addr & (~BURST_MASK); // aligned addr, if this is not found, the part we want also miss
@@ -169,6 +169,7 @@ void sram_read(swaddr_t raw_addr, void* data) {
 }
 
 void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
+	block** cache = head->cache;
 	swaddr_t addr = raw_addr & (~BURST_MASK);
 	uint32_t tag = addr & head->mask_tag;
 	uint32_t set = (addr & head->mask_set) >> head->bit_block;
@@ -177,49 +178,16 @@ void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
 	// search the block
 	int way;
 	for (way = 0; way < head->nr_way; way ++)
-		if (head->cache[set][way].valid && head->cache[set][way].tag == tag)
+		if (cache[set][way].valid && cache[set][way].tag == tag)
 			break;
 
 	// if miss
-	if (way == head->nr_way) {
-#if 0
-		// this section of code implements
-		// the write allocate function
-		// which is not needed at now
-		
-
-		// find a empty block in this set
-		for (way = 0; way < head->nr_way; way++) {
-			if (!head->cache[set][way].valid) {
-				break;
-			}
-		}
-		// if full, just take the first one
-		// TODO use fake lru algo !
-		if (way == head->nr_way) {
-			way = 0;
-		}
-
-		// load from dram
-		head->cache[set][way].valid = 1;
-		head->cache[set][way].tag = tag;
-		swaddr_t load_addr = tag | (set << head->bit_block);
-		Log("the addr to be loaded is %x", load_addr);
-		int i;
-		for (i = 0; i < head->nr_block; i ++) {
-			head->cache[set][way].block[i] = dram_read(load_addr + i, 1);
-		}
-#endif
-		return;
-	}
+	if (way == head->nr_way) return;
 
 	// burst write
 	memcpy_with_mask(head->cache[set][way].block + offset, data, BURST_LEN, mask);
 }
 
-
-// this function handle the situation
-// when the data is cross the boundary
 uint32_t cache_read(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t offset = addr & BURST_MASK;
@@ -254,18 +222,18 @@ void cache_write(swaddr_t addr, size_t len, uint32_t data) {
 	dram_write(addr, len, data);
 }
 
-// print the cache, especially for head(L1 cache)
 void print_cache(swaddr_t addr) {
+	block** cache = head->cache;
 	uint32_t set = addr & head->mask_set;
 	uint32_t tag = addr & head->mask_tag;
 	set = set >> head->bit_block;
 	int way, blck;
 	printf("set %d\n", set);
 	for (way = 0; way < head->nr_way; way ++) {
-		if (tag == head->cache[set][way].tag && head->cache[set][way].valid) {
-			printf("way %x: tag = %x\n", way, head->cache[set][way].tag);
+		if (tag == cache[set][way].tag && cache[set][way].valid) {
+			printf("way %x: tag = %x\n", way, cache[set][way].tag);
 			for (blck = 0; blck < head->nr_block; blck ++) {
-				printf(" %02x", head->cache[set][way].block[blck]);
+				printf(" %02x", cache[set][way].block[blck]);
 				if (blck == 31) printf("\n");
 			}
 			printf("\n");
