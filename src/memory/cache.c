@@ -120,44 +120,57 @@ void delete_cache() {
 	}
 }
 
-uint32_t read_cache(swaddr_t addr, size_t len) {
+void sram_read(swaddr_t raw_addr, void* data) {
+	swaddr_t addr = raw_addr & (~BURST_MASK); // aligned addr, if this is not found, the part we want also miss
 	uint32_t tag = addr & head->mask_tag;
-	uint32_t set = (addr & head->mask_set) >> head->bit_block;
-	uint32_t offset = addr & head->mask_block;
+	uint32_t set = (addr & head->mask_set) >> head->bit_block; // note that set is a numeric data
+	uint32_t offset = addr & head->mask_block; // used to locate data in block
 
-	int way = head->nr_way;
 	// search the cached data
+	int way;
 	for (way = 0; way < head->nr_way; way ++) {
-		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) break;
+		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) {
+			break;
+		}
 	}
-	// miss
+
+	// if miss
 	if (way == head->nr_way) {
 		// find a empty block in this set
 		for (way = 0; way < head->nr_way; way++) {
-			if (!head->cache[set][way].valid)
+			if (!head->cache[set][way].valid) {
 				break;
+			}
 		}
 		// if full, just take the first one
-		if (way == head->nr_way)
+		// TODO use fake lru algo !
+		if (way == head->nr_way) {
 			way = 0;
+		}
 		// load from dram
 		head->cache[set][way].valid = 1;
 		head->cache[set][way].tag = tag;
 		swaddr_t load_addr = tag | (set << head->bit_block);;
-		int idx;
-		for (idx = 0; idx < head->nr_block; idx ++) {
-			head->cache[set][way].block[idx] = dram_read(load_addr + idx, 1);
+		int i;
+		for (i = 0; i < head->nr_block; i ++) {
+			head->cache[set][way].block[i] = dram_read(load_addr + i, 1);
 		}
 	}
-
-	// buf
-	uint8_t temp[ BURST_LEN ];
-	memcpy(temp, head->cache[set][way].block + offset, BURST_LEN);
-	return *(uint32_t*)temp & (~0u >> ((4 - len) << 3));
+	memcpy(data, head->cache[set][way].block + offset, BURST_LEN);
 }
 
+// this function handle the situation
+// when the data is cross the boundary
 uint32_t cache_read(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t offset = addr & BURST_MASK;
-	return offset;
+	uint8_t temp[2 * BURST_LEN];
+
+	sram_read(addr, temp);
+
+	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
+		// data cross the burst boundary
+		sram_read(addr + BURST_LEN, temp + BURST_LEN);
+	}
+	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
 }
