@@ -45,7 +45,7 @@ bool init_cache (cache *pcache) {
 	int bit_block = 0;
 	int bit_set = 0;
 
-	pcache->mask_block = ~(nr_block - 1);
+	pcache->mask_block = (nr_block - 1);
 	Log("mask_block = %x", pcache->mask_block);
 
 	while (nr_block > 1) {
@@ -54,7 +54,7 @@ bool init_cache (cache *pcache) {
 	}
 	Log("nr_block = %d, bit_block = %x", pcache->nr_block, bit_block);
 
-	pcache->mask_block = (~(nr_set - 1)) << bit_block;
+	pcache->mask_block = (nr_set - 1) << bit_block;
 	Log("mask_set = %x", pcache->mask_block);	
 
 	while (nr_set > 1) {
