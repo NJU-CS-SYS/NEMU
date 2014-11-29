@@ -180,7 +180,7 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 #endif
 #if 1
 	for (i = 0; i < p->nr_block; i ++)
-		blk[i] = in_cache_read(addr + i, 1, p);
+			blk[i] = dram_read(addr + i, 1);
 #endif
 
 	return way;
