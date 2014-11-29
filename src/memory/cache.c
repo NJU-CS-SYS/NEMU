@@ -147,6 +147,7 @@ void sram_read(swaddr_t raw_addr, void* data) {
 		if (way == head->nr_way) {
 			way = 0;
 		}
+
 		// load from dram
 		head->cache[set][way].valid = 1;
 		head->cache[set][way].tag = tag;
