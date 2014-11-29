@@ -108,6 +108,12 @@ bool init_cache (cache *pcache) {
 		}
 	}
 
+
+	for (i = 0; i < NR_SET; i ++) {
+		for (j = 0; j < NR_WAY; j ++) {
+			L1[i][j].valid = false;
+		}
+	}
 	return true;
 }
 
