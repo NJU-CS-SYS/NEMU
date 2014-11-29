@@ -205,6 +205,7 @@ void sram_read(swaddr_t raw_addr, void* data, cache *p) {
 }
 
 void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask, cache *p) {
+	test(p != NULL, "seg!");
 	block** cache = p->cache;
 	swaddr_t addr = raw_addr & (~BURST_MASK);
 	uint32_t tag = addr & p->mask_tag;
@@ -243,7 +244,6 @@ uint32_t in_cache_read(swaddr_t addr, size_t len, cache *p) {
 }
 
 void in_cache_write(swaddr_t addr, size_t len, uint32_t data, cache *p) {
-	assert(p != NULL);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
 	uint8_t mask[2 * BURST_LEN];
