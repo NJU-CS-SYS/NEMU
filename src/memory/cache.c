@@ -66,6 +66,7 @@ bool init_cache (cache *pcache) {
 		nr_set = nr_set >> 1;
 		bit_set ++;
 	}
+	Log("bit set = %d", bit_set);
 	pcache->mask_tag = (~0u >> (bit_set + bit_block)) << (bit_set + bit_block);
 	// data init
 	int i, j, k;
@@ -77,7 +78,6 @@ bool init_cache (cache *pcache) {
 			}
 		}
 	}
-
 	return true;
 }
 
