@@ -57,6 +57,7 @@ static void L1_read(swaddr_t addr, void *data) {
 	uint32_t tag = temp.tag;
 	uint32_t offset = temp.offset;
 
+	Log("addr=%x\ntag=%x, set=%x, off=%x", addr, tag, set ,offset);
 	uint32_t way;
 	for (way = 0; way < NR_WAY; way ++) { // search by tag
 		if (L1[set][way].tag == tag && L1[set][way].valid) {
