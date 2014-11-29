@@ -133,7 +133,7 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 	Log("tag = %x, set = %x, offset = %x, addr = %x", tag, set, offset, addr);
 
 	int way = head->nr_way;
-	Log("survive233");
+	Log("survive233, way = %x", way);
 	// search the cached data
 	for (way = 0; way < head->nr_way; way ++) {
 		Log("set : %x, way : %x, valid : %x, tag : %x %x", set, way, head->cache[set][way].valid, head->cache[set][way].tag, tag);
