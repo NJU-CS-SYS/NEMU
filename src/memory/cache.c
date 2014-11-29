@@ -38,12 +38,15 @@ uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
 void init_nemu_cache();
 bool init_cache();
 cache* create_cache(uint32_t,uint32_t,uint32_t,uint8_t,uint8_t);
+void in_cache_write(swaddr_t,size_t,uint32_t,cache*);
+uint32_t in_cache_read(swaddr_t,size_t,cache*);
 void delete_cache();
 
 static cache *head;
 
 void init_nemu_cache() {
-	head = create_cache(128, 8, 64, 0, 1);
+	head = create_cache(128, 8, 64, 0, 0);
+	head->next = create_cache(4096, 16, 64, 1, 1);
 }
 
 bool init_cache (cache *pcache) {
@@ -124,89 +127,110 @@ void delete_cache() {
 	}
 }
 
-uint32_t cache_miss_allocate(uint32_t tag, uint32_t set) { // allocate when miss cache
+static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allocate when miss cache
 	int way;
-	swaddr_t addr = tag | (set << head->bit_block);
+	block** cache = p->cache;
+	swaddr_t addr = tag | (set << p->bit_block);
 
 	// find an empty block
-	for (way = 0; way < head->nr_way; way++) {
-		if (!head->cache[set][way].valid) {
-			break;
-		}
-	}
-
-	// replacement, using rand algorithm
-	if (way == head->nr_way) {
+	for (way = 0; way < p->nr_way; way++)
+		if (!p->cache[set][way].valid) break;
+	
+	if (way == p->nr_way) { // replacement, using rand algorithm
 		srand(addr);
-		way = rand() % head->nr_way;
+		way = rand() % p->nr_way;
+
+		if (p->en_wrt_back && cache[set][way].dirty) { // write back
+			hwaddr_t back_addr = tag | (set << p->bit_block);
+			uint8_t* blk = cache[set][way].block;
+
+			int i;
+			if (p->next == NULL) { // access physical memory
+				for (i = 0; i < p->nr_block; i ++)
+					dram_write(back_addr + i, 1, blk[i]);
+			} else { // next cache level
+				for (i = 0; i < p->nr_block; i ++)
+					in_cache_write(back_addr + i, 1, blk[i], p->next);
+			}
+		}
 	}
 
 	// load from dram
 	int i;
-	head->cache[set][way].valid = 1;
-	head->cache[set][way].tag = tag;
-	for (i = 0; i < head->nr_block; i ++) {
-		head->cache[set][way].block[i] = dram_read(addr + i, 1);
+	p->cache[set][way].valid = 1;
+	p->cache[set][way].tag = tag;
+	uint8_t *blk = p->cache[set][way].block;
+	if (p->next == NULL) { // access physical memory
+		for (i = 0; i < p->nr_block; i ++)
+			blk[i] = dram_read(addr + i, 1);
+	} 
+	else { // next cache level
+		for (i = 0; i < p->nr_block; i ++)
+			blk[i] = in_cache_read(addr + i, 1, p->next);
 	}
 
 	return way;
 }
 
-void sram_read(swaddr_t raw_addr, void* data) {
-	block** cache = head->cache;
+void sram_read(swaddr_t raw_addr, void* data, cache *p) {
+	block** cache = p->cache;
 	swaddr_t addr = raw_addr & (~BURST_MASK); // aligned addr, if this is not found, the part we want also miss
-	uint32_t tag = addr & head->mask_tag;
-	uint32_t set = (addr & head->mask_set) >> head->bit_block; // note that set is a numeric data
-	uint32_t offset = addr & head->mask_block; // used to locate data in block
+	uint32_t tag = addr & p->mask_tag;
+	uint32_t set = (addr & p->mask_set) >> p->bit_block; // note that set is a numeric data
+	uint32_t offset = addr & p->mask_block; // used to locate data in block
+	int way;
 
 	// search
-	int way;
-	for (way = 0; way < head->nr_way; way ++)
+	for (way = 0; way < p->nr_way; way ++)
 		if (cache[set][way].valid && cache[set][way].tag == tag)
 			break;
 
 	// miss
-	if (way == head->nr_way) 
-		way = cache_miss_allocate(tag, set);
+	if (way == p->nr_way) 
+		way = cache_miss_alloc(tag, set, p);
 
 	memcpy(data, cache[set][way].block + offset, BURST_LEN);
 }
 
-void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
-	block** cache = head->cache;
+void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask, cache *p) {
+	block** cache = p->cache;
 	swaddr_t addr = raw_addr & (~BURST_MASK);
-	uint32_t tag = addr & head->mask_tag;
-	uint32_t set = (addr & head->mask_set) >> head->bit_block;
-	uint32_t offset = addr & head->mask_block;
+	uint32_t tag = addr & p->mask_tag;
+	uint32_t set = (addr & p->mask_set) >> p->bit_block;
+	uint32_t offset = addr & p->mask_block;
 
-	// search the block
+	// search
 	int way;
-	for (way = 0; way < head->nr_way; way ++)
+	for (way = 0; way < p->nr_way; way ++)
 		if (cache[set][way].valid && cache[set][way].tag == tag)
 			break;
 
-	// if miss
-	if (way == head->nr_way) return;
+	// miss
+	if (way == p->nr_way) {
+		if (p->en_wrt_alloc) way = cache_miss_alloc(tag, set, p);
+	} else {
+		cache[set][way].dirty = 1;
+	}
 
 	// burst write
-	memcpy_with_mask(head->cache[set][way].block + offset, data, BURST_LEN, mask);
+	memcpy_with_mask(p->cache[set][way].block + offset, data, BURST_LEN, mask);
 }
 
-uint32_t cache_read(swaddr_t addr, size_t len) {
+uint32_t in_cache_read(swaddr_t addr, size_t len, cache *p) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
 
-	sram_read(addr, temp);
+	sram_read(addr, temp, p);
 
 	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
 		// data cross the burst boundary
-		sram_read(addr + BURST_LEN, temp + BURST_LEN);
+		sram_read(addr + BURST_LEN, temp + BURST_LEN, p);
 	}
 	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
 }
 
-void cache_write(swaddr_t addr, size_t len, uint32_t data) {
+void in_cache_write(swaddr_t addr, size_t len, uint32_t data, cache *p) {
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
 	uint8_t mask[2 * BURST_LEN];
@@ -215,15 +239,23 @@ void cache_write(swaddr_t addr, size_t len, uint32_t data) {
 	*(uint32_t*)(temp + offset) = data;
 	memset(mask + offset, 1, len);
 
-	sram_write(addr, temp, mask);
+	sram_write(addr, temp, mask, p);
 
 	if ( (addr ^ (addr + len - 1)) & (~BURST_MASK) ) {
 		// data cross the boundary
-		sram_write(addr, temp, mask);
+		sram_write(addr, temp, mask, p);
 	}
 
-	// write through to the dram
-	dram_write(addr, len, data);
+	// write through
+	if(!p->en_wrt_back) dram_write(addr, len, data);
+}
+
+uint32_t cache_read(swaddr_t addr, size_t len) {
+	return in_cache_read(addr, len, head);
+}
+
+void cache_write(swaddr_t addr, size_t len, uint32_t data) {
+	in_cache_write(addr, len, data, head);
 }
 
 void print_cache(swaddr_t addr) {
