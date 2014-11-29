@@ -18,7 +18,7 @@ void cpu_exec(uint32_t);
 void restart();
 void test_tokens(char* e);
 uint32_t calculate(char* e);
-void print_cache(swaddr_t addr);
+void L1_print(swaddr_t addr);
 uint32_t hwaddr_read(hwaddr_t,int);
 swaddr_t read_func_name(swaddr_t addr, swaddr_t *value);
 
@@ -235,7 +235,7 @@ static void cmd_bt() {
 
 static void cmd_pc() {
 	swaddr_t addr = strtol(strtok(NULL,""),NULL,16);
-	print_cache(addr);
+	L1_print(addr);
 }
 		
 void main_loop() { /* oh, main loop ! */

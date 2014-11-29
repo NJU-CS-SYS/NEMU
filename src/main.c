@@ -8,7 +8,7 @@ void set_main_args(int, char * []);
 void init_bp_pool();
 void init_regex();
 void init_signal();
-void init_nemu_cache();
+void init_L1();
 void reg_test();
 
 int enable_debug = false;
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	init_signal();
 	init_bp_pool();
 	load_table();
-	init_nemu_cache();
+	init_L1();
 
 
 	/* Test whether the 'CPU_state' structure is organized correctly. */
