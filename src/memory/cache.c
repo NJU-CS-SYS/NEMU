@@ -57,5 +57,8 @@ bool create_cache(cache **ppcache, int x, int y, int z) {
 	for (i = 0; i < x; i ++) {
 		pcache->valid[i] = (uint8_t*)malloc(sizeof(uint8_t) * y);
 	}
-	return 0;
+
+	// init
+	init_cache(ppcache);
+	return true;
 }
