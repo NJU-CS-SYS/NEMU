@@ -10,6 +10,31 @@
 #define BURST_LEN 8
 #define BURST_MASK (BURST_LEN - 1)
 
+#define SET_WIDTH 7
+#define BLOCK_WIDTH 6
+#define TAG_WIDTH 14
+
+typedef union {
+	struct {
+		uint32_t block : BLOCK_WIDTH;
+		uint32_t set   : SET_WIDTH;
+		uint32_t tag   : TAG_WIDTH;
+	};
+	uint32_t addr;
+} cache_addr;
+
+#define NR_BLOCK (1 << BLOCK_WIDTH)
+#define NR_SET   (1 << SET_WIDTH)
+#define NR_WAY   8
+
+typedef struct {
+	uint8_t blk[NR_BLOCK];
+	bool valid;
+	uint32_t tag : TAG_WIDTH;
+} L1_cache;
+
+L1_cache L1[NR_SET][NR_WAY];
+
 typedef struct {
 	uint32_t tag;
 	uint8_t *block;
