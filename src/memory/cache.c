@@ -168,7 +168,6 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 	p->cache[set][way].valid = 1;
 	p->cache[set][way].tag = tag;
 	uint8_t *blk = p->cache[set][way].block;
-	assert(0);
 #if 0
 	if (p->next == NULL) { // access physical memory
 		for (i = 0; i < p->nr_block; i ++)
@@ -184,6 +183,7 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 		blk[i] = in_cache_read(addr + i, 1, p->next);
 #endif
 
+	assert(0);
 	return way;
 }
 
