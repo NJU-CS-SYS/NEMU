@@ -136,7 +136,6 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 	for (way = 0; way < head->nr_way; way ++) {
 		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) break;
 	}
-	
 	// miss
 	if (way == head->nr_way) {
 		Log("miss");
@@ -155,6 +154,8 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 			head->cache[set][way].block[idx] = dram_read(load_addr + idx, 1);
 			//Log("%x ", head->cache[set][way].block[idx]);
 		}
+	} else {
+		Log("hit");
 	}
 
 	// buf
