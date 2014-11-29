@@ -175,6 +175,7 @@ void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
 
 	// if miss
 	if (way == head->nr_way) {
+
 		// find a empty block in this set
 		for (way = 0; way < head->nr_way; way++) {
 			if (!head->cache[set][way].valid) {
