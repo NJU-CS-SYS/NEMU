@@ -182,15 +182,18 @@ uint32_t cache_read(swaddr_t addr, size_t len) {
 // print the cache, especially for head(L1 cache)
 void print_cache(swaddr_t addr) {
 	uint32_t set = addr & head->mask_set;
+	uint32_t tag = addr & head->mask_tag;
 	set = set >> head->bit_block;
 	int way, blck;
 	printf("set %d\n", set);
 	for (way = 0; way < head->nr_way; way ++) {
-		printf("%d : tag = %x\n", way, head->cache[set][way].tag);
-		for (blck = 0; blck < head->nr_block; blck ++) {
-			printf(" %02x", head->cache[set][way].block[blck]);
-			if (blck == 31) printf("\n");
+		if (tag == head->cache[set][way].tag) {
+			printf("%d : tag = %x\n", way, head->cache[set][way].tag);
+			for (blck = 0; blck < head->nr_block; blck ++) {
+				printf(" %02x", head->cache[set][way].block[blck]);
+				if (blck == 31) printf("\n");
+			}
+			printf("\n");
 		}
-		printf("\n");
 	}
 }
