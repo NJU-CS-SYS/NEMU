@@ -25,8 +25,11 @@ uint32_t swaddr_read(swaddr_t addr, size_t len) {
 	if(cache_data != hw_data) {
 		print_cache();
 		int i = 0;
-		for (i = 0; i < 32; i ++)
-			printf("%02x ", hwaddr_read((addr&(~7u))+i,1));
+		printf("real ram:\n");
+		for (i = 0; i < 64; i ++) {
+			printf(" %02x", hwaddr_read((addr&(~63u))+i,1));
+			if (i == 31) printf("\n");
+		}
 		printf("\n");
 		test(0, "cache wrong, addr = %x, len = %x, cache = %x, hw = %x", addr, len, cache_data, hw_data);
 	}
