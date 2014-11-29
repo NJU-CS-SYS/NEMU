@@ -23,5 +23,15 @@ bool create_cache(cache **ppcache, int x, int y, int z) {
 	pcache->nr_way = y;
 	pcache->nr_block = z;
 	pcache->next = NULL;
+
+	// allocate the mem for cache
+	int i, j;
+	pcache->data = (int***)malloc(sizeof(int**) * x);
+	for (i = 0; i < x; i ++) {
+		pcache->data[i] = (int**)malloc(sizeof(int*) * y);
+		for (j = 0; j < y; j ++) {
+			pcache->data[i][j] = (int*)malloc(sizeof(int) * z);
+		}
+	}
 	return 0;
 }
