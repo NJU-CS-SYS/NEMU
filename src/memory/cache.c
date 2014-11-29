@@ -174,3 +174,19 @@ uint32_t cache_read(swaddr_t addr, size_t len) {
 	}
 	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
 }
+
+// print the cache, especially for head(L1 cache)
+void print_cache() {
+	int i, j, k;
+	for (i = 0; i < head->nr_set; i ++) {
+		printf("set %d\n", i);
+		for (j = 0; j < head->nr_way; j ++) {
+			printf("%d :\n", j);
+			for (k = 0; k < head->nr_block; k ++) {
+				printf(" %d", head->cache[i][j].block[k]);
+			}
+			printf("\n");
+		}
+		printf("\n");
+	}
+}
