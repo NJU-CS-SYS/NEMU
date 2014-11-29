@@ -161,7 +161,7 @@ void sram_read(swaddr_t raw_addr, void* data) {
 }
 
 void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
-	swaddr_t addr = raw_addr & head->mask_block;
+	swaddr_t addr = raw_addr & (~head->mask_block);
 	uint32_t tag = addr & head->mask_tag;
 	uint32_t set = (addr & head->mask_set) >> head->bit_block;
 	uint32_t offset = addr & head->mask_block;
