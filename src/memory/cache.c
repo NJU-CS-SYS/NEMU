@@ -125,29 +125,29 @@ void delete_cache() {
 	}
 }
 
-uint32_t cache_miss_allocate(uint32_t tag, uint32_t set) { // allocate when miss cache
+uint32_t cache_miss_allocate(uint32_t tag, uint32_t set, cache *p) { // allocate when miss cache
 	int way;
-	swaddr_t addr = tag | (set << head->bit_block);
+	swaddr_t addr = tag | (set << p->bit_block);
 
 	// find an empty block
-	for (way = 0; way < head->nr_way; way++) {
-		if (!head->cache[set][way].valid) {
+	for (way = 0; way < p->nr_way; way++) {
+		if (!p->cache[set][way].valid) {
 			break;
 		}
 	}
 
 	// replacement, using rand algorithm
-	if (way == head->nr_way) {
+	if (way == p->nr_way) {
 		srand(addr);
-		way = rand() % head->nr_way;
+		way = rand() % p->nr_way;
 	}
 
 	// load from dram
 	int i;
-	head->cache[set][way].valid = 1;
-	head->cache[set][way].tag = tag;
-	for (i = 0; i < head->nr_block; i ++) {
-		head->cache[set][way].block[i] = dram_read(addr + i, 1);
+	p->cache[set][way].valid = 1;
+	p->cache[set][way].tag = tag;
+	for (i = 0; i < p->nr_block; i ++) {
+		p->cache[set][way].block[i] = dram_read(addr + i, 1);
 	}
 
 	return way;
@@ -168,7 +168,7 @@ void sram_read(swaddr_t raw_addr, void* data) {
 
 	// miss
 	if (way == head->nr_way) 
-		way = cache_miss_allocate(tag, set);
+		way = cache_miss_allocate(tag, set, head);
 
 	memcpy(data, cache[set][way].block + offset, BURST_LEN);
 }
