@@ -137,13 +137,12 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 		if (!p->cache[set][way].valid) break;
 	
 	if (way == p->nr_way) { // replacement, using rand algorithm
-#if 0
 		srand(addr);
 		way = rand() % p->nr_way;
-#endif
-		way = 0;
 
+		assert(0);
 		if (p->en_wrt_back && cache[set][way].dirty) { // write back
+			
 			hwaddr_t back_addr = tag | (set << p->bit_block);
 			uint8_t* blk = cache[set][way].block;
 
