@@ -64,6 +64,7 @@ static void L1_read(swaddr_t addr, void *data) {
 		}
 	}
 	if (way == NR_WAY) { // miss
+		Log("hit");
 		// TODO load from L2
 		for (way = 0; way < NR_WAY; way ++)
 			if (!L1[set][way].valid) // empty block
@@ -71,6 +72,7 @@ static void L1_read(swaddr_t addr, void *data) {
 		if (way == NR_WAY) // full
 			way = rand() % NR_WAY;
 
+		Log("set=%x, way=%x", set, way);
 		int i;
 		for (i = 0; i < NR_BLOCK; i ++)
 			L1[set][way].blk[i] = dram_read(addr + i, 1);
