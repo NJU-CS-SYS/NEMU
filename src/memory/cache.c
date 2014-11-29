@@ -136,7 +136,9 @@ static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allo
 	for (way = 0; way < p->nr_way; way++)
 		if (!p->cache[set][way].valid) break;
 	
-	if (0) { // replacement, using rand algorithm
+	Log("hit");
+	assert(0);
+	if (way == p->nr_way) { // replacement, using rand algorithm
 		srand(addr);
 		way = rand() % p->nr_way;
 
