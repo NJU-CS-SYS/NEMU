@@ -7,27 +7,34 @@
  * it makes you clear about how CACHE is read/written.
  */
 
+typedef struct {
+	uint8_t *block;
+	uint8_t valid;
+	uint8_t used;
+} block;
+
 struct _cache_ {
-	uint8_t ***data;
+	block **cache;
 	int nr_set;
 	int nr_way;
 	int nr_block;
-	uint8_t **valid;
+	int mask_set;
+	int mask_block;
 	struct _cache_ *next;
 };
 typedef struct _cache_ cache;
 
+static cache* head;
 
-bool init_cache (cache **ppcache) {
-	cache *pcache = *ppcache;
+bool init_cache (cache *pcache) {
 	test(pcache != NULL, "the cache isn's allocated!");
 	
 	int i, j, k;
 	for (i = 0; i < pcache->nr_set; i ++) {
 		for (j = 0; j < pcache->nr_way; j ++) {
-			pcache->valid[i][j] = 0;
+			pcache->cache[i][j].valid = 0;
 			for (k = 0; k < pcache->nr_block; k ++) {
-				pcache->data[i][j][k] = 0;
+				pcache->cache[i][j].block[k] = 0;
 			}
 		}
 	}
@@ -45,38 +52,42 @@ bool create_cache(cache **ppcache, int x, int y, int z) {
 
 	// allocate the mem for data
 	int i, j;
-	pcache->data = (uint8_t***)malloc(sizeof(uint8_t**) * x);
+	pcache->cache = (block**)malloc(sizeof(block*) * x);
 	for (i = 0; i < x; i ++) {
-		pcache->data[i] = (uint8_t**)malloc(sizeof(uint8_t*) * y);
+		pcache->cache[i] = (block*)malloc(sizeof(block) * y);
 		for (j = 0; j < y; j ++) {
-			pcache->data[i][j] = (uint8_t*)malloc(sizeof(uint8_t) * z);
+			pcache->cache[i][j].block = (uint8_t*)malloc(sizeof(uint8_t) * z);
 		}
 	}
 
-	// allocate the mem for valid
-	pcache->valid = (uint8_t**)malloc(sizeof(uint8_t*) * x);
-	for (i = 0; i < x; i ++) {
-		pcache->valid[i] = (uint8_t*)malloc(sizeof(uint8_t) * y);
-	}
-
 	// init
-	init_cache(ppcache);
+	init_cache(pcache);
 	return true;
 }
 
-void delete_cache(cache *pcache) {
-	while (pcache != NULL) {
-		cache *ptemp = pcache;
-		pcache = pcache->next;
+void delete_cache() {
+	while (head != NULL) {
+		cache *ptemp = head;
+		head = head->next;
 
 		int i, j;
 		for (i = 0; i < ptemp->nr_set; i ++) {
 			for (j = 0; j < ptemp->nr_way; j ++) {
-				free(ptemp->data[i][j]);
+				free(ptemp->cache[i][j].block);
 			}
-			free(ptemp->valid[i]);
-			free(ptemp->data[i]);
+			free(ptemp->cache[i]);
 		}
+		free(ptemp->cache);
 		free(ptemp);
 	}
 }
+
+#if 0
+bool hit_cache(cache *pcache, swaddr_t addr, void* data) {
+	
+	int bit_set, bit_block;
+	int nr_set, nr_way, nr_bloc;
+	nr_set = pcache->nr_set;
+	nr_way = pcache->nr_way;
+	nr_block = pcache->nr_block;
+#endif
