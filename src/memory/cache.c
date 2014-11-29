@@ -53,27 +53,20 @@ bool init_cache (cache *pcache) {
 	int bit_set = 0;
 
 	pcache->mask_block = (nr_block - 1);
-	//Log("mask_block = %x", pcache->mask_block);
 
 	while (nr_block > 1) {
 		nr_block = nr_block >> 1;
 		bit_block ++;
 	}
-	//Log("nr_block = %d, bit_block = %x", pcache->nr_block, bit_block);
 
 	pcache->bit_block = bit_block;
 	pcache->mask_set = (nr_set - 1) << bit_block;
-	//Log("mask_set = %x", pcache->mask_set);	
 
 	while (nr_set > 1) {
 		nr_set = nr_set >> 1;
 		bit_set ++;
 	}
-	//Log("nr_set = %d, bit_set = %x", pcache->nr_set, bit_set);
-
 	pcache->mask_tag = (~0u >> (bit_set + bit_block)) << (bit_set + bit_block);
-	//Log("mask_tag = %x", pcache->mask_tag);
-
 	// data init
 	int i, j, k;
 	for (i = 0; i < pcache->nr_set; i ++) {
@@ -131,17 +124,14 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 	uint32_t tag = addr & head->mask_tag;
 	uint32_t set = (addr & head->mask_set) >> head->bit_block;
 	uint32_t offset = addr & head->mask_block;
-	//Log("tag = %x, set = %x, offset = %x, addr = %x", tag, set, offset, addr);
 
 	int way = head->nr_way;
 	// search the cached data
 	for (way = 0; way < head->nr_way; way ++) {
-	//	Log("set : %x, way : %x, valid : %x, tag : %x %x", set, way, head->cache[set][way].valid, head->cache[set][way].tag, tag);
 		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) break;
 	}
 	// miss
 	if (way == head->nr_way) {
-		//Log("miss");
 		// find a empty block in this set
 		for (way = 0; way < head->nr_way; way++) {
 			if (!head->cache[set][way].valid)
@@ -154,17 +144,20 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 		head->cache[set][way].valid = 1;
 		head->cache[set][way].tag = tag;
 		swaddr_t load_addr = tag | (set << head->bit_block);;
-		//Log("load addr = %x", load_addr);
 		int idx;
 		for (idx = 0; idx < head->nr_block; idx ++) {
 			head->cache[set][way].block[idx] = dram_read(load_addr + idx, 1);
 		}
-	} else {
-		//Log("hit");
 	}
 
 	// buf
 	uint8_t temp[ BURST_LEN ];
 	memcpy(temp, head->cache[set][way].block + offset, BURST_LEN);
 	return *(uint32_t*)temp & (~0u >> ((4 - len) << 3));
+}
+
+uint32_t cache_read(swaddr_t addr, size_t len) {
+	assert(len == 1 || len == 2 || len == 4);
+	uint32_t offset = addr & BURST_MASK;
+	return offset;
 }
