@@ -151,7 +151,7 @@ void sram_read(swaddr_t raw_addr, void* data) {
 		// load from dram
 		head->cache[set][way].valid = 1;
 		head->cache[set][way].tag = tag;
-		swaddr_t load_addr = tag | (set << head->bit_block);;
+		swaddr_t load_addr = tag | (set << head->bit_block);
 		Log("the addr to be loaded is %x", load_addr);
 		int i;
 		for (i = 0; i < head->nr_block; i ++) {
@@ -160,6 +160,48 @@ void sram_read(swaddr_t raw_addr, void* data) {
 	}
 	memcpy(data, head->cache[set][way].block + offset, BURST_LEN);
 }
+
+void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
+	swaddr_t addr = raw_addr & head->mask_block;
+	uint32_t tag = addr & head->mask_tag;
+	uint32_t set = (addr & head->mask_set) >> head->bit_block;
+	uint32_t offset = addr & head->mask_block;
+
+	// search the block
+	int way;
+	for (way = 0; way < head->nr_way; way ++)
+		if (head->cache[set][way].valid && head->cache[set][way].tag == tag)
+			break;
+
+	// if miss
+	if (way == head->nr_way) {
+		// find a empty block in this set
+		for (way = 0; way < head->nr_way; way++) {
+			if (!head->cache[set][way].valid) {
+				break;
+			}
+		}
+		// if full, just take the first one
+		// TODO use fake lru algo !
+		if (way == head->nr_way) {
+			way = 0;
+		}
+
+		// load from dram
+		head->cache[set][way].valid = 1;
+		head->cache[set][way].tag = tag;
+		swaddr_t load_addr = tag | (set << head->bit_block);
+		Log("the addr to be loaded is %x", load_addr);
+		int i;
+		for (i = 0; i < head->nr_block; i ++) {
+			head->cache[set][way].block[i] = dram_read(load_addr + i, 1);
+		}
+	}
+
+	// burst write
+	memcpy_with_mask(head->cache[set][way].block + offset, data, BURST_LEN, mask);
+}
+
 
 // this function handle the situation
 // when the data is cross the boundary
@@ -177,6 +219,26 @@ uint32_t cache_read(swaddr_t addr, size_t len) {
 		sram_read(addr + BURST_LEN, temp + BURST_LEN);
 	}
 	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
+}
+
+void cache_write(swaddr_t addr, size_t len, uint32_t data) {
+	uint32_t offset = addr & BURST_MASK;
+	uint8_t temp[2 * BURST_LEN];
+	uint8_t mask[2 * BURST_LEN];
+	memset(mask, 0, 2 * BURST_LEN);
+
+	*(uint32_t*)(temp + offset) = data;
+	memset(mask + offset, 1, len);
+
+	sram_write(addr, temp, mask);
+
+	if ( (addr ^ (addr + len - 1)) & (~BURST_MASK) ) {
+		// data cross the boundary
+		sram_write(addr, temp, mask);
+	}
+
+	// write through to the dram
+	dram_write(addr, len, data);
 }
 
 // print the cache, especially for head(L1 cache)
