@@ -8,6 +8,9 @@ uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
 /* Simulate the (main) behavor of CACHE. Although this will lower the performace of NEMU,
  * it makes you clear about how CACHE is read/written.
  */
+
+#define BURST_LEN 8
+#define BURST_MASK (BURST_LEN - 1)
 typedef struct {
 	uint32_t tag;
 	uint8_t *block;
@@ -124,7 +127,28 @@ void delete_cache() {
 
 
 uint32_t read_cache(swaddr_t addr, size_t len) {
-	uint32_t temp_tag = addr & head->mask_tag;
-	return temp_tag;
+	uint32_t tag = addr & head->mask_tag;
+	uint32_t set = addr & head->mask_set;
+	uint32_t block_offset = addr & head->mask_block;
+
+	int way;
+	for (way = 0; way < head->nr_way; way ++) {
+		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) break;
+	}
+	
+	if (way == head->nr_way) { // miss
+		for (way = 0; way < head->nr_way; way++)
+			if (!head->cache[set][way].valid)
+				break;
+		head->cache[set][way].valid = 1;
+		swaddr_t load_addr = tag | set;
+		int offset;
+		for (offset = 0; offset < head->nr_block; offset ++)
+			head->cache[set][way].block[offset] = dram_read(load_addr + offset, 1);
+	}
+
+	uint8_t *temp = (uint8_t*)malloc(sizeof(uint8_t) * BURST_LEN);
+	memcpy(temp, head->cache[set][way].block + block_offset, BURST_LEN);
+	return tag;
 }
 
