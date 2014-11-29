@@ -25,6 +25,7 @@ struct _cache_ {
 	int nr_block;
 	int mask_set;
 	int mask_block;
+	int bit_block;
 	int mask_tag;
 	struct _cache_ *next;
 };
@@ -60,6 +61,7 @@ bool init_cache (cache *pcache) {
 	}
 	Log("nr_block = %d, bit_block = %x", pcache->nr_block, bit_block);
 
+	pcache->bit_block = bit_block;
 	pcache->mask_set = (nr_set - 1) << bit_block;
 	Log("mask_set = %x", pcache->mask_set);	
 
@@ -128,7 +130,7 @@ void delete_cache() {
 uint32_t read_cache(swaddr_t addr, size_t len) {
 	Log("into");
 	uint32_t tag = addr & head->mask_tag;
-	uint32_t set = addr & head->mask_set;
+	uint32_t set = (addr & head->mask_set) >> head->bit_block;
 	uint32_t offset = addr & head->mask_block;
 	Log("tag = %x, set = %x, offset = %x, addr = %x", tag, set, offset, addr);
 
