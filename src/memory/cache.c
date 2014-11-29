@@ -18,5 +18,10 @@ typedef struct _cache_ cache;
 
 bool create_cache(cache **ppcache, int x, int y, int z) {
 	(*ppcache) = (cache*)malloc(sizeof(cache));
+	cache* pcache = *ppcache;
+	pcache->nr_set = x;
+	pcache->nr_way = y;
+	pcache->nr_block = z;
+	pcache->next = NULL;
 	return 0;
 }
