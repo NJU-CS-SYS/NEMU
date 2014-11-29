@@ -151,6 +151,7 @@ void sram_read(swaddr_t raw_addr, void* data) {
 		head->cache[set][way].valid = 1;
 		head->cache[set][way].tag = tag;
 		swaddr_t load_addr = tag | (set << head->bit_block);;
+		Log("the addr to be loaded is %x", load_addr);
 		int i;
 		for (i = 0; i < head->nr_block; i ++) {
 			head->cache[set][way].block[i] = dram_read(load_addr + i, 1);
@@ -162,6 +163,7 @@ void sram_read(swaddr_t raw_addr, void* data) {
 // this function handle the situation
 // when the data is cross the boundary
 uint32_t cache_read(swaddr_t addr, size_t len) {
+	Log("input addr is %x", addr);
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
@@ -170,6 +172,7 @@ uint32_t cache_read(swaddr_t addr, size_t len) {
 
 	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
 		// data cross the burst boundary
+		Log("override addr will be %x", addr + BURST_LEN);
 		sram_read(addr + BURST_LEN, temp + BURST_LEN);
 	}
 	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
