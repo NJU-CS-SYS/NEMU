@@ -63,7 +63,7 @@ static void L1_read(swaddr_t addr, void *data) {
 		}
 	}
 	if (way == NR_WAY) { // miss
-		// TODO load from mem
+		// TODO load from L2
 		for (way = 0; way < NR_WAY; way ++)
 			if (!L1[set][way].valid) // empty block
 				break;
