@@ -166,6 +166,7 @@ void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
 	uint32_t set = (addr & head->mask_set) >> head->bit_block;
 	uint32_t offset = addr & head->mask_block;
 
+	Log("cache write: tag=%x, set=%x, offset=%x", tag, set, offset);
 	// search the block
 	int way;
 	for (way = 0; way < head->nr_way; way ++)
