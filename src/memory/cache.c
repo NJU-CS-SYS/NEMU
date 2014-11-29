@@ -160,7 +160,7 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 			head->cache[set][way].block[idx] = dram_read(load_addr + idx, 1);
 		}
 	} else {
-		Log("hit");
+		//Log("hit");
 	}
 
 	// buf
