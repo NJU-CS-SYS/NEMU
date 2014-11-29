@@ -6,7 +6,6 @@
 /* Simulate the (main) behavor of CACHE. Although this will lower the performace of NEMU,
  * it makes you clear about how CACHE is read/written.
  */
-
 typedef struct {
 	uint8_t *block;
 	uint8_t valid;
@@ -23,9 +22,19 @@ struct _cache_ {
 	int mask_tag;
 	struct _cache_ *next;
 };
+
 typedef struct _cache_ cache;
 
-static cache* head;
+static cache * head;
+
+void init_nemu_cache();
+bool init_cache();
+cache* create_cache();
+void delete_cache();
+
+void init_nemu_cache() {
+	head = create_cache(128, 8, 64);
+}
 
 bool init_cache (cache *pcache) {
 	test(pcache != NULL, "the cache isn's allocated!");
@@ -71,9 +80,8 @@ bool init_cache (cache *pcache) {
 	return true;
 }
 
-bool create_cache(cache **ppcache, int x, int y, int z) {
-	(*ppcache) = (cache*)malloc(sizeof(cache));
-	cache* pcache = *ppcache;
+cache* create_cache(int x, int y, int z) {
+	cache *pcache = (cache*)malloc(sizeof(cache));
 	pcache->nr_set = x;
 	pcache->nr_way = y;
 	pcache->nr_block = z;
@@ -85,13 +93,13 @@ bool create_cache(cache **ppcache, int x, int y, int z) {
 	for (i = 0; i < x; i ++) {
 		pcache->cache[i] = (block*)malloc(sizeof(block) * y);
 		for (j = 0; j < y; j ++) {
-			pcache->cache[i][j].block = (uint8_t*)malloc(sizeof(uint8_t) * z);
+			(pcache->cache[i][j]).block = (uint8_t*)malloc(sizeof(uint8_t) * z);
 		}
 	}
 
 	// init
 	init_cache(pcache);
-	return true;
+	return pcache;
 }
 
 void delete_cache() {
