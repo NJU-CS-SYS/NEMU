@@ -40,6 +40,7 @@ typedef struct {
 L1_cache L1[NR_SET][NR_WAY];
 
 void init_L1() {
+	Log("L1 initiing");
 	int i, j;
 	for (i = 0; i < NR_SET; i ++) {
 		for (j = 0; j < NR_WAY; j ++) {
