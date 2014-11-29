@@ -20,6 +20,7 @@ struct _cache_ {
 	int nr_block;
 	int mask_set;
 	int mask_block;
+	int mask_tag;
 	struct _cache_ *next;
 };
 typedef struct _cache_ cache;
@@ -29,6 +30,34 @@ static cache* head;
 bool init_cache (cache *pcache) {
 	test(pcache != NULL, "the cache isn's allocated!");
 	
+	// get mask
+	int nr_block = pcache->nr_block;
+	int nr_set = pcache->nr_set;
+	int bit_block = 0;
+	int bit_set = 0;
+
+	pcache->mask_block = ~(nr_block - 1);
+	Log("mask_block = %x", pcache->mask_block);
+
+	while (nr_block > 1) {
+		nr_block = nr_block >> 1;
+		bit_block ++;
+	}
+	Log("nr_block = %d, bit_block = %x", pcache->nr_block, bit_block);
+
+	pcache->mask_block = (~(nr_set - 1)) << bit_block;
+	Log("mask_set = %x", pcache->mask_block);	
+
+	while (nr_set > 1) {
+		nr_set = nr_set >> 1;
+		bit_set ++;
+	}
+	Log("nr_set = %d, bit_set = %x", pcache->nr_set, bit_set);
+
+	pcache->mask_tag = (~0u >> (bit_set + bit_block)) << (bit_set + bit_block);
+	Log("mask_tag = %x", pcache->mask_tag);
+
+	// data init
 	int i, j, k;
 	for (i = 0; i < pcache->nr_set; i ++) {
 		for (j = 0; j < pcache->nr_way; j ++) {
@@ -84,7 +113,6 @@ void delete_cache() {
 
 #if 0
 bool hit_cache(cache *pcache, swaddr_t addr, void* data) {
-	
 	int bit_set, bit_block;
 	int nr_set, nr_way, nr_bloc;
 	nr_set = pcache->nr_set;
