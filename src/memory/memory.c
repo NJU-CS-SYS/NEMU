@@ -26,7 +26,7 @@ uint32_t swaddr_read(swaddr_t addr, size_t len) {
 		print_cache();
 		int i = 0;
 		for (i = 0; i < 32; i ++)
-			printf("%x ", hwaddr_read((addr&(~7u))+i,1));
+			printf("%02x ", hwaddr_read((addr&(~7u))+i,1));
 		printf("\n");
 		test(0, "cache wrong, addr = %x, len = %x, cache = %x, hw = %x", addr, len, cache_data, hw_data);
 	}
