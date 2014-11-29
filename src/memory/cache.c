@@ -134,7 +134,7 @@ uint32_t read_cache(swaddr_t addr, size_t len) {
 	// search the cached data
 	int way;
 	for (way = 0; way < head->nr_way; way ++) {
-		Log("cached tag : %x, cmp tag : %x", head->cache[set][way].tag, tag);
+		Log("cached tag : %x, cmp tag : %x, valid : %x", head->cache[set][way].tag, tag, head->cache[set][way].valid);
 		if (head->cache[set][way].valid && head->cache[set][way].tag == tag) break;
 	}
 	// miss
