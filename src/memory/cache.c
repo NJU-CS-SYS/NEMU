@@ -107,7 +107,6 @@ cache* create_cache(uint32_t x, uint32_t y, uint32_t z, uint8_t en_wrt_alloc, ui
 
 	// init
 	init_cache(pcache);
-	assert(0);
 	return pcache;
 }
 
@@ -129,6 +128,7 @@ void delete_cache() {
 }
 
 static uint32_t cache_miss_alloc(uint32_t tag, uint32_t set, cache *p) { // allocate when miss cache
+	assert(0);
 	int way;
 	block** cache = p->cache;
 	swaddr_t addr = tag | (set << p->bit_block);
