@@ -130,8 +130,7 @@ uint32_t cache_miss_allocate(uint32_t tag, uint32_t set) { // allocate when miss
 		}
 	}
 
-	// replacement
-	// using rand algorithm
+	// replacement, using rand algorithm
 	if (way == head->nr_way) {
 		srand(addr);
 		way = rand() % head->nr_way;
