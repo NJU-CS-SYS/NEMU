@@ -43,7 +43,7 @@ void delete_cache();
 static cache *head;
 
 void init_nemu_cache() {
-	head = create_cache(128, 8, 64, 0, 1);
+	head = create_cache(128, 8, 64, 0, 0);
 }
 
 bool init_cache (cache *pcache) {
