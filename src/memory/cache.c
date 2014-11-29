@@ -205,6 +205,7 @@ void sram_read(swaddr_t raw_addr, void* data, cache *p) {
 }
 
 void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask, cache *p) {
+	Log("raw_addr=%x", raw_addr);
 	block** cache = p->cache;
 	swaddr_t addr = raw_addr & (~BURST_MASK);
 	uint32_t tag = addr & p->mask_tag;
@@ -225,8 +226,6 @@ void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask, cache *p) {
 	}
 
 	// burst write
-	Log("survive");
-	fflush(stdout);
 	memcpy_with_mask(p->cache[set][way].block + offset, data, BURST_LEN, mask);
 }
 
