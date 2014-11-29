@@ -175,6 +175,11 @@ void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
 
 	// if miss
 	if (way == head->nr_way) {
+#if 0
+		// this section of code implements
+		// the write allocate function
+		// which is not needed at now
+		
 
 		// find a empty block in this set
 		for (way = 0; way < head->nr_way; way++) {
@@ -197,6 +202,8 @@ void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
 		for (i = 0; i < head->nr_block; i ++) {
 			head->cache[set][way].block[i] = dram_read(load_addr + i, 1);
 		}
+#endif
+		return;
 	}
 
 	// burst write
