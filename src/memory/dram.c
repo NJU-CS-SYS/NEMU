@@ -112,7 +112,6 @@ static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
 	memcpy_with_mask(rowbufs[rank][bank].buf + col, data, BURST_LEN, mask);
 
 	/* write back to dram */
-	// not all 8 bytes need to be write, so we have a mask
 	memcpy(dram[rank][bank][row], rowbufs[rank][bank].buf, NR_COL);
 }
 
@@ -120,6 +119,12 @@ uint32_t dram_read(hwaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[2 * BURST_LEN];
+	// the length of temp array is 16
+	// because the data may cross the burst boundary
+	// need to access mem twice
+	// but the data got is aligned
+	// so use twice longer array
+	// and finally get data accoring to offset
 	
 	ddr3_read(addr, temp);
 
@@ -128,7 +133,6 @@ uint32_t dram_read(hwaddr_t addr, size_t len) {
 		ddr3_read(addr + BURST_LEN, temp + BURST_LEN);
 	}
 
-	Log("mask = %x", ~0u >> ((4-len) << 3));
 	return *(uint32_t *)(temp + offset) & (~0u >> ((4 - len) << 3));
 }
 
