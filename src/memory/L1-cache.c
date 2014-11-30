@@ -59,7 +59,6 @@ static void L1_read(swaddr_t addr, void *data) {
 	uint32_t tag = temp.tag;
 	uint32_t offset = temp.offset;
 
-	Log("addr=%x, set=%x, tag=%x, offset=%x", addr, set, tag, offset);
 	uint32_t way;
 	for (way = 0; way < NR_WAY; way ++) { // search by tag
 		if (L1[set][way].tag == tag && L1[set][way].valid) {
@@ -77,7 +76,6 @@ static void L1_read(swaddr_t addr, void *data) {
 		hwaddr_t load = addr & ~BLOCK_MASK;
 		for (i = 0; i < NR_BLOCK; i ++) {
 			L1[set][way].blk[i] = L2_cache_read(load + i, 1);
-			Log("load from L2: %x", L1[set][way].blk[i]);
 		}
 		L1[set][way].valid = true;
 		L1[set][way].tag = tag;
@@ -134,7 +132,6 @@ void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 		L1_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
 	}
 
-	Log("data to write: %x", data);
 	L2_cache_write(addr, len, data); // write through
 }
 
