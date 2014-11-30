@@ -102,7 +102,7 @@ void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
 	L1_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
-	//uint32_t offset = temp.offset;
+	uint32_t offset = temp.offset;
 	const uint32_t tag = temp.tag;
 
 	uint32_t way;
@@ -112,6 +112,26 @@ void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
 
 	if (way == NR_WAY) // not write allocate
 		return;
+
+	// burst write
+	memcpy_with_mask(L1[set][way].blk + offset, data, BURST_LEN, mask);
+}
+
+void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
+	uint32_t offset = addr & BURST_MASK;
+	uint8_t temp [2 * BURST_LEN];
+	uint8_t mask [2 * BURST_LEN];
+	memset(mask, 0, 2 * BURST_LEN);
+
+	*(uint32_t*)(temp + offset) = data;
+	memset(mask + offset, 1, len);
+
+	L1_write(addr, temp, mask);
+
+	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
+		// data cross the boundary
+		L1_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
+	}
 }
 
 void L1_print(swaddr_t addr) {
