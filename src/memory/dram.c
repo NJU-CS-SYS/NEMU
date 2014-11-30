@@ -12,14 +12,6 @@
 #define BANK_WIDTH 3
 #define RANK_WIDTH (27 - COL_WIDTH - ROW_WIDTH - BANK_WIDTH)
 
-#if 0
-addr:
-[0 - 9]    col
-[10 - 19]  raw
-[20 - 22]  bank
-[23 - 26]  rank
-[27 - 31]  5?
-#endif
 typedef union {
 	struct {
 		uint32_t col	: COL_WIDTH;

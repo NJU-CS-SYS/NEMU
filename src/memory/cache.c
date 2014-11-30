@@ -7,239 +7,146 @@
 #include "cpu/reg.h"
 #include "stdlib.h"
 
-#define BURST_LEN 8
-#define BURST_MASK (BURST_LEN - 1)
-
-typedef struct {
-	uint32_t tag;
-	uint8_t *block;
-	uint8_t valid;
-	uint8_t dirty;
-} block;
-struct _cache_ {
-	block **cache;
-	int nr_set;
-	int nr_way;
-	int nr_block;
-	int mask_set;
-	int mask_block;
-	int bit_block;
-	int mask_tag;
-	uint8_t en_wrt_alloc;
-	uint8_t en_wrt_back;
-	struct _cache_ *next;
-};
-typedef struct _cache_ cache;
-
 uint32_t dram_read(hwaddr_t addr, size_t len);
 uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
 
-void init_nemu_cache();
-bool init_cache();
-cache* create_cache(uint32_t,uint32_t,uint32_t,uint8_t,uint8_t);
-void delete_cache();
+#define BURST_LEN 8
+#define BURST_MASK (BURST_LEN - 1)
 
-static cache *head;
+#define SET_WIDTH 7
+#define BLOCK_WIDTH 6
+#define TAG_WIDTH 14
 
-void init_nemu_cache() {
-	head = create_cache(128, 8, 64, 0, 0);
-	head->next = create_cache(4096, 16, 64, 1, 1);
+typedef union {
+	struct {
+		uint32_t offset : BLOCK_WIDTH;
+		uint32_t set   : SET_WIDTH;
+		uint32_t tag   : TAG_WIDTH;
+	};
+	uint32_t addr;
+} L1_addr;
+
+#define NR_BLOCK (1 << BLOCK_WIDTH)
+#define NR_SET   (1 << SET_WIDTH)
+#define NR_WAY   8
+#define BLOCK_MASK (NR_BLOCK - 1)
+
+typedef struct {
+	uint8_t blk[NR_BLOCK];
+	bool valid;
+	uint32_t tag : TAG_WIDTH;
+} L1_cache;
+
+L1_cache L1[NR_SET][NR_WAY];
+
+void init_L1() {
+	int i, j;
+	for (i = 0; i < NR_SET; i ++) {
+		for (j = 0; j < NR_WAY; j ++) {
+			L1[i][j].valid = false;
+		}
+	}
 }
 
-bool init_cache (cache *pcache) {
-	test(pcache != NULL, "the cache isn's allocated!");
+static void L1_read(swaddr_t addr, void *data) {
 	
-	// get mask
-	int nr_block = pcache->nr_block;
-	int nr_set = pcache->nr_set;
-	int bit_block = 0;
-	int bit_set = 0;
+	L1_addr temp;
+	temp.addr = addr & ~BURST_MASK;
+	uint32_t set = temp.set;
+	uint32_t tag = temp.tag;
+	uint32_t offset = temp.offset;
 
-	pcache->mask_block = (nr_block - 1);
-
-	while (nr_block > 1) {
-		nr_block = nr_block >> 1;
-		bit_block ++;
-	}
-
-	pcache->bit_block = bit_block;
-	pcache->mask_set = (nr_set - 1) << bit_block;
-
-	while (nr_set > 1) {
-		nr_set = nr_set >> 1;
-		bit_set ++;
-	}
-	pcache->mask_tag = (~0u >> (bit_set + bit_block)) << (bit_set + bit_block);
-	// data init
-	int i, j;
-	for (i = 0; i < pcache->nr_set; i ++) {
-		for (j = 0; j < pcache->nr_way; j ++) {
-			pcache->cache[i][j].valid = 0;
-			pcache->cache[i][j].dirty = 1;
-			memset(pcache->cache[i][j].block, 0, pcache->nr_block);
-		}
-	}
-
-	return true;
-}
-
-cache* create_cache(uint32_t x, uint32_t y, uint32_t z, uint8_t en_wrt_alloc, uint8_t en_wrt_back) {
-	cache *pcache = (cache*)malloc(sizeof(cache));
-	pcache->nr_set = x;
-	pcache->nr_way = y;
-	pcache->nr_block = z;
-	pcache->en_wrt_alloc = en_wrt_alloc;
-	pcache->en_wrt_back = en_wrt_back;
-	pcache->next = NULL;
-
-	// allocate the mem for data
-	int i, j;
-	pcache->cache = (block**)malloc(sizeof(block*) * x);
-	for (i = 0; i < x; i ++) {
-		pcache->cache[i] = (block*)malloc(sizeof(block) * y);
-		for (j = 0; j < y; j ++) {
-			(pcache->cache[i][j]).block = (uint8_t*)malloc(sizeof(uint8_t) * z);
-		}
-	}
-
-	// init
-	init_cache(pcache);
-	return pcache;
-}
-
-void delete_cache() {
-	while (head != NULL) {
-		cache *ptemp = head;
-		head = head->next;
-
-		int i, j;
-		for (i = 0; i < ptemp->nr_set; i ++) {
-			for (j = 0; j < ptemp->nr_way; j ++) {
-				free(ptemp->cache[i][j].block);
-			}
-			free(ptemp->cache[i]);
-		}
-		free(ptemp->cache);
-		free(ptemp);
-	}
-}
-
-uint32_t cache_miss_allocate(uint32_t tag, uint32_t set, cache *p) { // allocate when miss cache
-	int way;
-	swaddr_t addr = tag | (set << p->bit_block);
-
-	// find an empty block
-	for (way = 0; way < p->nr_way; way++) {
-		if (!p->cache[set][way].valid) {
+	uint32_t way;
+	for (way = 0; way < NR_WAY; way ++) { // search by tag
+		if (L1[set][way].tag == tag && L1[set][way].valid) {
 			break;
 		}
 	}
+	if (way == NR_WAY) { // miss
+		// TODO load from L2
+		for (way = 0; way < NR_WAY; way ++)
+			if (!L1[set][way].valid) // empty block
+				break;
+		if (way == NR_WAY) // full
+			way = rand() % NR_WAY;
 
-	// replacement, using rand algorithm
-	if (way == p->nr_way) {
-		srand(addr);
-		way = rand() % p->nr_way;
+		int i;
+		hwaddr_t load = addr & ~BLOCK_MASK;
+		for (i = 0; i < NR_BLOCK; i ++)
+			L1[set][way].blk[i] = dram_read(load + i, 1);
+		L1[set][way].valid = true;
+		L1[set][way].tag = tag;
 	}
 
-	// load from dram
-	int i;
-	p->cache[set][way].valid = 1;
-	p->cache[set][way].tag = tag;
-	for (i = 0; i < p->nr_block; i ++) {
-		p->cache[set][way].block[i] = dram_read(addr + i, 1);
-	}
-
-	return way;
+	// burst read
+	memcpy(data, L1[set][way].blk + offset, BURST_LEN);
 }
-
-void sram_read(swaddr_t raw_addr, void* data) {
-	block** cache = head->cache;
-	swaddr_t addr = raw_addr & (~BURST_MASK); // aligned addr, if this is not found, the part we want also miss
-	uint32_t tag = addr & head->mask_tag;
-	uint32_t set = (addr & head->mask_set) >> head->bit_block; // note that set is a numeric data
-	uint32_t offset = addr & head->mask_block; // used to locate data in block
-
-	// search
-	int way;
-	for (way = 0; way < head->nr_way; way ++)
-		if (cache[set][way].valid && cache[set][way].tag == tag)
-			break;
-
-	// miss
-	if (way == head->nr_way) 
-		way = cache_miss_allocate(tag, set, head);
-
-	memcpy(data, cache[set][way].block + offset, BURST_LEN);
-}
-
-void sram_write(swaddr_t raw_addr, void *data, uint8_t *mask) {
-	block** cache = head->cache;
-	swaddr_t addr = raw_addr & (~BURST_MASK);
-	uint32_t tag = addr & head->mask_tag;
-	uint32_t set = (addr & head->mask_set) >> head->bit_block;
-	uint32_t offset = addr & head->mask_block;
-
-	// search the block
-	int way;
-	for (way = 0; way < head->nr_way; way ++)
-		if (cache[set][way].valid && cache[set][way].tag == tag)
-			break;
-
-	// if miss
-	if (way == head->nr_way) return;
-
-	// burst write
-	memcpy_with_mask(head->cache[set][way].block + offset, data, BURST_LEN, mask);
-}
-
-uint32_t cache_read(swaddr_t addr, size_t len) {
+uint32_t L1_cache_read(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t offset = addr & BURST_MASK;
-	uint8_t temp[2 * BURST_LEN];
+	uint8_t temp[ 2 * BURST_LEN ];
 
-	sram_read(addr, temp);
+	L1_read(addr, temp);
 
 	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
-		// data cross the burst boundary
-		sram_read(addr + BURST_LEN, temp + BURST_LEN);
+		L1_read(addr + BURST_LEN, temp + BURST_LEN);
 	}
 	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
 }
 
-void cache_write(swaddr_t addr, size_t len, uint32_t data) {
+void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
+	L1_addr temp;
+	temp.addr = addr & ~BURST_MASK;
+	uint32_t set = temp.set;
+	uint32_t offset = temp.offset;
+	const uint32_t tag = temp.tag;
+
+	uint32_t way;
+	for (way = 0; way < NR_WAY; way ++)
+		if (L1[set][way].valid && tag == L1[set][way].tag)
+			break;
+
+	if (way == NR_WAY) // not write allocate
+		return;
+
+	// burst write
+	memcpy_with_mask(L1[set][way].blk + offset, data, BURST_LEN, mask);
+}
+
+void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 	uint32_t offset = addr & BURST_MASK;
-	uint8_t temp[2 * BURST_LEN];
-	uint8_t mask[2 * BURST_LEN];
+	uint8_t temp [2 * BURST_LEN];
+	uint8_t mask [2 * BURST_LEN];
 	memset(mask, 0, 2 * BURST_LEN);
 
 	*(uint32_t*)(temp + offset) = data;
 	memset(mask + offset, 1, len);
 
-	sram_write(addr, temp, mask);
+	L1_write(addr, temp, mask);
 
-	if ( (addr ^ (addr + len - 1)) & (~BURST_MASK) ) {
+	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
 		// data cross the boundary
-		sram_write(addr, temp, mask);
+		L1_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
 	}
 
-	// write through to the dram
-	dram_write(addr, len, data);
+	dram_write(addr, len, data); // write through
 }
 
-void print_cache(swaddr_t addr) {
-	block** cache = head->cache;
-	uint32_t set = addr & head->mask_set;
-	uint32_t tag = addr & head->mask_tag;
-	set = set >> head->bit_block;
-	int way, blck;
-	printf("set %d\n", set);
-	for (way = 0; way < head->nr_way; way ++) {
-		if (tag == cache[set][way].tag && cache[set][way].valid) {
-			printf("way %x: tag = %x\n", way, cache[set][way].tag);
-			for (blck = 0; blck < head->nr_block; blck ++) {
-				printf(" %02x", cache[set][way].block[blck]);
-				if (blck == 31) printf("\n");
+void L1_print(swaddr_t addr) {
+	L1_addr temp;
+	temp.addr = addr;
+	uint32_t set = temp.set;
+	const uint32_t tag = temp.tag;
+	
+	int way;
+	for (way = 0; way < NR_WAY; way ++) {
+		if (L1[set][way].valid && tag == L1[set][way].tag) {
+			printf("set=%x, way=%x:\n", set, way);
+			int offset;
+			for (offset = 0; offset < NR_BLOCK; offset ++) {
+				printf(" %02x", L1[set][way].blk[offset]);
+				if (offset == 31) printf("\n");
 			}
 			printf("\n");
 		}
