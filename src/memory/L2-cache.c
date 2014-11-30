@@ -53,6 +53,7 @@ void init_L2() {
 }
 
 static void L2_read(swaddr_t addr, void *data) {
+	Log("Into L2");
 	
 	L2_addr temp;
 	temp.addr = addr & ~BURST_MASK;
@@ -68,6 +69,7 @@ static void L2_read(swaddr_t addr, void *data) {
 	}
 
 	if (way == NR_WAY) { // miss, allocate
+		Log("miss");
 		for (way = 0; way <	NR_WAY; way ++) // find empty block
 			if (!L2[set][way].valid)
 				break;
@@ -108,6 +110,7 @@ uint32_t L2_cache_read(swaddr_t addr, size_t len) {
 }
 
 void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
+	Log("Into L2 write");
 	L2_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
@@ -120,6 +123,7 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 			break;
 
 	if (way == NR_WAY) { // miss, write allocate
+		Log("write miss");
 		for (way = 0; way <	NR_WAY; way ++) // find empty block
 			if (!L2[set][way].valid)
 				break;
