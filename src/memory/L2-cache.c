@@ -66,11 +66,12 @@ static void L2_read(swaddr_t addr, void *data) {
 		}
 	}
 
-	if (way == NR_WAY) { // miss, write allocate
+	if (way == NR_WAY) { // miss, allocate
 		for (way = 0; way <	NR_WAY; way ++) // find empty block
 			if (!L2[set][way].valid)
 				break;
 		if (way == NR_WAY) { // cache full, replacement
+			assert(0);
 			way = rand() % NR_WAY; // random replacement
 			if (L2[set][way].dirty) { // write back
 				int i;
