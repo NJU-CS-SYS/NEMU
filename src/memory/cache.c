@@ -75,6 +75,7 @@ static void L1_read(swaddr_t addr, void *data) {
 
 		int i;
 		hwaddr_t load = tag | (set << BLOCK_WIDTH);
+		Log("load=%x", load);
 		for (i = 0; i < NR_BLOCK; i ++)
 			L1[set][way].blk[i] = dram_read(load + i, 1);
 		L1[set][way].valid = true;
