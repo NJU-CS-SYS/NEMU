@@ -67,29 +67,28 @@ static void L2_read(swaddr_t addr, void *data) {
 		}
 	}
 
-	if (way == NR_WAY) { // miss, allocate
+	if (way == NR_WAY) { // allocate
 		for (way = 0; way <	NR_WAY; way ++) // find empty block
 			if (!L2[set][way].valid)
 				break;
-		if (way == NR_WAY) { // cache full, replacement
+		if (way == NR_WAY) { // replacement
 			way = rand() % NR_WAY; // random replacement
-			if (L2[set][way].dirty) { // write back
+			if (L2[set][way].dirty && L2[set][way].valid) { // write back
 				int i;
 				hwaddr_t back_addr = (L2[set][way].tag << (SET_WIDTH + BLOCK_WIDTH)) | (set << BLOCK_WIDTH);
 				for (i = 0; i < NR_BLOCK; i ++)
 					dram_write(back_addr + i, 1, L2[set][way].blk[i]);
-				for (i = 0; i < NR_BLOCK; i ++)
-					test(dram_read(back_addr + i, 1) == L2[set][way].blk[i], "write back wrong");
 			} 
-		}	
+		}
+		
+		// load
+		hwaddr_t load = addr & ~BLOCK_MASK;
+		int i;
+		for (i = 0; i < NR_BLOCK; i ++)
+			L2[set][way].blk[i] = dram_read(load + i, 1);
+		L2[set][way].tag = tag;
+		L2[set][way].valid = true;
 	}
-		// write allocate
-	hwaddr_t load = addr & ~BLOCK_MASK;
-	int i;
-	for (i = 0; i < NR_BLOCK; i ++)
-		L2[set][way].blk[i] = dram_read(load + i, 1);
-
-	L2[set][way].tag = tag;
 
 	// burst read
 	memcpy(data, L2[set][way].blk + offset, BURST_LEN);
