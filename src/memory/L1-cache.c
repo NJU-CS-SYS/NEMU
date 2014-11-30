@@ -134,6 +134,7 @@ void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 		L1_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
 	}
 
+	Log("data to write: %x", data);
 	L2_cache_write(addr, len, data); // write through
 }
 
