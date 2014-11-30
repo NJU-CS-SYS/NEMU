@@ -7,11 +7,8 @@
 #include "cpu/reg.h"
 #include "stdlib.h"
 
-//uint32_t dram_read(hwaddr_t addr, size_t len);
-//uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
 uint32_t L2_cache_read(swaddr_t addr, size_t len);
 void L2_cache_write(swaddr_t addr, size_t len, uint32_t data);
-
 
 #define BURST_LEN 8
 #define BURST_MASK (BURST_LEN - 1)
@@ -19,6 +16,12 @@ void L2_cache_write(swaddr_t addr, size_t len, uint32_t data);
 #define SET_WIDTH 7
 #define BLOCK_WIDTH 6
 #define TAG_WIDTH 14
+
+#define NR_BLOCK (1 << BLOCK_WIDTH)
+#define NR_SET   (1 << SET_WIDTH)
+#define NR_WAY   8
+#define BLOCK_MASK (NR_BLOCK - 1)
+
 
 typedef union {
 	struct {
@@ -28,18 +31,11 @@ typedef union {
 	};
 	uint32_t addr;
 } L1_addr;
-
-#define NR_BLOCK (1 << BLOCK_WIDTH)
-#define NR_SET   (1 << SET_WIDTH)
-#define NR_WAY   8
-#define BLOCK_MASK (NR_BLOCK - 1)
-
 typedef struct {
 	uint8_t blk[NR_BLOCK];
 	bool valid;
 	uint32_t tag : TAG_WIDTH;
 } L1_cache;
-
 L1_cache L1[NR_SET][NR_WAY];
 
 void init_L1() {
@@ -50,7 +46,6 @@ void init_L1() {
 		}
 	}
 }
-
 static void L1_read(swaddr_t addr, void *data) {
 	
 	L1_addr temp;
@@ -84,20 +79,7 @@ static void L1_read(swaddr_t addr, void *data) {
 	// burst read
 	memcpy(data, L1[set][way].blk + offset, BURST_LEN);
 }
-uint32_t L1_cache_read(swaddr_t addr, size_t len) {
-	assert(len == 1 || len == 2 || len == 4);
-	uint32_t offset = addr & BURST_MASK;
-	uint8_t temp[ 2 * BURST_LEN ];
-
-	L1_read(addr, temp);
-
-	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
-		L1_read(addr + BURST_LEN, temp + BURST_LEN);
-	}
-	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
-}
-
-void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
+static void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
 	L1_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
@@ -115,7 +97,18 @@ void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
 	// burst write
 	memcpy_with_mask(L1[set][way].blk + offset, data, BURST_LEN, mask);
 }
+uint32_t L1_cache_read(swaddr_t addr, size_t len) {
+	assert(len == 1 || len == 2 || len == 4);
+	uint32_t offset = addr & BURST_MASK;
+	uint8_t temp[ 2 * BURST_LEN ];
 
+	L1_read(addr, temp);
+
+	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
+		L1_read(addr + BURST_LEN, temp + BURST_LEN);
+	}
+	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
+}
 void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp [2 * BURST_LEN];
@@ -134,7 +127,6 @@ void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 
 	L2_cache_write(addr, len, data); // write through
 }
-
 void L1_print(swaddr_t addr) {
 	L1_addr temp;
 	temp.addr = addr;
