@@ -75,7 +75,7 @@ static void L1_read(swaddr_t addr, void *data) {
 			way = rand() % NR_WAY;
 
 		int i;
-		hwaddr_t load = addr & BLOCK_MASK;
+		hwaddr_t load = addr & ~BLOCK_MASK;
 		Log("load=%x", load);
 		for (i = 0; i < NR_BLOCK; i ++)
 			L1[set][way].blk[i] = dram_read(load + i, 1);
