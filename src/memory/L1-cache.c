@@ -67,7 +67,6 @@ static void L1_read(swaddr_t addr, void *data) {
 		}
 	}
 	if (way == NR_WAY) { // miss
-		// TODO load from L2
 		for (way = 0; way < NR_WAY; way ++)
 			if (!L1[set][way].valid) // empty block
 				break;
@@ -76,8 +75,10 @@ static void L1_read(swaddr_t addr, void *data) {
 
 		int i;
 		hwaddr_t load = addr & ~BLOCK_MASK;
-		for (i = 0; i < NR_BLOCK; i ++)
+		for (i = 0; i < NR_BLOCK; i ++) {
 			L1[set][way].blk[i] = L2_cache_read(load + i, 1);
+			Log("load from L2: %x", L1[set][way].blk[i]);
+		}
 		L1[set][way].valid = true;
 		L1[set][way].tag = tag;
 	}
