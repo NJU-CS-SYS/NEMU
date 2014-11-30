@@ -104,11 +104,11 @@ uint32_t L2_cache_read(swaddr_t addr, size_t len) {
 	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
 		L2_read(addr + BURST_LEN, temp + BURST_LEN);
 	}
+	L2_print(0x8000aa);
 	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
 }
 
 void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
-	Log("Into L2 write");
 	L2_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
@@ -121,7 +121,6 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 			break;
 
 	if (way == NR_WAY) { // miss, write allocate
-		Log("write miss");
 		for (way = 0; way <	NR_WAY; way ++) // find empty block
 			if (!L2[set][way].valid)
 				break;
@@ -143,14 +142,12 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 		L2[set][way].valid = true;
 	}
 	// burst write
-	L2_print(addr);
 	L2[set][way].tag = tag;
 	memcpy_with_mask(L2[set][way].blk + offset, data, BURST_LEN, mask);
 	L2[set][way].dirty = true;
 }
 
 void L2_cache_write(swaddr_t addr, size_t len, uint32_t data) {
-	Log("data to write: %x", data);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp [2 * BURST_LEN];
 	uint8_t mask [2 * BURST_LEN];
@@ -167,6 +164,7 @@ void L2_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 	}
 
 	//dram_write(addr, len, data); // write through
+	L2_print(0x8000aa);
 }
 
 void L2_print(swaddr_t addr) {
@@ -187,5 +185,4 @@ void L2_print(swaddr_t addr) {
 			printf("\n");
 		}
 	}
-	Log("fail");
 }
