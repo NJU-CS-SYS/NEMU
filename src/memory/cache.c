@@ -52,7 +52,7 @@ void init_L1() {
 static void L1_read(swaddr_t addr, void *data) {
 	
 	L1_addr temp;
-	temp.addr = addr & ~(NR_BLOCK - 1);
+	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
 	uint32_t tag = temp.tag;
 	uint32_t offset = temp.offset;
@@ -74,8 +74,9 @@ static void L1_read(swaddr_t addr, void *data) {
 			way = rand() % NR_WAY;
 
 		int i;
+		hwaddr_t load = tag | (set << BLOCK_WIDTH);
 		for (i = 0; i < NR_BLOCK; i ++)
-			L1[set][way].blk[i] = dram_read(temp.addr + i, 1);
+			L1[set][way].blk[i] = dram_read(load + i, 1);
 		L1[set][way].valid = true;
 		L1[set][way].tag = tag;
 	}
