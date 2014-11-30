@@ -7,8 +7,10 @@
 #include "cpu/reg.h"
 #include "stdlib.h"
 
-uint32_t dram_read(hwaddr_t addr, size_t len);
-uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
+//uint32_t dram_read(hwaddr_t addr, size_t len);
+//uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
+uint32_t L2_cache_read(swaddr_t addr, size_t len);
+void L2_cache_write(swaddr_t addr, size_t len, uint32_t data);
 
 
 #define BURST_LEN 8
@@ -74,7 +76,7 @@ static void L1_read(swaddr_t addr, void *data) {
 		int i;
 		hwaddr_t load = addr & ~BLOCK_MASK;
 		for (i = 0; i < NR_BLOCK; i ++)
-			L1[set][way].blk[i] = dram_read(load + i, 1);
+			L1[set][way].blk[i] = L2_cache_read(load + i, 1);
 		L1[set][way].valid = true;
 		L1[set][way].tag = tag;
 	}
@@ -130,7 +132,7 @@ void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 		L1_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
 	}
 
-	dram_write(addr, len, data); // write through
+	L2_cache_write(addr, len, data); // write through
 }
 
 void L1_print(swaddr_t addr) {
