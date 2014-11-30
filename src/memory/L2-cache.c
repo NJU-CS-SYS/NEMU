@@ -10,6 +10,7 @@
 uint32_t dram_read(hwaddr_t addr, size_t len);
 uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
+void L2_print(swaddr_t addr);
 
 #define BURST_LEN 8
 #define BURST_MASK (BURST_LEN - 1)
@@ -89,7 +90,6 @@ static void L2_read(swaddr_t addr, void *data) {
 		L2[set][way].blk[i] = dram_read(load + i, 1);
 
 	L2[set][way].tag = tag;
-	L2[set][way].dirty = true;
 
 	// burst read
 	memcpy(data, L2[set][way].blk + offset, BURST_LEN);
@@ -142,6 +142,7 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 
 	}
 	// burst write
+	L2_print(addr);
 	memcpy_with_mask(L2[set][way].blk + offset, data, BURST_LEN, mask);
 	L2[set][way].dirty = true;
 }
