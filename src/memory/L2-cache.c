@@ -167,6 +167,7 @@ void L2_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 }
 
 void L2_print(swaddr_t addr) {
+	return ;
 	L2_addr temp;
 	temp.addr = addr;
 	uint32_t set = temp.set;
