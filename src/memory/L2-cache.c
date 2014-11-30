@@ -132,8 +132,6 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 				hwaddr_t back_addr = (L2[set][way].tag << (SET_WIDTH + BLOCK_WIDTH)) | (set << BLOCK_WIDTH);
 				for (i = 0; i < NR_BLOCK; i ++)
 					dram_write(back_addr + i, 1, L2[set][way].blk[i]);
-				for (i = 0; i < NR_BLOCK; i ++)
-					test(dram_read(back_addr + i, 1) == L2[set][way].blk[i], "write back wrong");
 			} 
 		}	
 		// write allocate
@@ -142,11 +140,12 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 		for (i = 0; i < NR_BLOCK; i ++)
 			L2[set][way].blk[i] = dram_read(load + i, 1);
 		L2[set][way].tag = tag;
+		Log("set = %x, way = %x, tag = %x", set, way, tag);
+		L2_print(load);
 
 	}
 	// burst write
 	L2[set][way].tag = tag;
-	L2_print(addr);
 	assert(0);
 	memcpy_with_mask(L2[set][way].blk + offset, data, BURST_LEN, mask);
 	L2[set][way].dirty = true;
