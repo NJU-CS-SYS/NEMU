@@ -84,6 +84,7 @@ static void L2_read(swaddr_t addr, void *data) {
 					test(dram_read(back_addr + i, 1) == L2[set][way].blk[i], "write back wrong");
 			} 
 		}	
+		L2[set][way].tag = tag;
 	}
 		// write allocate
 	hwaddr_t load = addr & ~BLOCK_MASK;
@@ -143,6 +144,7 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 		int i;
 		for (i = 0; i < NR_BLOCK; i ++)
 			L2[set][way].blk[i] = dram_read(load + i, 1);
+		L2[set][way].tag = tag;
 
 	}
 	// burst write
