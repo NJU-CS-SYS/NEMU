@@ -162,7 +162,7 @@ void L2_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 		L2_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
 	}
 
-	//dram_write(addr, len, data); // write through
+	dram_write(addr, len, data); // write through
 	L2_print(0x8000aa);
 }
 
