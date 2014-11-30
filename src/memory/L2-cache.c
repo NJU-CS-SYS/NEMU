@@ -115,7 +115,7 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 		if (way == NR_WAY) { // cache full, replacement
 			way = rand() % NR_WAY; // random replacement
 			if (L2[set][way].dirty) { // write back
-				Log("hit");
+				assert(0);
 				int i;
 				hwaddr_t back_addr = (L2[set][way].tag << (SET_WIDTH + BLOCK_WIDTH)) | (set << BLOCK_WIDTH);
 				for (i = 0; i < NR_BLOCK; i ++)
