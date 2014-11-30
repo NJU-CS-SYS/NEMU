@@ -141,10 +141,9 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 			L2[set][way].blk[i] = dram_read(load + i, 1);
 		L2[set][way].tag = tag;
 		L2[set][way].valid = true;
-		L2_print(load);
-
 	}
 	// burst write
+	L2_print(addr);
 	L2[set][way].tag = tag;
 	memcpy_with_mask(L2[set][way].blk + offset, data, BURST_LEN, mask);
 	L2[set][way].dirty = true;
