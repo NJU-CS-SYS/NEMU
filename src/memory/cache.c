@@ -52,7 +52,7 @@ void init_L1() {
 static void L1_read(swaddr_t addr, void *data) {
 	
 	L1_addr temp;
-	temp.addr = addr & ~BURST_MASK;
+	temp.addr = addr & ~(NR_BLOCK - 1);
 	uint32_t set = temp.set;
 	uint32_t tag = temp.tag;
 	uint32_t offset = temp.offset;
