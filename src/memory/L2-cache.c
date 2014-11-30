@@ -140,7 +140,7 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 		for (i = 0; i < NR_BLOCK; i ++)
 			L2[set][way].blk[i] = dram_read(load + i, 1);
 		L2[set][way].tag = tag;
-		Log("set = %x, way = %x, tag = %x", set, way, tag);
+		Log("set = %x, way = %x, tag = %x, addr = %x", set, way, tag, addr);
 		L2_print(load);
 
 	}
