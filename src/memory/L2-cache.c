@@ -1,4 +1,4 @@
-/* Simulate the (main) behavor of CACHE. Although this will lower the performace of NEMU,
+/* Simulate the (main) behavor of L2_CACHE. Although this will lower the performace of NEMU,
  * it makes you clear about how CACHE is read/written.
  */
 
@@ -19,6 +19,11 @@ void L2_print(swaddr_t addr);
 #define BLOCK_WIDTH 6
 #define TAG_WIDTH 9
 
+#define NR_BLOCK (1 << BLOCK_WIDTH)
+#define NR_SET   (1 << SET_WIDTH)
+#define NR_WAY   8
+#define BLOCK_MASK (NR_BLOCK - 1)
+
 typedef union {
 	struct {
 		uint32_t offset : BLOCK_WIDTH;
@@ -27,11 +32,6 @@ typedef union {
 	};
 	uint32_t addr;
 } L2_addr;
-
-#define NR_BLOCK (1 << BLOCK_WIDTH)
-#define NR_SET   (1 << SET_WIDTH)
-#define NR_WAY   8
-#define BLOCK_MASK (NR_BLOCK - 1)
 
 typedef struct {
 	uint8_t blk[NR_BLOCK];
@@ -52,6 +52,38 @@ void init_L2() {
 	}
 }
 
+uint32_t L2_miss_alloc(uint32_t set, uint32_t tag) {
+	uint32_t way, i;
+
+	// find idle block
+	for (way = 0; way <	NR_WAY; way ++) {
+		if (!L2[set][way].valid) {
+			break;
+		}
+	}
+
+	// replacement
+	if (way == NR_WAY) {
+		way = rand() % NR_WAY; 
+
+		// write back
+		if (L2[set][way].dirty && L2[set][way].valid) {
+			hwaddr_t addr = (L2[set][way].tag << (SET_WIDTH + BLOCK_WIDTH)) | (set << BLOCK_WIDTH);
+			for (i = 0; i < NR_BLOCK; i ++) {
+				dram_write(addr + i, 1, L2[set][way].blk[i]);
+			}
+		} 
+	}
+	
+	// load
+	hwaddr_t load = tag << (SET_WIDTH + BLOCK_WIDTH) | (set << BLOCK_WIDTH);
+	for (i = 0; i < NR_BLOCK; i ++) {
+		L2[set][way].blk[i] = dram_read(load + i, 1);
+	}
+	L2[set][way].tag = tag;
+	L2[set][way].valid = true;
+	return way;
+}
 static void L2_read(swaddr_t addr, void *data) {
 	
 	L2_addr temp;
@@ -68,26 +100,7 @@ static void L2_read(swaddr_t addr, void *data) {
 	}
 
 	if (way == NR_WAY) { // allocate
-		for (way = 0; way <	NR_WAY; way ++) // find empty block
-			if (!L2[set][way].valid)
-				break;
-		if (way == NR_WAY) { // replacement
-			way = rand() % NR_WAY; // random replacement
-			if (L2[set][way].dirty && L2[set][way].valid) { // write back
-				int i;
-				hwaddr_t back_addr = (L2[set][way].tag << (SET_WIDTH + BLOCK_WIDTH)) | (set << BLOCK_WIDTH);
-				for (i = 0; i < NR_BLOCK; i ++)
-					dram_write(back_addr + i, 1, L2[set][way].blk[i]);
-			} 
-		}
-		
-		// load
-		hwaddr_t load = addr & ~BLOCK_MASK;
-		int i;
-		for (i = 0; i < NR_BLOCK; i ++)
-			L2[set][way].blk[i] = dram_read(load + i, 1);
-		L2[set][way].tag = tag;
-		L2[set][way].valid = true;
+		way = L2_miss_alloc(set, tag);
 	}
 
 	// burst read
@@ -163,7 +176,6 @@ void L2_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 	}
 
 	//dram_write(addr, len, data); // write through
-	L2_print(0x8000aa);
 }
 
 void L2_print(swaddr_t addr) {
