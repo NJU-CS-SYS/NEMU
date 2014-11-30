@@ -41,7 +41,6 @@ typedef struct {
 L1_cache L1[NR_SET][NR_WAY];
 
 void init_L1() {
-	Log("L1 initiing");
 	int i, j;
 	for (i = 0; i < NR_SET; i ++) {
 		for (j = 0; j < NR_WAY; j ++) {
@@ -58,7 +57,6 @@ static void L1_read(swaddr_t addr, void *data) {
 	uint32_t tag = temp.tag;
 	uint32_t offset = temp.offset;
 
-	Log("addr=%x, tag=%x, set=%x, off=%x", temp.addr, tag, set ,offset);
 	uint32_t way;
 	for (way = 0; way < NR_WAY; way ++) { // search by tag
 		if (L1[set][way].tag == tag && L1[set][way].valid) {
@@ -66,7 +64,6 @@ static void L1_read(swaddr_t addr, void *data) {
 		}
 	}
 	if (way == NR_WAY) { // miss
-		Log("hit");
 		// TODO load from L2
 		for (way = 0; way < NR_WAY; way ++)
 			if (!L1[set][way].valid) // empty block
@@ -76,7 +73,6 @@ static void L1_read(swaddr_t addr, void *data) {
 
 		int i;
 		hwaddr_t load = addr & ~BLOCK_MASK;
-		Log("load=%x", load);
 		for (i = 0; i < NR_BLOCK; i ++)
 			L1[set][way].blk[i] = dram_read(load + i, 1);
 		L1[set][way].valid = true;
