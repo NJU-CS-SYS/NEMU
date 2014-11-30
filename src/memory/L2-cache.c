@@ -10,8 +10,6 @@
 uint32_t dram_read(hwaddr_t addr, size_t len);
 uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
 
-void L2_print(swaddr_t addr);
-
 #define BURST_LEN 8
 #define BURST_MASK (BURST_LEN - 1)
 
@@ -32,16 +30,13 @@ typedef union {
 	};
 	uint32_t addr;
 } L2_addr;
-
 typedef struct {
 	uint8_t blk[NR_BLOCK];
 	bool valid;
 	uint32_t tag : TAG_WIDTH;
 	uint8_t dirty;
 } L2_cache;
-
 L2_cache L2[NR_SET][NR_WAY];
-
 void init_L2() {
 	int i, j;
 	for (i = 0; i < NR_SET; i ++) {
@@ -51,8 +46,7 @@ void init_L2() {
 		}
 	}
 }
-
-uint32_t L2_miss_alloc(uint32_t set, uint32_t tag) {
+static uint32_t L2_miss_alloc(uint32_t set, uint32_t tag) {
 	uint32_t way, i;
 
 	// find idle block
@@ -106,21 +100,7 @@ static void L2_read(swaddr_t addr, void *data) {
 	// burst read
 	memcpy(data, L2[set][way].blk + offset, BURST_LEN);
 }
-uint32_t L2_cache_read(swaddr_t addr, size_t len) {
-	assert(len == 1 || len == 2 || len == 4);
-	uint32_t offset = addr & BURST_MASK;
-	uint8_t temp[ 2 * BURST_LEN ];
-
-	L2_read(addr, temp);
-
-	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
-		L2_read(addr + BURST_LEN, temp + BURST_LEN);
-	}
-	L2_print(0x8000aa);
-	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
-}
-
-void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
+static void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 	L2_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
@@ -142,7 +122,18 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 	memcpy_with_mask(L2[set][way].blk + offset, data, BURST_LEN, mask);
 	L2[set][way].dirty = true;
 }
+uint32_t L2_cache_read(swaddr_t addr, size_t len) {
+	assert(len == 1 || len == 2 || len == 4);
+	uint32_t offset = addr & BURST_MASK;
+	uint8_t temp[ 2 * BURST_LEN ];
 
+	L2_read(addr, temp);
+
+	if ( (addr ^ (addr + len - 1)) & ~(BURST_MASK) ) {
+		L2_read(addr + BURST_LEN, temp + BURST_LEN);
+	}
+	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
+}
 void L2_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp [2 * BURST_LEN];
@@ -159,11 +150,8 @@ void L2_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 		L2_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
 	}
 
-	//dram_write(addr, len, data); // write through
 }
-
 void L2_print(swaddr_t addr) {
-	return ;
 	L2_addr temp;
 	temp.addr = addr;
 	uint32_t set = temp.set;
