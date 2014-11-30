@@ -108,8 +108,8 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 		if (L2[set][way].valid && tag == L2[set][way].tag)
 			break;
 
-	assert(0);
 	if (way == NR_WAY) { // miss, write allocate
+		assert(0);
 		for (way = 0; way <	NR_WAY; way ++) // find empty block
 			if (!L2[set][way].valid)
 				break;
