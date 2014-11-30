@@ -149,6 +149,7 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 	}
 	// burst write
 	L2_print(addr);
+	assert(0);
 	memcpy_with_mask(L2[set][way].blk + offset, data, BURST_LEN, mask);
 	L2[set][way].dirty = true;
 }
