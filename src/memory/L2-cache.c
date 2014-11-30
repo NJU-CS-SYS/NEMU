@@ -53,7 +53,6 @@ void init_L2() {
 }
 
 static void L2_read(swaddr_t addr, void *data) {
-	Log("Into L2");
 	
 	L2_addr temp;
 	temp.addr = addr & ~BURST_MASK;
@@ -69,7 +68,6 @@ static void L2_read(swaddr_t addr, void *data) {
 	}
 
 	if (way == NR_WAY) { // miss, allocate
-		Log("miss");
 		for (way = 0; way <	NR_WAY; way ++) // find empty block
 			if (!L2[set][way].valid)
 				break;
@@ -84,7 +82,6 @@ static void L2_read(swaddr_t addr, void *data) {
 					test(dram_read(back_addr + i, 1) == L2[set][way].blk[i], "write back wrong");
 			} 
 		}	
-		L2[set][way].tag = tag;
 	}
 		// write allocate
 	hwaddr_t load = addr & ~BLOCK_MASK;
@@ -148,6 +145,7 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 
 	}
 	// burst write
+	L2[set][way].tag = tag;
 	L2_print(addr);
 	assert(0);
 	memcpy_with_mask(L2[set][way].blk + offset, data, BURST_LEN, mask);
@@ -192,4 +190,5 @@ void L2_print(swaddr_t addr) {
 			printf("\n");
 		}
 	}
+	Log("fail");
 }
