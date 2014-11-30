@@ -113,7 +113,6 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 			if (!L2[set][way].valid)
 				break;
 		if (way == NR_WAY) { // cache full, replacement
-		assert(0);
 			way = rand() % NR_WAY; // random replacement
 			if (L2[set][way].dirty) { // write back
 				int i;
@@ -135,6 +134,7 @@ void L2_write(swaddr_t addr, void *data, uint8_t *mask) {
 }
 
 void L2_cache_write(swaddr_t addr, size_t len, uint32_t data) {
+	Log("data to write: %x", data);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp [2 * BURST_LEN];
 	uint8_t mask [2 * BURST_LEN];
