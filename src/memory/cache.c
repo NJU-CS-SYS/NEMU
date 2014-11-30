@@ -57,7 +57,7 @@ static void L1_read(swaddr_t addr, void *data) {
 	uint32_t tag = temp.tag;
 	uint32_t offset = temp.offset;
 
-	Log("addr=%x\ntag=%x, set=%x, off=%x", addr, tag, set ,offset);
+	Log("addr=%x, tag=%x, set=%x, off=%x", addr, tag, set ,offset);
 	uint32_t way;
 	for (way = 0; way < NR_WAY; way ++) { // search by tag
 		if (L1[set][way].tag == tag && L1[set][way].valid) {
@@ -73,10 +73,9 @@ static void L1_read(swaddr_t addr, void *data) {
 		if (way == NR_WAY) // full
 			way = rand() % NR_WAY;
 
-		Log("set=%x, way=%x", set, way);
 		int i;
 		for (i = 0; i < NR_BLOCK; i ++)
-			L1[set][way].blk[i] = dram_read(addr + i, 1);
+			L1[set][way].blk[i] = dram_read(temp.addr + i, 1);
 		L1[set][way].valid = true;
 		L1[set][way].tag = tag;
 	}
