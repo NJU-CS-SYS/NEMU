@@ -98,6 +98,22 @@ uint32_t L1_cache_read(swaddr_t addr, size_t len) {
 	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
 }
 
+void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
+	L1_addr temp;
+	temp.addr = addr & ~BURST_MASK;
+	uint32_t set = temp.set;
+	//uint32_t offset = temp.offset;
+	const uint32_t tag = temp.tag;
+
+	uint32_t way;
+	for (way = 0; way < NR_WAY; way ++)
+		if (L1[set][way].valid && tag == L1[set][way].tag)
+			break;
+
+	if (way == NR_WAY) // not write allocate
+		return;
+}
+
 void L1_print(swaddr_t addr) {
 	L1_addr temp;
 	temp.addr = addr;
