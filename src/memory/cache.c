@@ -30,6 +30,7 @@ typedef union {
 #define NR_BLOCK (1 << BLOCK_WIDTH)
 #define NR_SET   (1 << SET_WIDTH)
 #define NR_WAY   8
+#define BLOCK_MASK (NR_BLOCK - 1)
 
 typedef struct {
 	uint8_t blk[NR_BLOCK];
@@ -74,7 +75,7 @@ static void L1_read(swaddr_t addr, void *data) {
 			way = rand() % NR_WAY;
 
 		int i;
-		hwaddr_t load = tag | (set << BLOCK_WIDTH);
+		hwaddr_t load = addr & BLOCK_MASK;
 		Log("load=%x", load);
 		for (i = 0; i < NR_BLOCK; i ++)
 			L1[set][way].blk[i] = dram_read(load + i, 1);
