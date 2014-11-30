@@ -71,7 +71,6 @@ static void L2_read(swaddr_t addr, void *data) {
 			if (!L2[set][way].valid)
 				break;
 		if (way == NR_WAY) { // cache full, replacement
-			assert(0);
 			way = rand() % NR_WAY; // random replacement
 			if (L2[set][way].dirty) { // write back
 				int i;
@@ -90,6 +89,7 @@ static void L2_read(swaddr_t addr, void *data) {
 		L2[set][way].blk[i] = dram_read(load + i, 1);
 
 	L2[set][way].tag = tag;
+	L2[set][way].dirty = true;
 
 	// burst read
 	memcpy(data, L2[set][way].blk + offset, BURST_LEN);
