@@ -132,6 +132,8 @@ void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 		// data cross the boundary
 		L1_write(addr + BURST_LEN, temp + BURST_LEN, mask + BURST_LEN);
 	}
+
+	dram_write(addr, len, data); // write through
 }
 
 void L1_print(swaddr_t addr) {

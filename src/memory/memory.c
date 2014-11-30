@@ -1,6 +1,7 @@
 #include "common.h"
 
 uint32_t L1_cache_read(swaddr_t addr, size_t len);
+uint32_t L1_cache_write(swaddr_t addr, size_t len, uint32_t data);
 uint32_t L1_print(swaddr_t addr);
 uint32_t dram_read(hwaddr_t addr, size_t len);
 void dram_write(hwaddr_t addr, size_t len, uint32_t data);
@@ -37,7 +38,8 @@ uint32_t swaddr_read(swaddr_t addr, size_t len) {
 
 void swaddr_write(swaddr_t addr, size_t len, uint32_t data) {
 	assert(len == 1 || len == 2 || len == 4);
-	hwaddr_write(addr, len, data);
+	//hwaddr_write(addr, len, data);
+	L1_cache_write(addr, len, data);
 }
 
 static uint32_t hwaddr_read_instr(hwaddr_t addr, size_t len) {
