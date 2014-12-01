@@ -27,8 +27,8 @@ uint32_t loader() {
 	elf = (void *)0x0;
 #endif
 
+#if 0
 	/* Load each program segment */
-	nemu_assert(0);
 	for(; true; ) {
 		/* Scan the program header table, load each segment into memory */
 		if(ph->p_type == PT_LOAD) {
@@ -48,6 +48,38 @@ uint32_t loader() {
 			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
 			if(brk < new_brk) { brk = new_brk; }
 		}
+	}
+#endif
+
+	ph = (void*)elf->e_phoff;
+	uint16_t step = elf->e_phentsize;
+
+	int i;
+	for (i = 0; i < elf->e_phnum; i++) {
+		/* Scan the program header table, loader each segment into memory */
+		if (ph->p_type == PT_LOAD) {
+			k++;
+			char *dest = (char*)ph->p_vaddr;
+			char *src = (char*)ph->p_offset;
+			uint32_t filesz = ph->p_filesz;
+			uint32_t memsz = ph->p_memsz;
+			int j;
+			/* Memory copy */
+			if (i == 2) { nemu_assert(src[20000] == 27825); }
+			for (j = 0; j < filesz; j++)
+				dest[j] = src[j];
+
+			/* Memory clear */
+			for (; j < memsz; j++)
+				dest[j] = 0;
+
+			/* Record the prgram break for future use. */
+			extern uint32_t brk;
+			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
+			if(brk < new_brk) { brk = new_brk; }
+	
+		}
+		ph = (Elf32_Phdr*)((uint32_t)ph + step);
 	}
 
 	volatile uint32_t entry = elf->e_entry;
