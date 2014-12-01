@@ -1,4 +1,5 @@
 #include "common.h"
+
 #define READ L1_cache_read
 #define WRITE L1_cache_write
 uint32_t READ(swaddr_t addr, size_t len);
