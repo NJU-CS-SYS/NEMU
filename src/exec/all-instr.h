@@ -10,6 +10,7 @@
 
 #include "misc/misc.h"
 #include "misc/lea.h"
+#include "misc/ldt.h"
 
 #include "string/collection.h"
 

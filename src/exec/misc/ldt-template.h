@@ -15,8 +15,8 @@
 
 make_helper(concat(lgdt_, SUFFIX))
 {
-	uint16_t limit = instr_fetch(eip + 1, 2);
-	uint32_t base = instr_fetch(eip + 2, 4);
+	uint16_t limit = instr_fetch(eip + 2, 2);
+	uint32_t base = instr_fetch(eip + 4, 4);
 	
 	cpu.gdtr.limit = limit;
 #if DATA_BYTE == 2
@@ -25,6 +25,6 @@ make_helper(concat(lgdt_, SUFFIX))
 	cpu.gdtr.base = base;
 #endif
 
-	return 1 + 2 + 4;
+	return 1 + 1 + 2 + 4;
 }
 #include "exec/template-end.h"
