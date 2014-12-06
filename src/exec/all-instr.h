@@ -9,8 +9,7 @@
 #include "binary-arithmetic/collection.h"
 
 #include "misc/misc.h"
-
-#include "other/lea.h"
+#include "misc/lea.h"
 
 #include "string/collection.h"
 
