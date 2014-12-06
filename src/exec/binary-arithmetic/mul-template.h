@@ -77,6 +77,7 @@
 }while(0)
 
 make_helper(concat(mul_rm2r_, SUFFIX)) {
+	Log("mul rm 2 r");
 	uint64_t src, dst, rst;
 	int len = 1;
 	ModR_M m;
