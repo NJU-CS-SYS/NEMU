@@ -12,11 +12,19 @@
  * 0F 01 /2 imm16 imm32
  * LGDT.Limit:Base <- imm16:24/32
  */
-/*
-make_helper(concat(ldgt_, SUFFIX))
+
+make_helper(concat(lgdt_, SUFFIX))
 {
-	uint32_t imm = 
+	uint16_t limit = instr_fetch(eip + 1, 2);
+	uint32_t base = instr_fetch(eip + 2, 4);
+	
+	cpu.gdtr.limit = limit;
 #if DATA_BYTE == 2
-	cpu.gdtr = 
-	*/
+	cpu.gdtr.base = base & 0xffffff;
+#else
+	cpu.gdtr.base = base;
+#endif
+
+	return 1 + 2 + 4;
+}
 #include "exec/template-end.h"
