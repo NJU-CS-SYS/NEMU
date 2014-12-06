@@ -42,7 +42,12 @@ typedef union {
 		 * 0x 00 01 00 00, RF, Resume Flag
 		 * 0x 00 02 00 00, VM, Virtual 8086 Mode
 		 */
+		/* segment registers */
 		uint16_t cs, ds, ss, es, fs, gs;
+		/* control registers */
+		uint32_t cr0;
+		/* globle descriptor table register */
+		uint32_t gdtr;
 	};
 } CPU_state;
 
