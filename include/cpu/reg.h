@@ -47,7 +47,12 @@ typedef union {
 		/* control registers */
 		uint32_t cr0;
 		/* globle descriptor table register */
-		uint32_t gdtr;
+		union {
+			struct {
+				uint16_t limit;
+				uint32_t base;
+			};
+		}gdtr;
 	};
 } CPU_state;
 
