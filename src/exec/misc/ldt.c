@@ -12,5 +12,6 @@ extern char suffix;
 
 make_helper(lgdt_v)
 {
+	Log("hello");
 	return ('l' == suffix ? lgdt_l(eip) : lgdt_w(eip));
 }
