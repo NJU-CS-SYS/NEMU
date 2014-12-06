@@ -7,17 +7,24 @@
  */
 #include "exec/helper.h"
 #include "exec/template-start.h"
+#include "cpu/modrm.h"
 
 /* LGDT -- Load Global Descriptor Table Resigter
- * 0F 01 /2 imm16 imm32
+ * 0F 01 /2 imm16&24/imm16&32
  * LGDT.Limit:Base <- imm16:24/32
+ * imm16&32 means an memory address with a data pair
  */
 
 make_helper(concat(lgdt_, SUFFIX))
 {
-	uint16_t limit = instr_fetch(eip + 2, 2);
-	uint32_t base = instr_fetch(eip + 4, 4);
-	
+	ModR_M m;
+	m.val = instr_fetch(eip + 2, 1);
+	test(m.reg == 2, "wrong reg domain");
+	test(m.mod == 3, "wrong mod domain, expected addressing?");
+	swaddr_t addr;
+	int len = read_ModR_M(eip + 2, &addr);
+	uint16_t limit = swaddr_read(addr, 2);
+	uint32_t base = swaddr_read(addr + 2, 4);
 	cpu.gdtr.limit = limit;
 #if DATA_BYTE == 2
 	cpu.gdtr.base = base & 0xffffff;
@@ -25,6 +32,6 @@ make_helper(concat(lgdt_, SUFFIX))
 	cpu.gdtr.base = base;
 #endif
 
-	return 1 + 1 + 2 + 4;
+	return 1 + 1 + len;
 }
 #include "exec/template-end.h"
