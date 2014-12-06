@@ -31,7 +31,7 @@ make_helper(concat(lgdt_, SUFFIX))
 #else
 	cpu.gdtr.base = base;
 #endif
-
+	print_asm("lgdt" str(SUFFIX) " %x", addr);
 	return 1 + 1 + len;
 }
 #include "exec/template-end.h"
