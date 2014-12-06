@@ -20,7 +20,7 @@ make_helper(concat(lgdt_, SUFFIX))
 	ModR_M m;
 	m.val = instr_fetch(eip + 2, 1);
 	test(m.reg == 2, "wrong reg domain");
-	test(m.mod == 3, "wrong mod domain, expected addressing?");
+	test(m.mod != 3, "wrong mod domain, expected addressing?");
 	swaddr_t addr;
 	int len = read_ModR_M(eip + 2, &addr);
 	uint16_t limit = swaddr_read(addr, 2);
