@@ -23,6 +23,7 @@ void restart() {
 	load_prog();
 	memcpy(hwa_to_va(LOADER_START), loader, loader_len);
 
+	/* General initialization */
 	cpu.eip = LOADER_START;
 	cpu.ebp = 0;
 	cpu.esp = 0x8000000;
@@ -31,9 +32,13 @@ void restart() {
 	cpu.ecx = 0;
 	cpu.edx = 0;
 
+	/* Segment initialization */
+	cpu.gdtr = 0;
+	cpu.cr0 = 0; // Set PE to 0
+
 	init_dram();
 
-	/* enable the breakpoint */
+	/* Enable the breakpoint */
 	bp_state = INIT;
 }
 
