@@ -45,7 +45,7 @@ typedef union {
 		/* segment registers */
 		uint16_t cs, ds, ss, es, fs, gs;
 		/* control registers */
-		uint32_t cr0;
+		uint32_t cr[1];
 		/* globle descriptor table register */
 		union {
 			struct {
@@ -72,5 +72,6 @@ enum { CF, CONSERVE_1_1, PF, CONSERVE_0_2, AF, CONSERV_0_3, ZF, SF, TF, IF, DF, 
 extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];
+extern const char* crs[];
 
 #endif

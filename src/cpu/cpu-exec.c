@@ -35,7 +35,7 @@ void restart() {
 	/* Segment initialization */
 	cpu.gdtr.limit = 0;
 	cpu.gdtr.base = 0;
-	cpu.cr0 = 0; // Set PE to 0
+	cpu.cr[0] = 0; // Set PE to 0
 
 	init_dram();
 
