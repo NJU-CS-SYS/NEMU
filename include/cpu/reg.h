@@ -11,11 +11,6 @@
  * For more details about the GPR encoding scheme, see i386 manual.
  */
 
-/*
- * What is GPR? GPR is the general-purpose registers,
- * which i386 manual refers as general registers.
- */
-
 typedef union {
 	union {
 		uint32_t _32;
@@ -28,10 +23,6 @@ typedef union {
 	 * See i386 manual for more details.
 	 */
 
-	/*
-	 * What the hell can I define a uncompleted struct type 
-	 * without type name and even any var name!?
-	 */
 	struct {
 		uint32_t eax, ecx, edx, ebx, esp, ebp, esi, edi;
 		swaddr_t eip;
@@ -51,6 +42,7 @@ typedef union {
 		 * 0x 00 01 00 00, RF, Resume Flag
 		 * 0x 00 02 00 00, VM, Virtual 8086 Mode
 		 */
+		uint16_t cs, ds, ss, es, fs, gs;
 	};
 } CPU_state;
 
