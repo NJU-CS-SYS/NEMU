@@ -21,4 +21,7 @@ all_helper(movs_b2r);
 all_helper(movs_w2r);
 all_helper(movs_m2m);
 
+make_helper(mov_CR2r);
+make_helper(mov_r2CR);
+
 #endif
