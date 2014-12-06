@@ -1,8 +1,8 @@
 #include "exec/helper.h"
 #include "cpu/modrm.h"
 
-#define OPCODE f0_01
-#include "group-template.h"
+#define OPCODE 0f_01
+#include "0f-group-template.h"
 #undef OPCODE
 
 #define OPCODE 81

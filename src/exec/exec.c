@@ -77,7 +77,7 @@ helper_fun opcode_table [256] = {
 };
 
 helper_fun opcode_table_2 [256] = {
-/* 0x00 */	inv, group_f0_01, inv, inv,
+/* 0x00 */	inv, group_0f_01, inv, inv,
 /* 0x04 */	inv, inv, inv, inv, 
 /* 0x08 */	inv, inv, inv, inv, 
 /* 0x0c */	inv, inv, inv, inv, 
@@ -143,7 +143,7 @@ helper_fun opcode_table_2 [256] = {
 /* 0xfc */	inv, inv, inv, inv
 };
 
-helper_fun group_table_f0_01[8] = {
+helper_fun group_table_0f_01[8] = {
 	inv, inv, lgdt_v, inv,
 	inv, inv, inv, inv
 };
