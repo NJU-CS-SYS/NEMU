@@ -4,7 +4,7 @@
 
 int Sreg;
 
-lnaddr_t segment_translate(swaddr_t addr, size_t len)
+lnaddr_t segment_translate(swaddr_t addr)
 {
 	test(PE, "Unexpected real mode");
 	hwaddr_t gdt_addr = cpu.gdtr.base;

@@ -34,7 +34,7 @@ uint32_t swaddr_read(swaddr_t addr, size_t len)
 {
 	assert(len == 1 || len == 2 || len == 4);
 	if (PE) {
-		addr = segment_translate(addr, len);
+		addr = segment_translate(addr);
 	}
 	return lnaddr_read(addr, len);
 }
@@ -42,6 +42,9 @@ uint32_t swaddr_read(swaddr_t addr, size_t len)
 void swaddr_write(swaddr_t addr, size_t len, uint32_t data) 
 {
 	assert(len == 1 || len == 2 || len == 4);
+	if (PE) {
+		addr = segment_translate(addr);
+	}
 	lnaddr_write(addr, len, data);
 }
 
@@ -56,7 +59,7 @@ uint32_t instr_fetch(swaddr_t addr, size_t len)
 	assert(len == 1 || len == 2 || len == 4);
 	if (PE) {
 		Sreg = 1;
-		addr = segment_translate(addr, len);
+		addr = segment_translate(addr);
 	}
 	return hwaddr_read_instr(addr, len);
 }

@@ -19,7 +19,7 @@ typedef struct SegmentDescriptor {
 	uint32_t base_31_24          : 8;
 } SegDesc;
 
-lnaddr_t segment_translate(swaddr_t addr, size_t len);
+lnaddr_t segment_translate(swaddr_t addr);
 hwaddr_t hwaddr_read(swaddr_t addr, size_t len);
 
 extern int Sreg;
