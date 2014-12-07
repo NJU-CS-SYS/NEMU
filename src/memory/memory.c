@@ -51,7 +51,7 @@ static uint32_t hwaddr_read_instr(hwaddr_t addr, size_t len) {
 
 uint32_t instr_fetch(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
-	Sreg = 0;
+	Sreg = 1;
 	segment_translate(addr, len);
 	return hwaddr_read_instr(addr, len);
 }
