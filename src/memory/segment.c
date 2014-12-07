@@ -10,11 +10,11 @@ lnaddr_t segment_translate(swaddr_t addr, size_t len)
 	uint16_t index = selector >> 3;
 	SegDesc descriptor;
 	uint32_t temp[2];
-	temp[0] = hwaddr_read(gdt_addr + index, 4);
-	temp[1] = hwaddr_read(gdt_addr + index + 4, 4);
+	temp[1] = hwaddr_read(gdt_addr + index, 4);
+	temp[0] = hwaddr_read(gdt_addr + index + 4, 4);
 	memcpy(&descriptor, temp, sizeof(SegDesc));
 	
 	lnaddr_t lnaddr = descriptor.base_31_24 << 24 | descriptor.base_23_16 << 16 | descriptor.base_15_0;
-	Log("swaddr = %8x, lnaddr = %8x", addr, lnaddr);
+	Log("swaddr = %08x, lnaddr = %08x", addr, lnaddr);
 	return lnaddr;
 }
