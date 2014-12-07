@@ -13,5 +13,8 @@ lnaddr_t segment_translate(swaddr_t addr, size_t len)
 	temp[0] = hwaddr_read(gdt_addr + index, 4);
 	temp[1] = hwaddr_read(gdt_addr + index + 4, 4);
 	memcpy(&descriptor, temp, sizeof(SegDesc));
-	return 0;
+	
+	lnaddr_t lnaddr = descriptor.base_31_24 << 24 | descriptor.base_23_16 << 16 | descriptor.base_15_0;
+	Log("swaddr = %8x, lnaddr = %8x", addr, lnaddr);
+	return lnaddr;
 }

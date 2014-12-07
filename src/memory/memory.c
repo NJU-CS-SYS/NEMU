@@ -1,5 +1,5 @@
 #include "common.h"
-
+#include "segment.h"
 uint32_t cache_read(swaddr_t addr, size_t len);
 uint32_t cache_write(swaddr_t addr, size_t len, uint32_t data);
 uint32_t L1_print(swaddr_t addr);
@@ -51,5 +51,7 @@ static uint32_t hwaddr_read_instr(hwaddr_t addr, size_t len) {
 
 uint32_t instr_fetch(swaddr_t addr, size_t len) {
 	assert(len == 1 || len == 2 || len == 4);
+	Sreg = 0;
+	segment_translate(addr, len);
 	return hwaddr_read_instr(addr, len);
 }
