@@ -76,6 +76,7 @@ enum { CF, CONSERVE_1_1, PF, CONSERVE_0_2, AF, CONSERV_0_3, ZF, SF, TF, IF, DF, 
 #define FLAG_VAL(index) ((cpu.eflags & (0x1 << index)) == (0x1 << index))
 #define FLAG_CHG(index, val) (cpu.eflags = (val) ? (cpu.eflags | (0x1 << index)) : (cpu.eflags & (~(0x1 << index))))
 
+#define PE ((cpu.cr[0] & 0x1) == 0x1)
 extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];

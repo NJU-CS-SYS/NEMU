@@ -3,8 +3,10 @@
 #include "cpu/reg.h"
 
 int Sreg;
+
 lnaddr_t segment_translate(swaddr_t addr, size_t len)
 {
+	test(PE, "Unexpected real mode");
 	hwaddr_t gdt_addr = cpu.gdtr.base;
 	uint16_t selector = SEG(Sreg);
 	uint16_t index = selector >> 3;
@@ -15,7 +17,5 @@ lnaddr_t segment_translate(swaddr_t addr, size_t len)
 	memcpy(&descriptor, temp, sizeof(SegDesc));
 	
 	lnaddr_t base = descriptor.base_31_24 << 24 | descriptor.base_23_16 << 16 | descriptor.base_15_0;
-	Log("gdt_addr = %08x, cs = %08x", gdt_addr, selector);
-	Log("swaddr = %08x, lnaddr = %08x, data = %02x", addr, base + addr, hwaddr_read(base + addr, 1));
 	return base + addr;
 }
