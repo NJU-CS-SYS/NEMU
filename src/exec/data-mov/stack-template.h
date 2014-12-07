@@ -1,6 +1,7 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
+#include "cpu/segment.h"
 
 /* this head file deals with instructions
  * such as push and pop which operate the stack,

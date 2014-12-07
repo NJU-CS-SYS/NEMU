@@ -1,6 +1,5 @@
 #ifndef __MACRO_H__
 #define __MACRO_H__
-
 /* #x => "x" */
 #define str_temp(x) #x
 #define str(x) str_temp(x)
@@ -21,17 +20,24 @@
 	(!MSB(sub) && !MSB(past_sub) && MSB(result)) ||\
 	(MSB(sub) && MSB(past_sub) && !MSB(result))
 
-//FIXME I didn't take this macro seriously
+//FIXME this may be wrong
 #define ADJUST(sub, past_sub) \
 	(((uint32_t)past_sub & 0xf) - ((uint32_t)sub & 0xf) < 0) \
 	|| (((uint32_t)past_sub & 0xf) + ((uint32_t)sub & 0xf) > 0)
 
 #define PUSH(src_data)\
-MEM_W( REG(R_ESP) - DATA_BYTE, src_data );\
-REG(R_ESP) -= DATA_BYTE
+	do{\
+		Sreg = SS;\
+		MEM_W( REG(R_ESP) - DATA_BYTE, src_data );\
+		REG(R_ESP) -= DATA_BYTE;\
+	}while(0);
+
 
 #define POP(x)\
-x = MEM_R(concat(reg_, SUFFIX)(R_ESP));\
-concat(reg_, SUFFIX)(R_ESP) += DATA_BYTE
+	do{\
+		Sreg = DS;\
+		x = MEM_R(concat(reg_, SUFFIX)(R_ESP));\
+		concat(reg_, SUFFIX)(R_ESP) += DATA_BYTE;\
+	}while(0);
 
 #endif
