@@ -2,6 +2,10 @@
 #define __SEGMENT_H__
 #include "common.h"
 
+#define ES 0
+#define CS 1
+#define SS 2
+#define DS 3
 /* the 64bit segment descriptor */
 typedef struct SegmentDescriptor {
 	uint32_t limit_15_0          : 16;

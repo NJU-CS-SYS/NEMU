@@ -1,5 +1,5 @@
 #include "common.h"
-#include "segment.h"
+#include "cpu/segment.h"
 #include "cpu/reg.h"
 
 int Sreg;

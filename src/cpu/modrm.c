@@ -4,6 +4,8 @@
 
 #include "nemu.h"
 
+#include "cpu/segment.h"
+
 char ModR_M_asm[MODRM_ASM_BUF_SIZE];
 #define print_ModR_M_asm(...) \
 	assert(snprintf(ModR_M_asm, MODRM_ASM_BUF_SIZE, __VA_ARGS__) < MODRM_ASM_BUF_SIZE )
@@ -39,8 +41,8 @@ int read_ModR_M(swaddr_t eip, swaddr_t *addr) {
 	}
 
 	if(m.mod == 0) {
-		if(base_reg == R_EBP) { base_reg = -1; }
-		else { disp_size = 0; }
+		if(base_reg == R_EBP) { base_reg = -1; Sreg = SS; }
+		else { disp_size = 0;  Sreg = DS; }
 	}
 	else if(m.mod == 1) { disp_size = 1; }
 
