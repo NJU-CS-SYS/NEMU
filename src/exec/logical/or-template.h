@@ -41,7 +41,7 @@ make_helper(concat(or_i82rm_, SUFFIX)) {
 	if (addr) MEM_W(addr, result);
 	else REG(m.R_M) = result;
 Log("result = %x", result);
-
+	Log("eax = %x", cpu.eax);
 	return len;
 } 
 
@@ -52,9 +52,7 @@ make_helper(concat(or_i2r_, SUFFIX)) {
 
 	OR(src, dest, result);
 
-	Log("result = %x", result);
 	REG(R_EAX) = result;
-	Log("eax = %x", cpu.eax);
 	len = 1 + DATA_BYTE;
 	print_asm("or" str(SUFFIX) " $0x%x,%%%s", src,REG_NAME(R_EAX));
 	return len;
