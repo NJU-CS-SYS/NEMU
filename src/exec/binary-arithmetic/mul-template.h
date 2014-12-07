@@ -77,7 +77,6 @@
 }while(0)
 
 make_helper(concat(mul_rm2r_, SUFFIX)) {
-	Log("mul rm 2 r");
 	uint64_t src, dst, rst;
 	int len = 1;
 	ModR_M m;
@@ -87,7 +86,7 @@ make_helper(concat(mul_rm2r_, SUFFIX)) {
 	MUL_FLAG;
 	MUL_RST(rst);
 	LOG;
-	return len;
+	return len + 1;
 }
 
 make_helper(concat(imul_rm2imp_, SUFFIX)) {
