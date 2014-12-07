@@ -34,6 +34,7 @@ uint32_t swaddr_read(swaddr_t addr, size_t len)
 {
 	assert(len == 1 || len == 2 || len == 4);
 	if (PE) {
+		Log("hit");
 		addr = segment_translate(addr);
 	}
 	return lnaddr_read(addr, len);
