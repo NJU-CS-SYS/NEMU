@@ -43,7 +43,12 @@ typedef union {
 		 * 0x 00 02 00 00, VM, Virtual 8086 Mode
 		 */
 		/* segment registers */
-		uint16_t cs, ds, ss, es, fs, gs;
+		union {
+			struct {
+				uint16_t es, cs, ss, ds;
+			};
+			uint16_t seg[4];
+		};
 		/* control registers */
 		uint32_t cr[1];
 		/* globle descriptor table register */
@@ -66,6 +71,8 @@ enum { CF, CONSERVE_1_1, PF, CONSERVE_0_2, AF, CONSERV_0_3, ZF, SF, TF, IF, DF, 
 #define reg_l(index) (cpu.gpr[index]._32)
 #define reg_w(index) (cpu.gpr[index]._16)
 #define reg_b(index) (cpu.gpr[index & 0x3]._8[index >> 2])
+#define SEG_NAME(index) (segs[index])
+#define SEG(index) (cpu.seg[index])
 #define FLAG_VAL(index) ((cpu.eflags & (0x1 << index)) == (0x1 << index))
 #define FLAG_CHG(index, val) (cpu.eflags = (val) ? (cpu.eflags | (0x1 << index)) : (cpu.eflags & (~(0x1 << index))))
 
@@ -73,5 +80,6 @@ extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];
 extern const char* crs[];
+extern const char* segs[];
 
 #endif

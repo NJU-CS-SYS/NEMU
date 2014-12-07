@@ -192,7 +192,7 @@ make_helper(mov_CR2r)
 {
 	ModR_M m;
 	m.val = instr_fetch(eip + 2, 1);
-	REG(m.R_M) = CR(m.reg);
+	CR(m.R_M) = REG(m.reg);
 	print_asm("mov %s,%s", CR_NAME(m.R_M), REG_NAME(m.reg));
 	return 3;
 }
@@ -204,6 +204,16 @@ make_helper(mov_r2CR)
 	REG(m.reg) = CR(m.R_M);
 	print_asm("mov %s,%s", REG_NAME(m.reg), CR_NAME(m.R_M));
 	return 3;
+}
+
+make_helper(mov_seg)
+{
+	ModR_M m;
+	m.val = instr_fetch(eip + 1, 1);
+	test(m.mod == 3, "wrong");
+	SEG(m.R_M) = REG(m.reg);
+	print_asm("mov %s,%s", REG_NAME(m.reg), SEG_NAME(m.R_M));
+	return 1 + 1;
 }
 #endif
 #include "exec/template-end.h"
