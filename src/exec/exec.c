@@ -45,7 +45,7 @@ helper_fun opcode_table [256] = {
 /* 0x80 */	group_80, group_81, nemu_trap, group_83, 
 /* 0x84 */	test_r_rm_b, test_r_rm_v, inv, inv, 
 /* 0x88 */	mov_r2rm_b, mov_r2rm_v, mov_rm2r_b, mov_rm2r_v,
-/* 0x8c */	inv, lea_v, inv, group_8f, 
+/* 0x8c */	inv, lea_v, mov_r2seg, group_8f, 
 /* 0x90 */	nop, inv, inv, inv,
 /* 0x94 */	inv, inv, inv, inv,
 /* 0x98 */	inv, inv, inv, inv, 

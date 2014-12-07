@@ -206,7 +206,7 @@ make_helper(mov_r2CR)
 	return 3;
 }
 
-make_helper(mov_seg)
+make_helper(mov_r2seg)
 {
 	ModR_M m;
 	m.val = instr_fetch(eip + 1, 1);

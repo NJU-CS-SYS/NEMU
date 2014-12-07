@@ -23,5 +23,6 @@ all_helper(movs_m2m);
 
 make_helper(mov_CR2r);
 make_helper(mov_r2CR);
+make_helper(mov_r2seg);
 
 #endif
