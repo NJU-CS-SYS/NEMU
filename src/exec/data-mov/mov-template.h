@@ -211,8 +211,8 @@ make_helper(mov_r2seg)
 	ModR_M m;
 	m.val = instr_fetch(eip + 1, 1);
 	test(m.mod == 3, "wrong");
-	SEG(m.R_M) = REG(m.reg);
-	print_asm("mov %s,%s", REG_NAME(m.reg), SEG_NAME(m.R_M));
+	SEG(m.reg) = REG(m.R_M);
+	print_asm("mov %s,%s", REG_NAME(m.R_M), SEG_NAME(m.reg));
 	return 1 + 1;
 }
 #endif
