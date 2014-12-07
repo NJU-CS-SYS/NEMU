@@ -6,7 +6,6 @@ int Sreg;
 
 lnaddr_t segment_translate(swaddr_t addr)
 {
-	Log("Segment Translation");
 	test(PE, "Unexpected real mode");
 	hwaddr_t gdt_addr = cpu.gdtr.base;
 	uint16_t selector = SEG(Sreg);
