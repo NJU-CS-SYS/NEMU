@@ -3,6 +3,7 @@
 
 #include "all-instr.h"
 #include "group/group.h"
+#include "prefix/seg-override.h"
 make_helper(nop);
 
 typedef int (*helper_fun)(swaddr_t);
@@ -21,7 +22,7 @@ helper_fun opcode_table [256] = {
 /* 0x20 */	inv, inv, inv, inv, 
 /* 0x24 */	and_i2r_b, and_i2r_v, inv, inv,
 /* 0x28 */	sub_r2rm_b, sub_r2rm_v, sub_rm2r_b, sub_rm2r_v, 
-/* 0x2c */	sub_i2r_b, sub_i2r_v, sub_i2r_v, inv, 
+/* 0x2c */	sub_i2r_b, sub_i2r_v, cs_override, inv, 
 /* 0x30 */	xor_r2rm_b, xor_r2rm_v, xor_rm2r_b, xor_rm2r_v, 
 /* 0x34 */	xor_i2r_b, xor_i2r_v, inv, inv,
 /* 0x38 */	cmp_r2rm_b, cmp_r2rm_v, cmp_rm2r_b, cmp_rm2r_v, 
