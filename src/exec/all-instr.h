@@ -13,3 +13,5 @@
 #include "misc/ldt.h"
 
 #include "flag/flag.h"
+
+#include "string/stos.h"
