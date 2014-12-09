@@ -43,7 +43,6 @@ typedef union CR3 {
 	uint32_t val;
 } CR3;
 
-
 typedef union {
 	union {
 		uint32_t _32;
