@@ -10,6 +10,39 @@
  * Hint: Use 'union'.
  * For more details about the GPR encoding scheme, see i386 manual.
  */
+/* the Control Register 0 */
+typedef union CR0 {
+	struct {
+		uint32_t protect_enable      : 1;
+		uint32_t monitor_coprocessor : 1;
+		uint32_t emulation           : 1;
+		uint32_t task_switched       : 1;
+		uint32_t extension_type      : 1;
+		uint32_t numeric_error       : 1;
+		uint32_t pad0                : 10;
+		uint32_t write_protect       : 1; 
+		uint32_t pad1                : 1; 
+		uint32_t alignment_mask      : 1;
+		uint32_t pad2                : 10;
+		uint32_t no_write_through    : 1;
+		uint32_t cache_disable       : 1;
+		uint32_t paging              : 1;
+	};
+	uint32_t val;
+} CR0;
+
+/* the Control Register 3 (physical address of page directory) */
+typedef union CR3 {
+	struct {
+		uint32_t pad0                : 3;
+		uint32_t page_write_through  : 1;
+		uint32_t page_cache_disable  : 1;
+		uint32_t pad1                : 7;
+		uint32_t page_directory_base : 20;
+	};
+	uint32_t val;
+} CR3;
+
 
 typedef union {
 	union {
@@ -50,7 +83,13 @@ typedef union {
 			uint16_t seg[4];
 		};
 		/* control registers */
-		uint32_t cr[1];
+		union {
+			struct {
+				CR0 cr0;
+				CR3 cr3;
+			};
+			uint32_t cr[2];
+		};
 		/* globle descriptor table register */
 		union {
 			struct {
@@ -76,7 +115,7 @@ enum { CF, CONSERVE_1_1, PF, CONSERVE_0_2, AF, CONSERV_0_3, ZF, SF, TF, IF, DF, 
 #define FLAG_VAL(index) ((cpu.eflags & (0x1 << index)) == (0x1 << index))
 #define FLAG_CHG(index, val) (cpu.eflags = (val) ? (cpu.eflags | (0x1 << index)) : (cpu.eflags & (~(0x1 << index))))
 
-#define PE ((cpu.cr[0] & 0x1) == 0x1)
+#define PE (cpu.cr0.protect_enable)
 extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];
