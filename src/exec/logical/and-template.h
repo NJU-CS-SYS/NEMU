@@ -25,6 +25,7 @@ make_helper(concat(and_i2r_, SUFFIX)) {
 	REG(R_EAX) = result;
 	print_asm("and" str(SUFFIX) " $%#x,%s", src, REG_NAME(R_EAX));
 	test(len == 2, "len error");
+	Log("len = %x", len);
 	return len;
 }
 
