@@ -54,11 +54,5 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	dir_entry.val = hwaddr_read(dir_addr + lnaddr.dir, 4);
 	page_entry.val = hwaddr_read((dir_entry.page_frame << 12) + lnaddr.page, 4);
 	hwaddr_t hwaddr = (page_entry.page_frame << 12) + lnaddr.offset;
-	Log("dir_addr %#x", dir_addr);
-	Log("page_frame %x", dir_entry.page_frame);
-	Log("page %x", page_entry.page_frame);
-	Log("lnaddr %x", lnaddr.val);
-	Log("hwaddr %x", hwaddr);
-	test(0, "hit");
 	return hwaddr;
 }
