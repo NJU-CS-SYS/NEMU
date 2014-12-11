@@ -10,7 +10,6 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len);
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) 
 {
 	assert(len == 1 || len == 2 || len == 4);
-	if (cpu.cr0.paging) test(0,"paging");
 	return cache_read(addr, len);
 }
 
