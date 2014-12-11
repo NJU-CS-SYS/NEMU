@@ -193,7 +193,7 @@ make_helper(mov_CR2r)
 {
 	ModR_M m;
 	m.val = instr_fetch(eip + 2, 1);
-	Log("cr0 %x, reg %x", cpu.cr0.val, REG(m.reg));
+	Log("rm %x, reg %x", m.R_M, m.reg);
 	REG(m.reg) = CR(m.R_M);
 	print_asm("mov %s,%s", CR_NAME(m.R_M), REG_NAME(m.reg));
 	return 3;
@@ -203,7 +203,7 @@ make_helper(mov_r2CR)
 {
 	ModR_M m;
 	m.val = instr_fetch(eip + 2, 1);
-	Log("cr0 %x, reg %x", cpu.cr0.val, REG(m.reg));
+	Log("rm %x, reg %x", m.R_M, m.reg);
 	CR(m.R_M) = REG(m.reg);
 	print_asm("mov %s,%s", REG_NAME(m.reg), CR_NAME(m.R_M));
 	return 3;
