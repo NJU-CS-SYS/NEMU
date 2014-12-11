@@ -2,6 +2,7 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 #include "../template.h"
+#include "ui/ui.h"
 
 #define SHIFT_PROCESS(dest, times) \
 do {\
@@ -45,6 +46,7 @@ make_shift(i8) {
 	result = dest;
 	TEMP_RESULT2RM(result);
 	Log("edx(after) %x", cpu.edx);
+	nemu_state = INT;
 	return len;
 } 
 
