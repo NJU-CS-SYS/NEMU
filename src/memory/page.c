@@ -57,6 +57,5 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	Log("dir_addr %#x", dir_addr);
 	Log("page_frame %x", dir_entry.page_frame);
 	Log("hwaddr %x", hwaddr);
-	test(0,"hit");
-	return 0;
+	return hwaddr;
 }
