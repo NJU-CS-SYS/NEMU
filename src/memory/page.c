@@ -52,8 +52,8 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 
 	lnaddr.val = addr;
 	hwaddr_t dir_addr = cpu.cr3.page_directory_base << 12;
-	dir_entry.val = hwaddr_read(dir_addr + lnaddr.dir, 4);
-	page_entry.val = hwaddr_read((dir_entry.page_frame << 12) + lnaddr.page, 4);
+	dir_entry.val = hwaddr_read(dir_addr + 4 * lnaddr.dir, 4);
+	page_entry.val = hwaddr_read((dir_entry.page_frame << 12) + 4 * lnaddr.page, 4);
 	hwaddr_t hwaddr = (page_entry.page_frame << 12) + lnaddr.offset;
 	Log("dir %x page table %x page %x", dir_addr, dir_entry.page_frame, page_entry.page_frame);
 	Log("lnaddr dir %x, page %x, offset %x", lnaddr.dir, lnaddr.page, lnaddr.offset);
