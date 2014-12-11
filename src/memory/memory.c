@@ -25,6 +25,7 @@ static uint32_t lnaddr_read(lnaddr_t addr, size_t len)
 	if (cpu.cr0.paging) {
 		Log("eax %x",cpu.eax);
 		Log("pe %02x", cpu.cr0.protect_enable);
+		Log("cr0 %x", cpu.cr0.val);
 		test(0,"paging");
 	}
 	if (cpu.cr0.protect_enable && cpu.cr0.paging) {
