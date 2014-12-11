@@ -46,7 +46,6 @@ make_shift(i8) {
 	result = dest;
 	TEMP_RESULT2RM(result);
 	Log("edx(after) %x", cpu.edx);
-	nemu_state = INT;
 	return len;
 } 
 
