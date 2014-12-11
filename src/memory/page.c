@@ -38,9 +38,9 @@ typedef union PageTableEntry {
 
 typedef union __Lnaddr {
 	struct {
-		uint32_t dir : 10;
-		uint32_t page : 10;
 		uint32_t offset : 12;
+		uint32_t page : 10;
+		uint32_t dir : 10;
 	};
 	uint32_t val;
 } Lnaddr;
