@@ -62,11 +62,13 @@ make_helper(concat(or_i2rm_, SUFFIX)) {
 	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	test(m.reg == 1, "wrong dispatching in 83, or");
+	Log("edx(before or) %x", cpu.edx);
 	TEMP_I2RM(or, DATA_BYTE);
 
 	OR(src, dest, result);
 
 	TEMP_RESULT2RM(result);
+	Log("edx(after or) %x", cpu.edx);
 	return len;
 }
 
