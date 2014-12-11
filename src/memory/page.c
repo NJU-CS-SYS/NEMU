@@ -1,6 +1,7 @@
 #include "common.h"
 #include "cpu/reg.h"
 
+uint32_t hwaddr_read(hwaddr_t addr, size_t len);
 /* the 32bit Page Directory(first level page table) data structure */
 typedef union PageDirectoryEntry {
 	struct {
@@ -34,10 +35,24 @@ typedef union PageTableEntry {
 	};
 	uint32_t val;
 } PTE;
+
+typedef union __Lnaddr {
+	struct {
+		uint32_t dir : 10;
+		uint32_t page : 10;
+		uint32_t offset : 12;
+	};
+	uint32_t val;
+} Lnaddr;
 hwaddr_t page_translate(lnaddr_t addr, size_t len)
 {
+	Lnaddr lnaddr;
+	lnaddr.val = addr;
 	hwaddr_t dir_addr = cpu.cr3.page_directory_base << 12;
+	PDE dir_entry;
+	dir_entry.val = hwaddr_read(dir_addr + lnaddr.dir, 4);
 	Log("dir_addr %#x", dir_addr);
+	Log("page_frame %x", dir_entry.page_frame);
 	test(0,"hit");
 	return 0;
 }
