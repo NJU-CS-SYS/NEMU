@@ -59,6 +59,5 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	Log("lnaddr dir %x, page %x, offset %x", lnaddr.dir, lnaddr.page, lnaddr.offset);
 	Log("bit %02x", hwaddr_read(hwaddr, 1));
 	nemu_state = INT;
-	test(0,"test");
 	return hwaddr;
 }
