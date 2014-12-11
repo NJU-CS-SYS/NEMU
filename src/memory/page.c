@@ -1,6 +1,6 @@
 #include "common.h"
 #include "cpu/reg.h"
-
+#include "ui/ui.h"
 uint32_t hwaddr_read(hwaddr_t addr, size_t len);
 /* the 32bit Page Directory(first level page table) data structure */
 typedef union PageDirectoryEntry {
@@ -58,6 +58,7 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	Log("dir %x page table %x page %x", dir_addr, dir_entry.page_frame, page_entry.page_frame);
 	Log("lnaddr dir %x, page %x, offset %x", lnaddr.dir, lnaddr.page, lnaddr.offset);
 	Log("bit %02x", hwaddr_read(hwaddr, 1));
+	nemu_state = INT;
 	test(0,"test");
 	return hwaddr;
 }
