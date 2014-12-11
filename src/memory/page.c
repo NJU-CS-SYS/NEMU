@@ -38,9 +38,9 @@ typedef union PageTableEntry {
 
 typedef union __Lnaddr {
 	struct {
-		uint32_t dir : 10;
-		uint32_t page : 10;
 		uint32_t offset : 12;
+		uint32_t page : 10;
+		uint32_t dir : 10;
 	};
 	uint32_t val;
 } Lnaddr;
@@ -50,12 +50,14 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	PDE dir_entry;
 	PTE page_entry;
 	lnaddr.val = addr;
-	hwaddr_t dir_addr = cpu.cr3.page_directory_base << 10;
+	hwaddr_t dir_addr = cpu.cr3.page_directory_base << 12;
 	dir_entry.val = hwaddr_read(dir_addr + lnaddr.dir, 4);
-	page_entry.val = hwaddr_read((dir_entry.page_frame << 10) + lnaddr.page, 4);
+	page_entry.val = hwaddr_read((dir_entry.page_frame << 12) + lnaddr.page, 4);
 	hwaddr_t hwaddr = (page_entry.page_frame << 12) + lnaddr.offset;
 	Log("dir_addr %#x", dir_addr);
 	Log("page_frame %x", dir_entry.page_frame);
+	Log("page %x", page_entry.page_frame);
 	Log("hwaddr %x", hwaddr);
+	test(0, "hit");
 	return hwaddr;
 }
