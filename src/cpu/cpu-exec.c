@@ -104,6 +104,8 @@ void cpu_exec(volatile uint32_t n) {
 			case END:
 				free_all();
 				return;
+			case TEST_INT:
+				return;
 		}
 	}
 }

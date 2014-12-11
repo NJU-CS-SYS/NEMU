@@ -2,6 +2,7 @@
 #include "cpu/modrm.h"
 #include "exec/template-start.h"
 #include "../template.h"
+#include "ui/ui.h"
 
 #define OR_FLAG(result)\
 	do {\
@@ -35,13 +36,13 @@ make_helper(concat(or_i82rm_, SUFFIX)) {
 	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	TEMP_I2RM(or, 1);
-
-	Log("edx(before) %x", cpu.edx);
+	Log("or edx(before) %x", cpu.edx);
 	OR(src, dest, result);
 
 	if (addr) MEM_W(addr, result);
 	else REG(m.R_M) = result;
-	Log("edx(before) %x", cpu.edx);
+	Log("or edx(before) %x", cpu.edx);
+	nemu_state = TEST_INT;
 	return len;
 } 
 
