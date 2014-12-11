@@ -36,7 +36,7 @@ typedef union PageTableEntry {
 } PTE;
 hwaddr_t page_translate(lnaddr_t addr, size_t len)
 {
-	hwaddr_t dir_addr = cpu.cr3.page_directory_base;
+	hwaddr_t dir_addr = cpu.cr3.page_directory_base << 12;
 	Log("dir_addr %#x", dir_addr);
 	test(0,"hit");
 	return 0;
