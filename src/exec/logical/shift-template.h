@@ -37,12 +37,14 @@ do {\
 #define make_shift(mod) make_helper(concat(concat(s, concat(SIGN, concat(DIR, _##mod##_))), SUFFIX))
 #define shift_name concat(s, concat(SIGN, DIR))
 make_shift(i8) {
+	Log("edx(before) %x", cpu.edx);
 	TEMP_VALUES;
 	TEMP_MOD_RM;
 	TEMP_I2RM(shift_name, 1);
 	SHIFT_PROCESS(dest, src);
 	result = dest;
 	TEMP_RESULT2RM(result);
+	Log("edx(after) %x", cpu.edx);
 	return len;
 } 
 
