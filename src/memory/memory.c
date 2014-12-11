@@ -22,6 +22,11 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data)
 static uint32_t lnaddr_read(lnaddr_t addr, size_t len) 
 {
 	assert(len == 1 || len == 2 || len == 4);
+	if (cpu.cr0.paging) {
+		Log("eax %x",cpu.eax);
+		Log("pe %02x", cpu.cr0.protect_enable);
+		test(0,"paging");
+	}
 	if (cpu.cr0.protect_enable && cpu.cr0.paging) {
 		test(0,"in");
 		addr = page_translate(addr, len);
