@@ -38,9 +38,9 @@ typedef union PageTableEntry {
 
 typedef union __Lnaddr {
 	struct {
-		uint32_t offset : 12;
-		uint32_t page : 10;
 		uint32_t dir : 10;
+		uint32_t page : 10;
+		uint32_t offset : 12;
 	};
 	uint32_t val;
 } Lnaddr;
@@ -57,6 +57,7 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	Log("dir_addr %#x", dir_addr);
 	Log("page_frame %x", dir_entry.page_frame);
 	Log("page %x", page_entry.page_frame);
+	Log("lnaddr %x", lnaddr.val);
 	Log("hwaddr %x", hwaddr);
 	test(0, "hit");
 	return hwaddr;
