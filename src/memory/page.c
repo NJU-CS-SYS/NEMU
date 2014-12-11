@@ -49,6 +49,7 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	Lnaddr lnaddr;
 	PDE dir_entry;
 	PTE page_entry;
+
 	lnaddr.val = addr;
 	hwaddr_t dir_addr = cpu.cr3.page_directory_base << 12;
 	dir_entry.val = hwaddr_read(dir_addr + lnaddr.dir, 4);

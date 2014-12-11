@@ -63,6 +63,7 @@ make_helper(concat(leave_, SUFFIX)) {
 }
 
 make_helper(concat(ret_near_, SUFFIX)) {
+	Sreg = SS;
 #if DATA_BYTE == 2
 	DATA_TYPE ip;
 	POP(ip);
