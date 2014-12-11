@@ -48,11 +48,13 @@ make_helper(concat(or_i2r_, SUFFIX)) {
 	src = instr_fetch(eip + 1, DATA_BYTE);
 	dest = REG(R_EAX); // al, ax, eax
 
+	Log("eax(before) %x", cpu.eax);
 	OR(src, dest, result);
 
 	REG(R_EAX) = result;
 	len = 1 + DATA_BYTE;
 	print_asm("or" str(SUFFIX) " $0x%x,%%%s", src,REG_NAME(R_EAX));
+	Log("eax(after) %x", cpu.eax);
 	return len;
 }
 
