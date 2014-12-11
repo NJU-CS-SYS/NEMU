@@ -85,9 +85,11 @@ typedef union {
 		union {
 			struct {
 				CR0 cr0;
+				CR0 cr1;
+				CR0 cr2;
 				CR3 cr3;
 			};
-			uint32_t cr[2];
+			uint32_t cr[4];
 		};
 		/* globle descriptor table register */
 		union {
