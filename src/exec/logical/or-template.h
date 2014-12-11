@@ -36,13 +36,10 @@ make_helper(concat(or_i82rm_, SUFFIX)) {
 	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	TEMP_I2RM(or, 1);
-	Log("or edx(before) %x", cpu.edx);
 	OR(src, dest, result);
 
 	if (addr) MEM_W(addr, result);
 	else REG(m.R_M) = result;
-	Log("or edx(before) %x", cpu.edx);
-	nemu_state = TEST_INT;
 	return len;
 } 
 
@@ -51,13 +48,11 @@ make_helper(concat(or_i2r_, SUFFIX)) {
 	src = instr_fetch(eip + 1, DATA_BYTE);
 	dest = REG(R_EAX); // al, ax, eax
 
-	Log("eax(before) %x", cpu.eax);
 	OR(src, dest, result);
 
 	REG(R_EAX) = result;
 	len = 1 + DATA_BYTE;
 	print_asm("or" str(SUFFIX) " $0x%x,%%%s", src,REG_NAME(R_EAX));
-	Log("eax(after) %x", cpu.eax);
 	return len;
 }
 
@@ -65,13 +60,11 @@ make_helper(concat(or_i2rm_, SUFFIX)) {
 	TEMP_VALUES_S;
 	TEMP_MOD_RM;
 	test(m.reg == 1, "wrong dispatching in 83, or");
-	Log("edx(before or) %x", cpu.edx);
 	TEMP_I2RM(or, DATA_BYTE);
 
 	OR(src, dest, result);
 
 	TEMP_RESULT2RM(result);
-	Log("edx(after or) %x", cpu.edx);
 	return len;
 }
 
