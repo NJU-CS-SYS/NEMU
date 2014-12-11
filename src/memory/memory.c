@@ -3,6 +3,7 @@
 #include "cpu/reg.h"
 uint32_t cache_read(swaddr_t addr, size_t len);
 uint32_t cache_write(swaddr_t addr, size_t len, uint32_t data);
+hwaddr_t page_translate(lnaddr_t addr, size_t len);
 
 /* Memory accessing interfaces */
 
@@ -22,12 +23,18 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data)
 static uint32_t lnaddr_read(lnaddr_t addr, size_t len) 
 {
 	assert(len == 1 || len == 2 || len == 4);
+	if (cpu.cr0.protect_enable && cpu.cr0.paging) {
+		addr = page_translate(addr, len);
+	}
 	return hwaddr_read(addr, len);
 }
 
 static void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data)
 {
 	assert(len == 1 || len == 2 || len == 4);
+	if (cpu.cr0.protect_enable && cpu.cr0.paging) {
+		addr = page_translate(addr, len);
+	}
 	return hwaddr_write(addr, len, data);
 }
 

@@ -41,7 +41,7 @@
 typedef union PageDirectoryEntry {
 	struct {
 		uint32_t present             : 1;
-		uint32_t read_write          : 1; 
+		uint32_t read_write          : 1;
 		uint32_t user_supervisor     : 1;
 		uint32_t page_write_through  : 1;
 		uint32_t page_cache_disable  : 1;
