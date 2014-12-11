@@ -22,8 +22,8 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data)
 static uint32_t lnaddr_read(lnaddr_t addr, size_t len) 
 {
 	assert(len == 1 || len == 2 || len == 4);
-	if (cpu.cr0.paging) test(0,"paging");
 	if (cpu.cr0.protect_enable && cpu.cr0.paging) {
+		test(0,"in");
 		addr = page_translate(addr, len);
 	}
 	return hwaddr_read(addr, len);
@@ -32,8 +32,8 @@ static uint32_t lnaddr_read(lnaddr_t addr, size_t len)
 static void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data)
 {
 	assert(len == 1 || len == 2 || len == 4);
-	if (cpu.cr0.paging) test(0,"paging");
 	if (cpu.cr0.protect_enable && cpu.cr0.paging) {
+		test(0,"in");
 		addr = page_translate(addr, len);
 	}
 	return hwaddr_write(addr, len, data);
