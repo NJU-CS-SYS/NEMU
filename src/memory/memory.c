@@ -68,5 +68,7 @@ uint32_t instr_fetch(swaddr_t addr, size_t len)
 		Sreg = CS;
 		addr = segment_translate(addr);
 	}
+	if (cpu.cr0.protect_enable && cpu.cr0.paging)
+		addr = page_translate(addr, len);
 	return hwaddr_read_instr(addr, len);
 }
