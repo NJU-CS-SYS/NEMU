@@ -204,7 +204,7 @@ static uint32_t evaluate(int p, int q) {
 			case NUM:
 					  return atoi(tokens[p].str);
 			case HEX: 
-					  return strtol(tokens[p].str, NULL, 16);
+					  return strtoull(tokens[p].str, NULL, 16);
 			case REG:
 					  strcpy(temp, tokens[p].str);
 					  if (!strcmp(temp, "$eax")) return cpu.eax;

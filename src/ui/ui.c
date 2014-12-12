@@ -153,10 +153,7 @@ void cmd_x() {
 	char* _addr = strtok(NULL, "");
 	if((_num != NULL) && (_addr != NULL)) {
 		int num = atoi(_num);
-		//swaddr_t addr = calculate(_addr);
-		Log("_addr %s", _addr);
-		swaddr_t addr = strtoll(_addr, NULL, 16);
-		Log("addr %x", addr);
+		swaddr_t addr = calculate(_addr);
 		int i;
 		for(i = 0; i < num; i++){
 			int j;
