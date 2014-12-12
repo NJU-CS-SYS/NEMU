@@ -157,9 +157,13 @@ void cmd_x() {
 		int i;
 		for(i = 0; i < num; i++){
 			int j;
-			printf("%8x:   ", addr+i*8);
-			for(j = 0; j < 8; j++) {
-				printf("%02x", swaddr_read(addr+i*8+j, 1));
+			printf("%8x: ", addr+i*8);
+			for(j = 0; j < 4; j++) {
+				int k;
+				for (k = 0; k < 4; k ++) {
+					printf("%02x", swaddr_read(addr+i*8+j*4+k, 1));
+				}
+				printf(" ");
 			}
 			putchar('\n');
 		}
