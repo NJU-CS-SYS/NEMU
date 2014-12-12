@@ -60,7 +60,7 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	page_entry.val = hwaddr_read((dir_entry.page_frame << 12) + 4 * lnaddr.page, 4);
 	if (!page_entry.present) Test(0, "page fault: eip %#x, vaddr %#x", cpu.eip, addr);
 	hwaddr_t hwaddr = (page_entry.page_frame << 12) + lnaddr.offset;
-#if 1
+#if 0
 	Log("dir %x page table %x page %x", dir_addr, dir_entry.page_frame, page_entry.page_frame);
 	Log("lnaddr dir %x, page %x, offset %x", lnaddr.dir, lnaddr.page, lnaddr.offset);
 	Log("bit %02x", hwaddr_read(hwaddr, 1));
