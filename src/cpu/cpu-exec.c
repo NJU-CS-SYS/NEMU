@@ -82,8 +82,10 @@ void cpu_exec(volatile uint32_t n) {
 		cpu.eip += instr_len;
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
-			print_bin_instr(eip_temp, instr_len);
-			puts(assembly);
+			if ( !(0x100000 <= cpu.eip && 0x200000) ) {
+				print_bin_instr(eip_temp, instr_len);
+				puts(assembly);
+			}
 		}
 
 		if (wp_state == ON) {
