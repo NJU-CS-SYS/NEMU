@@ -98,7 +98,7 @@ make_helper(concat(movz_b2_, SUFFIX))
 	} else {
 		swaddr_t addr;
 		len += read_ModR_M(eip + 2, &addr);
-		src = MEM_R(addr); 
+		src = swaddr_read(addr, 1); 
 		
 		print_asm("movzb" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
     	}
@@ -121,7 +121,7 @@ make_helper(concat(movz_w2_, SUFFIX))
 	} else {
 		swaddr_t addr;
 		len += read_ModR_M(eip + 2, &addr);
-		src = MEM_R(addr);
+		src = swaddr_read(addr, 2);
 		
 		print_asm("movzw" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
   	}
