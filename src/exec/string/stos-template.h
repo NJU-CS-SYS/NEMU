@@ -8,9 +8,9 @@ make_helper(concat(stos_, SUFFIX)) // Store String Data
 {
 	Sreg = ES;
 	// TODO AddressSize variation
-	MEM_W(REG(R_EDI),REG(R_EAX));
-	if (FLAG_VAL(DF)) REG(R_EDI) -= DATA_BYTE;
-	else REG(R_EDI) += DATA_BYTE;
+	MEM_W(reg_w(R_DI),REG(R_EAX));
+	if (FLAG_VAL(DF)) reg_w(R_DI) -= DATA_BYTE;
+	else reg_w(R_DI) += DATA_BYTE;
 	print_asm("stos" str(SUFFIX));
 	return 1;
 }
