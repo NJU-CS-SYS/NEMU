@@ -72,7 +72,7 @@ void cpu_exec(volatile uint32_t n) {
 		}
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
-		if (cpu.eip == 0xc0100fb0) nemu_state = TEST_INT;
+		if (cpu.eip == 0xc0100547) nemu_state = TEST_INT;
 
 
 		/* restore the breakpoint on the byte */
