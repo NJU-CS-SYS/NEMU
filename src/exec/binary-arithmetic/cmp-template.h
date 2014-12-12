@@ -45,6 +45,7 @@ make_helper(concat(cmp_i2r_, SUFFIX)) {
 	len += DATA_BYTE;
 	dest = REG(R_EAX);
 	TEMP_SUB_I(src, dest, result);
+	print_asm("cmp" str(SUFFIX) " $%#x,%s", src, REG_NAME(R_EAX));
 	return len;
 }
 #include "exec/template-end.h"
