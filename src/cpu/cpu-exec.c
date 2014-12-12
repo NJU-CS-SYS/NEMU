@@ -6,6 +6,8 @@
 
 #define LOADER_START 0x100000
 
+int sig_test = 0;
+
 int exec(swaddr_t);
 void load_prog();
 void init_dram();
@@ -82,6 +84,10 @@ void cpu_exec(volatile uint32_t n) {
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
 			if (cpu.eip >= 0xc0101018) {
+				if (!sig_test) {
+					sig_test = 1;
+					nemu_state = TEST_INT;
+				}
 			print_bin_instr(eip_temp, instr_len);
 			puts(assembly);
 			}
