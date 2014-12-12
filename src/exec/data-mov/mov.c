@@ -41,6 +41,9 @@ make_helper(mov_moffs2a_v) {
 	return (suffix == 'l' ? mov_moffs2a_l(eip) : mov_moffs2a_w(eip));
 }
 
-v_helper(movz_b2);
+make_helper(movzbv)
+{
+	return (suffix == 'l' ? movzbl(eip) : movzbw(eip));
+}
 v_helper(movs_b2r);
 v_helper(movs_m2m);

@@ -15,6 +15,16 @@
 		} \
 	} while(0)
 
+#define Test(cond, ...) \
+	do { \
+		if(!(cond)) { \
+			fflush(stdout); \
+			fprintf(stderr, "\33[1;31m"); \
+			fprintf(stderr, __VA_ARGS__); \
+			fprintf(stderr, "\33[0m\n"); \
+			nemu_state = TEST_INT;\
+		} \
+	} while(0)
 extern int enable_debug;
 
 #define Log(format,...) \
