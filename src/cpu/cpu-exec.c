@@ -33,6 +33,7 @@ void restart() {
 	cpu.eax = 0;
 	cpu.ecx = 0;
 	cpu.edx = 0;
+	cpu.cr0.paging = 0;
 
 	/* Segment initialization */
 	cpu.gdtr.limit = 0;
@@ -71,6 +72,7 @@ void cpu_exec(volatile uint32_t n) {
 		}
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
+		if (cpu.eip == 0xc0100fb0) nemu_state = TEST_INT;
 
 
 		/* restore the breakpoint on the byte */
