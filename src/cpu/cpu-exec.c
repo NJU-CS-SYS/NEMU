@@ -83,7 +83,7 @@ void cpu_exec(volatile uint32_t n) {
 		cpu.eip += instr_len;
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
-			if (cpu.eip == 0xc01010b8 && !sig_test) {
+			if (cpu.eip == 0xc01010b8) {
 				nemu_state = TEST_INT;
 				sig_test = 1;
 			}
