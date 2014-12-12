@@ -56,7 +56,11 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	if (bound > 0xfffu) test(0,"override: bound %#x, offset %#x, len %d", bound, lnaddr.offset, len);
 	hwaddr_t dir_addr = cpu.cr3.page_directory_base << 12;
 	dir_entry.val = hwaddr_read(dir_addr + 4 * lnaddr.dir, 4);
+	if (!dir_entry.present)
+		test(0, "page fault");
 	page_entry.val = hwaddr_read((dir_entry.page_frame << 12) + 4 * lnaddr.page, 4);
+	if (!page_entry.present)
+		test(0, "page fault");
 	hwaddr_t hwaddr = (page_entry.page_frame << 12) + lnaddr.offset;
 #if 0
 	Log("dir %x page table %x page %x", dir_addr, dir_entry.page_frame, page_entry.page_frame);

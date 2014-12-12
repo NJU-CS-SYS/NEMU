@@ -69,6 +69,7 @@ void cpu_exec(volatile uint32_t n) {
 			enable_all_bp();
 			bp_state = NORMAL;
 		}
+	if (cpu.eip == 0x80480c0) nemu_state = TEST_INT;
 
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
