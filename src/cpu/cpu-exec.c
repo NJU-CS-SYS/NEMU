@@ -83,11 +83,11 @@ void cpu_exec(volatile uint32_t n) {
 		cpu.eip += instr_len;
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
-			if (cpu.eip >= 0xc0101018) {
-				if (!sig_test) {
-					sig_test = 1;
-					nemu_state = TEST_INT;
-				}
+			if (cpu.eip == 0xc0101018) {
+				nemu_state = TEST_INT;
+				sig_test = 1;
+			}
+			if (sig_test) {
 			print_bin_instr(eip_temp, instr_len);
 			puts(assembly);
 			}
