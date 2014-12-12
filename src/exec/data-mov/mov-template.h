@@ -85,58 +85,29 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
 	return 5;
 }
 
-/**************************************************************************************/
-
-#if DATA_BYTE == 1
-make_helper(movzbw) 
+make_helper(concat(movz_b2_, SUFFIX)) 
 {
-	// Note that read_ModR_M refer to SUFFIX !
 	uint8_t src;
 	int len = 2;
 	ModR_M m;
 	m.val = instr_fetch(eip + 2, 1);
 	if (m.mod == 3) { // reg
 		src = REG(m.R_M);
-		print_asm("movzbw %%%s,%%%s", regsb[m.R_M], regsw[m.reg]);
+		print_asm("movzb" str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));
 		len++;
 	} else {
 		swaddr_t addr;
 		len += read_ModR_M(eip + 2, &addr);
 		src = MEM_R(addr); 
 		
-		print_asm("movzbw %s,%%%s", ModR_M_asm, regsw[m.reg]);
+		print_asm("movzb" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
     	}
-	reg_w(m.reg) = src;
-	reg_w(m.reg) &= 0x000000ff;
+	REG(m.reg) = src;
+	REG(m.reg) &= 0x000000ff;
 	return len;
 }
 
-make_helper(movzbl) 
-{
-	// Note that read_ModR_M refer to SUFFIX !
-	uint8_t src;
-	int len = 2;
-	ModR_M m;
-	m.val = instr_fetch(eip + 2, 1);
-	if (m.mod == 3) { // reg
-		src = REG(m.R_M);
-		print_asm("movzbl %%%s,%%%s", regsb[m.R_M], regsl[m.reg]);
-		len++;
-	} else {
-		swaddr_t addr;
-		len += read_ModR_M(eip + 2, &addr);
-		src = MEM_R(addr); 
-		
-		print_asm("movzbl %s,%%%s", ModR_M_asm, regsl[m.reg]);
-    	}
-	reg_w(m.reg) = src;
-	reg_w(m.reg) &= 0x000000ff;
-	return len;
-}
-#endif
-
-#if DATA_BYTE == 2 
-make_helper(movzwl) 
+make_helper(concat(movz_w2_, SUFFIX)) 
 {
 	uint16_t src;
 	int len = 2;
@@ -146,19 +117,18 @@ make_helper(movzwl)
 		src = REG(m.R_M);
 		len++;
 
-		print_asm("movzw" str(SUFFIX) " %%%s,%%%s", regsw[m.R_M],regsl[m.reg]);
+		print_asm("movzw" str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M),REG_NAME(m.reg));
 	} else {
 		swaddr_t addr;
 		len += read_ModR_M(eip + 2, &addr);
 		src = MEM_R(addr);
 		
-		print_asm("movzw" str(SUFFIX) " %s,%%%s", ModR_M_asm, regsl[m.reg]);
+		print_asm("movzw" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
   	}
 	REG(m.reg) = src;
 	REG(m.reg) &= 0x0000ffff;
 	return len;
 }
-#endif
 
 make_helper(concat(movs_b2r_, SUFFIX)) {
 	DATA_TYPE_S src;
