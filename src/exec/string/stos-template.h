@@ -8,6 +8,7 @@ make_helper(concat(stos_, SUFFIX)) // Store String Data
 {
 	Sreg = ES;
 	// TODO AddressSize variation
+	Log("%%eax %#x, addr %#X", REG(R_EAX), reg_w(R_DI));
 	MEM_W(reg_w(R_DI),REG(R_EAX));
 	if (FLAG_VAL(DF)) reg_w(R_DI) -= DATA_BYTE;
 	else reg_w(R_DI) += DATA_BYTE;
