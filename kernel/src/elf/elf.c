@@ -63,8 +63,11 @@ uint32_t loader() {
 			uint32_t filesz = ph->p_filesz;
 			uint32_t memsz = ph->p_memsz;
 			int j;
+	
+#ifdef IA32_PAGE
+			dest = (char*)mm_malloc(ph->p_vaddr, ph->p_memsz);
+#endif
 			/* Memory copy */
-			if (i == 2) { nemu_assert(src[20000] == 27825); }
 			for (j = 0; j < filesz; j++)
 				dest[j] = src[j];
 
@@ -76,7 +79,7 @@ uint32_t loader() {
 			extern uint32_t brk;
 			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
 			if(brk < new_brk) { brk = new_brk; }
-	
+
 		}
 		ph = (Elf32_Phdr*)((uint32_t)ph + step);
 	}
