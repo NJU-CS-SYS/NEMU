@@ -206,5 +206,5 @@ int main()
 
     HIT_GOOD_TRAP;
 
-    return 0;
+    return 0
 }
