@@ -154,6 +154,7 @@ void cmd_x() {
 	if((_num != NULL) && (_addr != NULL)) {
 		int num = atoi(_num);
 		swaddr_t addr = calculate(_addr);
+		Log("addr %x", addr);
 		int i;
 		for(i = 0; i < num; i++){
 			int j;
