@@ -53,7 +53,7 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	lnaddr.val = addr;
 
 	uint32_t bound = lnaddr.offset + len;
-	if (bound > 0xfffu) test(0,"override");
+	if (bound > 0xfffu) test(0,"override: bound %#x, offset %#x, len %d", bound, lnaddr.offset, len);
 	hwaddr_t dir_addr = cpu.cr3.page_directory_base << 12;
 	dir_entry.val = hwaddr_read(dir_addr + 4 * lnaddr.dir, 4);
 	page_entry.val = hwaddr_read((dir_entry.page_frame << 12) + 4 * lnaddr.page, 4);
