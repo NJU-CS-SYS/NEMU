@@ -47,6 +47,8 @@ void restart() {
 
 	/* Enable the breakpoint */
 	bp_state = INIT;
+
+	trigger = 0;
 }
 
 static void print_bin_instr(swaddr_t eip, int len) {
