@@ -3,6 +3,7 @@
 #include "cpu/modrm.h"
 #include "../template.h"
 #include "cpu/reg.h"
+void tlb_init();
 
 make_helper(concat(mov_i2r_, SUFFIX)) {
 	int reg_code = instr_fetch(eip, 1) & 0x7;
@@ -202,6 +203,7 @@ make_helper(mov_CR2r)
 
 make_helper(mov_r2CR)
 {
+	tlb_init();
 	ModR_M m;
 	m.val = instr_fetch(eip + 2, 1);
 	CR(m.reg) = REG(m.R_M);
