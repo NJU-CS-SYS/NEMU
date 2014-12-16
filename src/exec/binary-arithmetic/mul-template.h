@@ -45,7 +45,7 @@ typedef union __imul64_t__ {
 		uint32_t low;
 		int32_t high;
 	};
-	int64_t val;
+	uint64_t val;
 }imul64_t;
 #endif
 
