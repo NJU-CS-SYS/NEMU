@@ -91,7 +91,7 @@ void cpu_exec(volatile uint32_t n) {
 			}
 		}
 
-		if ((uint32_t)cpu.eip > 0x800000 && !trigger) {
+		if ((uint32_t)cpu.eip > 0x800000 && (uint32_t)cpu.eip < 0xc0000000 && !trigger) {
 			nemu_state = TEST_INT;
 			trigger = 1;
 		}
