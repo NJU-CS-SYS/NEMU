@@ -5,9 +5,11 @@
 #define DELETE -1
 #define EMPTY 0
 
-unsigned int test_data[MAX_SIZE];
-unsigned int answer[MAX_SIZE];
+int test_data[MAX_SIZE];
+int answer[MAX_SIZE];
 
+int dst;
+int pos;
 typedef struct {
     int value;
     int ref;
@@ -26,9 +28,9 @@ void init_barrier(Element* barrier)
 
 void insert_barrier(Element* barrier, int element) 
 {
-    int dst = element % MOD;
+    dst = element % MOD;
     int i = 1;
-    int pos = dst;
+    pos = dst;
     while (barrier[pos].ref != EMPTY) {
 	if (barrier[pos].ref == DELETE) break;
 	i ++;
@@ -44,6 +46,7 @@ void insert_barrier(Element* barrier, int element)
     barrier[pos].ref = i;
 }
 
+int ist = 0;
 int cnt = 0;
 int main() 
 {
@@ -51,6 +54,7 @@ int main()
     init_barrier(barrier);
     for (i = 0; i < MAX_SIZE; i ++) {
 		insert_barrier(barrier, i);
+		ist ++;
     }
 	for (i = 0; i < MAX_SIZE; i ++) {
 		nemu_assert(i == barrier[i].value);

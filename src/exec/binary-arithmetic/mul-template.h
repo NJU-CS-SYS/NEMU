@@ -3,6 +3,17 @@
 #include "exec/template-start.h"
 #include "../template.h"
 
+#if DATA_BYTE == 1
+#define RST_TYPE uint16_t
+#define RST_TYPE_S int16_t
+#elif DATA_BYTE == 2
+#define RST_TYPE uint32_t
+#define RST_TYPE_S int32_t
+#else
+#define RST_TYPE uint64_t
+#define RST_TYPE_S int64_t
+#endif
+
 #define CLEAR_FLAG do{\
 	FLAG_CHG(OF, 0);\
 	FLAG_CHG(CF, 0);\
@@ -24,8 +35,8 @@
 }while(0)
 
 #define IMUL_RST(rst) do{\
-	reg_b(R_AL) = rst & 0xff;\
-	reg_b(R_AH) = (rst << 56) >> 60;\
+	reg_b(R_AL) = (rst) & 0xff;\
+	reg_b(R_AH) = ((rst) >> (DATA_BYTE << 3));\
 }while(0)
 
 #elif DATA_BYTE == 2
@@ -62,12 +73,12 @@
 }while(0)
 
 #define MUL_RST(rst) do {\
-	reg_l(R_EDX) = (DATA_TYPE)(rst >> 32);\
+	reg_l(R_EDX) = (DATA_TYPE)((rst) >> (DATA_BYTE << 3));\
 	reg_l(R_EAX) = (DATA_TYPE)(rst);\
 }while(0)
 
 #define IMUL_RST(rst) do {\
-	reg_l(R_EDX) = (rst) >> 32;\
+	reg_l(R_EDX) = (rst) >> (DATA_BYTE << 3);\
 	reg_l(R_EAX) = (rst);\
 }while(0)
 #endif
@@ -77,7 +88,8 @@
 }while(0)
 
 make_helper(concat(mul_rm2r_, SUFFIX)) {
-	uint64_t src, dst, rst;
+	DATA_TYPE src, dst;
+	RST_TYPE rst;
 	int len = 1;
 	ModR_M m;
 	dst = REG(R_EAX);
@@ -90,9 +102,9 @@ make_helper(concat(mul_rm2r_, SUFFIX)) {
 }
 
 make_helper(concat(imul_rm2imp_, SUFFIX)) {
-	int64_t src, dst, rst;
-	int len = 1;
-	ModR_M m;
+	RST_TYPE_S rst;
+	DATA_TYPE_S src, dst; 
+	int len = 1; ModR_M m;
 	dst = REG(R_EAX);
 	m.val = instr_fetch(eip + 1, 1);
 	if (m.mod == 3) {
@@ -116,7 +128,8 @@ make_helper(concat(imul_rm2imp_, SUFFIX)) {
 
 make_helper(concat(imul_rm2r_, SUFFIX)) {
 	eip++; // 2 bytes opcode !
-	int64_t src, dst, rst;
+	RST_TYPE_S rst;
+	DATA_TYPE_S src, dst; 
 	int len = 1;
 	ModR_M m;
 	MOD_RM2R(imul, src, len);
@@ -129,12 +142,14 @@ make_helper(concat(imul_rm2r_, SUFFIX)) {
 }
 
 make_helper(concat(imul_i8rm2r_, SUFFIX)) {
-	int64_t src, dst, rst;
+	RST_TYPE_S rst;
+   	DATA_TYPE_S src, dst;
 	int len = 1;
 	ModR_M m;
 	MOD_RM2R(imul, src, len);
 	dst = instr_fetch(eip + len, 1);
-	dst = (dst << 56) >> 56; // sign-extended
+	// sign-extended
+	dst = (dst << ((DATA_BYTE - 1) << 3)) >> ((DATA_BYTE - 1) << 3);
 	rst = src * dst;
 	REG(m.reg) = rst;
 	IMUL_FLAG(rst);
@@ -143,7 +158,8 @@ make_helper(concat(imul_i8rm2r_, SUFFIX)) {
 }
 
 make_helper(concat(imul_irm2r_, SUFFIX)) {
-	int64_t src, dst, rst;
+	RST_TYPE_S rst;
+	DATA_TYPE_S src, dst;
 	int len = 1;
 	ModR_M m;
 	MOD_RM2R(imul, src, len);
@@ -158,4 +174,6 @@ make_helper(concat(imul_irm2r_, SUFFIX)) {
 #undef MUL_RST
 #undef IMUL_FLAG
 #undef IMUL_RST
+#undef RST_TYPE
+#undef RST_TYPE_S
 #include "exec/template-end.h"
