@@ -12,6 +12,7 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 #if 1
 	if ( tlb_read(addr, &hwaddr) ) {
 		test(hwaddr == -1, "tlb hit and wrong: return %x", hwaddr);
+		return hwaddr;
 	}
 #endif
 	

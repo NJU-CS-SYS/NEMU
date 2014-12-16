@@ -41,7 +41,7 @@ bool tlb_read(lnaddr_t addr, hwaddr_t *outaddr)
 	temp.val = addr;
 	if ( tlb_search(tag, &i) ) {
 		test(i != -1, "i should not be -1 when hitting tlb!");
-		(*outaddr) =  ( ((Tlb[i].pte.page_frame) << 12) & temp.offset );
+		(*outaddr) =  ( ((Tlb[i].pte.page_frame) << 12) | temp.offset );
 		return true;
 	}
 	
