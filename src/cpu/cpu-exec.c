@@ -21,6 +21,7 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 extern int quiet;
 
+static int trigger = 0;
 void restart() {
 	/* Perform some initialization to restart a program */
 	load_prog();
@@ -90,6 +91,10 @@ void cpu_exec(volatile uint32_t n) {
 			}
 		}
 
+		if ((uint32_t)cpu.eip > 0x800000 && !trigger) {
+			nemu_state = TEST_INT;
+			trigger = 1;
+		}
 		if (wp_state == ON) {
 			int result[NR_BP] = { 0 };
 			int nr_changed;
