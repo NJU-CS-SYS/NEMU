@@ -119,7 +119,6 @@ make_helper(concat(imul_rm2imp_, SUFFIX)) {
 	rst = src * dst;
 	CLEAR_FLAG;
 	IMUL_RST(rst);
-	LOG;
 
 	if (m.mod == 3) print_asm("imul" str(SUFFIX) " %%%s", REG_NAME(m.R_M));
 	else print_asm("imul" str(SUFFIX) " %s", ModR_M_asm);
