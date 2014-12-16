@@ -84,7 +84,7 @@ void cpu_exec(volatile uint32_t n) {
 		cpu.eip += instr_len;
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
-			if ((uint32_t)cpu.eip > 200000) {
+			if ((uint32_t)cpu.eip > 0x200000) {
 			print_bin_instr(eip_temp, instr_len);
 			puts(assembly);
 			}
