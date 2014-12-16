@@ -11,6 +11,7 @@ int sig_test = 0;
 int exec(swaddr_t);
 void load_prog();
 void init_dram();
+void tlb_init();
 
 char assembly[40];
 char *asm_string = (char *)assembly;
@@ -24,6 +25,7 @@ void restart() {
 	/* Perform some initialization to restart a program */
 	load_prog();
 	memcpy(hwa_to_va(LOADER_START), loader, loader_len);
+	tlb_init();
 
 	/* General initialization */
 	cpu.eip = LOADER_START;

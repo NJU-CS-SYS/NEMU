@@ -49,10 +49,10 @@ int main()
 	int i;
     init_barrier(barrier);
     for (i = 0; i < MAX_SIZE; i ++) {
-		insert_barrier(barrier, i);
+		test_data[i] = i;
     }
 	for (i = 0; i < MAX_SIZE; i ++) {
-		nemu_assert(i == barrier[i].value);
+		nemu_assert(i == test_data[i]);
 	}
     return 0;
 }
