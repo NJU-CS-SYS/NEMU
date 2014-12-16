@@ -249,19 +249,12 @@ static void cmd_l2() {
 }
 
 static void cmd_dir() {
-	Log("survive");
 	const int n = strtol(strtok(NULL,""), NULL, 10);
-	Log("survive");
 	int i;
-	Log("survive");
 	int base = cpu.cr3.page_directory_base << 12;
-	Log("survive");
 	for (i = 0; i < n; i += 4) {
-	Log("survive");
 		PDE temp;
-	Log("survive");
 		temp.val = hwaddr_read(base + i, 4);
-	Log("survive");
 		printf("dir.no %04x    present %1x page talbe %05x\n", i, temp.present, temp.page_frame);
 	}
 }
