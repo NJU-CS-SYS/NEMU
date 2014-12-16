@@ -44,6 +44,7 @@ void insert_barrier(Element* barrier, int element)
     barrier[pos].ref = i;
 }
 
+int cnt = 0;
 int main() 
 {
 	int i;
@@ -53,6 +54,7 @@ int main()
     }
 	for (i = 0; i < MAX_SIZE; i ++) {
 		nemu_assert(i == barrier[i].value);
+		cnt ++;
 	}
     return 0;
 }
