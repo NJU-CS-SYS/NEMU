@@ -1,5 +1,6 @@
 #include "ui/ui.h"
 #include "ui/breakpoint.h"
+#include "../memory/page.h"
 
 #include "nemu.h"
 
@@ -246,7 +247,18 @@ static void cmd_l2() {
 	swaddr_t addr = strtol(strtok(NULL,""),NULL,16);
 	L2_print(addr);
 }
-		
+
+static void cmd_dir() {
+	char *p = strtok(NULL, " ");
+	const int n = strtol(p, NULL, 10);
+	int i;
+	int base = cpu.cr3.page_directory_base << 12;
+	for (i = 0; i < n; i += 4) {
+		PDE temp;
+		temp.val = hwaddr_read(base + i, 4);
+		printf("dir.no %04x    present %1x page talbe %05x\n", i, temp.present, temp.page_frame);
+	}
+}
 void main_loop() { /* oh, main loop ! */
 	char *cmd;
 	while(1) {
@@ -269,6 +281,7 @@ void main_loop() { /* oh, main loop ! */
 		else if(strcmp(p, "info") == 0) { cmd_info(); }
 		else if(strcmp(p, "l1") == 0) { cmd_l1(); }
 		else if(strcmp(p, "l2") == 0) { cmd_l2(); }
+		else if(strcmp(p, "dir") == 0) { cmd_dir(); }
 		/*remember to delete this test instr */
 		else if(strcmp(p, "e") == 0) { cmd_e(); }
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
