@@ -3,90 +3,93 @@
 #include "exec/template-start.h"
 #include "../template.h"
 
-#if DATA_BYTE == 1
-#define RST_TYPE uint16_t
-#define RST_TYPE_S int16_t
-#elif DATA_BYTE == 2
-#define RST_TYPE uint32_t
-#define RST_TYPE_S int32_t
-#else
-#define RST_TYPE uint64_t
-#define RST_TYPE_S int64_t
+#ifndef __MUL_TYPE__
+#define __MUL_TYPE__
+typedef union __mul16_t__ {
+	struct {
+		uint8_t low;
+		uint8_t high;
+	};
+	uint16_t val;
+} mul16_t;
+typedef union __mul32_t__ {
+	struct {
+		uint16_t low;
+		uint16_t high;
+	};
+	uint32_t val;
+}mul32_t;
+typedef union __mul64_t__ {
+	struct {
+		uint32_t low;
+		uint32_t high;
+	};
+	uint64_t val;
+}mul64_t;
+typedef union __imul16_t__ {
+	struct {
+		uint8_t low;
+		int8_t high;
+	};
+	int16_t val;
+}imul16_t;
+typedef union __imul32_t__ {
+	struct {
+		uint16_t low;
+		int16_t high;
+	};
+	int32_t val;
+}imul32_t;
+typedef union __imul64_t__ {
+	struct {
+		uint32_t low;
+		int32_t high;
+	};
+	int64_t val;
+}imul64_t;
 #endif
 
-#define CLEAR_FLAG do{\
+// type define macro
+#if DATA_BYTE == 1
+#define RST_TYPE   mul16_t
+#define RST_TYPE_S imul16_t
+#elif DATA_BYTE == 2
+#define RST_TYPE   mul32_t
+#define RST_TYPE_S imul32_t
+#else
+#define RST_TYPE   mul64_t
+#define RST_TYPE_S imul64_t
+#endif
+
+// flag control macro
+#define CLEAR_FLAG \
+do{\
 	FLAG_CHG(OF, 0);\
 	FLAG_CHG(CF, 0);\
 }while(0)
 
+#define MUL_FLAG(rst) \
+do{\
+	FLAG_CHG(OF, rst.high != 0);\
+	FLAG_CHG(CF, rst.high != 0);\
+}while(0)
+
 #if DATA_BYTE == 1
-#define MUL_FLAG do{\
-	FLAG_CHG(OF, REG(R_AH) != 0);\
-	FLAG_CHG(CF, REG(R_AH) != 0);\
-}while(0)
-
-#define IMUL_FLAG(rst) do{\
-	FLAG_CHG(OF, (((rst) & 0xff00ULL) != 0));\
-	FLAG_CHG(CF, (((rst) & 0xff00ULL) != 0));\
-}while(0)
-
-#define MUL_RST(rst) do{\
-	reg_w(R_AX) = rst;\
-}while(0)
-
-#define IMUL_RST(rst) do{\
-	reg_b(R_AL) = (rst) & 0xff;\
-	reg_b(R_AH) = ((rst) >> (DATA_BYTE << 3));\
-}while(0)
-
+#define RST_H R_AH
+#define RST_L R_AL
 #elif DATA_BYTE == 2
-
-#define MUL_FLAG do{\
-	FLAG_CHG(OF, REG(R_DX) != 0);\
-	FLAG_CHG(CF, REG(R_DX) != 0);\
-}while(0)
-
-#define IMUL_FLAG(rst) do{\
-	FLAG_CHG(OF, (((rst) & 0xffff0000ULL) != 0));\
-	FLAG_CHG(CF, (((rst) & 0xffff0000ULL) != 0));\
-}while(0)
-
-#define MUL_RST(rst) do{\
-	reg_w(R_DX) = (DATA_TYPE)(rst >> 16);\
-	reg_w(R_AX) = (DATA_TYPE)(rst);\
-}while(0)
-
-#define IMUL_RST(rst) do{\
-	reg_w(R_DX) = (rst) >> 16;\
-	reg_w(R_AX) = (rst);\
-}while(0)
-
+#define RST_H R_DX
+#define RST_L R_AX
 #elif DATA_BYTE == 4
-#define MUL_FLAG do{\
-	FLAG_CHG(OF, REG(R_EDX) != 0);\
-	FLAG_CHG(CF, REG(R_EDX) != 0);\
-}while(0)
-
-#define IMUL_FLAG(rst) do{\
-	FLAG_CHG(OF, (((rst) & 0xffffffff00000000ULL) != 0));\
-	FLAG_CHG(CF, (((rst) & 0xffffffff00000000ULL) != 0));\
-}while(0)
-
-#define MUL_RST(rst) do {\
-	reg_l(R_EDX) = (DATA_TYPE)((rst) >> (DATA_BYTE << 3));\
-	reg_l(R_EAX) = (DATA_TYPE)(rst);\
-}while(0)
-
-#define IMUL_RST(rst) do {\
-	Log("shift right %d, high %x", DATA_BYTE << 3, (uint32_t)((rst & 0xffffffff00000000) >> 32));\
-	reg_l(R_EDX) = (rst) >> (DATA_BYTE << 3);\
-	reg_l(R_EAX) = (rst);\
-}while(0)
+#define RST_H R_EDX
+#define RST_L R_EAX
 #endif
 
-#define LOG do{\
-	Log("multiplier = %d multiplicat = %d result = %d", (int)src, (int)dst, (int)rst);\
-}while(0)
+#define MUL_RST(rst)\
+	do {\
+		REG(RST_H) = rst.high;\
+		REG(RST_L) = rst.low;\
+	} while (0);
 
 make_helper(concat(mul_rm2r_, SUFFIX)) {
 	DATA_TYPE src, dst;
@@ -95,10 +98,9 @@ make_helper(concat(mul_rm2r_, SUFFIX)) {
 	ModR_M m;
 	dst = REG(R_EAX);
 	MOD_RM2R(mul, src, len);
-	rst = src * dst;
-	MUL_FLAG;
+	rst.val = src * dst;
+	MUL_FLAG(rst);
 	MUL_RST(rst);
-	LOG;
 	return len + 1;
 }
 
@@ -116,10 +118,11 @@ make_helper(concat(imul_rm2imp_, SUFFIX)) {
 		len += read_ModR_M(eip + 1, &addr);
 		src = MEM_R(addr);
 	}
-	rst = src * dst;
+	rst.val = src * dst;
 	CLEAR_FLAG;
-	IMUL_RST(rst);
+	MUL_RST(rst);
 
+	Log("Src %x * Dst %x = High %x Low %x", src, dst, rst.high, rst.low);
 	if (m.mod == 3) print_asm("imul" str(SUFFIX) " %%%s", REG_NAME(m.R_M));
 	else print_asm("imul" str(SUFFIX) " %s", ModR_M_asm);
 
@@ -134,10 +137,9 @@ make_helper(concat(imul_rm2r_, SUFFIX)) {
 	ModR_M m;
 	MOD_RM2R(imul, src, len);
 	dst = REG(m.reg);
-	rst = src * dst;
-	REG(m.reg) = rst;
+	rst.val = src * dst;
+	REG(m.reg) = (DATA_TYPE_S)rst.val;
 	CLEAR_FLAG;
-	LOG;
 	return len + 1;
 }
 
@@ -150,10 +152,9 @@ make_helper(concat(imul_i8rm2r_, SUFFIX)) {
 	dst = instr_fetch(eip + len, 1);
 	// sign-extended
 	dst = (dst << ((DATA_BYTE - 1) << 3)) >> ((DATA_BYTE - 1) << 3);
-	rst = src * dst;
-	REG(m.reg) = rst;
-	IMUL_FLAG(rst);
-	LOG;
+	rst.val = src * dst;
+	REG(m.reg) = (DATA_TYPE_S)rst.val;
+	MUL_FLAG(rst);
 	return len + 1;
 }
 
@@ -164,16 +165,16 @@ make_helper(concat(imul_irm2r_, SUFFIX)) {
 	ModR_M m;
 	MOD_RM2R(imul, src, len);
 	dst = instr_fetch(eip + len, DATA_BYTE);
-	rst = src * dst;
-	REG(m.reg) = rst;
+	rst.val = src * dst;
+	REG(m.reg) = (DATA_TYPE_S)rst.val;
 	CLEAR_FLAG;
-	LOG;
 	return len + DATA_BYTE;
 }
 #undef MUL_FLAG
 #undef MUL_RST
 #undef IMUL_FLAG
-#undef IMUL_RST
 #undef RST_TYPE
 #undef RST_TYPE_S
+#undef RST_L
+#undef RST_H
 #include "exec/template-end.h"
