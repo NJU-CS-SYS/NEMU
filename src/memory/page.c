@@ -12,7 +12,6 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 #if 1
 	if ( tlb_read(addr, &hwaddr) ) {
 		test(hwaddr == -1, "tlb hit and wrong: return %x", hwaddr);
-		
 	}
 #endif
 	
@@ -32,7 +31,7 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	if (!page_entry.present) Test(0, "page fault: eip %#x, vaddr %#x", cpu.eip, addr);
 	__hwaddr = (page_entry.page_frame << 12) + lnaddr.offset;
 	
-	test(__hwaddr == hwaddr, "__hwaddr %x, hwaddr %x", __hwaddr, hwaddr);
+	//test(__hwaddr == hwaddr, "__hwaddr %x, hwaddr %x", __hwaddr, hwaddr);
 #if 0
 	Log("dir %x page table %x page %x", dir_addr, dir_entry.page_frame, page_entry.page_frame);
 	Log("lnaddr dir %x, page %x, offset %x", lnaddr.dir, lnaddr.page, lnaddr.offset);
