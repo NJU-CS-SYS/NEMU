@@ -78,7 +78,7 @@
 }while(0)
 
 #define IMUL_RST(rst) do {\
-	Log("shift right %d", DATA_BYTE << 3);\
+	Log("shift right %d, high %x", DATA_BYTE << 3, (uint32_t)((rst & 0xffffffff00000000) >> 32));\
 	reg_l(R_EDX) = (rst) >> (DATA_BYTE << 3);\
 	reg_l(R_EAX) = (rst);\
 }while(0)
