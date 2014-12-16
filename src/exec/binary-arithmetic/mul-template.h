@@ -45,7 +45,7 @@ typedef union __imul64_t__ {
 		uint32_t low;
 		int32_t high;
 	};
-	uint64_t val;
+	int64_t val;
 }imul64_t;
 #endif
 
@@ -91,6 +91,21 @@ do{\
 		REG(RST_L) = rst.low;\
 	} while (0);
 
+#define IMUL(rst, src, dst)\
+	do {\
+		rst.val = (uint64_t)src * (uint64_t)dst;\
+		DATA_TYPE mask = 1 << ((DATA_BYTE << 3) - 1);\
+		if ((MSB(src) + MSB(dst)) != 1) {\
+			break;\
+		}\
+		for (; mask == 0; mask >>= 1) {\
+			if (!(mask & rst.high)) {\
+				rst.high = rst.high | mask;\
+			} else {\
+				break;\
+			}\
+		}\
+	} while (0)
 make_helper(concat(mul_rm2r_, SUFFIX)) {
 	DATA_TYPE src, dst;
 	RST_TYPE rst;
@@ -118,7 +133,7 @@ make_helper(concat(imul_rm2imp_, SUFFIX)) {
 		len += read_ModR_M(eip + 1, &addr);
 		src = MEM_R(addr);
 	}
-	rst.val = src * dst;
+	IMUL(rst, src, dst);
 	CLEAR_FLAG;
 	MUL_RST(rst);
 
@@ -137,7 +152,7 @@ make_helper(concat(imul_rm2r_, SUFFIX)) {
 	ModR_M m;
 	MOD_RM2R(imul, src, len);
 	dst = REG(m.reg);
-	rst.val = src * dst;
+	IMUL(rst, src, dst);
 	REG(m.reg) = (DATA_TYPE_S)rst.val;
 	CLEAR_FLAG;
 	return len + 1;
@@ -152,7 +167,7 @@ make_helper(concat(imul_i8rm2r_, SUFFIX)) {
 	dst = instr_fetch(eip + len, 1);
 	// sign-extended
 	dst = (dst << ((DATA_BYTE - 1) << 3)) >> ((DATA_BYTE - 1) << 3);
-	rst.val = src * dst;
+	IMUL(rst, src, dst);
 	REG(m.reg) = (DATA_TYPE_S)rst.val;
 	MUL_FLAG(rst);
 	return len + 1;
@@ -165,7 +180,7 @@ make_helper(concat(imul_irm2r_, SUFFIX)) {
 	ModR_M m;
 	MOD_RM2R(imul, src, len);
 	dst = instr_fetch(eip + len, DATA_BYTE);
-	rst.val = src * dst;
+	IMUL(rst, src, dst);
 	REG(m.reg) = (DATA_TYPE_S)rst.val;
 	CLEAR_FLAG;
 	return len + DATA_BYTE;
