@@ -30,6 +30,8 @@ struct _frame_node {
 	struct _frame_node *next;
 };
 typedef struct _frame_node frame_node;
+
+static char previous[64];
 /* We use the readline library to provide more flexibility to read from stdin. */
 char* rl_gets() { /* read line get string */
 	static char *line_read = NULL;
@@ -268,8 +270,13 @@ void main_loop() { /* oh, main loop ! */
 	while(1) {
 
 		cmd = rl_gets();
-		char *p = strtok(cmd, " ");/* use strtok to break a line into fiels with ' '*/	
-
+		/* use strtok to break a line into fiels with ' '*/	
+		char *p = strtok(cmd, " ");
+		if (p == NULL) {
+			p = previous;
+		} else {
+			strcpy(previous, p);
+		}
 		if(p == NULL) { continue; }
 
 		if(strcmp(p, "q") == 0) { return; }
