@@ -249,8 +249,7 @@ static void cmd_l2() {
 }
 
 static void cmd_dir() {
-	char *p = strtok(NULL, " ");
-	const int n = strtol(p, NULL, 10);
+	const int n = strtol(strtok(NULL,""), NULL, 10);
 	int i;
 	int base = cpu.cr3.page_directory_base << 12;
 	for (i = 0; i < n; i += 4) {
