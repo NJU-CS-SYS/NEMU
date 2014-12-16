@@ -9,9 +9,10 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 {
 	hwaddr_t hwaddr = -1;
 	hwaddr_t __hwaddr = -1;
-#if 0
+#if 1
 	if ( tlb_read(addr, &hwaddr) ) {
-		test(hwaddr != -1, "tlb hit and wrong");
+		test(hwaddr == -1, "tlb hit and wrong: return %x", hwaddr);
+		
 	}
 #endif
 	
