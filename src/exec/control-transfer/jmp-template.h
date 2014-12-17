@@ -24,7 +24,6 @@ make_helper(ljmp)
 	uint16_t new_cs = instr_fetch(eip + 5, 2);
 	cpu.eip = new_eip - 7;
 	cpu.cs = new_cs;
-	Log("cs = %08x", cpu.cs);
 	print_asm("ljmp $%#x,$%#x", new_cs, new_eip);
 	return 1 + 4 + 2;
 }

@@ -49,7 +49,6 @@ make_helper(concat(jmp_rm_, SUFFIX)) {
 	} else {
 		print_asm("jmp *%s", ModR_M_asm);
 	}
-	Log("addr = %x dest = %x", src, MEM_R(src));
 	return len;
 }
 
