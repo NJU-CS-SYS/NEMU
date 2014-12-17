@@ -64,11 +64,8 @@ static void print_bin_instr(swaddr_t eip, int len) {
 void cpu_exec(volatile uint32_t n) {
 	volatile uint32_t n_temp = n;
 
-	/* use volatile means n can never be modified by the func itself but
-	 * from memory directly by other func()
-	 */
-
 	setjmp(jbuf);
+
 	for(; n > 0; n --) {
 		/* enable the breakpoint when enter loaded program */
 		if (cpu.eip > 0x800000 && bp_state == INIT) {
