@@ -137,7 +137,6 @@ make_helper(concat(imul_rm2imp_, SUFFIX)) {
 	CLEAR_FLAG;
 	MUL_RST(rst);
 
-	Log("Src %x * Dst %x = High %x Low %x", src, dst, rst.high, rst.low);
 	if (m.mod == 3) print_asm("imul" str(SUFFIX) " %%%s", REG_NAME(m.R_M));
 	else print_asm("imul" str(SUFFIX) " %s", ModR_M_asm);
 
