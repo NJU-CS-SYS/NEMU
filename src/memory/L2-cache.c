@@ -22,6 +22,7 @@ uint32_t dram_write(hwaddr_t addr, size_t len, uint32_t data);
 #define NR_WAY   8
 #define BLOCK_MASK (NR_BLOCK - 1)
 
+uint64_t L2_access = 0;
 uint64_t L2_hit = 0;
 
 typedef union {
@@ -83,6 +84,7 @@ static uint32_t L2_miss_alloc(uint32_t set, uint32_t tag)
 }
 static void L2_read(swaddr_t addr, void *data)
 {
+	L2_access ++;
 	L2_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
@@ -106,6 +108,7 @@ static void L2_read(swaddr_t addr, void *data)
 }
 static void L2_write(swaddr_t addr, void *data, uint8_t *mask)
 {
+	L2_access ++;
 	L2_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;

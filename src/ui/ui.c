@@ -12,6 +12,7 @@
 extern uint64_t L1_hit;
 extern uint64_t L2_hit;
 extern uint64_t mem_access;
+extern uint64_t L2_access;
 
 int nemu_state = END;
 int bp_state = INIT;
@@ -255,9 +256,10 @@ static void cmd_l2() {
 
 static void cmd_check()
 {
-	printf("Total access times : %llu\n", mem_access);
-	printf("L1 hit times : %llu\n", L1_hit);
-	printf("L2 hit times : %llu\n", L2_hit);
+	printf("Total times     : %llu\n", mem_access);
+	printf("L1 hit times    : %llu\n", L1_hit);
+	printf("L2 access times : %llu\n", L2_access);
+	printf("L2 hit times    : %llu\n", L2_hit);
 }
 static void cmd_dir()
 {
