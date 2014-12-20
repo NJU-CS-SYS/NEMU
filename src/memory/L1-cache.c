@@ -23,6 +23,7 @@ void L2_cache_write(swaddr_t addr, size_t len, uint32_t data);
 #define BLOCK_MASK (NR_BLOCK - 1)
 
 uint64_t L1_hit = 0;
+uint64_t L1_access = 0;
 
 typedef union {
 	struct {
@@ -47,8 +48,9 @@ void init_L1() {
 		}
 	}
 }
-static void L1_read(swaddr_t addr, void *data) {
-	
+static void L1_read(swaddr_t addr, void *data)
+{
+	L1_access ++;	
 	L1_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
@@ -82,6 +84,7 @@ static void L1_read(swaddr_t addr, void *data) {
 	memcpy(data, L1[set][way].blk + offset, BURST_LEN);
 }
 static void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
+	L1_access ++;
 	L1_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
