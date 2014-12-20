@@ -4,11 +4,14 @@
 
 #include "nemu.h"
 
-
 #include <signal.h>
 #include <stdlib.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+
+extern uint64_t L1_hit;
+extern uint64_t L2_hit;
+extern uint64_t mem_access;
 
 int nemu_state = END;
 int bp_state = INIT;
@@ -250,7 +253,14 @@ static void cmd_l2() {
 	L2_print(addr);
 }
 
-static void cmd_dir() {
+static void cmd_check()
+{
+	printf("Total access times : %llu\n", mem_access);
+	printf("L1 hit times : %llu\n", L1_hit);
+	printf("L2 hit times : %llu\n", L2_hit);
+}
+static void cmd_dir()
+{
 	char *p = strtok(NULL, "");
 	int n;
 	if (p == NULL) {
@@ -265,7 +275,8 @@ static void cmd_dir() {
 		printf("dir.no %04x    present %1x page talbe %05x\n", i, temp.present, temp.page_frame);
 	}
 }
-void main_loop() { /* oh, main loop ! */
+void main_loop()
+{
 	char *cmd;
 	while(1) {
 
@@ -296,6 +307,7 @@ void main_loop() { /* oh, main loop ! */
 		/*remember to delete this test instr */
 		else if(strcmp(p, "e") == 0) { cmd_e(); }
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
+		else if (strcmp(p, "check") == 0) { cmd_check(); }
 
 		else { printf("Unknown command '%s'\n", p); }
 	}

@@ -22,6 +22,7 @@ void L2_cache_write(swaddr_t addr, size_t len, uint32_t data);
 #define NR_WAY   8
 #define BLOCK_MASK (NR_BLOCK - 1)
 
+uint64_t L1_hit = 0;
 
 typedef union {
 	struct {
@@ -57,6 +58,7 @@ static void L1_read(swaddr_t addr, void *data) {
 	uint32_t way;
 	for (way = 0; way < NR_WAY; way ++) { // search by tag
 		if (L1[set][way].tag == tag && L1[set][way].valid) {
+			L1_hit ++;
 			break;
 		}
 	}
@@ -88,8 +90,10 @@ static void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
 
 	uint32_t way;
 	for (way = 0; way < NR_WAY; way ++)
-		if (L1[set][way].valid && tag == L1[set][way].tag)
+		if (L1[set][way].valid && tag == L1[set][way].tag) {
+			L1_hit ++;
 			break;
+		}
 
 	if (way == NR_WAY) // not write allocate
 		return;

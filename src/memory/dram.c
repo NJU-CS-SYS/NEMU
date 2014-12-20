@@ -29,12 +29,6 @@ typedef union {
 
 #define HW_MEM_SIZE (1 << (COL_WIDTH + ROW_WIDTH + BANK_WIDTH + RANK_WIDTH))
 
-// burst means the number of bytes
-// that read and write at the same time
-// it is 32bits, or 4 bytes,
-// which is just the length of 'int'
-// and the maximum length of the databus
-// which can be read at a time
 #define BURST_LEN 8
 #define BURST_MASK (BURST_LEN - 1)
 
@@ -75,7 +69,6 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 
 	if(!(rowbufs[rank][bank].valid && rowbufs[rank][bank].row_idx == row) ) {
 		/* read a row into row buffer */
-		//Log("cross hit");
 		memcpy(rowbufs[rank][bank].buf, dram[rank][bank][row], NR_COL);
 		rowbufs[rank][bank].row_idx = row;
 		rowbufs[rank][bank].valid = true;
