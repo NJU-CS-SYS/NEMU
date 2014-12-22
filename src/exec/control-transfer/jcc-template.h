@@ -36,7 +36,8 @@ make_helper(concat(jmp_rel_, SUFFIX)) {
 	return len;
 }
 
-make_helper(concat(jmp_rm_, SUFFIX)) {
+make_helper(concat(jmp_rm_, SUFFIX))
+{
 	int len = 1;
 	DATA_TYPE src;
 	ModR_M m;
