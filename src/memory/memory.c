@@ -63,13 +63,16 @@ static uint32_t hwaddr_read_instr(hwaddr_t addr, size_t len)
 
 uint32_t instr_fetch(swaddr_t addr, size_t len) 
 {
+	Log("1 instr addr %x", addr);
 	assert(len == 1 || len == 2 || len == 4);
 	if (PE) {
 		Sreg = CS;
 		addr = segment_translate(addr);
 	}
+	Log("2 instr addr %x", addr);
 	if (cpu.cr0.protect_enable && cpu.cr0.paging) {
 		addr = page_translate(addr,len);
 	}
+	Log("3 instr addr %x", addr);
 	return hwaddr_read_instr(addr, len);
 }
