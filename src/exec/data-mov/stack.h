@@ -9,4 +9,9 @@ make_helper(push_i2s_b);
 make_helper(push_i2s_w);
 make_helper(push_i2s_l);
 make_helper(push_i2s_v);
+
+make_helper(push_m2s_b);
+make_helper(push_m2s_w);
+make_helper(push_m2s_l);
+make_helper(push_m2s_v);
 #endif

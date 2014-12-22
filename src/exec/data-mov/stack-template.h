@@ -34,11 +34,27 @@ make_helper(concat(push_i2s_, SUFFIX))
 
 	cpu.esp -= 4;
 	Sreg = SS;
-
 	MEM_W(cpu.esp, imm);
+	
+	print_asm("push" str(SUFFIX) " $%#x", imm);
 	return 1 + DATA_BYTE;
 }
+make_helper(concat(push_m2s_, SUFFIX))
+{
+	ModR_M m;
+	m.val = instr_fetch(eip + 1, 1);
+	test ((m.mod != 3) && (m.reg == 6), "Bad ModR/M Byte!");
+	swaddr_t addr;
+	int len = read_ModR_M(eip + 1, &addr);
+	DATA_TYPE src = MEM_R(addr);
+	
+	cpu.esp -= 4;
+	Sreg = SS;
+	MEM_W(cpu.esp, src);
 
+	print_asm("push" str(SUFFIX) " %s", ModR_M_asm);
+	return 1 + len;
+}
 make_helper(concat(pop_stack2m_, SUFFIX)) {
 	ModR_M m;
 	int len;
