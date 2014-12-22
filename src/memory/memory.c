@@ -63,16 +63,21 @@ static uint32_t hwaddr_read_instr(hwaddr_t addr, size_t len)
 
 uint32_t instr_fetch(swaddr_t addr, size_t len) 
 {
-	Log("1 instr addr %x", addr);
 	assert(len == 1 || len == 2 || len == 4);
+	lnaddr_t lnaddr;
+	hwaddr_t hwaddr;
 	if (PE) {
 		Sreg = CS;
-		addr = segment_translate(addr);
+		lnaddr = segment_translate(addr);
+	} else {
+		lnaddr = addr;
 	}
-	Log("2 instr addr %x", addr);
 	if (cpu.cr0.protect_enable && cpu.cr0.paging) {
-		addr = page_translate(addr,len);
+		hwaddr = page_translate(lnaddr,len);
+	} else {
+		hwaddr = lnaddr;
 	}
-	Log("3 instr addr %x", addr);
-	return hwaddr_read_instr(addr, len);
+	if (cpu.eip >= 0xc0100f29)
+		Log("swaddr %x lnaddr %x hwaddr %x", addr, lnaddr, hwaddr);
+	return hwaddr_read_instr(hwaddr, len);
 }
