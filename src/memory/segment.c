@@ -12,7 +12,7 @@ lnaddr_t segment_translate(swaddr_t addr)
 	uint16_t index = selector >> 3;
 	SegDesc desc;
 	desc.val_high = hwaddr_read(gdt_addr + index * sizeof(SegDesc), 4);
-	desc.val_low = hwaddr_read(gdt_addr + index * sizeof(SegDesc) + 4, 4);
+	desc.val_low = hwaddr_read(gdt_addr + index * sizeof(SegDesc) + 32, 4);
 
 	lnaddr_t base = desc.base_31_24 << 24 | desc.base_23_16 << 16 | desc.base_15_0;
 	if (base != 0) {
