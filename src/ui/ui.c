@@ -142,6 +142,7 @@ static void cmd_info() {
 				FLAG_VAL(DF),
 				FLAG_VAL(OF)
 		      );
+		printf("CS %x DS %x SS %x", cpu.cs, cpu.ds, cpu.ss);
 	}
 	else if (strcmp(opt, "b") == 0) {
 		BP* current = getHead();
