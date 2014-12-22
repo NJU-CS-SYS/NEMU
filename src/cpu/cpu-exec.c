@@ -84,17 +84,9 @@ void cpu_exec(volatile uint32_t n) {
 		cpu.eip += instr_len;
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
-			if ((uint32_t)cpu.eip > 0x200000 
-					&& (uint32_t)cpu.eip < 0xc0000000) {
-				if ((uint32_t)cpu.eip > 0x800000 
-						&& (uint32_t)cpu.eip < 0xc0000000 
-						&& !trigger) {
-					nemu_state = TEST_INT;
-					trigger = 1;
-				}
-				print_bin_instr(eip_temp, instr_len);
-				puts(assembly);
-			}
+			print_bin_instr(eip_temp, instr_len);
+			puts(assembly);
+
 		}
 
 		if (wp_state == ON) {
