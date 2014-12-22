@@ -22,6 +22,5 @@ lnaddr_t segment_translate(swaddr_t addr)
 		Log("index %x", index);
 		Log("base 31-24 %x 23-16 %x 15-0 %x", descriptor.base_31_24, descriptor.base_23_16, descriptor.base_15_0);
 	}
-	base = 0;
 	return base + addr;
 }
