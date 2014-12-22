@@ -8,9 +8,13 @@ void cache_writeback(void);
 uint8_t read_byte(uint32_t);
 void write_byte(uint32_t, uint8_t);
 
+void add_irq_handle(int, void(*)(void));
+void ide_writeback(void);
+
 void
 init_ide(void) {
 	cache_init();
+	add_irq_handle(0, ide_writeback);
 }
 
 /* The loader acts as a monolithic kernel, therefore we do not need
