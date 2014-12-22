@@ -45,10 +45,7 @@ uint32_t swaddr_read(swaddr_t addr, size_t len)
 		lnaddr = segment_translate(addr);
 	}
 	else lnaddr = addr;
-	if (cpu.eip >= 0xc0100f29) {
-		Log("swaddr %x lnaddr %x Seg %x", addr, lnaddr, Sreg);
-	}
-	return lnaddr_read(addr, len);
+	return lnaddr_read(lnaddr, len);
 }
 
 void swaddr_write(swaddr_t addr, size_t len, uint32_t data) 
@@ -81,9 +78,6 @@ uint32_t instr_fetch(swaddr_t addr, size_t len)
 		hwaddr = page_translate(lnaddr,len);
 	} else {
 		hwaddr = lnaddr;
-	}
-	if (cpu.eip >= 0xc0100f29) {
-		Log("swaddr %x lnaddr %x hwaddr %x", addr, lnaddr, hwaddr);
 	}
 	return hwaddr_read_instr(hwaddr, len);
 }

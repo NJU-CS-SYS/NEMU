@@ -8,7 +8,6 @@ void tlb_insert(lnaddr_t addr, PTE pte);
 
 hwaddr_t page_translate(lnaddr_t addr, size_t len)
 {
-	Log("vaddr is %x", addr);
 	hwaddr_t hwaddr = -1;
 	hwaddr_t __hwaddr = -1;
 #if 1
