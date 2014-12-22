@@ -22,7 +22,7 @@ make_helper(push_v) {
 }
 make_helper(push_i2s_v)
 {
-	return (suffix == 'l' ? push_l(eip) : push_w(eip));
+	return (suffix == 'l' ? push_i2s_l(eip) : push_i2s_w(eip));
 }
 
 v_helper(pop_stack2m);
