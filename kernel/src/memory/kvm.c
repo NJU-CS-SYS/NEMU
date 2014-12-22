@@ -2,6 +2,7 @@
 #include "x86.h"
 #include "memory.h"
 #include <string.h>
+#include "trap.h"
 
 static PDE kpdir[NR_PDE] align_to_page;						// kernel page directory
 static PTE kptable[PHY_MEM / PAGE_SIZE] align_to_page;		// kernel page tables
@@ -69,6 +70,7 @@ set_segment(SegDesc *ptr, uint32_t pl, uint32_t type) {
  * below 0xC0000000, and is not in the user process' address space. */
 void
 init_segment(void) {
+	nemu_assert(0);
 	memset(gdt, 0, sizeof(gdt));
 	set_segment(&gdt[SEG_KERNEL_CODE], DPL_KERNEL, SEG_EXECUTABLE | SEG_READABLE);
 	set_segment(&gdt[SEG_KERNEL_DATA], DPL_KERNEL, SEG_WRITABLE );
