@@ -18,6 +18,9 @@ lnaddr_t segment_translate(swaddr_t addr)
 	
 	lnaddr_t base = descriptor.base_31_24 << 24 | descriptor.base_23_16 << 16 | descriptor.base_15_0;
 	if (base != 0) {
+		Log("base %x", base);
+		Log("limit %x  %x", descriptor.limit_19_16, descriptor.limit_15_0);
+		Log("segment type　%x", descriptor.segment_type);
 		Log("sel %x, index %x", selector, index);
 	}
 	return base + addr;
