@@ -11,8 +11,9 @@ lnaddr_t segment_translate(swaddr_t addr)
 	uint16_t selector = SEG(Sreg);
 	uint16_t index = selector >> 3;
 	SegDesc desc;
-	desc.val_low = hwaddr_read(gdt_addr + index * sizeof(SegDesc), 4);
-	desc.val_high = hwaddr_read(gdt_addr + index * sizeof(SegDesc) + 32, 4);
+	index = index << 3;
+	desc.val_high = hwaddr_read(gdt_addr + index, 4);
+	desc.val_low = hwaddr_read(gdt_addr + index + 4, 4);
 
 	lnaddr_t base = desc.base_31_24 << 24 | desc.base_23_16 << 16 | desc.base_15_0;
 	if (base != 0) {
@@ -20,6 +21,17 @@ lnaddr_t segment_translate(swaddr_t addr)
 		Log("limit %x  %x", desc.limit_19_16, desc.limit_15_0);
 		Log("segment type　%x", desc.segment_type);
 		Log("sel %x, index %x", selector, index);
+		int i;
+		for (i = 0; i < 3; i++) {
+			printf(" %02x", hwaddr_read(gdt_addr + index + i, 1));
+		}
+		printf("\n");
+		for (; i < 8; i ++) {
+			printf(" %02x", hwaddr_read(gdt_addr + index + i, 1));
+		}
+		printf("\n");
+		fflush(stdout);
+
 	}
 	return base + addr;
 }
