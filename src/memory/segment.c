@@ -17,6 +17,7 @@ lnaddr_t segment_translate(swaddr_t addr)
 
 	lnaddr_t base = desc.base_31_24 << 24 | desc.base_23_16 << 16 | desc.base_15_0;
 	if (base != 0) {
+		Log("gdt %x",gdt_addr);
 		Log("base %x", base);
 		Log("limit %x  %x", desc.limit_19_16, desc.limit_15_0);
 		Log("segment type　%x", desc.segment_type);
