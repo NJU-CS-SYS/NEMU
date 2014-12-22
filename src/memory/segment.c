@@ -23,14 +23,11 @@ lnaddr_t segment_translate(swaddr_t addr)
 		Log("sel %x, index %x", selector, index);
 		int i;
 		for (i = 0; i < 3; i++) {
-			printf(" %02x", hwaddr_read(gdt_addr + index + i, 1));
+			Log(" %02x", hwaddr_read(gdt_addr + index + i, 1));
 		}
-		printf("\n");
 		for (; i < 8; i ++) {
-			printf(" %02x", hwaddr_read(gdt_addr + index + i, 1));
+			Log(" %02x", hwaddr_read(gdt_addr + index + i, 1));
 		}
-		printf("\n");
-		fflush(stdout);
 
 	}
 	return base + addr;
