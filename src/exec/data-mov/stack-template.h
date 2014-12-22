@@ -36,6 +36,7 @@ make_helper(concat(push_i2s_, SUFFIX))
 	Sreg = SS;
 
 	MEM_W(cpu.esp, imm);
+	test(0, "fuck");
 	Log("len %d", 1 + DATA_BYTE);
 	return 1 + DATA_BYTE;
 }
