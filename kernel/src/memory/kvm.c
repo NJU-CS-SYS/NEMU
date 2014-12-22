@@ -75,6 +75,5 @@ init_segment(void) {
 	set_segment(&gdt[SEG_KERNEL_DATA], DPL_KERNEL, SEG_WRITABLE );
 
 	write_gdtr(gdt, sizeof(gdt));
-	nemu_assert(0);
 }
 
