@@ -28,6 +28,17 @@ make_helper(concat(push_, SUFFIX)) {
 	return 1;
 }
 
+make_helper(concat(push_i2s_, SUFFIX))
+{
+	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
+
+	cpu.esp -= 4;
+	Sreg = SS;
+
+	MEM_W(cpu.esp, imm);
+	return 1 + DATA_BYTE;
+}
+
 make_helper(concat(pop_stack2m_, SUFFIX)) {
 	ModR_M m;
 	int len;
