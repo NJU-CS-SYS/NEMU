@@ -23,8 +23,8 @@ make_helper(concat(lgdt_, SUFFIX))
 	test(m.mod != 3, "wrong mod domain, expected addressing?");
 	swaddr_t addr;
 	int len = read_ModR_M(eip + 2, &addr);
-	uint16_t limit = swaddr_read(addr + 4, 2);
-	uint32_t base = swaddr_read(addr, 4);
+	uint16_t limit = swaddr_read(addr, 2);
+	uint32_t base = swaddr_read(addr + 2, 4);
 	cpu.gdtr.limit = limit;
 #if DATA_BYTE == 2
 	cpu.gdtr.base = base & 0xffffff;
