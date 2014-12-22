@@ -72,9 +72,9 @@ void
 init_segment(void) {
 	memset(gdt, 0, sizeof(gdt));
 	set_segment(&gdt[SEG_KERNEL_CODE], DPL_KERNEL, SEG_EXECUTABLE | SEG_READABLE);
-	nemu_assert(0);
 	set_segment(&gdt[SEG_KERNEL_DATA], DPL_KERNEL, SEG_WRITABLE );
 
+	nemu_assert(0);
 	write_gdtr(gdt, sizeof(gdt));
 }
 
