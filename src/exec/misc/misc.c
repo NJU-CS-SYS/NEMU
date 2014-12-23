@@ -41,7 +41,7 @@ make_helper(nemu_trap) {
 	char buf[1024];
 	int i, limit;
 	switch (cpu.eax) {
-		case 4:
+		case 2:
 		    limit = cpu.edx;
 			for (i = 0; i < limit; i ++)
 				buf[i] = swaddr_read(cpu.ecx + i, 1);
