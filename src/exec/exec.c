@@ -112,7 +112,7 @@ helper_fun opcode_table_2 [256] = {
 /* 0x7c */	inv, inv, inv, inv, 
 /* 0x80 */	jo_rel_v, jno_rel_v, jb_rel_v, jae_rel_v,
 /* 0x84 */	je_v, jne_rel_v, jbe_rel_v, ja_rel_v,
-/* 0x88 */	inv, jns_rel_v, jp_rel_v, jnp_rel_v,
+/* 0x88 */	js_rel_v, jns_rel_v, jp_rel_v, jnp_rel_v,
 /* 0x8c */	jl_rel_v, jge_rel_v, jle_rel_v, jg_rel_v, 
 /* 0x90 */	set_o, set_no, set_c, set_ae,
 /* 0x94 */	set_e, set_ne_nz, set_be, set_a,
