@@ -3,6 +3,9 @@
 #include "nemu.h"
 #include "cpu/intr.h"
 
+void print_bin_instr(swaddr_t eip, int len);
+extern char assembly[];
+
 make_helper(inv) {
 	/* invalid opcode */
 
@@ -24,7 +27,12 @@ make_helper(int3) {
 make_helper(int_i) // opcode = cd
 {
 	uint8_t imm = instr_fetch(eip + 1, 1);
-	Log("int %#x", imm);
+
+	/* Special output */
+	print_asm("int %#x", imm);
+	print_bin_instr(eip, 2);
+	puts(assembly);
+
 	raise_intr(imm);
 	return 2;
 }

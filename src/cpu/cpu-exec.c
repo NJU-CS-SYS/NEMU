@@ -51,7 +51,7 @@ void restart() {
 	trigger = 0;
 }
 
-static void print_bin_instr(swaddr_t eip, int len) {
+void print_bin_instr(swaddr_t eip, int len) {
 	int i;
 
 	printf("%8x:   ", eip);
