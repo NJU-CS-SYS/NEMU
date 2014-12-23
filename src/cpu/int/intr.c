@@ -22,11 +22,11 @@ void raise_intr(uint8_t NO)
 	*((uint32_t *)(&desc) + 1) = hwaddr_read(idt_addr + NO * size + 4, 4);
 
 	/* Store current infomation */
-	test(0, "计划报废desu");
 	push(cpu.eflags);
 	push(cpu.cs);
 	push(cpu.eip);
 
+	test(0, "计划报废desu");
 	/* Jump */
 	cpu.cs = desc.segment;
 	cpu.eip = (desc.offset_31_16 << 16) | (desc.offset_15_0);
