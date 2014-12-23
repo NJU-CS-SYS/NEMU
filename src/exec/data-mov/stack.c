@@ -32,6 +32,10 @@ make_helper(pusha_v)
 {
 	return ('l' == suffix ? pusha_l(eip) : pusha_w(eip));
 }
+make_helper(popa_v)
+{
+	return ('l' == suffix ? popa_l(eip) : popa_w(eip));
+}
 v_helper(pop_stack2m);
 v_helper(pop_stack2r);
 

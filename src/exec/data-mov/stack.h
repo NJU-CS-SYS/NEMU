@@ -18,4 +18,8 @@ make_helper(push_m2s_v);
 make_helper(pusha_w);
 make_helper(pusha_l);
 make_helper(pusha_v);
+
+make_helper(popa_w);
+make_helper(popa_l);
+make_helper(popa_v);
 #endif

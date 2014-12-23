@@ -101,4 +101,18 @@ make_helper(concat(pusha_, SUFFIX))
 	print_asm("pusha");
 	return 1;
 }
+make_helper(concat(popa_, SUFFIX))
+{
+	POP(REG(R_EDI));
+	POP(REG(R_ESI));
+	POP(REG(R_EBP));
+	POP(REG(R_EBX));
+	POP(REG(R_EBX));
+	POP(REG(R_EDX));
+	POP(REG(R_ECX));
+	POP(REG(R_EAX));
+
+	print_asm("popa" str(SUFFIX));
+	return 1;
+}
 #include "exec/template-end.h"

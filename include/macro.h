@@ -35,8 +35,8 @@
 
 #define POP(x)\
 	do{\
-		Sreg = DS;\
-		x = MEM_R(concat(reg_, SUFFIX)(R_ESP));\
+		Sreg = SS;\
+		(x) = MEM_R(concat(reg_, SUFFIX)(R_ESP));\
 		concat(reg_, SUFFIX)(R_ESP) += DATA_BYTE;\
 	}while(0);
 
