@@ -23,7 +23,6 @@ void raise_intr(uint8_t NO)
 
 	/* Store current infomation */
 	push(cpu.eflags);
-	test(0, "计划报废desu");
 	push(cpu.cs);
 	push(cpu.eip);
 
