@@ -26,12 +26,20 @@ void raise_intr(uint8_t NO)
 	push(cpu.cs);
 	push(cpu.eip);
 
+	/* Jump */
+	cpu.cs = desc.segment;
+	cpu.eip = (desc.offset_31_16 << 16) | (desc.offset_15_0);
+
 	/* Debug */
+	test(desc.present, "failed in checking present bit of gate descriptor");
 	test((desc.type & 0x4) == 0x4, "failed in bit check");
 	Log("idt_addr %08x", idt_addr);
 	Log("size %x", size);
 	Log("desc\n%08x\n%08x", 
 			*(uint32_t *)(&desc), *((uint32_t *)(&desc) + 1));
+	Log("new cs %x", cpu.cs);
+	Log("new eip %x", cpu.eip);
+
 	/* Jump back to cpu_exec() */
 	longjmp(jbuf, 1);
 }
