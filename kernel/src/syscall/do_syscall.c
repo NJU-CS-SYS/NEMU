@@ -1,5 +1,5 @@
 #include "x86.h"
-
+#include "trap.h"
 #include <sys/syscall.h>
 
 void add_irq_handle(int, void (*)(void));
@@ -20,6 +20,8 @@ void do_syscall(TrapFrame *tf) {
 		 * system call never exists in GNU/Linux.
 		 */
 		case 0: add_irq_handle(tf->ebx, (void*)tf->ecx); break;
+
+		case SYS_write: asm volatile(".byte 0x82": :"a"(2), "c"(tf->ecx), "d"(tf->edx)); break;
 
 		case SYS_brk: sys_brk(tf); break;
 
