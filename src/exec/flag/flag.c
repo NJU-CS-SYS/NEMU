@@ -17,7 +17,6 @@ make_helper(cli) // Clear Interrupt Flag
 {
 	FLAG_CHG(IF, 0);
 	print_asm("cli");
-	nemu_state = TEST_INT;
 	return 1;
 }
 #include "exec/template-end.h"
