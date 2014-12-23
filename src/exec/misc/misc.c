@@ -1,8 +1,7 @@
 #include "exec/helper.h"
-
 #include "ui/ui.h"
-
 #include "nemu.h"
+#include "cpu/intr.h"
 
 make_helper(inv) {
 	/* invalid opcode */
@@ -20,6 +19,13 @@ make_helper(int3) {
 	/* A breakpoint is hit! Do something here! */
 	nemu_state = INT;
 	return 1;
+}
+
+make_helper(int_i) // opcode = cd
+{
+	uint8_t imm = instr_fetch(eip + 1, 1);
+	raise_intr(imm);
+	return 2;
 }
 
 make_helper(nemu_trap) {

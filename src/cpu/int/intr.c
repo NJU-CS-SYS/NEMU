@@ -21,6 +21,7 @@ void raise_intr(uint8_t NO)
 	Log("idt_addr %x", idt_addr);
 	Log("size %x", size);
 	Log("desc\n%x\n%x", *(uint32_t *)(&desc), *((uint32_t *)(&desc) + 1));
+	test(0, "计划报废desu");
 	/* Jump back to cpu_exec() */
 	longjmp(jbuf, 1);
 }

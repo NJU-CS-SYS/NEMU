@@ -3,6 +3,7 @@
 
 make_helper(inv);
 make_helper(int3);
+make_helper(int_i);
 make_helper(nemu_trap);
 
 #endif
