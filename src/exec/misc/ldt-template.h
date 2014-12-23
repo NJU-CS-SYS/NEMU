@@ -34,4 +34,8 @@ make_helper(concat(lgdt_, SUFFIX))
 	print_asm("lgdt" str(SUFFIX) " %#x", addr);
 	return 1 + 1 + len;
 }
+make_helper(concat(lidt_, SUFFIX))
+{
+	return 0;
+}
 #include "exec/template-end.h"

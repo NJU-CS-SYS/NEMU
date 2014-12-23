@@ -98,6 +98,12 @@ typedef union {
 				uint32_t base;
 			};
 		}gdtr;
+		union {
+			struct {
+				uint16_t limit;
+				uint32_t base;
+			};
+		}idtr;
 	};
 } CPU_state;
 
