@@ -67,11 +67,6 @@ void cpu_exec(volatile uint32_t n) {
 	setjmp(jbuf);
 
 	for(; n > 0; n --) {
-		/* enable the breakpoint when enter loaded program */
-		if (cpu.eip > 0x800000 && bp_state == INIT) {
-			enable_all_bp();
-			bp_state = NORMAL;
-		}
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
 
@@ -81,7 +76,6 @@ void cpu_exec(volatile uint32_t n) {
 			bp_state = NORMAL;
 		}
 		
-		if (cpu.eip == 0xc0100eb2) nemu_state = TEST_INT;
 		cpu.eip += instr_len;
 
 		if(n_temp != -1 || (enable_debug && !quiet)) {
@@ -110,6 +104,7 @@ void cpu_exec(volatile uint32_t n) {
 				free_all();
 				return;
 			case TEST_INT:
+				Log("Fault!");
 				return;
 		}
 	}
