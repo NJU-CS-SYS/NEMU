@@ -99,6 +99,14 @@ make_helper(concat(iret_, SUFFIX))
 	POP(cpu.cs);
 	POP(cpu.eflags);
 
+	/* TODO This amend of eip is expected the intr is caused by
+	 * instruction `int' with 2 bytes in total. This may not be
+	 * always correct, so pay attention to this code when you 
+	 * run into fault
+	 */
+
+	Log("cpu.eip = cpu.eip + 2 - 1,"
+		" if you meet a failure, consider instruction `iret'");
 	cpu.eip = cpu.eip + 2 - 1;
 	print_asm("iret" str(SUFFIX));
 	return 1;
