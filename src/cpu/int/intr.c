@@ -22,6 +22,7 @@ void raise_intr(uint8_t NO)
 	*((uint32_t *)(&desc) + 1) = hwaddr_read(idt_addr + NO * size + 4, 4);
 
 	/* Store current infomation */
+	test(0, "计划报废desu");
 	push(cpu.eflags);
 	push(cpu.cs);
 	push(cpu.eip);
@@ -41,6 +42,5 @@ void raise_intr(uint8_t NO)
 	Log("new eip %x", cpu.eip);
 
 	/* Jump back to cpu_exec() */
-	test(0, "计划报废desu");
 	longjmp(jbuf, 1);
 }
