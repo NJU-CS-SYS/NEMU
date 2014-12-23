@@ -38,8 +38,20 @@ make_helper(int_i) // opcode = cd
 }
 
 make_helper(nemu_trap) {
-	printf("nemu: HIT \33[1;31m%s\33[0m TRAP at eip = 0x%08x\n\n", (cpu.eax == 0 ? "GOOD" : "BAD"), cpu.eip);
-	nemu_state = END;
+	char buf[1024];
+	int i, limit;
+	switch (cpu.eax) {
+		case 4:
+		    limit = cpu.edx;
+			for (i = 0; i < limit; i ++)
+				buf[i] = swaddr_read(cpu.ecx + i, 1);
+			buf[i] = '\0';
+			puts(buf);
+			break;
+		default:
+			printf("nemu: HIT \33[1;31m%s\33[0m TRAP at eip = 0x%08x\n\n", (cpu.eax == 0 ? "GOOD" : "BAD"), cpu.eip);
+			nemu_state = END;
+	}
 
 	print_asm("nemu trap");
 	return 1;
