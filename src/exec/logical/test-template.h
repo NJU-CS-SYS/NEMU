@@ -31,11 +31,11 @@ make_helper(concat(test_r_rm_, SUFFIX)) {
 }
 
 make_helper(concat(test_i2r_, SUFFIX)) {
-	DATA_TYPE imm = instr_fetch(eip + 1, 1);
+	DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
 	DATA_TYPE buf = REG(R_EAX) & imm;
 	TEST_FLAG(buf);
 	print_asm("test" str(SUFFIX) " $0x%x", imm);
-	return 2;
+	return 1 + DATA_BYTE;
 }
 
 make_helper(concat(test_i2rm_, SUFFIX)) {
