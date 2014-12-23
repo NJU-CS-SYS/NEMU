@@ -98,6 +98,7 @@ make_helper(concat(pusha_, SUFFIX))
 
 	test(temp_esp == REG(R_ESP) + (DATA_BYTE << 3),
 			"temp_esp %x, new_esp %x", temp_esp, REG(R_ESP));
+	print_asm("pusha");
 	return 1;
 }
 #include "exec/template-end.h"
