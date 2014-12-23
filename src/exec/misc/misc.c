@@ -24,6 +24,7 @@ make_helper(int3) {
 make_helper(int_i) // opcode = cd
 {
 	uint8_t imm = instr_fetch(eip + 1, 1);
+	print_asm("int %#x", imm);
 	raise_intr(imm);
 	return 2;
 }
