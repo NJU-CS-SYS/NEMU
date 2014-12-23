@@ -12,7 +12,9 @@ void raise_intr(uint8_t NO)
 	 * That is, use ``NO'' to index the IDT.
 	 */	 
 	lnaddr_t idt_addr = cpu.idtr.base; 
+	size_t size = sizeof(GateDesc);
 	Log("idt_addr %x", idt_addr);
+	Log("size %x", size);
 	/* Jump back to cpu_exec() */
 	longjmp(jbuf, 1);
 }
