@@ -145,7 +145,7 @@ helper_fun opcode_table_2 [256] = {
 };
 
 helper_fun group_table_0f_01[8] = {
-	inv, inv, lgdt_v, inv,
+	inv, inv, lgdt_v, lidt_v,
 	inv, inv, inv, inv
 };
 helper_fun group_table_80[8] = {

@@ -36,6 +36,21 @@ make_helper(concat(lgdt_, SUFFIX))
 }
 make_helper(concat(lidt_, SUFFIX))
 {
-	return 0;
+	ModR_M m;
+	m.val = instr_fetch(eip + 2, 1);
+	test(m.reg == 3, "wrong reg domain");
+	test(m.mod != 3, "wrong mod domain, expected addressing");
+	
+	swaddr_t addr;
+	int len = read_ModR_M(eip + 2, &addr);
+	cpu.idtr.limit = swaddr_read(addr, 2);
+#if DATA_BYTE == 2
+	cpu.idtr.base = swaddr_read(addr + 2, 4) & 0xffffff;
+#else
+	cpu.idtr.base = swaddr_read(addr + 2, 4);
+#endif
+
+	print_asm("lidt" str(SUFFIX) " %#x", addr);
+	return 1 + 1 + len;
 }
 #include "exec/template-end.h"
