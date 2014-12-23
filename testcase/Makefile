@@ -1,5 +1,5 @@
 all:
-	cd asm && make
+	cd asm && make && hello
 	cd c && make
 
 clean:
