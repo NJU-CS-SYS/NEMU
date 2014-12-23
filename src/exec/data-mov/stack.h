@@ -14,4 +14,8 @@ make_helper(push_m2s_b);
 make_helper(push_m2s_w);
 make_helper(push_m2s_l);
 make_helper(push_m2s_v);
+
+make_helper(pusha_w);
+make_helper(pusha_l);
+make_helper(pusha_v);
 #endif

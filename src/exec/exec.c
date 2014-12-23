@@ -35,7 +35,7 @@ helper_fun opcode_table [256] = {
 /* 0x54 */	push_v, push_v, push_v, push_v,
 /* 0x58 */	pop_stack2r_v, pop_stack2r_v, pop_stack2r_v, pop_stack2r_v, 
 /* 0x5c */	pop_stack2r_v, pop_stack2r_v, pop_stack2r_v, pop_stack2r_v, 
-/* 0x60 */	inv, inv, inv, inv,
+/* 0x60 */	pusha_v, inv, inv, inv,
 /* 0x64 */	inv, inv, data_size, inv,
 /* 0x68 */	push_i2s_v, imul_irm2r_v, push_i2s_b, imul_i8rm2r_v, 
 /* 0x6c */	inv, inv, inv, inv, 

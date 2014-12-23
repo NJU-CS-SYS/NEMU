@@ -28,5 +28,10 @@ make_helper(push_m2s_v)
 {
 	return (suffix == 'l' ? push_m2s_l(eip) : push_m2s_w(eip));
 }
+make_helper(pusha_v)
+{
+	return ('l' == suffix ? pusha_l(eip) : pusha_w(eip));
+}
 v_helper(pop_stack2m);
 v_helper(pop_stack2r);
+

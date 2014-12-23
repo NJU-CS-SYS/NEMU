@@ -14,13 +14,14 @@
 /* 50 +rb PUSH r16  PUSH register word
  * 50 +rw PUSH r32  PUSH register dword
  */
+
 make_helper(concat(push_, SUFFIX)) {
 	int reg_code = instr_fetch(eip, 1) & 0x7;
 	/* according to 80386 manual, push esp/sp should be
 	 * the old value of esp/sp,
 	 * so we minus esp first by not store its result.
 	 * Due to little endian, esp should get smaller.
-	 */
+ 	 */
 	MEM_W( REG(4) - DATA_BYTE, REG(reg_code) );
 	REG(R_ESP) -= DATA_BYTE;
 
@@ -75,11 +76,28 @@ make_helper(concat(pop_stack2m_, SUFFIX)) {
 	return len;
 }
 
-make_helper(concat(pop_stack2r_, SUFFIX)) {
+make_helper(concat(pop_stack2r_, SUFFIX))
+{
 	int regcode = instr_fetch(eip, 1) & 0x7;
 	REG(regcode) = MEM_R(REG(R_ESP));
 	cpu.esp += DATA_BYTE;
 	print_asm("pop" str(SUFFIX) " %%%s", REG_NAME(regcode));	
+	return 1;
+}
+make_helper(concat(pusha_, SUFFIX))
+{
+	const DATA_TYPE temp_esp = REG(R_ESP);
+	PUSH(REG(R_EAX));
+	PUSH(REG(R_ECX));
+	PUSH(REG(R_EDX));
+	PUSH(REG(R_EBX));
+	PUSH(temp_esp);
+	PUSH(REG(R_EBP));
+	PUSH(REG(R_ESI));
+	PUSH(REG(R_EDI)); 
+
+	test(temp_esp == REG(R_ESP) + (DATA_BYTE << 3),
+			"temp_esp %x, new_esp %x", temp_esp, REG(R_ESP));
 	return 1;
 }
 #include "exec/template-end.h"

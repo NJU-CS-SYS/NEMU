@@ -28,7 +28,7 @@
 #define PUSH(src_data)\
 	do{\
 		Sreg = SS;\
-		MEM_W( REG(R_ESP) - DATA_BYTE, src_data );\
+		MEM_W( REG(R_ESP) - DATA_BYTE, (src_data) );\
 		REG(R_ESP) -= DATA_BYTE;\
 	}while(0);
 
