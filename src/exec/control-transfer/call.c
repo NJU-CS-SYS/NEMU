@@ -25,6 +25,9 @@ make_helper(leave_v) {
 make_helper(ret_near_v) {
 	return (suffix == 'l' ? ret_near_l(eip) : ret_near_w(eip));
 }
-
+make_helper(iret_v)
+{
+	return ('l' == suffix ? iret_l(eip) : iret_w(eip));
+}
 v_helper(call_rm);
 v_helper(ret_imm16);

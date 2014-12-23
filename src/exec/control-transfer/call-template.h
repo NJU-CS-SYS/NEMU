@@ -92,4 +92,15 @@ make_helper(concat(ret_imm16_, SUFFIX)) {
 }
 #endif
 
+make_helper(concat(iret_, SUFFIX))
+{
+	/* TODO This instruction is not implement fully! */
+	POP(cpu.eip);
+	POP(cpu.cs);
+	POP(cpu.eflags);
+
+	print_asm("iret" str(SUFFIX));
+	return 1;
+}
+
 #include "exec/template-end.h"
