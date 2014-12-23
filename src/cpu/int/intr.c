@@ -23,10 +23,10 @@ void raise_intr(uint8_t NO)
 
 	/* Store current infomation */
 	push(cpu.eflags);
+	test(0, "计划报废desu");
 	push(cpu.cs);
 	push(cpu.eip);
 
-	test(0, "计划报废desu");
 	/* Jump */
 	cpu.cs = desc.segment;
 	cpu.eip = (desc.offset_31_16 << 16) | (desc.offset_15_0);
