@@ -21,13 +21,13 @@ void do_syscall(TrapFrame *tf) {
 		 */
 		case 0: add_irq_handle(tf->ebx, (void*)tf->ecx); break;
 
-
 		case SYS_brk: sys_brk(tf); break;
 
 		/* TODO: Add more system calls. */
 
 		case SYS_write: asm volatile(".byte 0x82": :"a"(2), "c"(tf->ecx), "d"(tf->edx)); break;
-		//default: panic("Unhandled system call: id = %d", tf->eax);
+		
+		default: panic("Unhandled system call: id = %d", tf->eax);
 	}
 }
 
