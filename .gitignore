@@ -5,3 +5,4 @@
 !*.[cSh]
 !test.sh
 !.gitignore
+!./testcase/*
