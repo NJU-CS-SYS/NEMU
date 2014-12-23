@@ -99,6 +99,7 @@ make_helper(concat(iret_, SUFFIX))
 	POP(cpu.cs);
 	POP(cpu.eflags);
 
+	cpu.eip = cpu.eip + 2 - 1;
 	print_asm("iret" str(SUFFIX));
 	return 1;
 }
