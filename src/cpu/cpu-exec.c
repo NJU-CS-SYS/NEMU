@@ -12,7 +12,7 @@ int exec(swaddr_t);
 void load_prog();
 void init_dram();
 void tlb_init();
-
+extern uint32_t main_entry;
 char assembly[40];
 char *asm_string = (char *)assembly;
 jmp_buf jbuf;	/* Make it easy to perform exception handling */
@@ -78,6 +78,7 @@ void cpu_exec(volatile uint32_t n) {
 		
 		cpu.eip += instr_len;
 
+		if (cpu.eip == main_entry) nemu_state = TEST_INT;
 		if(n_temp != -1 || (enable_debug && !quiet)) {
 			print_bin_instr(eip_temp, instr_len);
 			puts(assembly);

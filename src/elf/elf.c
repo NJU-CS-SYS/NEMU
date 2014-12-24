@@ -11,6 +11,7 @@ static char *exec_file;
 static char *strtab = NULL;
 static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
+uint32_t main_entry;
 
 void set_main_args(int argc, char *argv[]) {
 	main_argc = argc;
@@ -33,6 +34,7 @@ void load_table() {
 	Elf32_Ehdr *elf = (void *)buf;
 	char magic[] = {ELFMAG0, ELFMAG1, ELFMAG2, ELFMAG3};
 
+	main_entry = elf->e_entry;
 	/* Check ELF header */
 	assert(memcmp(elf->e_ident, magic, 4) == 0);		// magic number
 	assert(elf->e_ident[EI_CLASS] == ELFCLASS32);		// 32-bit architecture
