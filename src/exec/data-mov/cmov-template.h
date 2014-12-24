@@ -27,6 +27,6 @@
 	}while(0)
 #endif
 
-make_helper(concat(cmovg_, SUFFIX)) { make_cmov(1, g, SUFFIX); }
+make_helper(concat(cmovg_, SUFFIX)) { make_cmov(CC_G, g, SUFFIX); }
 
 #include "exec/template-end.h"
