@@ -1,7 +1,5 @@
 #include "ui/ui.h"
-
 #include "nemu.h"
-
 #include <setjmp.h>
 
 #define LOADER_START 0x100000
@@ -79,10 +77,10 @@ void cpu_exec(volatile uint32_t n) {
 		cpu.eip += instr_len;
 
 		if (cpu.eip == main_entry) nemu_state = TEST_INT;
+
 		if(n_temp != -1 || (enable_debug && !quiet)) {
 			print_bin_instr(eip_temp, instr_len);
 			puts(assembly);
-
 		}
 
 		if (wp_state == ON) {
