@@ -5,6 +5,11 @@
 
 void print_bin_instr(swaddr_t eip, int len);
 extern char assembly[];
+extern int nemu_state;
+
+static char str_buffer[1024];
+static int buffer_idx = 0;
+static void print_buffer(uint32_t, size_t);
 
 make_helper(inv) {
 	/* invalid opcode */
@@ -38,15 +43,9 @@ make_helper(int_i) // opcode = cd
 }
 
 make_helper(nemu_trap) {
-	char buf[1024];
-	int i, limit;
 	switch (cpu.eax) {
 		case 2:
-		    limit = cpu.edx;
-			for (i = 0; i < limit; i ++)
-				buf[i] = swaddr_read(cpu.ecx + i, 1);
-			buf[i] = '\0';
-			puts(buf);
+			print_buffer(cpu.ecx, cpu.edx);
 			break;
 		default:
 			printf("nemu: HIT \33[1;31m%s\33[0m TRAP at eip = 0x%08x\n\n", (cpu.eax == 0 ? "GOOD" : "BAD"), cpu.eip);
@@ -55,4 +54,20 @@ make_helper(nemu_trap) {
 
 	print_asm("nemu trap");
 	return 1;
+}
+
+static void print_buffer(uint32_t ptr, size_t len)
+{
+	int i;
+	for (i = 0; i < len; i ++) {
+		str_buffer[buffer_idx] = swaddr_read(ptr + i, 1);
+		if ( str_buffer[buffer_idx] == '\n' ) {
+			str_buffer[buffer_idx + 1] = '\0';
+			Log("%s", str_buffer);
+			buffer_idx = 0;
+			nemu_state = TEST_INT;
+		} else {
+			buffer_idx ++;
+		}
+	}
 }
