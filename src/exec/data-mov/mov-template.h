@@ -3,7 +3,9 @@
 #include "cpu/modrm.h"
 #include "../template.h"
 #include "cpu/reg.h"
+#include "cpu/segment.h"
 void tlb_init();
+extern int Sreg;
 
 make_helper(concat(mov_i2r_, SUFFIX)) {
 	int reg_code = instr_fetch(eip, 1) & 0x7;
@@ -178,15 +180,17 @@ make_helper(concat(movs_w2r_, SUFFIX)) {
 }
 
 make_helper(concat(movs_m2m_, SUFFIX)) {
-	DATA_TYPE buf = MEM_R(REG(R_ESI));
-	MEM_W(REG(R_EDI), buf);
-	print_asm("movs ES:%%%s,ES:%%%s", REG_NAME(R_ESI), REG_NAME(R_EDI));
+	Sreg = DS;
+	DATA_TYPE buf = MEM_R( cpu.esi );
+	Sreg = ES;
+	MEM_W( cpu.edi, buf );
+	print_asm("movs %%ds:%%%s,%%es:%%%s", regsl[R_ESI], regsl[R_EDI]);
 	if (FLAG_VAL(DF)) {
-		REG(R_EDI) -= DATA_BYTE;
-		REG(R_ESI) -= DATA_BYTE;
+		cpu.edi -= DATA_BYTE;
+		cpu.esi -= DATA_BYTE;
 	} else {
-		REG(R_EDI) += DATA_BYTE;
-		REG(R_ESI) += DATA_BYTE;
+		cpu.edi += DATA_BYTE;
+		cpu.esi += DATA_BYTE;
 	}
 	return 1;
 }
