@@ -45,6 +45,7 @@ make_helper(int_i) // opcode = cd
 make_helper(nemu_trap) {
 	switch (cpu.eax) {
 		case 2:
+			Log("tf->eax %x", cpu.ebx);
 			cpu.eax = print_buffer(cpu.ecx, cpu.edx);
 			swaddr_write(cpu.ebx, 4, cpu.eax);
 			break;
