@@ -103,7 +103,8 @@ void cpu_exec(volatile uint32_t n) {
 				free_all();
 				return;
 			case TEST_INT:
-				Log("Fault!");
+				printf("\33[1;32mStop to confirm, press `c' to continue\33[0m\n");
+				fflush(stdout);
 				return;
 		}
 	}
