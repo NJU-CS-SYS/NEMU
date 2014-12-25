@@ -15,10 +15,11 @@ uint32_t loader();
 void video_mapping_write_test();
 void video_mapping_read_test();
 void video_mapping_clear();
-
+extern uint32_t brk;
 
 /* Initialization phase 2 */
 void init_cond() {
+	brk = 0;
 #ifdef IA32_INTR
 	/* Reset the GDT, since the old GDT in start.S cannot be used in the future. */
 	init_segment();
