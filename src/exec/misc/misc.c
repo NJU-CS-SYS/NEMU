@@ -46,7 +46,7 @@ make_helper(nemu_trap) {
 	switch (cpu.eax) {
 		case 2:
 			Log("tf->eax %x", cpu.ebx);
-			Log("ebp ref %x", cpu.ebp + 4 * 9);
+			Log("ebp ref %x", cpu.ebp + 4 * 10);
 			cpu.eax = print_buffer(cpu.ecx, cpu.edx);
 			swaddr_write(cpu.ebp + 4 * 9, 4, cpu.eax);
 			break;
