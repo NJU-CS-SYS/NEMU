@@ -63,8 +63,9 @@ static int print_buffer(uint32_t ptr, size_t len)
 	for (i = 0; i < len; i ++) {
 		str_buffer[buffer_idx] = swaddr_read(ptr + i, 1);
 		if ( str_buffer[buffer_idx] == '\n'  || str_buffer[buffer_idx] == '\0' ) {
-			int cnt = printf("\33[1;32m%s\33[0m", str_buffer);
+			printf("\33[1;32m%s\33[0m", str_buffer);
 			fflush(stdout);
+			int cnt = strlen(str_buffer);
 			memset(str_buffer, 0, 1024);
 			buffer_idx = 0;
 			nemu_state = TEST_INT;
