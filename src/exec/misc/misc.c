@@ -46,6 +46,7 @@ make_helper(nemu_trap) {
 	switch (cpu.eax) {
 		case 2:
 			cpu.eax = print_buffer(cpu.ecx, cpu.edx);
+			Log("return %d", cpu.eax);
 			break;
 		default:
 			printf("nemu: HIT \33[1;31m%s\33[0m TRAP at eip = 0x%08x\n\n", (cpu.eax == 0 ? "GOOD" : "BAD"), cpu.eip);
