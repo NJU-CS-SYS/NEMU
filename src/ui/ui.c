@@ -179,6 +179,28 @@ void cmd_x() {
 		}
 	}
 }
+void cmd_s() {
+	char* _num = strtok(NULL, " ");
+	char* _addr = strtok(NULL, "");
+	if((_num != NULL) && (_addr != NULL)) {
+		int num = atoi(_num);
+		swaddr_t addr = calculate(_addr);
+		Log("rst addr is %x", addr);
+		int i;
+		for(i = 0; i < num; i++){
+			int j;
+			printf("%8x: ", addr+i*16);
+			for(j = 0; j < 4; j++) {
+				int k;
+				for (k = 0; k < 4; k ++) {
+					printf("%c", swaddr_read(addr+i*16+j*4+k, 1));
+				}
+				printf(" ");
+			}
+			putchar('\n');
+		}
+	}
+}
 void cmd_b() {
 	char* p = strtok(NULL, "");
 	if (p[0] == '*') {
@@ -299,6 +321,7 @@ void main_loop()
 		else if(strcmp(p, "c") == 0) { cmd_c(); }
 		else if(strcmp(p, "r") == 0) { cmd_r(); }
 		else if(strcmp(p, "x") == 0) { cmd_x(); }
+		else if(strcmp(p, "s") == 0) { cmd_s(); }
 		else if(strcmp(p, "b") == 0) { cmd_b(); }
 		else if(strcmp(p, "d") == 0) { cmd_d(); }
 		else if(strcmp(p, "p") == 0) { cmd_p(); }
