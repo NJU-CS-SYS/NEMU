@@ -50,7 +50,7 @@ void restart() {
 
 	trigger = TRIGGER_INIT;
 
-#if 0
+#if 1
 	sdl_clear_event_queue();
 #endif
 }
