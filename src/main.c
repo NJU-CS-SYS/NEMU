@@ -54,8 +54,8 @@ int main(int argc, char *argv[]) {
 	/* Initialization of device */
 #if 0
 	init_device();
-	init_sdl();
 #endif
+	init_sdl();
 
 	main_loop();
 
