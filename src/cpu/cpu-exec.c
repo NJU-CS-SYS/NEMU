@@ -20,7 +20,8 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 extern int quiet;
 
-static int trigger = 0;
+#define TRIGGER_INIT 1
+static int trigger = TRIGGER_INIT;
 void restart() {
 	/* Perform some initialization to restart a program */
 	load_prog();
@@ -47,7 +48,7 @@ void restart() {
 	/* Enable the breakpoint */
 	bp_state = INIT;
 
-	trigger = 0;
+	trigger = TRIGGER_INIT;
 
 	sdl_clear_event_queue();
 }
