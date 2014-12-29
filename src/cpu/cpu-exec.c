@@ -10,6 +10,7 @@ int exec(swaddr_t);
 void load_prog();
 void init_dram();
 void tlb_init();
+void sdl_clear_event_queue();
 extern uint32_t main_entry;
 char assembly[40];
 char *asm_string = (char *)assembly;
@@ -47,6 +48,8 @@ void restart() {
 	bp_state = INIT;
 
 	trigger = 0;
+
+	sdl_clear_event_queue();
 }
 
 void print_bin_instr(swaddr_t eip, int len) {
