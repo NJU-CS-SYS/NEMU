@@ -52,10 +52,10 @@ int main(int argc, char *argv[]) {
 	reg_test();
 
 	/* Initialization of device */
-#if 0
+#if 1 
 	init_device();
 #endif
-	init_sdl();
+	//init_sdl();
 
 	main_loop();
 
