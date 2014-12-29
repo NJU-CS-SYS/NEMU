@@ -20,7 +20,7 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 extern int quiet;
 
-#define TRIGGER_INIT 1
+#define TRIGGER_INIT 0
 static int trigger = TRIGGER_INIT;
 void restart() {
 	/* Perform some initialization to restart a program */
@@ -50,7 +50,9 @@ void restart() {
 
 	trigger = TRIGGER_INIT;
 
+#if 0
 	sdl_clear_event_queue();
+#endif
 }
 
 void print_bin_instr(swaddr_t eip, int len) {
