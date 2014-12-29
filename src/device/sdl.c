@@ -27,7 +27,7 @@ static void device_update(int signum) {
 	SDL_Event event;
 	while(SDL_PollEvent(&event)) {
 		// If a key was pressed
-
+		Log("device_update");
 		uint32_t sym = event.key.keysym.sym;
 		if( event.type == SDL_KEYDOWN ) {
 			keyboard_intr(sym2scancode[sym >> 8][sym & 0xff]);
