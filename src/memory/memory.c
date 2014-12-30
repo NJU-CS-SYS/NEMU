@@ -1,5 +1,6 @@
 #include "common.h"
 #include "cpu/segment.h"
+#include "io/mmio.h"
 #include "cpu/reg.h"
 uint32_t cache_read(swaddr_t addr, size_t len);
 uint32_t cache_write(swaddr_t addr, size_t len, uint32_t data);
