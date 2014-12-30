@@ -9,10 +9,10 @@
 #undef DATA_BYTE
 
 #define DATA_BYTE 4
-#include "io-tempalte.h"
+#include "io-template.h"
 #undef DATA_BYTE
 
 extern char suffix;
 
-make_helper(io_i2a_v)
-{ return ('l' == suffix ? io_i2a_l(eip) : io_i2a_w(eip)); }
+v_helper(in_i2a);
+v_helper(in_d2a);

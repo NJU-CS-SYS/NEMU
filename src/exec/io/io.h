@@ -1,4 +1,4 @@
 #include "exec/helper.h"
 
-all_helper(io_i2a);
-all_helper(io_d2a);
+all_helper(in_i2a);
+all_helper(in_d2a);
