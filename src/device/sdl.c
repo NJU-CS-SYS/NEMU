@@ -25,7 +25,6 @@ static void device_update(int signum) {
 		update_screen();
 	}
 
-#if 0
 	SDL_Event event;
 
 	while(SDL_PollEvent(&event)) {
@@ -45,6 +44,7 @@ static void device_update(int signum) {
 		}
 	}
 
+#if 0
 	int ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
 	assert(ret == 0);
 #endif
