@@ -19,6 +19,7 @@ extern void keyboard_intr();
 extern void update_screen();
 static void device_update(int signum) {
 	jiffy ++;
+#if 0
 	timer_intr();
 	if(jiffy % (TIMER_HZ / VGA_HZ) == 0) {
 		update_screen();
@@ -44,6 +45,7 @@ static void device_update(int signum) {
 
 	int ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
 	assert(ret == 0);
+#endif
 }
 
 void sdl_clear_event_queue() {
