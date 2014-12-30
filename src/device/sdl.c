@@ -21,7 +21,7 @@ extern void update_screen();
 
 static void device_update(int signum) {
 	jiffy ++;
-	Log("device update %lld", jiffy);
+	printf("device update %lld\n", jiffy);
 	timer_intr();
 	if(jiffy % (TIMER_HZ / VGA_HZ) == 0) {
 		update_screen();
