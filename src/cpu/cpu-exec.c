@@ -71,7 +71,6 @@ void print_bin_instr(swaddr_t eip, int len)
 	}
 	printf("%*.s", 50 - (12 + 3 * len), "");
 }
-
 void cpu_exec(volatile uint32_t n)
 {
 	volatile uint32_t n_temp = n;
@@ -90,7 +89,6 @@ void cpu_exec(volatile uint32_t n)
 		
 		cpu.eip += instr_len;
 		
-
 		if (cpu.eip == main_entry) trigger = 1; 
 
 		if( (n_temp != -1 || (enable_debug && !quiet)) && trigger ) {
@@ -107,11 +105,13 @@ void cpu_exec(volatile uint32_t n)
 			}
 		}
 	
+		/*
 		if(cpu.INTR & FLAG_VAL(IF)) {
 			uint32_t intr_no = i8259_query_intr();
 			i8259_ack_intr();
 			raise_intr(intr_no);
 		}
+		*/
 
 		switch(nemu_state) {
 			case INT:
