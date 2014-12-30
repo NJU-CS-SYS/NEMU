@@ -24,7 +24,7 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 extern int quiet;
 
-#define TRIGGER_INIT 0
+#define TRIGGER_INIT 1
 static int trigger = TRIGGER_INIT;
 
 void restart()
