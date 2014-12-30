@@ -104,8 +104,8 @@ typedef union {
 				uint32_t base;
 			};
 		}idtr;
+		bool INTR;
 	};
-	bool INTR;
 } CPU_state;
 
 extern CPU_state cpu;

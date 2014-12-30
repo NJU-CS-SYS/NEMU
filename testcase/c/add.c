@@ -18,7 +18,7 @@ int main() {
 		}
 	}
 
-//	HIT_GOOD_TRAP;
+	HIT_GOOD_TRAP;
 
 	return 0;
 }
