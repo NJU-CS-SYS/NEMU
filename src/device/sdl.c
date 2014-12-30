@@ -44,10 +44,10 @@ static void device_update(int signum) {
 			exit(0);
 		}
 	}
-#endif
 
 	int ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
 	assert(ret == 0);
+#endif
 }
 
 void sdl_clear_event_queue() {
