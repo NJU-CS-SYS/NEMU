@@ -19,8 +19,8 @@ extern void keyboard_intr();
 extern void update_screen();
 static void device_update(int signum) {
 	jiffy ++;
-#if 0
 	timer_intr();
+#if 0
 	if(jiffy % (TIMER_HZ / VGA_HZ) == 0) {
 		update_screen();
 	}
