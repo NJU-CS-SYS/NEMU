@@ -21,6 +21,7 @@ extern void update_screen();
 
 static void device_update(int signum) {
 	jiffy ++;
+	Log("device update %lld", jiffy);
 	timer_intr();
 	if(jiffy % (TIMER_HZ / VGA_HZ) == 0) {
 		update_screen();
@@ -46,9 +47,7 @@ static void device_update(int signum) {
 	}
 
 	int ret = 0;
-#if 0
 	ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
-#endif
 	assert(ret == 0);
 }
 

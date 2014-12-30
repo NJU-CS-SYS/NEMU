@@ -44,6 +44,9 @@ play:
 run: nemu $(TESTFILE)
 	./nemu -d $(TESTFILE) 2>&1 | tee log.txt
 
+go: nemu $(TESTFILE)
+	./nemu $(TESTFILE) 
+
 gdb: nemu $(TESTFILE)
 	gdb --args ./nemu -dq $(TESTFILE)
 
