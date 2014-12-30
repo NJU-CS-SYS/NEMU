@@ -10,13 +10,23 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len);
 uint32_t hwaddr_read(hwaddr_t addr, size_t len) 
 {
 	assert(len == 1 || len == 2 || len == 4);
-	return cache_read(addr, len);
+	int mmio_code = is_mmio(addr);
+	if (mmio_code != -1) {
+		return mmio_read(addr, len, mmio_code);
+	} else {
+		return cache_read(addr, len);
+	}
 }
 
 void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) 
 {
 	assert(len == 1 || len == 2 || len == 4);
-	cache_write(addr, len, data);
+	int mmio_code = is_mmio(addr);
+	if (mmio_code != -1) {
+		mmio_write(addr, len, data, mmio_code);
+	} else {
+		cache_write(addr, len, data);
+	}
 }
 
 static uint32_t lnaddr_read(lnaddr_t addr, size_t len) 
