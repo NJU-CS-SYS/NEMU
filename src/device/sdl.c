@@ -83,6 +83,6 @@ void init_sdl() {
 
 	it.it_value.tv_sec = 0;
 	it.it_value.tv_usec = 1000000 / TIMER_HZ;
-	//ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
+	ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
 	assert(ret == 0);
 }
