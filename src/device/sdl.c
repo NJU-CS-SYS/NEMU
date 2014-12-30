@@ -18,6 +18,7 @@ static struct itimerval it;
 extern void timer_intr();
 extern void keyboard_intr();
 extern void update_screen();
+
 static void device_update(int signum) {
 	jiffy ++;
 	timer_intr();
