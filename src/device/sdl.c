@@ -44,8 +44,7 @@ static void device_update(int signum) {
 	}
 
 	int ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
-	Log("ret");
-	nemu_state = TEST_INT;
+	Log("ret = %x", ret);
 	assert(ret == 0);
 }
 
