@@ -25,7 +25,9 @@ static void device_update(int signum) {
 		update_screen();
 	}
 
+#if 0
 	SDL_Event event;
+
 	while(SDL_PollEvent(&event)) {
 		// If a key was pressed
 		uint32_t sym = event.key.keysym.sym;
@@ -42,9 +44,9 @@ static void device_update(int signum) {
 			exit(0);
 		}
 	}
+#endif
 
 	int ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
-	Log("ret = %x", ret);
 	assert(ret == 0);
 }
 
