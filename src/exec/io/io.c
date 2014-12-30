@@ -16,3 +16,5 @@ extern char suffix;
 
 v_helper(in_i2a);
 v_helper(in_d2a);
+v_helper(out_i2a);
+v_helper(out_d2a);
