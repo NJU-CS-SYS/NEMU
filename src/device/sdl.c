@@ -1,6 +1,7 @@
 #include "common.h"
 #include "sdl.h"
 #include "vga.h"
+#include "ui/ui.h"
 
 #include <sys/time.h>
 #include <signal.h>
@@ -24,7 +25,6 @@ static void device_update(int signum) {
 		update_screen();
 	}
 
-#if 0
 	SDL_Event event;
 	while(SDL_PollEvent(&event)) {
 		// If a key was pressed
@@ -44,8 +44,9 @@ static void device_update(int signum) {
 	}
 
 	int ret = setitimer(ITIMER_VIRTUAL, &it, NULL);
+	Log("ret");
+	nemu_state = TEST_INT;
 	assert(ret == 0);
-#endif
 }
 
 void sdl_clear_event_queue() {
