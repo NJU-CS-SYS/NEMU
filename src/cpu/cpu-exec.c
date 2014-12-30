@@ -11,6 +11,10 @@ void load_prog();
 void init_dram();
 void tlb_init();
 void sdl_clear_event_queue();
+uint32_t i8259_query_intr();
+void i8259_ack_intr();
+void raise_intr(uint8_t);
+
 extern uint32_t main_entry;
 char assembly[40];
 char *asm_string = (char *)assembly;
@@ -20,9 +24,11 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 extern int quiet;
 
-#define TRIGGER_INIT 1
+#define TRIGGER_INIT 0
 static int trigger = TRIGGER_INIT;
-void restart() {
+
+void restart()
+{
 	/* Perform some initialization to restart a program */
 	load_prog();
 	memcpy(hwa_to_va(LOADER_START), loader, loader_len);
@@ -55,7 +61,8 @@ void restart() {
 #endif
 }
 
-void print_bin_instr(swaddr_t eip, int len) {
+void print_bin_instr(swaddr_t eip, int len)
+{
 	int i;
 
 	printf("%8x:   ", eip);
@@ -65,7 +72,8 @@ void print_bin_instr(swaddr_t eip, int len) {
 	printf("%*.s", 50 - (12 + 3 * len), "");
 }
 
-void cpu_exec(volatile uint32_t n) {
+void cpu_exec(volatile uint32_t n)
+{
 	volatile uint32_t n_temp = n;
 
 	setjmp(jbuf);
@@ -81,6 +89,7 @@ void cpu_exec(volatile uint32_t n) {
 		}
 		
 		cpu.eip += instr_len;
+		
 
 		if (cpu.eip == main_entry) trigger = 1; 
 
@@ -97,7 +106,13 @@ void cpu_exec(volatile uint32_t n) {
 				return;
 			}
 		}
-		
+	
+		if(cpu.INTR & FLAG_VAL(IF)) {
+			uint32_t intr_no = i8259_query_intr();
+			i8259_ack_intr();
+			raise_intr(intr_no);
+		}
+
 		switch(nemu_state) {
 			case INT:
 				printf("\n\nUser interrupt\n");
