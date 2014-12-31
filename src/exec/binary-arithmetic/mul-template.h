@@ -116,7 +116,7 @@ make_helper(concat(mul_rm2r_, SUFFIX)) {
 	rst.val = src * dst;
 	MUL_FLAG(rst);
 	MUL_RST(rst);
-	return len + 1;
+	return len;
 }
 
 make_helper(concat(imul_rm2imp_, SUFFIX)) {
