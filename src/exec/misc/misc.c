@@ -33,11 +33,6 @@ make_helper(int_i) // opcode = cd
 {
 	uint8_t imm = instr_fetch(eip + 1, 1);
 
-	/* Special output */
-	print_asm("int %#x", imm);
-	print_bin_instr(eip, 2);
-	puts(assembly);
-
 	raise_intr(imm);
 	return 2;
 }
@@ -68,7 +63,6 @@ static int print_buffer(uint32_t ptr, size_t len)
 			int cnt = strlen(str_buffer);
 			memset(str_buffer, 0, 1024);
 			buffer_idx = 0;
-			nemu_state = TEST_INT;
 			return cnt;
 		} else {
 			buffer_idx ++;
