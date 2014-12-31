@@ -17,3 +17,4 @@
 #include "string/stos.h"
 
 #include "io/io.h"
+#include "io/hlt.h"

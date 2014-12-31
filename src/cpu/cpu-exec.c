@@ -4,8 +4,6 @@
 
 #define LOADER_START 0x100000
 
-int sig_test = 0;
-
 int exec(swaddr_t);
 void load_prog();
 void init_dram();
@@ -24,7 +22,7 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 extern int quiet;
 
-#define TRIGGER_INIT 1
+#define TRIGGER_INIT 0
 static int trigger = TRIGGER_INIT;
 
 void restart()
@@ -56,21 +54,20 @@ void restart()
 
 	trigger = TRIGGER_INIT;
 
-#if 1
 	sdl_clear_event_queue();
-#endif
 }
 
 void print_bin_instr(swaddr_t eip, int len)
 {
 	int i;
-
 	printf("%8x:   ", eip);
-	for(i = 0; i < len; i ++) {
+	for(i = 0; i < len; i ++)
 		printf("%02x ", swaddr_read(eip + i, 1));
-	}
 	printf("%*.s", 50 - (12 + 3 * len), "");
 }
+
+void int_polling();
+
 void cpu_exec(volatile uint32_t n)
 {
 	volatile uint32_t n_temp = n;
@@ -81,12 +78,8 @@ void cpu_exec(volatile uint32_t n)
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
 
-		/* restore the breakpoint on the byte */
-		if (bp_state == RECOVER) { 
-			swaddr_write(bp_backup, 1, INT3_CODE);
-			bp_state = NORMAL;
-		}
 		
+
 		cpu.eip += instr_len;
 		
 		if (cpu.eip == main_entry) trigger = 1; 
@@ -94,6 +87,11 @@ void cpu_exec(volatile uint32_t n)
 		if( (n_temp != -1 || (enable_debug && !quiet)) && trigger ) {
 			print_bin_instr(eip_temp, instr_len);
 			puts(assembly);
+		}
+
+		if (bp_state == RECOVER) { 
+			swaddr_write(bp_backup, 1, INT3_CODE);
+			bp_state = NORMAL;
 		}
 
 		if (wp_state == ON) {
@@ -105,11 +103,7 @@ void cpu_exec(volatile uint32_t n)
 			}
 		}
 	
-		if(cpu.INTR & FLAG_VAL(IF)) {
-			uint32_t intr_no = i8259_query_intr();
-			i8259_ack_intr();
-			raise_intr(intr_no);
-		}
+		int_polling();
 
 		switch(nemu_state) {
 			case INT:
@@ -126,5 +120,14 @@ void cpu_exec(volatile uint32_t n)
 				fflush(stdout);
 				return;
 		}
+	}
+}
+
+void int_polling()
+{
+	if(cpu.INTR & FLAG_VAL(IF)) {
+		uint32_t intr_no = i8259_query_intr();
+		i8259_ack_intr();
+		raise_intr(intr_no);
 	}
 }

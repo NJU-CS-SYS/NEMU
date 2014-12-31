@@ -35,10 +35,10 @@ struct _frame_node {
 	struct _frame_node *next;
 };
 typedef struct _frame_node frame_node;
-
 static char previous[64];
 /* We use the readline library to provide more flexibility to read from stdin. */
-char* rl_gets() { /* read line get string */
+char* rl_gets()
+{ /* read line get string */
 	static char *line_read = NULL;
 
 	if (line_read) { /* why this statements needed? */
@@ -58,16 +58,20 @@ char* rl_gets() { /* read line get string */
 
 	return line_read;
 }
+
 /* This function will be called when you press <C-c>. And it will return to 
  * where you press <C-c>. If you are interesting in how it works, please
  * search for "Unix signal" in the Internet.
  */
-static void control_C(int signum) {
+
+static void control_C(int signum)
+{
 	if(nemu_state == RUNNING) {
 		nemu_state = INT;
 	}
 }
-void init_signal() {
+void init_signal()
+{
 	/* Register a signal handler. */
 	struct sigaction s;
 	/* sigaction is a system struct ! */
@@ -76,8 +80,8 @@ void init_signal() {
 	int ret = sigaction(SIGINT, &s, NULL);
 	assert(ret == 0);
 }
-
-static void cmd_c() {
+static void cmd_c()
+{
 	if(nemu_state == END) {
 		puts("The Program does not start. Use 'r' command to start the program.");
 		return;
@@ -87,7 +91,8 @@ static void cmd_c() {
 	cpu_exec(-1);
 	if(nemu_state != END) { nemu_state = STOP; }
 }
-static void cmd_r() {
+static void cmd_r()
+{
 	if(nemu_state != END) { 
 		char c;
 		while(1) {
@@ -107,7 +112,8 @@ restart_:
 	nemu_state = STOP; /* HIT good trap here !? */
 	cmd_c();
 }
-static void cmd_si() {
+static void cmd_si()
+{
 	char* p = strtok(NULL, " ");
 	int run_times = 1;
 	if (p != NULL) { run_times = atoi(p); }
@@ -118,7 +124,8 @@ static void cmd_si() {
 	cpu_exec(run_times);
 	if(nemu_state != END) { nemu_state = STOP; }
 }
-static void cmd_info() {
+static void cmd_info()
+{
 	char* opt = strtok(NULL, " ");
 	if (strcmp(opt, "r") == 0) {
 		printf("%-15s%#-15X%u\n","eax", cpu.eax, cpu.eax);
@@ -157,7 +164,8 @@ static void cmd_info() {
 		}
 	}
 }
-void cmd_x() {
+static void cmd_x()
+{
 	char* _num = strtok(NULL, " ");
 	char* _addr = strtok(NULL, "");
 	if((_num != NULL) && (_addr != NULL)) {
@@ -179,7 +187,8 @@ void cmd_x() {
 		}
 	}
 }
-void cmd_s() {
+static void cmd_s()
+{
 	char* _num = strtok(NULL, " ");
 	char* _addr = strtok(NULL, "");
 	if((_num != NULL) && (_addr != NULL)) {
@@ -201,14 +210,16 @@ void cmd_s() {
 		}
 	}
 }
-void cmd_b() {
+static void cmd_b()
+{
 	char* p = strtok(NULL, "");
 	if (p[0] == '*') {
 		swaddr_t addr = calculate(p+1);
 		add_bp(addr);
 	}
 }
-void cmd_d() {
+static void cmd_d()
+{
 	char *opt = strtok(NULL, " ");
 	if (opt == NULL) { 
 		free_all(); 
@@ -220,28 +231,32 @@ void cmd_d() {
 		else assert(0);
 	}
 }
-void cmd_e() {
+static void cmd_e()
+{
 	char *expr = strtok(NULL, "");
 	test_tokens(expr);
 }
-void cmd_p() {
+static void cmd_p()
+{
 	char *e = strtok(NULL, "");
 	printf("%u\n", calculate(e));
 }
-void cmd_w() {
+static void cmd_w()
+{
 	char *expr = strtok(NULL, "");
 	add_watchpoint(expr);
 	wp_state = ON;
 }
-
-static void _put_bt (frame_node* cur, int i) {
+static void _put_bt (frame_node* cur, int i)
+{
 	if (cur == NULL) return;
 	_put_bt(cur->next, i + 1);
 	printf("#%d %-10s %x\n", i,
 				(char*)cur->name,
 				cur->addr);
 }
-static void cmd_bt() {
+static void cmd_bt()
+{
 	swaddr_t eip = cpu.eip;
 	uint32_t ebp = cpu.ebp;
 	frame_node *head = 
@@ -269,16 +284,16 @@ static void cmd_bt() {
 		free(temp);
 	}
 }
-
-static void cmd_l1() {
+static void cmd_l1()
+{
 	swaddr_t addr = strtol(strtok(NULL,""),NULL,16);
 	L1_print(addr);
 }
-static void cmd_l2() {
+static void cmd_l2()
+{
 	swaddr_t addr = strtol(strtok(NULL,""),NULL,16);
 	L2_print(addr);
 }
-
 static void cmd_check()
 {
 	printf("L1 access times : %llu\n", L1_access);
@@ -302,19 +317,21 @@ static void cmd_dir()
 		printf("dir.no %04x    present %1x page talbe %05x\n", i, temp.present, temp.page_frame);
 	}
 }
+
 void main_loop()
 {
 	char *cmd;
 	while(1) {
 
 		cmd = rl_gets();
-		/* use strtok to break a line into fiels with ' '*/	
 		char *p = strtok(cmd, " ");
+
 		if (p == NULL) {
 			p = previous;
 		} else {
 			strcpy(previous, p);
 		}
+
 		if(p == NULL) { continue; }
 
 		if(strcmp(p, "q") == 0) { return; }
@@ -332,11 +349,9 @@ void main_loop()
 		else if(strcmp(p, "l1") == 0) { cmd_l1(); }
 		else if(strcmp(p, "l2") == 0) { cmd_l2(); }
 		else if(strcmp(p, "dir") == 0) { cmd_dir(); }
-		/*remember to delete this test instr */
 		else if(strcmp(p, "e") == 0) { cmd_e(); }
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
 		else if (strcmp(p, "check") == 0) { cmd_check(); }
-
 		else { printf("Unknown command '%s'\n", p); }
 	}
 }
