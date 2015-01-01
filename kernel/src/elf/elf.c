@@ -6,6 +6,7 @@
 
 #ifdef HAS_DEVICE
 #define ELF_OFFSET_IN_DISK 0
+#define BUF_LEN 4096
 #endif
 
 #define STACK_SIZE (1 << 20)
@@ -27,30 +28,6 @@ uint32_t loader() {
 	elf = (void *)0x0;
 #endif
 
-#if 0
-	/* Load each program segment */
-	for(; true; ) {
-		/* Scan the program header table, load each segment into memory */
-		if(ph->p_type == PT_LOAD) {
-
-			/* TODO: read the content of the segment from the ELF file 
-			 * to the memory region [VirtAddr, VirtAddr + FileSiz)
-			 */
-			 
-			 
-			/* TODO: zero the memory region 
-			 * [VirtAddr + FileSiz, VirtAddr + MemSiz)
-			 */
-
-
-			/* Record the prgram break for future use. */
-			extern uint32_t brk;
-			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
-			if(brk < new_brk) { brk = new_brk; }
-		}
-	}
-#endif
-
 	ph = (void*)elf->e_phoff;
 	uint16_t step = elf->e_phentsize;
 
@@ -59,17 +36,43 @@ uint32_t loader() {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
 			char *dest = (char*)ph->p_vaddr;
-			char *src = (char*)ph->p_offset;
 			uint32_t filesz = ph->p_filesz;
 			uint32_t memsz = ph->p_memsz;
-			int j;
 	
 #ifdef IA32_PAGE
 			dest = (char*)mm_malloc(ph->p_vaddr, ph->p_memsz);
 #endif
 			/* Memory copy */
+#ifdef HAS_DEVICE
+			uint8_t section[BUF_LEN];
+			int times = filesz / BUF_LEN;
+			int rest = filesz % BUF_LEN;
+			int time, k, j = 0;
+
+			for (time = 0; time < times; time ++) { // load disk data one buf a time
+				ide_read(section, 
+						 ELF_OFFSET_IN_DISK + ph->p_offset + time * BUF_LEN,
+						 BUF_LEN);
+				for (k = 0; k < BUF_LEN; k ++) {
+					dest[j] = section[k];
+					j ++;
+				}
+			}
+			
+			// load unaligned rest data
+			ide_read(section, ELF_OFFSET_IN_DISK + ph->p_offset + time * BUF_LEN, rest);
+			for (k = 0; k < rest; k ++) {
+				dest[j + k] = section[k];
+				j ++;
+			}
+
+			Log("j %x", j);
+			nemu_assert(j == filesz);
+#else
+			char *src = (char*)ph->p_offset;
 			for (j = 0; j < filesz; j++)
 				dest[j] = src[j];
+#endif
 
 			/* Memory clear */
 			for (; j < memsz; j++)
