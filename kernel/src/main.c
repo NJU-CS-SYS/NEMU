@@ -52,7 +52,7 @@ void init_cond() {
 	Log("Hello, NEMU world!");
 
 #ifdef HAS_DEVICE
-#if 0
+#if 1
 	/* Write some test data to the video memory. */
 	video_mapping_write_test();
 #endif
@@ -62,7 +62,7 @@ void init_cond() {
 	uint32_t eip = loader();
 	
 #ifdef HAS_DEVICE
-#if 0
+#if 1
 	/* Read data in the video memory to check whether 
 	 * the test data is written sucessfully.
 	 */
