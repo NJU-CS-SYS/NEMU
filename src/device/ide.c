@@ -58,7 +58,7 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 			}
 		}
 	}
-	printf("file pos : %ld\n", ftell(disk_fp));
+	printf("file pos : %ld, eip : %x\n", ftell(disk_fp), cpu.eip);
 }
 
 void init_ide() {
