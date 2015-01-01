@@ -14,7 +14,6 @@ static bool ide_write;
 static FILE *disk_fp;
 
 void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
-	printf("eip %x: sector %x, disk_idx %x, byte_cnt %d\n", cpu.eip, sector, disk_idx, byte_cnt);
 	assert(byte_cnt <= 512);
 	if(is_write) {
 		if(addr - IDE_PORT == 0 && len == 4) {
