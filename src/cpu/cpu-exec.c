@@ -132,5 +132,6 @@ void int_polling()
 		i8259_ack_intr();
 		raise_intr(intr_no);
 		printf("intr_no %x\n", intr_no);
+		nemu_state = TEST_INT;
 	}
 }
