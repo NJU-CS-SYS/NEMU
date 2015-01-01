@@ -20,7 +20,6 @@ void create_video_mapping() {
 	//PDE *pdir = get_updir();
 	//uint32_t pdir_idx;
 	//pdir_idx = frame_to_pdir_idx( VMEM_ADDR );
-	printf("hello");
 	nemu_assert(0);
 }
 
