@@ -52,9 +52,7 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 	else {
 		if(addr - IDE_PORT == 0 && len == 4) {
 			assert(!ide_write);
-			int cnt = fread(ide_port_base, 4, 1, disk_fp);
-
-			printf("eax = %x, disk_fp %p, cnt = %d\n", *ide_port_base,disk_fp, cnt);
+			fread(ide_port_base, 4, 1, disk_fp);
 			byte_cnt += 4;
 			if(byte_cnt == 512) {
 				ide_port_base[7] = 0x40;
