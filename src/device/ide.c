@@ -60,7 +60,7 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 			}
 		}
 	}
-	printf("file pos : %ld, eip : %x, intr %x\n", ftell(disk_fp), cpu.eip, cpu.INTR);
+	//printf("file pos : %ld, eip : %x, intr %x\n", ftell(disk_fp), cpu.eip, cpu.INTR);
 }
 
 void init_ide() {
