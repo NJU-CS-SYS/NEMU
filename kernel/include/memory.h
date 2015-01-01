@@ -22,6 +22,8 @@
 #define make_invalid_pte() 0
 #define make_pde(addr) ((((uint32_t)(addr)) & 0xfffff000) | 0x7)
 #define make_pte(addr) ((((uint32_t)(addr)) & 0xfffff000) | 0x7)
+#define make_vmem_pde(addr) ((((uint32_t)(addr)) & 0xfffff000) | 0x1f)
+#define make_vmem_pte(addr) ((((uint32_t)(addr)) & 0xfffff000) | 0x1f)
 
 uint32_t mm_malloc(uint32_t, int);
 

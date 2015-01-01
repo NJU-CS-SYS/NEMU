@@ -4,6 +4,8 @@
 
 #define VMEM_ADDR 0xa0000
 #define SCR_SIZE (320 * 200)
+#define frame_to_pdir_idx(frame) ( ((frame) & 0xffc00) >> 10 )
+#define frame_to_ptable_idx(frame) ((frame) & 0x003ff)
 
 /* Use the function to get the start address of user page directory. */
 inline PDE* get_updir();
@@ -14,6 +16,10 @@ void create_video_mapping() {
 	 * [0xa0000, 0xa0000 + SCR_SIZE) for user program. You may define
 	 * some page tables to create this mapping.
 	 */
+	PDE *pdir = get_updir();
+	uint32_t pdir_idx, ptable_idx, pframe_idx;
+	pdir_idx = frame_to_pdir_idx( VMEM_ADDR );
+	Log("pdir idx %d", pdir_idx);
 	nemu_assert(0);
 }
 
