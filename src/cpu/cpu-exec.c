@@ -40,7 +40,6 @@ void restart()
 	cpu.eax = 0;
 	cpu.ecx = 0;
 	cpu.edx = 0;
-	FLAG_CHG(IF, 1);
 	cpu.cr0.paging = 0;
 
 	/* Segment initialization */
