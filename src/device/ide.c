@@ -32,7 +32,7 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 			disk_idx = sector << 9;
 			fseek(disk_fp, disk_idx, SEEK_SET);
 			
-			printf("disk_idx = %x, sector = %x\n", disk_idx, sector);
+			printf("%x: disk_idx = %x, sector = %x, intr %x\n", cpu.eip, disk_idx, sector, cpu.INTR);
 
 			byte_cnt = 0;
 
