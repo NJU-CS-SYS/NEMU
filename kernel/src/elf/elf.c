@@ -87,6 +87,7 @@ uint32_t loader() {
 		ph = (Elf32_Phdr*)((uint32_t)ph + step);
 	}
 
+	Log("entry %x", elf->e_entry);
 	volatile uint32_t entry = elf->e_entry;
 
 #ifdef IA32_PAGE
