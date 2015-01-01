@@ -17,7 +17,6 @@ make_helper(concat(in_d2a_, SUFFIX))
 	REG(R_EAX) = pio_read(ioaddr, DATA_BYTE);
 	
 	Log("eax %x, dx %x", REG(R_EAX), ioaddr);
-	nemu_state = TEST_INT;
 
 	print_asm("in %s,%%%s", "(%dx)", REG_NAME(R_EAX));
 
