@@ -42,8 +42,6 @@ void create_video_mapping() {
 		ptable ++;
 
 		Log("ptable %x", ptable_idx);
-		if (nr_page == (SCR_SIZE / PAGE_SIZE))
-			goto END;
 	}
 
 	for (nr_pdir = 1; nr_pdir <= SCR_SIZE / PT_SIZE; nr_pdir ++) {
@@ -57,14 +55,9 @@ void create_video_mapping() {
 			ptable ++;
 
 			Log("ptable %x", ptable_idx);
-			if (nr_page == (SCR_SIZE / PAGE_SIZE))
-				goto END;
 		}
 	}
 
-	nemu_assert(0);
-
-END:
 	Log("survive");
 }
 
