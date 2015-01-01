@@ -64,7 +64,7 @@ uint32_t loader() {
 			// load unaligned rest data
 			ide_read(section, ELF_OFFSET_IN_DISK + ph->p_offset + time * BUF_LEN, rest);
 			for (k = 0; k < rest; k ++) {
-				dest[j + k] = section[k];
+				dest[j] = section[k];
 				j ++;
 			}
 
