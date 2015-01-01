@@ -23,6 +23,7 @@ make_helper(concat(in_d2a_, SUFFIX))
 }
 make_helper(concat(out_i2a_, SUFFIX))
 {
+	assert(0);
 	int16_t ioaddr = instr_fetch(eip + 1, 1);
 	pio_write( ioaddr, DATA_BYTE, REG(R_EAX) );
 	
