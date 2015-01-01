@@ -23,12 +23,6 @@ uint32_t loader() {
 	uint8_t buf[4096];
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 	elf = (void*)buf;
-#if 1
-	int m;
-	for (m = 0; m < 8; m ++)
-		Log("%02x",buf[m]);
-	Log("\n");
-#endif
 #else
 	/* The ELF file is located at memory address 0 */
 	elf = (void *)0x0;
@@ -41,6 +35,7 @@ uint32_t loader() {
 	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
+			Log("loading!");
 			char *dest = (char*)ph->p_vaddr;
 			uint32_t filesz = ph->p_filesz;
 			uint32_t memsz = ph->p_memsz;
