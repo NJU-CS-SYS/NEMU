@@ -22,7 +22,6 @@ init_ide(void) {
  * one, which is necessary for a microkernel.
  */
 void ide_read(uint8_t *buf, uint32_t offset, uint32_t len) {
-	Log("offset = %x", offset);
 	uint32_t i;
 	for (i = 0; i < len; i ++) {
 		buf[i] = read_byte(offset + i);
