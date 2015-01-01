@@ -16,8 +16,6 @@ make_helper(concat(in_d2a_, SUFFIX))
 	int16_t ioaddr = reg_l(R_DX);
 	REG(R_EAX) = pio_read(ioaddr, DATA_BYTE);
 	
-	printf("in: eax %x, dx %x\n", REG(R_EAX), ioaddr);
-	fflush(stdout);
 
 	print_asm("in %s,%%%s", "(%dx)", REG_NAME(R_EAX));
 
@@ -34,8 +32,6 @@ make_helper(concat(out_i2a_, SUFFIX))
 make_helper(concat(out_d2a_, SUFFIX))
 {
 	int16_t ioaddr = reg_w(R_DX);
-	printf("out: port %x, data %x %c\n", ioaddr, REG(R_EAX), REG(R_EAX));
-	fflush(stdout);
 	pio_write( ioaddr, DATA_BYTE, REG(R_EAX) );
 
 	print_asm("out %%%s,%s", REG_NAME(R_EAX), "(%dx)");

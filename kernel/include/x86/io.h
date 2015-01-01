@@ -2,6 +2,8 @@
 #define __X86_IO_H__
 
 #include <stdint.h>
+#include "common.h"
+#include "debug.h"
 
 static inline uint8_t
 in_byte(uint16_t port) {
@@ -21,6 +23,7 @@ static inline uint32_t
 in_long(uint16_t port) {
 	uint32_t data;
 	asm volatile("in %1, %0" : "=a"(data) : "d"(port));
+	Log("port %x, data %x");
 	return data;
 }
 
