@@ -15,7 +15,7 @@ make_helper(concat(in_d2a_, SUFFIX))
 {
 	ioaddr_t ioaddr = reg_l(R_DX);
 	REG(R_EAX) = pio_read(ioaddr, DATA_BYTE);
-	printf("eip %x: in port %x, data %x\n", eip, ioaddr, REG(R_EAX));
+	printf(str(SUFFIX) "eip %x: in port %x, data %x\n", eip, ioaddr, REG(R_EAX));
 	print_asm("in %s,%%%s", "(%dx)", REG_NAME(R_EAX));
 
 	return 1;
