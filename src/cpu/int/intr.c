@@ -11,7 +11,7 @@ extern jmp_buf jbuf;
 void raise_intr(uint8_t NO)
 {
 	/* Get gate descriptor */
-	if (NO == 0) {
+	if (NO == 0x20) {
 		return;
 	}
 	lnaddr_t idt_addr = cpu.idtr.base;
