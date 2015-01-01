@@ -56,7 +56,6 @@ read_byte(uint32_t offset) {
 	uint32_t sector = offset >> 9;
 	struct SectorCache *ptr = cache_fetch(sector);
 	uint8_t ret = ptr->content[offset & 511];
-	Log("read_byte ret %02x", ret);
 	return ret;
 }
 
@@ -67,4 +66,3 @@ write_byte(uint32_t offset, uint8_t data) {
 	ptr->content[offset & 511] = data;
 	ptr->dirty = true;
 }
-
