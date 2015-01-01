@@ -54,6 +54,7 @@ cache_fetch(uint32_t sector) {
 uint8_t
 read_byte(uint32_t offset) {
 	uint32_t sector = offset >> 9;
+	Log("sector %x", sector);
 	struct SectorCache *ptr = cache_fetch(sector);
 	return ptr->content[offset & 511];
 }
