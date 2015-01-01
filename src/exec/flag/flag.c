@@ -19,5 +19,11 @@ make_helper(cli) // Clear Interrupt Flag
 	print_asm("cli");
 	return 1;
 }
+make_helper(sti) // Set Interrupt Flag
+{
+	FLAG_CHG(IF, 1);
+	print_asm("sti");
+	return 1;
+}
 #include "exec/template-end.h"
 #undef DATA_BYTE

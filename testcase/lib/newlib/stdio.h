@@ -32,7 +32,7 @@
 
 #define __need_size_t
 #define __need_NULL
-#include <stddef.h>
+#include "stddef.h"
 
 #define __need___va_list
 #include <stdarg.h>
