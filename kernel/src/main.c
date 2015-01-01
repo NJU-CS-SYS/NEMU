@@ -60,6 +60,7 @@ void init_cond() {
 	uint32_t eip = loader();
 	
 #ifdef HAS_DEVICE
+#if 0
 	/* Read data in the video memory to check whether 
 	 * the test data is written sucessfully.
 	 */
@@ -67,6 +68,7 @@ void init_cond() {
 
 	/* Clear the test data we just written in the video memory. */
 	video_mapping_clear();
+#endif
 #endif
 
 #ifdef IA32_PAGE

@@ -32,7 +32,6 @@ make_helper(concat(out_d2a_, SUFFIX))
 {
 	int16_t ioaddr = reg_w(R_DX);
 	Log("ioaddr %x, data %x %c", ioaddr, REG(R_EAX), REG(R_EAX));
-	nemu_state = TEST_INT;
 	pio_write( ioaddr, DATA_BYTE, REG(R_EAX) );
 
 	print_asm("out %%%s,%s", REG_NAME(R_EAX), "(%%dx)");
