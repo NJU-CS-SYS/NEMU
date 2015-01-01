@@ -5,8 +5,9 @@
 
 #define VMEM_ADDR 0xa0000
 #define SCR_SIZE (320 * 200)
-#define frame_to_pdir_idx(frame) ( ((frame) & 0xffc00) >> 10 )
-#define frame_to_ptable_idx(frame) ((frame) & 0x003ff)
+#define va_to_pdir_idx(va) (((va) & 0xffc00000) >> 22)
+#define va_to_ptable_idx(va) ((va) & 0x003ff000 >> 12)
+#define pa_to_page_frame(pa) (((pa) & 0xfffff000) >> 12)
 
 /* Use the function to get the start address of user page directory. */
 inline PDE* get_updir();
@@ -23,11 +24,28 @@ void create_video_mapping() {
 	uint32_t pdir_idx, ptable_idx, pframe_idx;
 	uint32_t nr_pdir, nr_page = 0;
 
-	pdir_idx = frame_to_pdir_idx( VMEM_ADDR );
-	pframe_idx = pdir_idx;
+	pdir_idx = va_to_pdir_idx( VMEM_ADDR );
+	ptable_idx = va_to_ptable_idx( VMEM_ADDR );
+	pframe_idx = pa_to_page_frame( VMEM_ADDR );
 
 	Log("pdir %x, idx %x", pdir, pdir_idx);
-	for (nr_pdir = 0; nr_pdir <= SCR_SIZE / PT_SIZE; nr_pdir ++) {
+
+	/* the 1st page talbe is special */
+	pdir[pdir_idx ++].val = make_vmem_pde(ptable);
+	ptable += ptable_idx;
+	for (; ptable_idx < NR_PTE; ptable_idx ++) {
+		ptable->val = make_vmem_pte(pframe_idx << 12);
+
+		nr_page ++;
+
+		pframe_idx ++;
+		ptable ++;
+
+		if (nr_page == (SCR_SIZE / PAGE_SIZE))
+			goto END;
+	}
+
+	for (nr_pdir = 1; nr_pdir <= SCR_SIZE / PT_SIZE; nr_pdir ++) {
 		pdir[pdir_idx ++].val = make_vmem_pde(ptable);
 		for (ptable_idx = 0; ptable_idx < NR_PTE; ptable_idx ++) {
 			ptable->val = make_vmem_pte(pframe_idx << 12);
@@ -37,12 +55,13 @@ void create_video_mapping() {
 			pframe_idx ++;
 			ptable ++;
 
-			if (nr_page == (SCR_SIZE / PAGE_SIZE)) {
+			if (nr_page == (SCR_SIZE / PAGE_SIZE))
 				goto END;
-			}
 		}
 	}
+
 	nemu_assert(0);
+
 END:
 	Log("survive");
 }
