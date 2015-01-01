@@ -95,8 +95,8 @@ make_helper(concat(movz_b2_, SUFFIX))
 	ModR_M m;
 	m.val = instr_fetch(eip + 2, 1);
 	if (m.mod == 3) { // reg
-		src = REG(m.R_M);
-		print_asm("movzb" str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));
+		src = reg_b(m.R_M);
+		print_asm("movzb" str(SUFFIX) " %%%s,%%%s", regsb[m.R_M], REG_NAME(m.reg));
 		len++;
 	} else {
 		swaddr_t addr;
@@ -139,10 +139,10 @@ make_helper(concat(movs_b2r_, SUFFIX)) {
 	ModR_M m;
 	m.val = instr_fetch(eip + 2, 1);
 	if (m.mod == 3) { // reg
-		src = REG(m.R_M);
+		src = reg_b(m.R_M);
 		len++;
 
-		print_asm("movsb" str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));
+		print_asm("movsb" str(SUFFIX) " %%%s,%%%s", regsb[m.R_M], REG_NAME(m.reg));
 	} else {
 		swaddr_t addr;
 		len += read_ModR_M(eip + 2, &addr);
