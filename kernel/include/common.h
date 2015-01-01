@@ -7,6 +7,7 @@
 #define IA32_PAGE
 #define IA32_INTR
 #define HAS_DEVICE
+//#define HAS_DISK
 
 #ifndef __ASSEMBLER__
 /* The following code will be included if the source file is a "*.c" file. */

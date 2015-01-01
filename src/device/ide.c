@@ -58,6 +58,7 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 			}
 		}
 	}
+	printf("file pos : %ld\n", ftell(disk_fp));
 }
 
 void init_ide() {
@@ -66,5 +67,6 @@ void init_ide() {
 
 	extern char *exec_file;
 	disk_fp = fopen(exec_file, "r+");
+	printf("file pos : %ld\n", ftell(disk_fp));
 	assert(disk_fp);
 }
