@@ -31,6 +31,7 @@ void create_video_mapping() {
 	Log("pdir %x, idx %x, ptable idx %x, frame %x", pdir, pdir_idx, ptable_idx, pframe_idx);
 
 	/* the 1st page talbe is special */
+#if 0
 	pdir[pdir_idx ++].val = make_vmem_pde(ptable);
 	ptable += ptable_idx;
 	for (; ptable_idx < NR_PTE; ptable_idx ++) {
@@ -40,11 +41,10 @@ void create_video_mapping() {
 
 		pframe_idx ++;
 		ptable ++;
-
-		Log("ptable %x", ptable_idx);
 	}
+#endif
 
-	for (nr_pdir = 1; nr_pdir <= SCR_SIZE / PT_SIZE; nr_pdir ++) {
+	for (nr_pdir = 0; nr_pdir <= SCR_SIZE / PT_SIZE; nr_pdir ++) {
 		pdir[pdir_idx ++].val = make_vmem_pde(ptable);
 		for (ptable_idx = 0; ptable_idx < NR_PTE; ptable_idx ++) {
 			ptable->val = make_vmem_pte(pframe_idx << 12);
@@ -53,12 +53,8 @@ void create_video_mapping() {
 
 			pframe_idx ++;
 			ptable ++;
-
-			Log("ptable %x", ptable_idx);
 		}
 	}
-
-	Log("survive");
 }
 
 void video_mapping_write_test() {
