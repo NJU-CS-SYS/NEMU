@@ -12,7 +12,7 @@ static void
 ide_prepare(uint32_t sector) {
 	waitdisk();
 
-//	out_byte(IDE_PORT_CTRL, 0);
+	out_byte(IDE_PORT_CTRL, 0);
 	out_byte(IDE_PORT_BASE + 2, 1);
 	out_byte(IDE_PORT_BASE + 3, sector & 0xFF);
 	out_byte(IDE_PORT_BASE + 4, (sector >> 8) & 0xFF);
