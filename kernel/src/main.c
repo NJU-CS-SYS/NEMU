@@ -49,7 +49,7 @@ void init_cond() {
 	/* Output a welcome message. Note that the output is actually 
 	 * performed only when the serial port is available in NEMU.
 	 */
-	Log("Hello, NEMU world!");
+	//Log("Hello, NEMU world!");
 
 #ifdef HAS_DEVICE
 	/* Write some test data to the video memory. */

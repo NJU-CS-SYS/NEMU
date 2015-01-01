@@ -53,4 +53,3 @@ void pio_write(ioaddr_t addr, size_t len, uint32_t data) {
 	memcpy(pio_space + addr, &data, len);
 	pio_callback(addr, len, true);
 }
-
