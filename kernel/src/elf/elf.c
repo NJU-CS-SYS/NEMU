@@ -23,10 +23,11 @@ uint32_t loader() {
 	uint8_t buf[4096];
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 	elf = (void*)buf;
-#if 0
+#if 1
 	int m;
 	for (m = 0; m < 8; m ++)
 		Log("%02x",buf[m]);
+	Log("\n");
 #endif
 #else
 	/* The ELF file is located at memory address 0 */
@@ -92,7 +93,7 @@ uint32_t loader() {
 		ph = (Elf32_Phdr*)((uint32_t)ph + step);
 	}
 
-	//Log("entry %x", elf->e_entry);
+	Log("entry %x", elf->e_entry);
 	volatile uint32_t entry = elf->e_entry;
 
 #ifdef IA32_PAGE
