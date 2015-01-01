@@ -10,12 +10,8 @@ extern jmp_buf jbuf;
 
 void raise_intr(uint8_t NO)
 {
-	/* TODO: Trigger an interrupt/exception with ``NO''.
-	 * That is, use ``NO'' to index the IDT.
-	 */	 
-
 	/* Get gate descriptor */
-	lnaddr_t idt_addr = cpu.idtr.base; 
+	lnaddr_t idt_addr = cpu.idtr.base;
 	size_t size = sizeof(GateDesc);
 	GateDesc desc;
 	*(uint32_t *)(&desc) = hwaddr_read(idt_addr + NO * size, 4);
@@ -31,8 +27,8 @@ void raise_intr(uint8_t NO)
 	cpu.eip = (desc.offset_31_16 << 16) | (desc.offset_15_0);
 
 	/* Debug */
-	test(desc.present, "failed in checking present bit of gate descriptor");
-	test((desc.type & 0x4) == 0x4, "failed in bit check");
+	//test(desc.present, "failed in checking present bit of gate descriptor");
+	//test((desc.type & 0x4) == 0x4, "failed in bit check");
 	Log("idt_addr %08x", idt_addr);
 	Log("size %x", size);
 	Log("desc\n%08x\n%08x", 
