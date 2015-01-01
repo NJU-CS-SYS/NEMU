@@ -130,8 +130,7 @@ void int_polling()
 	if(cpu.INTR & FLAG_VAL(IF)) {
 		uint32_t intr_no = i8259_query_intr();
 		i8259_ack_intr();
-		nemu_state = TEST_INT;
-		printf("intr_no %x\n", intr_no);
+		Log("intr_no %x\n", intr_no);
 		raise_intr(intr_no);
 	}
 }
