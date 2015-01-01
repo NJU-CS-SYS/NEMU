@@ -17,9 +17,10 @@ void create_video_mapping() {
 	 * [0xa0000, 0xa0000 + SCR_SIZE) for user program. You may define
 	 * some page tables to create this mapping.
 	 */
-	//PDE *pdir = get_updir();
-	//uint32_t pdir_idx;
-	//pdir_idx = frame_to_pdir_idx( VMEM_ADDR );
+	PDE *pdir = get_updir();
+	uint32_t pdir_idx;
+	pdir_idx = frame_to_pdir_idx( VMEM_ADDR );
+	Log("pdir %x, idx %x", pdir, pdir_idx);
 	nemu_assert(0);
 }
 
