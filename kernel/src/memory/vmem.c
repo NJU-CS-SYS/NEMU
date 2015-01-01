@@ -6,7 +6,7 @@
 #define VMEM_ADDR 0xa0000
 #define SCR_SIZE (320 * 200)
 #define va_to_pdir_idx(va) (((va) & 0xffc00000) >> 22)
-#define va_to_ptable_idx(va) ((va) & 0x003ff000 >> 12)
+#define va_to_ptable_idx(va) (((va) & 0x003ff000) >> 12)
 #define pa_to_page_frame(pa) (((pa) & 0xfffff000) >> 12)
 
 /* Use the function to get the start address of user page directory. */
