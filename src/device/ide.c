@@ -1,7 +1,7 @@
 #include "common.h"
 #include "io/port-io.h"
 #include "device/i8259.h"
-
+#include "cpu/reg.h"
 #define IDE_CTRL_PORT 0x3F6
 #define IDE_PORT 0x1F0
 #define IDE_IRQ 14
@@ -14,6 +14,7 @@ static bool ide_write;
 static FILE *disk_fp;
 
 void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
+	printf("ioaddr %x, len %x, is_write %x, eip = %x\n", addr, len, is_write, cpu.eip);
 	assert(byte_cnt <= 512);
 	if(is_write) {
 		if(addr - IDE_PORT == 0 && len == 4) {
@@ -51,11 +52,9 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 	else {
 		if(addr - IDE_PORT == 0 && len == 4) {
 			assert(!ide_write);
-			assert(disk_fp);
-			int a;
-			int cnt = fread(&a, 4, 1, disk_fp);
-			printf("eax = %x, disk_fp %p, cnt = %d\n", a,disk_fp, cnt);
-			*ide_port_base = a;
+			int cnt = fread(ide_port_base, 4, 1, disk_fp);
+
+			printf("eax = %x, disk_fp %p, cnt = %d\n", *ide_port_base,disk_fp, cnt);
 			byte_cnt += 4;
 			if(byte_cnt == 512) {
 				ide_port_base[7] = 0x40;
@@ -70,8 +69,5 @@ void init_ide() {
 
 	extern char *exec_file;
 	disk_fp = fopen(exec_file, "r+");
-	int a;
-	int cnt = fread(&a, 4, 1, disk_fp);
-	printf("cnt=%d, a=%x\n", cnt, a);
 	assert(disk_fp);
 }
