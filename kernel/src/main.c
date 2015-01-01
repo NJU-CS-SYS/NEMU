@@ -49,10 +49,10 @@ void init_cond() {
 	/* Output a welcome message. Note that the output is actually 
 	 * performed only when the serial port is available in NEMU.
 	 */
-	Log("Hello, NEMU world!");
+	//Log("Hello, NEMU world!");
 
 #ifdef HAS_DEVICE
-#if 1
+#if 0
 	/* Write some test data to the video memory. */
 	video_mapping_write_test();
 #endif
@@ -62,7 +62,7 @@ void init_cond() {
 	uint32_t eip = loader();
 	
 #ifdef HAS_DEVICE
-#if 1
+#if 0
 	/* Read data in the video memory to check whether 
 	 * the test data is written sucessfully.
 	 */
