@@ -28,7 +28,8 @@ void load_table() {
 	uint8_t buf[4096];
 	/* Read the first 4096 bytes from the exec_file.
 	 * They should contain the ELF header and program headers. */
-	fread(buf, 4096, 1, fp);
+	int cnt = fread(buf, 4096, 1, fp);
+	printf("cnt = %d\n",cnt);
 
 	/* The first several bytes contain the ELF header. */
 	Elf32_Ehdr *elf = (void *)buf;
