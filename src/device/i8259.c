@@ -54,6 +54,7 @@ static void do_i8259() {
 /* device interface */
 void i8259_raise_intr(int n) {
 	assert(n >= 0 && n < 16);
+	printf("intr no %x, eip %x\n", n, cpu.eip);
 	if(n < 8) {
 		master.IRR |= MASK(n);
 	}
