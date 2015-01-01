@@ -1,6 +1,7 @@
 #include "common.h"
 #include "memory.h"
 #include <string.h>
+#include "my_printf.h"
 
 #define VMEM_ADDR 0xa0000
 #define SCR_SIZE (320 * 200)
@@ -17,9 +18,9 @@ void create_video_mapping() {
 	 * some page tables to create this mapping.
 	 */
 	//PDE *pdir = get_updir();
-	uint32_t pdir_idx;
-	pdir_idx = frame_to_pdir_idx( VMEM_ADDR );
-	Log("pdir idx %d", pdir_idx);
+	//uint32_t pdir_idx;
+	//pdir_idx = frame_to_pdir_idx( VMEM_ADDR );
+	printf("hello");
 	nemu_assert(0);
 }
 
