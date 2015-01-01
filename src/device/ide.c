@@ -68,5 +68,8 @@ void init_ide() {
 
 	extern char *exec_file;
 	disk_fp = fopen(exec_file, "r+");
+	int a;
+	int cnt = fread(&a, 4, 1, disk_fp);
+	printf("cnt=%d, a=%x\n", cnt, a);
 	assert(disk_fp);
 }
