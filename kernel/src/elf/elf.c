@@ -23,7 +23,7 @@ uint32_t loader() {
 	uint8_t buf[4096];
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 	elf = (void*)buf;
-	Log("elf : %x %x %x %x %x %x %x %x", buf[0], buf[1], buf[2], buf[3]);
+	Log("magic : %x", elf->e_ident);
 #else
 	/* The ELF file is located at memory address 0 */
 	elf = (void *)0x0;
