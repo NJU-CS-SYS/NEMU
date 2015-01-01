@@ -28,8 +28,6 @@ void create_video_mapping() {
 	ptable_idx = va_to_ptable_idx( VMEM_ADDR );
 	pframe_idx = pa_to_page_frame( VMEM_ADDR );
 
-	Log("pdir %x, idx %x, ptable idx %x, frame %x", pdir, pdir_idx, ptable_idx, pframe_idx);
-
 	/* the 1st page talbe is special */
 #if 1
 	pdir[pdir_idx ++].val = make_vmem_pde(ptable);
