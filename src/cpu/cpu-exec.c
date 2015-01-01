@@ -42,7 +42,7 @@ void restart()
 	cpu.edx = 0;
 	cpu.cr0.paging = 0;
 	cpu.INTR = 0;
-	//FLAG_CHG(IF, 1);
+	FLAG_CHG(IF, 1);
 
 	/* Segment initialization */
 	cpu.gdtr.limit = 0;

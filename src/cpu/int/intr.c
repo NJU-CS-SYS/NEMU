@@ -11,6 +11,9 @@ extern jmp_buf jbuf;
 void raise_intr(uint8_t NO)
 {
 	/* Get gate descriptor */
+	if (NO == 0) {
+		return;
+	}
 	lnaddr_t idt_addr = cpu.idtr.base;
 	size_t size = sizeof(GateDesc);
 	GateDesc desc;
