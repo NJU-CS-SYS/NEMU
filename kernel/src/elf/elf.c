@@ -49,6 +49,7 @@ uint32_t loader() {
 			int times = filesz / BUF_LEN;
 			int rest = filesz % BUF_LEN;
 			int time, k, j = 0;
+			Log("times = %x, rest = %x", times, rest);
 
 			for (time = 0; time < times; time ++) { // load disk data one buf a time
 				ide_read(section, 
