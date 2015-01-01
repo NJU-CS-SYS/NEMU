@@ -41,6 +41,7 @@ void create_video_mapping() {
 		pframe_idx ++;
 		ptable ++;
 
+		Log("ptable %x", ptable_idx);
 		if (nr_page == (SCR_SIZE / PAGE_SIZE))
 			goto END;
 	}
@@ -55,6 +56,7 @@ void create_video_mapping() {
 			pframe_idx ++;
 			ptable ++;
 
+			Log("ptable %x", ptable_idx);
 			if (nr_page == (SCR_SIZE / PAGE_SIZE))
 				goto END;
 		}
