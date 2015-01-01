@@ -31,6 +31,8 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 				| ide_port_base[4] << 8 | ide_port_base[3];
 			disk_idx = sector << 9;
 			fseek(disk_fp, disk_idx, SEEK_SET);
+			
+			printf("disk_idx = %x, sector = %x\n", disk_idx, sector);
 
 			byte_cnt = 0;
 
