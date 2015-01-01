@@ -67,9 +67,9 @@ uint32_t loader() {
 				j ++;
 			}
 
-			Log("j %x", j);
 			nemu_assert(j == filesz);
 #else
+			int j;
 			char *src = (char*)ph->p_offset;
 			for (j = 0; j < filesz; j++)
 				dest[j] = src[j];
