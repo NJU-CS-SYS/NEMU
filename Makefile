@@ -45,7 +45,7 @@ run: nemu $(TESTFILE)
 	./nemu -d $(TESTFILE) 2>&1 | tee log.txt
 
 go: nemu $(TESTFILE)
-	./nemu $(TESTFILE) 
+	./nemu $(TESTFILE) 2>&1 | tee log.txt
 
 gdb: nemu $(TESTFILE)
 	gdb --args ./nemu -dq $(TESTFILE)
