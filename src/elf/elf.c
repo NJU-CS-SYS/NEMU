@@ -30,6 +30,7 @@ void load_table() {
 	 * They should contain the ELF header and program headers. */
 	int cnt = fread(buf, 4096, 1, fp);
 	printf("cnt=%d\n", cnt);
+	printf("%x\n", *buf);
 
 	/* The first several bytes contain the ELF header. */
 	Elf32_Ehdr *elf = (void *)buf;
