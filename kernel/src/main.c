@@ -95,10 +95,16 @@ void init() {
 	asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
+	/* Draw white */
+	char *color = (char *)0xa0000;
+	int color_idx;
+	for (color_idx = 0; color_idx < 320 * 120; color_idx ++)
+		color[color_idx] = 0xff;
+
+	nemu_assert(0);
 	/* Jump to init_cond() to continue initialization. */
 	asm volatile("jmp *%0" : : "r"(init_cond));
 
 	/* Should never reach here. */
 	nemu_assert(0);
 }
-
