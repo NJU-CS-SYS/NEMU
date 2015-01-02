@@ -6,6 +6,7 @@
 void timer_intr() {
 	if(nemu_state == RUNNING) {
 		printf("timer!\n");
+		fflush(stdout);
 		i8259_raise_intr(TIMER_IRQ);
 	}
 }
