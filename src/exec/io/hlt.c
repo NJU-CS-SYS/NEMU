@@ -5,8 +5,8 @@ int int_polling();
 
 make_helper(hlt)
 {
-	//volatile bool *p = &(cpu.INTR);
+	volatile bool *p = &(cpu.INTR);
 	if (FLAG_VAL(IF))
-		while (cpu.INTR == 0);
+		while (*p == 0);
 	return 1;
 }
