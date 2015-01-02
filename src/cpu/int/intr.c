@@ -5,6 +5,7 @@
 #include "idt.h"
 #include "cpu/segment.h"
 #include "stack.h"
+#include "ui/ui.h"
 
 extern jmp_buf jbuf;
 extern uint32_t main_entry;
@@ -27,6 +28,9 @@ void raise_intr(uint8_t NO)
 	push(cpu.eflags);
 	push(cpu.cs);
 	push(cpu.eip);
+	
+	Log("the eip stored is %x", cpu.eip);
+	nemu_state = TEST_INT;
 
 	/* Jump */
 	cpu.cs = desc.segment;
