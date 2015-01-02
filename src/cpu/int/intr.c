@@ -33,6 +33,7 @@ void raise_intr(uint8_t NO)
 	cpu.eip = (desc.offset_31_16 << 16) | (desc.offset_15_0);
 
 	/* Debug */
+	Log("NO %x", NO);
 	Log("desc\n%08x\n%08x", 
 			*(uint32_t *)(&desc), *((uint32_t *)(&desc) + 1));
 	Log("new cs %x", cpu.cs);
