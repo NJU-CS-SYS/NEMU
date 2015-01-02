@@ -27,7 +27,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data)
 	assert(len == 1 || len == 2 || len == 4);
 	int mmio_code = is_mmio(addr);
 	if (mmio_code != -1) {
-		printf("Write MMIO %x\n", mmio_code);
+		printf("Write MMIO %x MMIO Data = %x\n", mmio_code, data);
 		mmio_write(addr, len, data, mmio_code);
 	} else {
 		cache_write(addr, len, data);
