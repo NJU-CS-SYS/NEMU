@@ -129,7 +129,6 @@ void int_polling()
 {
 	if(cpu.INTR & FLAG_VAL(IF)) {
 		uint32_t intr_no = i8259_query_intr();
-		printf("INTR NO %x\n", intr_no);
 		i8259_ack_intr();
 		raise_intr(intr_no);
 	}
