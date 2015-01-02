@@ -21,7 +21,6 @@ display_buffer(void) {
 static inline void
 draw_character(char ch, int x, int y, int color) {
 	int i, j;
-	Log("ch %c %x", ch, ch);
 	assert((ch & 0x80) == 0);
 	char *p = font8x8_basic[(int)ch];
 	for (i = 0; i < 8; i ++) 
