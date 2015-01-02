@@ -8,8 +8,6 @@ void timer_intr() {
 	if(nemu_state == RUNNING) {
 		i8259_raise_intr(TIMER_IRQ);
 		count ++;
-		printf("timer! intr %x %llu\n", cpu.INTR, count);
-		fflush(stdout);
 	}
 }
 
