@@ -84,7 +84,7 @@ void cpu_exec(volatile uint32_t n)
 
 		cpu.eip += instr_len;
 		
-		if (cpu.eip == main_entry) trigger = 1, nemu_state = TEST_INT; 
+		if (cpu.eip == main_entry) trigger = 1; 
 
 		if( (n_temp != -1 || (enable_debug && !quiet)) && trigger ) {
 			print_bin_instr(eip_temp, instr_len);
