@@ -6,8 +6,9 @@ int int_polling();
 make_helper(hlt)
 {
 	if (FLAG_VAL(IF)) {
-		printf("hit");
-		while ( int_polling() );
+		while ( int_polling() ) {
+			printf("hit\n");
+		}
 	}
 	print_asm("hlt");
 
