@@ -40,11 +40,8 @@ main_loop(void) {
 	bool redraw;
 
 	while (true) {
-		Log("Hello");
 		wait_intr();
-		Log("Following");
 		cli();
-		Log("now %x, tick %x", now, tick);
 		if (now == tick) {
 			sti();
 			continue;
@@ -60,7 +57,6 @@ main_loop(void) {
 		/* 依次模拟已经错过的时钟中断。一次主循环如果执行时间长，期间可能到来多次时钟中断，
 		 * 从而主循环中维护的时钟可能与实际时钟相差较多。为了维持游戏的正常运行，必须补上
 		 * 期间错过的每一帧游戏逻辑。 */
-		Log("now %x, target %x", now, target);
 		while (now < target) { 
 			/* 每隔一定时间产生一个新的字符 */
 			if (now % (HZ / CHARACTER_PER_SECOND) == 0) {
