@@ -12,7 +12,7 @@ extern uint32_t main_entry;
 void raise_intr(uint8_t NO)
 {
 	/* Get gate descriptor */
-	//if (NO == 0x20) return;
+	if (NO == 0x20) return;
 	lnaddr_t idt_addr = cpu.idtr.base;
 	size_t size = sizeof(GateDesc);
 	GateDesc desc;
@@ -20,7 +20,6 @@ void raise_intr(uint8_t NO)
 	*((uint32_t *)(&desc) + 1) = hwaddr_read(idt_addr + NO * size + 4, 4);
 
 	if ( !desc.present ) {
-		printf("unregistered intr %#x\n", NO);
 		return;
 	}
 
