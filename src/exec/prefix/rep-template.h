@@ -5,12 +5,12 @@ make_helper(exec);
 
 make_helper(concat(rep_, SUFFIX)) {
 	int len = 0;
-	Log("rep");
 	uint8_t next_opcode = instr_fetch(eip + 1, 1);
 	if (next_opcode == 0xc3) { // repz ret
-		return 1 + exec(eip + 1);
+		return exec(eip + 1); // don't count rep, for right eip
 	}
 	while (REG(R_ECX) != 0) {
+		Log("rep %x", REG(R_ECX));
 		len = exec(eip+1);
 		REG(R_ECX) --;
 	}
