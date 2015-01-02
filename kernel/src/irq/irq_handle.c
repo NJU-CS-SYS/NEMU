@@ -31,7 +31,6 @@ add_irq_handle(int irq, void (*func)(void) ) {
 
 void irq_handle(TrapFrame *tf) {
 	int irq = tf->irq;
-	Log("irq %x", irq);
 
 	if (irq < 0) {
 		panic("Unhandled exception!");
@@ -41,7 +40,6 @@ void irq_handle(TrapFrame *tf) {
 		panic("Unexpected exception #%d at eip = %x", irq, tf->eip);
 	} else if (irq >= 1000) {
 		int irq_id = irq - 1000;
-		Log("irq id %x", irq_id);
 		assert(irq_id < NR_HARD_INTR);
 		struct IRQ_t *f = handles[irq_id];
 
