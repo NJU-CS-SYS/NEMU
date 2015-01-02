@@ -76,7 +76,7 @@ void init_cond() {
 	asm volatile("movl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
-	fun_color();
+	//fun_color();
 
 	/* Here we go! */
 	((void(*)(void))eip)();
@@ -105,7 +105,7 @@ void init() {
 	nemu_assert(0);
 }
 
-void fun_color() /* Draw white */
+void fun_color() /* Draw some */
 {
 	char *color = (char *)0xa0000;
 	int color_idx;
