@@ -112,6 +112,8 @@ make_helper(concat(iret_, SUFFIX))
 	 * above presume is incorrect.
 	 */
 
+	cpu.eip --;
+	Log("eip has sub 1 for iret return len");
 	print_asm("iret" str(SUFFIX));
 	return 1;
 }

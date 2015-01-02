@@ -30,7 +30,6 @@ void raise_intr(uint8_t NO)
 	push(cpu.eip);
 	
 	Log("the eip stored is %x", cpu.eip);
-	nemu_state = TEST_INT;
 
 	/* Jump */
 	cpu.cs = desc.segment;
