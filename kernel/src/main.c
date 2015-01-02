@@ -109,10 +109,9 @@ void fun_color() /* Draw white */
 {
 	char *color = (char *)0xa0000;
 	int color_idx;
-	for (color_idx = 0; color_idx < 320 * 120; color_idx ++)
-		color[color_idx] = 0x0f;
+	for (color_idx = 0; color_idx < 320 * 240; color_idx ++)
+		color[color_idx] = 0xff;
 
-	Log("What");
 	nemu_assert(0);
 }
 
