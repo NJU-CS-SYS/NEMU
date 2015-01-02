@@ -8,6 +8,5 @@ make_helper(hlt)
 	volatile bool *p = &(cpu.INTR);
 	if (FLAG_VAL(IF))
 		while (*p == 0) printf("hlt\n");
-	assert(0);
 	return 1;
 }
