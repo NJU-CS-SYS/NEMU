@@ -132,7 +132,7 @@ int int_polling()
 		printf("hit no %x\n", intr_no);
 		i8259_ack_intr();
 		raise_intr(intr_no);
-		return 1;
+		return 0;
 	}
-	return 0;
+	return 1;
 }
