@@ -68,7 +68,7 @@ void print_bin_instr(swaddr_t eip, int len)
 	printf("%*.s", 50 - (12 + 3 * len), "");
 }
 
-void int_polling();
+int int_polling();
 
 void cpu_exec(volatile uint32_t n)
 {
@@ -125,11 +125,13 @@ void cpu_exec(volatile uint32_t n)
 	}
 }
 
-void int_polling()
+int int_polling()
 {
 	if(cpu.INTR & FLAG_VAL(IF)) {
 		uint32_t intr_no = i8259_query_intr();
 		i8259_ack_intr();
 		raise_intr(intr_no);
+		return 0;
 	}
+	return 1;
 }
