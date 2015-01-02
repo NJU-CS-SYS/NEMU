@@ -108,9 +108,10 @@ make_helper(concat(iret_, SUFFIX))
 	 * run into fault
 	 */
 
-	Log("cpu.eip = cpu.eip + 2 - 1,"
-		" if you meet a failure, consider instruction `iret'");
-	cpu.eip = cpu.eip + 2 - 1;
+	/* UPDATE: raise_intr can be triggered by any INTR, so the
+	 * above presume is incorrect.
+	 */
+
 	print_asm("iret" str(SUFFIX));
 	return 1;
 }
