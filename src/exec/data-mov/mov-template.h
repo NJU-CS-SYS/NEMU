@@ -111,9 +111,7 @@ make_helper(concat(movz_b2_, SUFFIX))
 }
 
 make_helper(concat(movz_w2_, SUFFIX)) 
-{
-	uint16_t src;
-	int len = 2;
+{ uint16_t src; int len = 2;
 	ModR_M m;
 	m.val = instr_fetch(eip + 2, 1);
 	if (m.mod == 3) { // reg
@@ -180,6 +178,9 @@ make_helper(concat(movs_w2r_, SUFFIX)) {
 }
 
 make_helper(concat(movs_m2m_, SUFFIX)) {
+	Log("data length %d", DATA_BYTE);
+	Log("cpu.esi %x", cpu.esi);
+	Log("cpu.edi %x", cpu.edi);
 	Sreg = DS;
 	DATA_TYPE buf = MEM_R( cpu.esi );
 	Sreg = ES;
