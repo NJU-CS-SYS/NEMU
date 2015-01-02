@@ -69,7 +69,10 @@ make_helper(concat(ret_near_, SUFFIX)) {
 	POP(ip);
 	cpu.eip = ip & 0x0000ffff;
 #else
+	uint32_t old_eip = cpu.eip;
+	uint32_t old_esp = cpu.esp;
 	POP(cpu.eip);
+	Log("old-eip %x, old-esp %x, new-eip %x, new-esp %x", old_eip, old_esp, cpu.eip, cpu.esp);
 #endif
 	print_asm("ret");
 	return 1;
