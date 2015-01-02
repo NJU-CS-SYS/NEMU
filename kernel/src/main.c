@@ -6,6 +6,7 @@
 void init_page();
 void init_serial();
 void init_ide();
+void init_kb();
 void init_i8259();
 void init_segment();
 void init_idt();
@@ -40,6 +41,9 @@ void init_cond() {
 
 	/* Initialize the IDE driver. */
 	init_ide();
+
+	/* Initialize the keyboard. */
+	init_kb();
 #endif
 
 #ifdef IA32_PAGE
