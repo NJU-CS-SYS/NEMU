@@ -39,13 +39,6 @@ main_loop(void) {
 	int num_draw = 0;
 	bool redraw;
 
-	redraw = true;
-	create_new_letter();
-	if (redraw) { /* 当需要重新绘图时重绘 */
-		num_draw ++;
-		redraw_screen();
-	}
-
 	while (true) {
 		Log("Hello");
 		wait_intr();
