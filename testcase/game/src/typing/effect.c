@@ -41,7 +41,8 @@ create_new_letter(void) {
 	/* 字母、初始位置、掉落速度均为随机设定 */
 	head->x = 0;
 	head->y = rand() % (SCR_WIDTH / 8 - 2) * 8 + 8;
-	head->v = F_div_F(int2F(rand() % 1000), int2F(2000)) + f2F(0.5);
+	//head->v = F_div_F(int2F(rand() % 1000), int2F(2000)) + f2F(0.5);
+	head->v = F_div_F(int2F(rand() % 1000), int2F(2000)) + (FLOAT)(1 << 15);
 	head->text = rand() % 26;
 	release_key(head->text); /* 清除过往的按键 */
 }
@@ -53,7 +54,8 @@ update_letter_pos(void) {
 	for (it = head; it != NULL; ) {
 		fly_t next = it->_next;
 		it->x += it->v; /* 根据速度更新位置 */
-		if (it->x < 0 || it->x + f2F(7.9) > int2F(SCR_HEIGHT)) {
+		//if (it->x < 0 || it->x + f2F(7.9) > int2F(SCR_HEIGHT)) {
+		if (it->x < 0 || it->x + (FLOAT)517734 > int2F(SCR_HEIGHT)) {
 			if (it->x < 0) hit ++; /* 从上部飞出屏幕 */
 			else miss ++; /* 从下部飞出屏幕 */
 			fly_remove(it);

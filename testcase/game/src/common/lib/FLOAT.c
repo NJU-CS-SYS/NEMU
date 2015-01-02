@@ -5,23 +5,19 @@
 #include "FLOAT.h"
 
 FLOAT F_mul_F(FLOAT a, FLOAT b) {
-	assert(0);
-	return 0;
+	return ((a * b) >> 16);
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
-	assert(0);
-	return 0;
+	return ((a / b) << 16);
 }
 
 FLOAT f2F(float a) {
-	assert(0);
-	return 0;
+	return (int32_t)(a * (1 << 16));
 }
 
 static inline FLOAT Fabs(FLOAT x) {
-	assert(0);
-	return 0;
+	return (x & 0x7fffffff);
 }
 
 

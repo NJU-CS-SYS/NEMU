@@ -118,7 +118,7 @@ helper_fun opcode_table_2 [256] = {
 /* 0x94 */	set_e, set_ne_nz, set_be, set_a,
 /* 0x98 */	set_s, set_ns, set_pe, set_po, 
 /* 0x9c */	set_l, set_ge, set_le, set_g, 
-/* 0xa0 */	inv, inv, inv, inv,
+/* 0xa0 */	inv, inv, inv, bt_r2rm_v,
 /* 0xa4 */	inv, inv, inv, inv,
 /* 0xa8 */	inv, inv, inv, inv,
 /* 0xac */	inv, inv, inv, imul_rm2r_v,

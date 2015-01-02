@@ -5,23 +5,19 @@
 
 #ifdef BIN_SCALE
 static inline int32_t F2int(FLOAT a) {
-	assert(0);
-	return 0;
+	return (a >> 16);
 }
 
 static inline FLOAT int2F(int32_t a) {
-	assert(0);
-	return 0;
+	return (a << 16);
 }
 
 static inline FLOAT F_mul_int(FLOAT a, int32_t b) {
-	assert(0);
-	return 0;
+	return (a * b);
 }
 
 static inline FLOAT F_div_int(FLOAT a, int32_t b) {
-	assert(0);
-	return 0;
+	return (a / b);
 }
 
 
@@ -41,7 +37,7 @@ static inline FLOAT int2F(int32_t a) {
 }
 
 static inline FLOAT f2F(float a) {
-	return a;
+	return (int32_t)(a * (1 << 16));
 }
 
 static inline FLOAT F_mul_int(FLOAT a, uint32_t b) {
