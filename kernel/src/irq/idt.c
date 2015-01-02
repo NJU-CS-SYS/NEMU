@@ -32,6 +32,7 @@ static void set_trap(GateDesc *ptr, uint32_t selector, uint32_t offset, uint32_t
 }
 
 void irq0();
+void irq1();
 void irq14();
 void vec0();
 void vec1();
@@ -76,7 +77,8 @@ void init_idt() {
 	/* the system call 0x80 */
 	set_trap(idt + 0x80, SEG_KERNEL_CODE << 3, (uint32_t)vecsys, DPL_USER);
 
-	set_intr(idt+32 + 0, SEG_KERNEL_CODE << 3, (uint32_t)irq0, DPL_KERNEL);
+	set_intr(idt+32 + 0, SEG_KERNEL_CODE << 3, (uint32_t)irq0, DPL_KERNEL); // ide write back
+	set_intr(idt+32 + 1, SEG_KERNEL_CODE << 3, (uint32_t)irq1, DPL_KERNEL); // keyboard
 	set_intr(idt+32 + 14, SEG_KERNEL_CODE << 3, (uint32_t)irq14, DPL_KERNEL);
 
 	/* the ``idt'' is its virtual address */
