@@ -17,6 +17,7 @@ void video_mapping_read_test();
 void video_mapping_clear();
 extern uint32_t brk;
 
+void fun_color(void);
 /* Initialization phase 2 */
 void init_cond() {
 	brk = 0;
@@ -75,6 +76,8 @@ void init_cond() {
 	asm volatile("movl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
+	fun_color();
+
 	/* Here we go! */
 	((void(*)(void))eip)();
 
@@ -95,16 +98,21 @@ void init() {
 	asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
-	/* Draw white */
-	char *color = (char *)0xa0000;
-	int color_idx;
-	for (color_idx = 0; color_idx < 320 * 120; color_idx ++)
-		color[color_idx] = 0xff;
-
-	nemu_assert(0);
 	/* Jump to init_cond() to continue initialization. */
 	asm volatile("jmp *%0" : : "r"(init_cond));
 
 	/* Should never reach here. */
 	nemu_assert(0);
 }
+
+void fun_color() /* Draw white */
+{
+	char *color = (char *)0xa0000;
+	int color_idx;
+	for (color_idx = 0; color_idx < 320 * 120; color_idx ++)
+		color[color_idx] = 0x0f;
+
+	Log("What");
+	nemu_assert(0);
+}
+
