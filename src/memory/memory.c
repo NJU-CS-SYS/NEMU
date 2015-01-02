@@ -13,9 +13,9 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len)
 	assert(len == 1 || len == 2 || len == 4);
 	int mmio_code = is_mmio(addr);
 	if (mmio_code != -1) {
-		printf("Read MMIO %x ", mmio_code);
+		//printf("Read MMIO %x ", mmio_code);
 		uint32_t video_data =  mmio_read(addr, len, mmio_code);
-		printf("MMIO Data = %02x\n", (unsigned char)video_data);
+		//printf("MMIO Data = %02x\n", (unsigned char)video_data);
 		return video_data;	
 	} else {
 		return cache_read(addr, len);
@@ -27,7 +27,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data)
 	assert(len == 1 || len == 2 || len == 4);
 	int mmio_code = is_mmio(addr);
 	if (mmio_code != -1) {
-		printf("Write MMIO %x MMIO Data = %02x\n", mmio_code, (unsigned char)data);
+		//printf("Write MMIO %x MMIO Data = %02x\n", mmio_code, (unsigned char)data);
 		mmio_write(addr, len, data, mmio_code);
 	} else {
 		cache_write(addr, len, data);
