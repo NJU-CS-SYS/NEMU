@@ -103,6 +103,7 @@ void init() {
 	 * Before setting up correct paging, no global variable can be used. */
 	Log("init page...");
 	init_page();
+	nemu_assert(0);
 
 	/* After paging is enabled, transform %esp to virtual address. */
 	asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
