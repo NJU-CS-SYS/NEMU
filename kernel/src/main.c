@@ -100,7 +100,6 @@ void init() {
 	init_page();
 
 	/* After paging is enabled, transform %esp to virtual address. */
-	nemu_assert(0);
 	asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
@@ -118,4 +117,3 @@ void fun_color() /* Draw some */
 	for (color_idx = 0; color_idx < 320 * 200; color_idx ++)
 		color[color_idx] = 0x0f;
 }
-
