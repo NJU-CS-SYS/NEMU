@@ -101,7 +101,7 @@ void init() {
 	/* We must set up kernel virtual memory first because our kernel thinks it 
 	 * is located at 0xc0100000, which is set by the linking options in Makefile.
 	 * Before setting up correct paging, no global variable can be used. */
-	Log("init page...");
+	nemu_assert(0);
 	init_page();
 	nemu_assert(0);
 
