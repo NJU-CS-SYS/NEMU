@@ -20,9 +20,12 @@ uint32_t loader() {
 	Elf32_Phdr *ph = NULL;
 
 #ifdef HAS_DEVICE
+	Log("loading elf head...");
 	uint8_t buf[4096];
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 	elf = (void*)buf;
+	Log("elf head is loaded");
+	nemu_assert(0);
 #else
 	/* The ELF file is located at memory address 0 */
 	elf = (void *)0x0;
@@ -35,6 +38,7 @@ uint32_t loader() {
 	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
+			Log("loading...");
 			char *dest = (char*)ph->p_vaddr;
 			uint32_t filesz = ph->p_filesz;
 			uint32_t memsz = ph->p_memsz;
@@ -82,6 +86,9 @@ uint32_t loader() {
 			extern uint32_t brk;
 			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
 			if(brk < new_brk) { brk = new_brk; }
+
+			Log("a section is loaded");
+			nemu_assert(0);
 
 		}
 		ph = (Elf32_Phdr*)((uint32_t)ph + step);
