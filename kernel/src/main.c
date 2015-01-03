@@ -24,7 +24,6 @@ void init_cond() {
 	brk = 0;
 #ifdef IA32_INTR
 	/* Reset the GDT, since the old GDT in start.S cannot be used in the future. */
-	nemu_assert(0);
 	init_segment();
 
 	/* Set the IDT by setting up interrupt and exception handlers.
@@ -105,6 +104,7 @@ void init() {
 #endif
 
 	/* Jump to init_cond() to continue initialization. */
+	nemu_assert(0);
 	asm volatile("jmp *%0" : : "r"(init_cond));
 
 	/* Should never reach here. */
