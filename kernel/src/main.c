@@ -100,11 +100,11 @@ void init() {
 	init_page();
 
 	/* After paging is enabled, transform %esp to virtual address. */
+	nemu_assert(0);
 	asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
 	/* Jump to init_cond() to continue initialization. */
-	nemu_assert(0);
 	asm volatile("jmp *%0" : : "r"(init_cond));
 
 	/* Should never reach here. */
