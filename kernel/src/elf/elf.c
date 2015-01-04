@@ -25,7 +25,6 @@ uint32_t loader() {
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 	elf = (void*)buf;
 	Log("elf head is loaded");
-	nemu_assert(0);
 #else
 	/* The ELF file is located at memory address 0 */
 	elf = (void *)0x0;
@@ -88,7 +87,6 @@ uint32_t loader() {
 			if(brk < new_brk) { brk = new_brk; }
 
 			Log("a section is loaded");
-			nemu_assert(0);
 
 		}
 		ph = (Elf32_Phdr*)((uint32_t)ph + step);
