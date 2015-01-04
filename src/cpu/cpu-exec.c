@@ -41,6 +41,7 @@ void restart()
 	cpu.ecx = 0;
 	cpu.edx = 0;
 	cpu.cr0.paging = 0;
+	cpu.cr0.protect_enable = 0;
 	cpu.INTR = 0;
 	FLAG_CHG(IF, 1);
 
