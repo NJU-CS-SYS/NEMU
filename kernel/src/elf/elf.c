@@ -32,6 +32,8 @@ uint32_t loader() {
 
 	ph = (void*)elf->e_phoff;
 	uint16_t step = elf->e_phentsize;
+
+	Log("phoff %x", elf->e_phoff);
 	Log("phnum %x", elf->e_phnum);
 
 	int i;
