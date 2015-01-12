@@ -56,9 +56,6 @@ int fs_open(const char *pathname, int flags)
 }
 int fs_read(int fd, void *buf, int len)
 {
-	if (fd == 0 || fd == 2) { // stdout or stderr
-		return print(buf, len);
-	}
 
 	fd -= 3; // for stdin, stdout, and stderr
 
@@ -92,7 +89,12 @@ int fs_read(int fd, void *buf, int len)
 }
 int fs_write(int fd, void *buf, int len)
 {
-	Log("fd = %d", fd);
+	Log("sys_write = %d", fd);
+
+	if (fd == 0 || fd == 2) { // stdout or stderr
+		return print(buf, len);
+	}
+
 	fd -= 3; // for stdin, stdout, and stderr
 	nemu_assert(fd < NR_FILES);
 	len = len < file_table[fd].size ? len : file_table[fd].size;
