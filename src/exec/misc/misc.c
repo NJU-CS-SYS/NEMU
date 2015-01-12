@@ -33,6 +33,7 @@ make_helper(int_i) // opcode = cd
 {
 	uint8_t imm = instr_fetch(eip + 1, 1);
 	cpu.eip += 2; // update eip here, otherwise nemu has no chance to get the correct original eip
+	nemu_state = TEST_INT;
 	raise_intr(imm);
 
 	return 2;
