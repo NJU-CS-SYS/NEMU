@@ -35,7 +35,7 @@ uint32_t loader() {
 
 	int m;
 	for (m = 0; m < 32; m ++)
-		Log("%02x", ph[m]);
+		Log("%02x", buf[52 + m]);
 	Log("phoff %x", elf->e_phoff);
 	Log("phnum %x", elf->e_phnum);
 	Log("phsize %x", elf->e_phentsize);
