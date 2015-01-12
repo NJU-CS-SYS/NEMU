@@ -16,8 +16,7 @@ void _exit(int status) {
 
 int open(const char *pathname, int flags) {
 	//nemu_assert(0);
-	int ret;
-	asm volatile("int $0x80": "=a"(ret) : "a"(SYS_open), "c"(pathname));
+	return syscall(SYS_open, pathname, flags);
 	return ret; 
 }
 
