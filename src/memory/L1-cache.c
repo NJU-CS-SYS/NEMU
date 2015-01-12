@@ -94,7 +94,7 @@ static void L1_read(swaddr_t addr, void *data)
 	// burst read
 	// memcpy(data, L1[set][way].blk + offset, BURST_LEN);
 	// For performance
-	uint32_t *data_ptr = data;
+	uint8_t *data_ptr = data; // step by byte
 	*(data_ptr ++) = set_ptr[way].blk[ offset ++ ];
 	*(data_ptr ++) = set_ptr[way].blk[ offset ++ ];
 	*(data_ptr ++) = set_ptr[way].blk[ offset ++ ];
