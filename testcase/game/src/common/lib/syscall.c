@@ -20,8 +20,6 @@ int open(const char *pathname, int flags) {
 }
 
 int read(int fd, char *buf, int len) {
-	Log("fd %d len %d, buf %p", fd, len, buf);
-	nemu_assert(0);
 	return syscall(SYS_read, fd, buf, len);
 }
 
