@@ -15,8 +15,10 @@ void _exit(int status) {
 }
 
 int open(const char *pathname, int flags) {
-	nemu_assert(0);
-	return 0; 
+	//nemu_assert(0);
+	int ret;
+	asm volatile("int $0x80": "=a"(ret) : "a"(SYS_open), "c"(pathname));
+	return ret; 
 }
 
 int read(int fd, char *buf, int len) {

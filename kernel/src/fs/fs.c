@@ -89,8 +89,6 @@ int fs_read(int fd, void *buf, int len)
 }
 int fs_write(int fd, void *buf, int len)
 {
-	Log("sys_write = %d", fd);
-
 	if (fd == 1 || fd == 2) { // stdout or stderr
 		return print(buf, len);
 	}
@@ -102,4 +100,7 @@ int fs_write(int fd, void *buf, int len)
 	return len;
 }
 int fs_lseek(int fd, int offset, int whence);
-int fs_close(int fd);
+int fs_close(int fd)
+{
+	return 0;
+}
