@@ -718,6 +718,7 @@ PAL_LoadObjectDesc(
    //
    // Load the description data
    //
+   Log("buf %p", buf);
    while (fgets(buf, 512, fp) != NULL)
    {
       p = strchr(buf, '=');

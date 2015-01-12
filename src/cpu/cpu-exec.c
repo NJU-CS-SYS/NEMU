@@ -80,6 +80,7 @@ void cpu_exec(volatile uint32_t n)
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
 
+		if (cpu.eip == 0x80740a0) nemu_state = TEST_INT;
 		
 
 		cpu.eip += instr_len;
