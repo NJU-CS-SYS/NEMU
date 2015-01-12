@@ -52,7 +52,7 @@ int fs_open(const char *pathname, int flags)
 		if ( !strcmp(pathname, file_table[fd].name) ) {
 			file_state[fd].opened = true;
 			file_state[fd].offset = 0;
-			return fd;
+			return fd + 3;
 		}
 	}
 	return -1;
@@ -66,7 +66,7 @@ int fs_open(const char *pathname, int flags)
 int fs_read(int fd, void *buf, int len)
 {
 	
-	// fd -= 3; // for stdin, stdout, and stderr
+	fd -= 3; // for stdin, stdout, and stderr
 	Log("fs_read %s", file_table[fd].name);
 
 	nemu_assert(fd < NR_FILES);
@@ -96,7 +96,6 @@ int fs_read(int fd, void *buf, int len)
 	file_state[fd].offset += len;
 	return len;
 }
-
 int fs_write(int fd, void *buf, int len)
 {
 	if (fd == 1 || fd == 2) { // stdout or stderr
@@ -135,5 +134,8 @@ int fs_write(int fd, void *buf, int len)
 int fs_lseek(int fd, int offset, int whence);
 int fs_close(int fd)
 {
+	fd -= 3;
+	file_state[fd].opened = false;
+	file_state[fd].offset = 0;
 	return 0;
 }
