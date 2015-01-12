@@ -10,7 +10,7 @@
 uint32_t L2_cache_read(swaddr_t addr, size_t len);
 void L2_cache_write(swaddr_t addr, size_t len, uint32_t data);
 
-#define BURST_LEN 8
+#define BURST_LEN 4
 #define BURST_MASK (BURST_LEN - 1)
 
 #define SET_WIDTH 7

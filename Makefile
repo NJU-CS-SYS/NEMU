@@ -66,3 +66,9 @@ submit: clean
 
 clean:
 	-rm -f nemu $(OBJS) $(OBJS:.o=.d) log.txt 2> /dev/null
+
+opt:
+	$ perf record ./nemu $(TESTFILE)
+
+rep:
+	$ perf report -i perf.data
