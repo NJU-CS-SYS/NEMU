@@ -28,7 +28,6 @@ static int trigger = TRIGGER_INIT;
 void restart()
 {
 	/* Perform some initialization to restart a program */
-	load_prog();
 	memcpy(hwa_to_va(LOADER_START), loader, loader_len);
 	tlb_init();
 
