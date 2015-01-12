@@ -25,6 +25,7 @@ int print(void *buf, int len)
 
 int fs_write(int fd, void *buf, int len);
 int fs_open(char *filename, int flag);
+int fs_read(int fd, void *buf, int len);
 void do_syscall(TrapFrame *tf)
 {
 	switch(tf->eax) {
@@ -40,14 +41,14 @@ void do_syscall(TrapFrame *tf)
 		/* TODO: Add more system calls. */
 
 		case SYS_write:
-					  Log("SYS write tf->eax = %d", tf->eax);
 					  tf->eax = fs_write(tf->ebx, (void *)(tf->ecx), tf->edx);
 					  break;
 		case SYS_open:
 					  tf->eax = fs_open((char *)tf->ebx, tf->ebx);
 					  break;
+		case SYS_read:
+					  tf->eax = fs_read(tf->ebx, (void *)(tf->ebx), tf->edx);
 		default: 
-					  Log("a %x, b %x, c %x, d %x", tf->eax, tf->ebx, tf->ecx, tf->edx);
 					  panic("Unhandled system call: id = %d", tf->eax);
 	}
 }
