@@ -6,6 +6,8 @@ int __attribute__((__noinline__))
 syscall(int id, ...) {
 	int ret;
 	int *args = &id;
+	if (args[0] == 3)
+		Log("In syscall len = %x", args[3]);
 	asm volatile("int $0x80": "=a"(ret) : "a"(args[0]), "b"(args[1]), "c"(args[2]), "d"(args[3]));
 	return ret;
 }
@@ -20,6 +22,7 @@ int open(const char *pathname, int flags) {
 }
 
 int read(int fd, char *buf, int len) {
+	Log("In read len = %x", len);
 	return syscall(SYS_read, fd, buf, len);
 }
 
