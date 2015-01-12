@@ -47,7 +47,7 @@ void do_syscall(TrapFrame *tf)
 					  tf->eax = fs_open((char *)tf->ebx, tf->ebx);
 					  break;
 		case SYS_read:
-					  tf->eax = fs_read(tf->ebx, (void *)(tf->ebx), tf->edx);
+					  tf->eax = fs_read(tf->ebx, (void *)(tf->ecx), tf->edx);
 		default: 
 					  panic("Unhandled system call: id = %d", tf->eax);
 	}

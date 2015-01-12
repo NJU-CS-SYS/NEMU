@@ -63,7 +63,6 @@ int fs_read(int fd, void *buf, int len)
 
 	Log("Open: %s", file_table[fd].name);
 	len = len < file_table[fd].size ? len : file_table[fd].size;
-	Log("offset %d, len %d, buf %p", file_table[fd].disk_offset, len, buf);
 	ide_read(buf, file_table[fd].disk_offset, len);
 	return len;
 }
