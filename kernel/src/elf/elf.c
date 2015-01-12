@@ -37,7 +37,7 @@ uint32_t loader() {
 	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
-			Log("loading...");
+			Log("phvaddr %x", ph->p_vaddr);
 			char *dest = (char*)ph->p_vaddr;
 			uint32_t filesz = ph->p_filesz;
 			uint32_t memsz = ph->p_memsz;
