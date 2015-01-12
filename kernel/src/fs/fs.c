@@ -67,6 +67,7 @@ int fs_read(int fd, void *buf, int len)
 {
 	
 	// fd -= 3; // for stdin, stdout, and stderr
+	Log("fs_read %s", file_table[fd].name);
 
 	nemu_assert(fd < NR_FILES);
 
