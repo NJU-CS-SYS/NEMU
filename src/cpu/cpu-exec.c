@@ -81,7 +81,7 @@ void cpu_exec(volatile uint32_t n)
 		int instr_len = exec(cpu.eip);
 
 		//if (cpu.eip == 0x8048102) nemu_state = TEST_INT;
-		if (cpu.eip >= 0x80692b0 && cpu.eip <= 0x80692a9) nemu_state = TEST_INT;
+		if (cpu.eip >= 0x80691b0 && cpu.eip <= 0x80692a9) nemu_state = TEST_INT;
 		
 
 		cpu.eip += instr_len;
