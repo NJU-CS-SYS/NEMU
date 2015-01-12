@@ -32,7 +32,7 @@ static const file_info file_table[] =
 
 void ide_read(uint8_t *, uint32_t, uint32_t);
 void ide_write(uint8_t *, uint32_t, uint32_t);
-
+#define BUF_LEN 4096
 /* This array stores the solid file info for game pal
  * reserving the front 3 pos for stdin, stdout, stderr
  */
@@ -53,7 +53,38 @@ int fs_open(const char *pathname, int flags)
 	 */
 	return -1;
 }
-int fs_read(int fd, void *buf, int len);
+int fs_read(int fd, void *buf, int len)
+{
+	fd -= 3; // for stdin, stdout, and stderr
+
+	nemu_assert(fd < NR_FILES);
+
+	Log("Open: %s", file_table[fd].name);
+	uint32_t offset = file_table[fd].disk_offset;
+
+	len = len < file_table[fd].size ? len : file_table[fd].size;
+	const int cnt = len / BUF_LEN;
+	const int rest = len % BUF_LEN;
+	uint8_t read_buf[BUF_LEN];
+	int i;
+	int file_idx = 0;
+	for (i = 0; i < cnt; i ++) {
+		ide_read(read_buf, offset, BUF_LEN);
+		int k;
+		for (k = 0; k < BUF_LEN; k ++)
+			buf[file_idx ++] =  read_buf[k];
+		offset += BUF_LEN;
+	}
+	ide_read(read_buf, offset, rest);
+	for (i = 0; i < rest; i ++)
+		buf[file_idx ++] = read_buf[i];
+
+	return file_idx;
+}
 int fs_write(int fd, void *buf, int len);
+{
+	fd -= 3; // for stdin, stdout, and stderr
+	nemu_assert(fd < NR_FILES);
+}
 int fs_lseek(int fd, int offset, int whence);
 int fs_close(int fd);
