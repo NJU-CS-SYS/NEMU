@@ -63,29 +63,9 @@ int fs_read(int fd, void *buf, int len)
 
 	Log("Open: %s", file_table[fd].name);
 	len = len < file_table[fd].size ? len : file_table[fd].size;
+	Log("offset %d, len %d, buf %p", file_table[fd].disk_offset, len, buf);
 	ide_read(buf, file_table[fd].disk_offset, len);
 	return len;
-	/*
-	uint32_t offset = file_table[fd].disk_offset;
-
-	const int cnt = len / BUF_LEN;
-	const int rest = len % BUF_LEN;
-	uint8_t read_buf[BUF_LEN];
-	int i;
-	int file_idx = 0;
-	for (i = 0; i < cnt; i ++) {
-		ide_read(read_buf, offset, BUF_LEN);
-		int k;
-		for (k = 0; k < BUF_LEN; k ++)
-			((char*)buf)[file_idx ++] =  read_buf[k];
-		offset += BUF_LEN;
-	}
-	ide_read(read_buf, offset, rest);
-	for (i = 0; i < rest; i ++)
-		((char*)buf)[file_idx ++] = read_buf[i];
-
-	return file_idx;
-	*/
 }
 int fs_write(int fd, void *buf, int len)
 {
