@@ -89,6 +89,7 @@ void load_table() {
 void load_prog() {
 	struct stat st;
 	stat(exec_file, &st);
+	printf("st.st_size = %x", (uint32_t)st.st_size);
 	assert(st.st_size < 0xa0000);
 
 	FILE *fp = fopen(exec_file, "rb");
