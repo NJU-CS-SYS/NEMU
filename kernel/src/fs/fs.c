@@ -92,6 +92,7 @@ int fs_read(int fd, void *buf, int len)
 }
 int fs_write(int fd, void *buf, int len)
 {
+	Log("fd = %d", fd);
 	fd -= 3; // for stdin, stdout, and stderr
 	nemu_assert(fd < NR_FILES);
 	len = len < file_table[fd].size ? len : file_table[fd].size;
