@@ -17,7 +17,9 @@ void _exit(int status) {
 int open(const char *pathname, int flags) {
 	Log("Now in open");
 	Log("SYS_open %d", SYS_open);
-	return syscall(SYS_open, pathname, flags);
+	int ret = syscall(SYS_open, pathname, flags);
+	Log("Now out open");
+	return ret;
 }
 
 int read(int fd, char *buf, int len) {
