@@ -33,16 +33,10 @@ uint32_t loader() {
 	ph = (void*)((uint8_t*)elf + elf->e_phoff);
 	// uint16_t step = elf->e_phentsize;
 
-	Log("phoff %x", elf->e_phoff);
-	Log("phnum %x", elf->e_phnum);
-	Log("phsize %x", elf->e_phentsize);
-
 	int i;
 	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
-		Log("phvaddr %x", ph->p_vaddr);
 		if (ph->p_type == PT_LOAD) {
-			Log("phvaddr %x", ph->p_vaddr);
 			char *dest = (char*)ph->p_vaddr;
 			uint32_t filesz = ph->p_filesz;
 			uint32_t memsz = ph->p_memsz;
@@ -94,7 +88,6 @@ uint32_t loader() {
 			Log("a section is loaded");
 
 		}
-		//ph = (Elf32_Phdr*)((uint32_t)ph + step);
 		ph ++;
 	}
 
