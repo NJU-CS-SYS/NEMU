@@ -95,11 +95,11 @@ static void L1_read(swaddr_t addr, void *data)
 	// memcpy(data, L1[set][way].blk + offset, BURST_LEN);
 	// For performance
 	uint8_t *data_ptr = data; // step by byte
-	uint8_t *blk = set_ptr[way].blk;
-	*(data_ptr ++) = blk[ offset ++ ];
-	*(data_ptr ++) = blk[ offset ++ ];
-	*(data_ptr ++) = blk[ offset ++ ];
-	*(data_ptr) = set_ptr[way].blk[offset];
+	uint8_t *blk = set_ptr[way].blk + offset;
+	*(data_ptr ++) = *(blk ++);
+	*(data_ptr ++) = *(blk ++);
+	*(data_ptr ++) = *(blk ++);
+	*(data_ptr) = *blk;
 }
 static void L1_write(swaddr_t addr, void *data, uint8_t *mask) 
 {
