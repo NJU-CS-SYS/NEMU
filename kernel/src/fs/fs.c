@@ -61,7 +61,6 @@ int fs_read(int fd, void *buf, int len)
 
 	nemu_assert(fd < NR_FILES);
 
-	Log("Open: %s", file_table[fd].name);
 	len = len < file_table[fd].size ? len : file_table[fd].size;
 	ide_read(buf, file_table[fd].disk_offset, len);
 	return len;
