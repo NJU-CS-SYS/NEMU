@@ -40,6 +40,7 @@ void do_syscall(TrapFrame *tf)
 		/* TODO: Add more system calls. */
 
 		case SYS_write:
+					  Log("SYS write tf->eax = %d", tf->eax);
 					  tf->eax = fs_write(tf->ebx, (void *)(tf->ecx), tf->edx);
 					  break;
 		case SYS_open:
