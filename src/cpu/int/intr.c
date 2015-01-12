@@ -14,6 +14,7 @@ void raise_intr(uint8_t NO)
 {
 	/* Get gate descriptor */
 	//if (NO == 0x20) return;
+	printf("eax = %d\n", cpu.eax);
 	lnaddr_t idt_addr = cpu.idtr.base;
 	size_t size = sizeof(GateDesc);
 	GateDesc desc;
