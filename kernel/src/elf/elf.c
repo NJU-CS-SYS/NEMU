@@ -31,7 +31,7 @@ uint32_t loader() {
 #endif
 
 	ph = (void*)((uint8_t*)elf + elf->e_phoff);
-	uint16_t step = elf->e_phentsize;
+	// uint16_t step = elf->e_phentsize;
 
 	Log("phoff %x", elf->e_phoff);
 	Log("phnum %x", elf->e_phnum);
@@ -94,7 +94,8 @@ uint32_t loader() {
 			Log("a section is loaded");
 
 		}
-		ph = (Elf32_Phdr*)((uint32_t)ph + step);
+		//ph = (Elf32_Phdr*)((uint32_t)ph + step);
+		ph ++;
 	}
 
 	volatile uint32_t entry = elf->e_entry;
