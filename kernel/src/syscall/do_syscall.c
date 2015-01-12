@@ -13,9 +13,9 @@ static void sys_brk(TrapFrame *tf) {
 	tf->eax = 0;
 }
 
-static int print(uint32_t buf, int len)
+int print(void *buf, int len)
 {
-	char *str = (char *)buf;
+	char *str = buf;
 	int i;
 	for (i = 0; i < len; i ++) {
 		serial_printc(str[i]);
@@ -23,6 +23,7 @@ static int print(uint32_t buf, int len)
 	return len;
 }
 
+int fs_write(int fd, void *buf, int len);
 void do_syscall(TrapFrame *tf)
 {
 	switch(tf->eax) {
@@ -38,9 +39,7 @@ void do_syscall(TrapFrame *tf)
 		/* TODO: Add more system calls. */
 
 		case SYS_write:
-					  // asm volatile(".byte 0x82": :"a"(2), "c"(tf->ecx), "d"(tf->edx));
-					  // tf->eax has been modified as return value
-					  tf->eax = print(tf->ecx, tf->edx);
+					  tf->eax = fs_write(tf->ebx, (void *)(tf->ecx), tf->edx);
 					  break;
 		default: panic("Unhandled system call: id = %d", tf->eax);
 	}
