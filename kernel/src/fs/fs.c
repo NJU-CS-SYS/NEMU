@@ -56,8 +56,6 @@ int fs_open(const char *pathname, int flags)
 }
 int fs_read(int fd, void *buf, int len)
 {
-	Log("In fs_read len %x", len);
-
 	fd -= 3; // for stdin, stdout, and stderr
 
 	nemu_assert(fd < NR_FILES);
