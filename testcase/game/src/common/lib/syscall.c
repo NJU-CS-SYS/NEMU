@@ -15,9 +15,9 @@ void _exit(int status) {
 }
 
 int open(const char *pathname, int flags) {
-	//nemu_assert(0);
+	Log("Now in open");
+	Log("SYS_open %d", SYS_open);
 	return syscall(SYS_open, pathname, flags);
-	return ret; 
 }
 
 int read(int fd, char *buf, int len) {
