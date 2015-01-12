@@ -91,7 +91,7 @@ int fs_write(int fd, void *buf, int len)
 {
 	Log("sys_write = %d", fd);
 
-	if (fd == 0 || fd == 2) { // stdout or stderr
+	if (fd == 1 || fd == 2) { // stdout or stderr
 		return print(buf, len);
 	}
 
