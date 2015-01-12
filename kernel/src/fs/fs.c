@@ -66,7 +66,7 @@ int fs_open(const char *pathname, int flags)
 int fs_read(int fd, void *buf, int len)
 {
 	
-	fd -= 3; // for stdin, stdout, and stderr
+	// fd -= 3; // for stdin, stdout, and stderr
 
 	nemu_assert(fd < NR_FILES);
 
@@ -95,6 +95,7 @@ int fs_read(int fd, void *buf, int len)
 	file_state[fd].offset += len;
 	return len;
 }
+
 int fs_write(int fd, void *buf, int len)
 {
 	if (fd == 1 || fd == 2) { // stdout or stderr
