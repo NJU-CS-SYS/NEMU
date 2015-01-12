@@ -62,15 +62,16 @@ static void L1_read(swaddr_t addr, void *data)
 	uint32_t offset = temp.offset;
 
 	uint32_t way;
+	L1_cache *set_ptr = L1[set];
 	for (way = 0; way < NR_WAY; way ++) { // search by tag
-		if (L1[set][way].tag == tag) {
+		if (set_ptr[way].tag == tag) {
 			//L1_hit ++;
 			break;
 		}
 	}
 
 	// No need to check every valid bit
-	if ( !(L1[set][way].valid) ) {
+	if ( !(set_ptr[way].valid) ) {
 		way = NR_WAY;
 	}
 
