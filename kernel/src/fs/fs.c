@@ -1,6 +1,8 @@
 #include "common.h"
+#include "string.h"
 
-typedef struct {
+typedef struct
+{
 	char *name;
 	uint32_t size;
 	uint32_t disk_offset;
@@ -9,7 +11,8 @@ typedef struct {
 enum {SEEK_SET, SEEK_CUR, SEEK_END};
 
 /* This is the information about all files in disk. */
-static const file_info file_table[] = {
+static const file_info file_table[] =
+{
 	{"1.rpg", 188864, 1048576}, {"2.rpg", 188864, 1237440},
 	{"3.rpg", 188864, 1426304}, {"4.rpg", 188864, 1615168},
 	{"5.rpg", 188864, 1804032}, {"abc.mkf", 1022564, 1992896},
@@ -30,5 +33,27 @@ static const file_info file_table[] = {
 void ide_read(uint8_t *, uint32_t, uint32_t);
 void ide_write(uint8_t *, uint32_t, uint32_t);
 
-/* TODO: implement a simplified file system here. */
+/* This array stores the solid file info for game pal
+ * reserving the front 3 pos for stdin, stdout, stderr
+ */
 
+/* TODO: implement a simplified file system here. */
+int fs_open(const char *pathname, int flags)
+{
+	int fd; // file descriptor, ignore stdin, stdout, and stderr
+	for (fd = 0; fd < NR_FILES; fd ++) {
+		if ( !strcmp(pathname, file_table[fd].name) ) {
+			return fd;
+		}
+	}
+	
+	/* Don't find the file, which is impossible
+	 * and I don't allocate new file descriptor
+	 * for the non-existed file
+	 */
+	return -1;
+}
+int fs_read(int fd, void *buf, int len);
+int fs_write(int fd, void *buf, int len);
+int fs_lseek(int fd, int offset, int whence);
+int fs_close(int fd);
