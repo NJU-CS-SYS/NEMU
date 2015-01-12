@@ -30,7 +30,7 @@ uint32_t loader() {
 	elf = (void *)0x0;
 #endif
 
-	ph = (void*)(elf + elf->e_phoff);
+	ph = (void*)(elf + elf->e_phoff - 1);
 	uint16_t step = elf->e_phentsize;
 
 	Log("phoff %x", elf->e_phoff);
