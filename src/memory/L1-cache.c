@@ -25,7 +25,8 @@ void L2_cache_write(swaddr_t addr, size_t len, uint32_t data);
 uint64_t L1_hit = 0;
 uint64_t L1_access = 0;
 
-typedef union {
+typedef union
+{
 	struct {
 		uint32_t offset : BLOCK_WIDTH;
 		uint32_t set   : SET_WIDTH;
@@ -33,14 +34,17 @@ typedef union {
 	};
 	uint32_t addr;
 } L1_addr;
-typedef struct {
+typedef struct
+{
 	uint8_t blk[NR_BLOCK];
 	bool valid;
 	uint32_t tag : TAG_WIDTH;
 } L1_cache;
+
 L1_cache L1[NR_SET][NR_WAY];
 
-void init_L1() {
+void init_L1()
+{
 	int i, j;
 	for (i = 0; i < NR_SET; i ++) {
 		for (j = 0; j < NR_WAY; j ++) {
@@ -50,7 +54,7 @@ void init_L1() {
 }
 static void L1_read(swaddr_t addr, void *data)
 {
-	L1_access ++;	
+	//L1_access ++;	
 	L1_addr temp;
 	temp.addr = addr & ~BURST_MASK;
 	uint32_t set = temp.set;
@@ -59,11 +63,17 @@ static void L1_read(swaddr_t addr, void *data)
 
 	uint32_t way;
 	for (way = 0; way < NR_WAY; way ++) { // search by tag
-		if (L1[set][way].tag == tag && L1[set][way].valid) {
-			L1_hit ++;
+		if (L1[set][way].tag == tag) {
+			//L1_hit ++;
 			break;
 		}
 	}
+
+	// No need to check every valid bit
+	if ( !(L1[set][way].valid) ) {
+		way = NR_WAY;
+	}
+
 	if (way == NR_WAY) { // miss
 		for (way = 0; way < NR_WAY; way ++)
 			if (!L1[set][way].valid) // empty block
@@ -83,7 +93,8 @@ static void L1_read(swaddr_t addr, void *data)
 	// burst read
 	memcpy(data, L1[set][way].blk + offset, BURST_LEN);
 }
-static void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
+static void L1_write(swaddr_t addr, void *data, uint8_t *mask) 
+{
 	L1_access ++;
 	L1_addr temp;
 	temp.addr = addr & ~BURST_MASK;
@@ -104,7 +115,8 @@ static void L1_write(swaddr_t addr, void *data, uint8_t *mask) {
 	// burst write
 	memcpy_with_mask(L1[set][way].blk + offset, data, BURST_LEN, mask);
 }
-uint32_t L1_cache_read(swaddr_t addr, size_t len) {
+uint32_t L1_cache_read(swaddr_t addr, size_t len)  
+{
 	assert(len == 1 || len == 2 || len == 4);
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp[ 2 * BURST_LEN ];
@@ -116,7 +128,8 @@ uint32_t L1_cache_read(swaddr_t addr, size_t len) {
 	}
 	return *(uint32_t*)(temp + offset) & (~0u >> ((4 - len) << 3));
 }
-void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
+void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) 
+{
 	uint32_t offset = addr & BURST_MASK;
 	uint8_t temp [2 * BURST_LEN];
 	uint8_t mask [2 * BURST_LEN];
@@ -134,7 +147,8 @@ void L1_cache_write(swaddr_t addr, size_t len, uint32_t data) {
 
 	L2_cache_write(addr, len, data); // write through
 }
-void L1_print(swaddr_t addr) {
+void L1_print(swaddr_t addr) 
+{
 	L1_addr temp;
 	temp.addr = addr;
 	uint32_t set = temp.set;
