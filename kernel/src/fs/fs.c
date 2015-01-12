@@ -8,6 +8,12 @@ typedef struct
 	uint32_t disk_offset;
 } file_info;
 
+typedef struct
+{
+	bool opened;
+	uint32_t offset;
+} FileState;
+
 enum {SEEK_SET, SEEK_CUR, SEEK_END};
 
 /* This is the information about all files in disk. */
@@ -30,6 +36,8 @@ static const file_info file_table[] =
 
 #define NR_FILES (sizeof(file_table) / sizeof(file_table[0]))
 
+FileState file_state[NR_FILES];
+
 void ide_read(uint8_t *, uint32_t, uint32_t);
 void ide_write(uint8_t *, uint32_t, uint32_t);
 int print(void *buf, int len);
@@ -37,31 +45,54 @@ int print(void *buf, int len);
 /* This array stores the solid file info for game pal
  * reserving the front 3 pos for stdin, stdout, stderr
  */
-
-/* TODO: implement a simplified file system here. */
 int fs_open(const char *pathname, int flags)
 {
 	int fd; // file descriptor, ignore stdin, stdout, and stderr
 	for (fd = 0; fd < NR_FILES; fd ++) {
 		if ( !strcmp(pathname, file_table[fd].name) ) {
+			file_state[fd].opened = true;
+			file_state[fd].offset = 0;
 			return fd;
 		}
 	}
-	
-	/* Don't find the file, which is impossible
-	 * and I don't allocate new file descriptor
-	 * for the non-existed file
-	 */
 	return -1;
 }
+
+/* read return 0 to indicate that it has reached the end of file
+ * but how can read to detect the end of file?
+ * The first time its return value is less than the count
+ * parameter, the next time its return value is zero.
+ */
 int fs_read(int fd, void *buf, int len)
 {
+	
 	fd -= 3; // for stdin, stdout, and stderr
 
 	nemu_assert(fd < NR_FILES);
 
-	len = len < file_table[fd].size ? len : file_table[fd].size;
-	ide_read(buf, file_table[fd].disk_offset, len);
+	nemu_assert(file_state[fd].opened);
+
+	if (len == 0)
+		return 0;
+
+	if (file_state[fd].offset + len <= file_table[fd].size) {
+		ide_read(
+				buf,
+				file_table[fd].disk_offset + file_state[fd].offset,
+				len);
+		file_state[fd].offset += len;
+		return len;
+	}
+	
+	if (file_state[fd].offset >= file_table[fd].size)
+		return 0;
+
+	len = file_table[fd].size - file_state[fd].offset;
+	ide_read(
+			buf,
+			file_table[fd].disk_offset + file_state[fd].offset,
+			len);
+	file_state[fd].offset += len;
 	return len;
 }
 int fs_write(int fd, void *buf, int len)
@@ -71,9 +102,32 @@ int fs_write(int fd, void *buf, int len)
 	}
 
 	fd -= 3; // for stdin, stdout, and stderr
+
 	nemu_assert(fd < NR_FILES);
-	len = len < file_table[fd].size ? len : file_table[fd].size;
-	ide_write(buf, file_table[fd].disk_offset, len);
+
+	nemu_assert(file_state[fd].opened);
+
+	if (len == 0)
+		return 0;
+
+	if (file_state[fd].offset + len <= file_table[fd].size) {
+		ide_write(
+				buf,
+				file_table[fd].disk_offset + file_state[fd].offset,
+				len);
+		file_state[fd].offset += len;
+		return len;
+	}
+	
+	if (file_state[fd].offset >= file_table[fd].size)
+		return 0;
+
+	len = file_table[fd].size - file_state[fd].offset;
+	ide_write(
+			buf,
+			file_table[fd].disk_offset + file_state[fd].offset,
+			len);
+	file_state[fd].offset += len;
 	return len;
 }
 int fs_lseek(int fd, int offset, int whence);
