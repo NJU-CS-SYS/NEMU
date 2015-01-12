@@ -38,7 +38,7 @@ typedef struct
 {
 	uint8_t blk[NR_BLOCK];
 	bool valid;
-	uint32_t tag : TAG_WIDTH;
+	uint32_t tag;
 } L1_cache;
 
 L1_cache L1[NR_SET][NR_WAY];
