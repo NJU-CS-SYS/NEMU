@@ -32,10 +32,12 @@ uint32_t loader() {
 
 	ph = (void*)elf->e_phoff;
 	uint16_t step = elf->e_phentsize;
+	Log("phnum %x", elf->e_phnum);
 
 	int i;
 	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
+			Log("phvaddr %x", ph->p_vaddr);
 		if (ph->p_type == PT_LOAD) {
 			Log("phvaddr %x", ph->p_vaddr);
 			char *dest = (char*)ph->p_vaddr;
