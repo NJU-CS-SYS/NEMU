@@ -64,6 +64,7 @@ PAL_GetPalette(
       // Read failed
       //
 	  Log("Palette read failed, i = %x", i);
+	  assert(0);
       return NULL;
    }
    else if (i <= 256 * 3)
@@ -87,6 +88,7 @@ PAL_GetPalette(
    }
 
    Log("Palette %p", palette);
+   assert(palette != NULL);
    return palette;
 }
 
@@ -148,12 +150,13 @@ PAL_FadeOut(
    PAL_LARGE SDL_Color      palette[256];
    PAL_LARGE SDL_Color      newpalette[256];
 
+   PAL_LARGE SDL_Color * temp = VIDEO_GetPalette();
    //
    // Get the original palette...
    //
    for (i = 0; i < 256; i++)
    {
-      palette[i] = VIDEO_GetPalette()[i];
+      palette[i] = temp[i];
    }
 
    //

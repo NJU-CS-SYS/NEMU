@@ -55,6 +55,7 @@ int fs_open(const char *pathname, int flags)
 			return fd + 3;
 		}
 	}
+	assert(0);
 	return -1;
 }
 
@@ -67,10 +68,12 @@ int fs_read(int fd, void *buf, int len)
 {
 	
 	fd -= 3; // for stdin, stdout, and stderr
-	Log("fs_read %s cur off %x add off %x",
+#if 0
+	Log("Read %s cur off %x add off %x",
 			file_table[fd].name,
 			file_state[fd].offset,
 			len);
+#endif
 
 	nemu_assert(fd < NR_FILES);
 
@@ -137,7 +140,7 @@ int fs_write(int fd, void *buf, int len)
 int fs_lseek(int fd, int offset, int whence)
 {
 	fd -= 3;
-	Log("seek file %s offset %x", file_table[fd].name, offset);
+	//Log("Seek file %s offset %x", file_table[fd].name, offset);
 
 	nemu_assert(fd >= 0 && fd < NR_FILES);
 	nemu_assert(file_state[fd].opened);
@@ -149,16 +152,17 @@ int fs_lseek(int fd, int offset, int whence)
 			file_state[fd].offset += offset;
 			return file_state[fd].offset;
 		case SEEK_END:
-			Log("unclear SEEK_END");
+			//Log("unclear SEEK_END");
 			file_state[fd].offset = offset + file_table[fd].size;
 			return file_state[fd].offset;
 	}
-	return -1;
+	assert(0);
+	return 0;
 }
 int fs_close(int fd)
 {
 	fd -= 3;
-	Log("close file %s", file_table[fd].name);
+	//Log("Close file %s", file_table[fd].name);
 	file_state[fd].opened = false;
 	file_state[fd].offset = 0;
 	return 0;
