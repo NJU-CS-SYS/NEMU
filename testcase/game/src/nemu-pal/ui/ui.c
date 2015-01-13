@@ -54,6 +54,11 @@ PAL_InitUI(
    }
 
    gpSpriteUI = (LPSPRITE)calloc(1, iSize);
+   Log("iSize %x", iSize);
+   /*
+   gpSpriteUI = (LPSPRITE)malloc(iSize+1);
+   memset(gpSpriteUI, 0, iSize);
+   */
    if (gpSpriteUI == NULL)
    {
       return -1;
