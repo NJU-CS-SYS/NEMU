@@ -82,7 +82,7 @@ int fs_read(int fd, void *buf, int len)
 				file_table[fd].disk_offset + file_state[fd].offset,
 				len);
 		file_state[fd].offset += len;
-		Log("file %s offset %x, buf %x", file_table[fd].name, file_state[fd].offset, *(uint32_t *)buf);
+		Log("file %s offset %x, buf %x, len %x", file_table[fd].name, file_state[fd].offset, *(uint32_t *)buf, len);
 		return len;
 	}
 	
