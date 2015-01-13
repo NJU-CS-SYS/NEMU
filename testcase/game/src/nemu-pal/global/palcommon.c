@@ -772,10 +772,10 @@ PAL_MKFReadChunk(
 	UINT     uiChunkLen;
 
 	if (lpBuffer == NULL || fp == NULL || uiBufferSize == 0)
-   {
+	{
 	   Log("NULL error");
-      return -1;
-   }
+	   return -1;
+	}
 
    //
    // Get the total number of chunks.
@@ -784,7 +784,7 @@ PAL_MKFReadChunk(
    if (uiChunkNum >= uiChunkCount)
    {
 	   Log("Over error");
-      return -1;
+	   return -1;
    }
 
    //

@@ -68,12 +68,6 @@ int fs_read(int fd, void *buf, int len)
 {
 	
 	fd -= 3; // for stdin, stdout, and stderr
-#if 0
-	Log("Read %s cur off %x add off %x",
-			file_table[fd].name,
-			file_state[fd].offset,
-			len);
-#endif
 
 	nemu_assert(fd < NR_FILES);
 
@@ -88,6 +82,7 @@ int fs_read(int fd, void *buf, int len)
 				file_table[fd].disk_offset + file_state[fd].offset,
 				len);
 		file_state[fd].offset += len;
+		Log("offset %x, buf %x", file_state[fd].offset, *(uint32_t *)buf);
 		return len;
 	}
 	
