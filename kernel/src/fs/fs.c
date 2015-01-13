@@ -89,6 +89,7 @@ int fs_read(int fd, void *buf, int len)
 				len);
 		file_state[fd].offset += len;
 		Log("new offset %x", file_state[fd].offset);
+		Log("buf %x", *(uint32_t *)buf);
 		return len;
 	}
 	
