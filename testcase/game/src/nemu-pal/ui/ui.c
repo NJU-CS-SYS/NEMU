@@ -23,6 +23,8 @@
 
 LPSPRITE      gpSpriteUI = NULL;
 
+static uint8_t failedToDebug[0x10000];
+
 INT
 PAL_InitUI(
    VOID
@@ -53,8 +55,10 @@ PAL_InitUI(
       return -1;
    }
 
-   gpSpriteUI = (LPSPRITE)calloc(1, iSize);
    Log("iSize %x", iSize);
+   // TODO fire the bug with calloc/malloc/free
+   //gpSpriteUI = (LPSPRITE)calloc(1, iSize + 0x2000);
+   gpSpriteUI = (LPSPRITE)failedToDebug;
    /*
    gpSpriteUI = (LPSPRITE)malloc(iSize+1);
    memset(gpSpriteUI, 0, iSize);

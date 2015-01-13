@@ -18,6 +18,7 @@ make_helper(concat(test_r_rm_, SUFFIX)) {
 	uint32_t len = 1;
 	if(m.mod == 3) {
 		AND &= REG(m.R_M);
+		len ++;
 		print_asm("test" str(SUFFIX) " %%%s,%%%s", REG_NAME(m.reg), REG_NAME(m.R_M));
 	}
 	else {
@@ -27,7 +28,7 @@ make_helper(concat(test_r_rm_, SUFFIX)) {
 		print_asm("test" str(SUFFIX) " %%%s,%s", REG_NAME(m.reg), ModR_M_asm);
 	}
 	TEST_FLAG(AND);
-	return len + 1;
+	return len;
 }
 
 make_helper(concat(test_i2r_, SUFFIX)) {
