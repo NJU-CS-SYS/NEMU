@@ -133,6 +133,9 @@ int fs_write(int fd, void *buf, int len)
 }
 int fs_lseek(int fd, int offset, int whence)
 {
+	fd -= 3;
+
+	nemu_assert(fd >= 0 && fd < NR_FILES);
 	nemu_assert(file_state[fd].opened);
 	switch (whence)	{
 		case SEEK_SET:
