@@ -145,7 +145,7 @@ int fs_lseek(int fd, int offset, int whence)
 			file_state[fd].offset += offset;
 			return file_state[fd].offset;
 		case SEEK_END:
-			Log("unclear SEEK_EN");
+			Log("unclear SEEK_END");
 			file_state[fd].offset = offset + file_table[fd].size;
 			return file_state[fd].offset;
 	}
