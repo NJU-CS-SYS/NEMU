@@ -26,6 +26,7 @@ int print(void *buf, int len)
 int fs_write(int fd, void *buf, int len);
 int fs_open(char *filename, int flag);
 int fs_read(int fd, void *buf, int len);
+int fs_lseek(int fd, int offset, int whence);
 int fs_close(int fd);
 void do_syscall(TrapFrame *tf)
 {
@@ -55,6 +56,9 @@ void do_syscall(TrapFrame *tf)
 							  tf->ebx,
 							  (void *)(tf->ecx),
 							  tf->edx);
+					  break;
+		case SYS_lseek:
+					  tf->eax = fs_lseek(tf->ebx, tf->ecx, tf->edx);
 					  break;
 		case SYS_close:
 					  tf->eax = fs_close(tf->ebx);

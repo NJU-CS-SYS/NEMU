@@ -29,8 +29,7 @@ int write(int fd, char *buf, int len) {
 }
 
 off_t lseek(int fd, off_t offset, int whence) {
-	nemu_assert(0);
-	return 0; 
+	return syscall(SYS_write, fd, offset, whence); 
 }
 
 void *sbrk(int incr) {

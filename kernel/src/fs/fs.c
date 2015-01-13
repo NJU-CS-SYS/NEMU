@@ -131,7 +131,23 @@ int fs_write(int fd, void *buf, int len)
 	file_state[fd].offset += len;
 	return len;
 }
-int fs_lseek(int fd, int offset, int whence);
+int fs_lseek(int fd, int offset, int whence)
+{
+	nemu_assert(file_state[fd].opened);
+	switch (whence)	{
+		case SEEK_SET:
+			file_state[fd].offset = offset;
+			return offset;
+		case SEEK_CUR:
+			file_state[fd].offset += offset;
+			return file_state[fd].offset;
+		case SEEK_END:
+			Log("unclear SEEK_EN");
+			file_state[fd].offset = offset + file_table[fd].size;
+			return file_state[fd].offset;
+	}
+	return -1;
+}
 int fs_close(int fd)
 {
 	fd -= 3;
