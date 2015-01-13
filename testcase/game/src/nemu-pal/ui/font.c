@@ -22,6 +22,7 @@
 #include "font.h"
 #include "ascii.h"
 #include "util.h"
+#include "common.h"
 
 #ifdef PAL_WIN95
 
@@ -91,6 +92,7 @@
 
 BOOL fIsBig5 = FALSE;
 
+#if 0
 INT
 PAL_InitFont(
    VOID
@@ -110,6 +112,7 @@ PAL_InitFont(
 
 --*/
 {
+	/*
    Log("Into Font Init");
    FILE *fp;
 
@@ -133,7 +136,9 @@ PAL_InitFont(
    fclose(fp);
    Log("Font Init, fclose end");
    return 0;
+   */
 }
+#endif
 
 VOID
 PAL_FreeFont(
@@ -366,6 +371,7 @@ PAL_InitFont(
 
 --*/
 {
+	Log("Into Init Font");
    FILE *fp;
 
    if (gpFont != NULL)
@@ -376,6 +382,7 @@ PAL_InitFont(
       return 0;
    }
 
+   Log("Before calloc");
    gpFont = (LPFONT)calloc(1, sizeof(FONT));
    if (gpFont == NULL)
    {
@@ -397,7 +404,15 @@ PAL_InitFont(
    //
    // Read all the character codes.
    //
+   Log("Init Font: nChar = %x", gpFont->nChar);
+#if 0
    gpFont->lpBufChar = (LPWORD)calloc(gpFont->nChar, sizeof(WORD));
+#else
+   gpFont->lpBufChar = (LPWORD)malloc(gpFont->nChar * sizeof(WORD));
+   memset(gpFont->lpBufChar, 0, gpFont->nChar * sizeof(WORD));
+#endif
+
+   Log("Survive");
    if (gpFont->lpBufChar == NULL)
    {
       free(gpFont);
