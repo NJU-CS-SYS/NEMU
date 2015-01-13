@@ -110,8 +110,10 @@ PAL_InitFont(
 
 --*/
 {
+   Log("Into Font Init");
    FILE *fp;
 
+   Log("Into Font Init");
    fp = fopen(PAL_PREFIX "word.dat", "rb");
    if (!fp)
    {
@@ -119,12 +121,17 @@ PAL_InitFont(
    }
 
    fseek(fp, 0x1E, SEEK_SET);
+
+   Log("Font Init, fseek end");
+
    if (fgetc(fp) == 0xAA)
    {
       fIsBig5 = TRUE;
    }
 
+   Log("Font Init, while end");
    fclose(fp);
+   Log("Font Init, fclose end");
    return 0;
 }
 
