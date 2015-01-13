@@ -1,6 +1,8 @@
 #include "hal.h"
+#include <time.h>
 
 static volatile uint32_t jiffy = 0;
+static volatile uint32_t mtime = 0;
 static int fps = 0;
 static int nr_draw = 0;
 
@@ -17,6 +19,7 @@ get_fps() {
 void
 timer_event(void) {
 	jiffy ++;
+	mtime ++;
 	if(jiffy % (HZ / 2) == 0) {
 		fps = nr_draw * 2 + 1;
 		nr_draw = 0;
@@ -25,8 +28,7 @@ timer_event(void) {
 
 uint32_t SDL_GetTicks() {
 	/* TODO: Return the time in millisecond. */
-	assert(0);
-	return 0;
+	return mtime;
 }
 
 void SDL_Delay(uint32_t ms) {
