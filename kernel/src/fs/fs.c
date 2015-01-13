@@ -83,6 +83,7 @@ int fs_read(int fd, void *buf, int len)
 				len);
 		file_state[fd].offset += len;
 		Log("file %s offset %x, buf %x, len %x", file_table[fd].name, file_state[fd].offset, *(uint32_t *)buf, len);
+		if (len == 0x400) Log("fuck!");
 		return len;
 	}
 	
