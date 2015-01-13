@@ -21,6 +21,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#include "common.h"
 #include "palcommon.h"
 
 INT
@@ -769,6 +770,7 @@ PAL_MKFReadChunk(
 
    if (lpBuffer == NULL || fp == NULL || uiBufferSize == 0)
    {
+	   Log("NULL error");
       return -1;
    }
 
@@ -778,6 +780,7 @@ PAL_MKFReadChunk(
    uiChunkCount = PAL_MKFGetChunkCount(fp);
    if (uiChunkNum >= uiChunkCount)
    {
+	   Log("Over error");
       return -1;
    }
 
@@ -797,6 +800,7 @@ PAL_MKFReadChunk(
 
    if (uiChunkLen > uiBufferSize)
    {
+	   Log("Buf size error");
       return -2;
    }
 
@@ -807,9 +811,11 @@ PAL_MKFReadChunk(
    }
    else
    {
+	   Log("uiChunlen == 0");
       return -1;
    }
 
+   Log("Success read");
    return (INT)uiChunkLen;
 }
 

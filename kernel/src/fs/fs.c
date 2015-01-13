@@ -67,7 +67,10 @@ int fs_read(int fd, void *buf, int len)
 {
 	
 	fd -= 3; // for stdin, stdout, and stderr
-	Log("fs_read %s", file_table[fd].name);
+	Log("fs_read %s cur off %x add off %x",
+			file_table[fd].name,
+			file_state[fd].offset,
+			len);
 
 	nemu_assert(fd < NR_FILES);
 
@@ -134,6 +137,7 @@ int fs_write(int fd, void *buf, int len)
 int fs_lseek(int fd, int offset, int whence)
 {
 	fd -= 3;
+	Log("seek file %s offset %x", file_table[fd].name, offset);
 
 	nemu_assert(fd >= 0 && fd < NR_FILES);
 	nemu_assert(file_state[fd].opened);
@@ -154,6 +158,7 @@ int fs_lseek(int fd, int offset, int whence)
 int fs_close(int fd)
 {
 	fd -= 3;
+	Log("close file %s", file_table[fd].name);
 	file_state[fd].opened = false;
 	file_state[fd].offset = 0;
 	return 0;

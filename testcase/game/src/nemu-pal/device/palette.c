@@ -20,6 +20,7 @@
 //
 
 #include "main.h"
+#include "common.h"
 
 SDL_Color *
 PAL_GetPalette(
@@ -62,6 +63,7 @@ PAL_GetPalette(
       //
       // Read failed
       //
+	  Log("Palette read failed, i = %x", i);
       return NULL;
    }
    else if (i <= 256 * 3)
@@ -84,6 +86,7 @@ PAL_GetPalette(
 #endif
    }
 
+   Log("Palette %p", palette);
    return palette;
 }
 

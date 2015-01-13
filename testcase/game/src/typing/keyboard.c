@@ -44,4 +44,3 @@ keyboard_event() {
 	key_code = in_byte(0x60);
 	press_key(key_code);
 }
-

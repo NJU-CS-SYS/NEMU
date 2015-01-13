@@ -1,4 +1,6 @@
 #include "hal.h"
+#include "common.h"
+#include "x86.h"
 
 #define NR_KEYS 18
 
@@ -14,10 +16,31 @@ static const int keycode_array[] = {
 
 static int key_state[NR_KEYS];
 
+static int old_key = 0;
 void
 keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
-	assert(0);
+	const int scan = in_byte(0x60);
+	int i;
+
+	// clear release state
+	for (i = 0; i < 18; i ++)
+		if (KEY_STATE_RELEASE == key_state[i])
+			key_state[i] = KEY_STATE_EMPTY;
+	// scan
+	for (i = 0; i < 18; i ++) {
+		if (keycode_array[i] == scan) {
+			if (scan == old_key) {
+				key_state[i] = KEY_STATE_WAIT_RELEASE;
+			} else {
+				key_state[i] = KEY_STATE_PRESS;
+			}
+		} else if (scan + 0x80 == keycode_array[i]) {
+			key_state[i] = KEY_STATE_RELEASE;
+		}
+	}
+
+	old_key = scan;
 }
 
 static inline int
@@ -46,7 +69,9 @@ clear_key(int index) {
 
 bool 
 process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int)) {
+
 	cli();
+
 	/* TODO: Traverse the key states. Find a key just pressed or released.
 	 * If a pressed key is found, call ``key_press_callback'' with the keycode.
 	 * If a released key is found, call ``key_release_callback'' with the keycode.
@@ -55,7 +80,21 @@ process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
 	 * Remember to enable interrupts before returning from the function.
 	 */
 
-	assert(0);
+	int i;
+	for (i = 0; i < NR_KEYS; i ++) {
+		if (KEY_STATE_PRESS == key_state[i]) {
+			key_press_callback(i);
+			sti();
+			return true;
+		}	
+		else if (KEY_STATE_RELEASE == key_state[i]) {
+			key_release_callback(i);
+			sti();
+			return true;
+		}
+	}
+
 	sti();
+
 	return false;
 }
