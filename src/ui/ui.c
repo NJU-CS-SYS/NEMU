@@ -15,6 +15,7 @@ extern uint64_t mem_access;
 extern uint64_t L2_access;
 extern uint64_t L1_access;
 
+int WATCH_EIP = 0;
 int nemu_state = END;
 int bp_state = INIT;
 int wp_state = OFF;
@@ -317,6 +318,11 @@ static void cmd_dir()
 		printf("dir.no %04x    present %1x page talbe %05x\n", i, temp.present, temp.page_frame);
 	}
 }
+static void cmd_eip()
+{
+	char *p = strtok(NULL, "");
+	WATCH_EIP = strtoll(p, NULL, 16);
+}
 
 void main_loop()
 {
@@ -352,6 +358,7 @@ void main_loop()
 		else if(strcmp(p, "e") == 0) { cmd_e(); }
 		else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
 		else if (strcmp(p, "check") == 0) { cmd_check(); }
+		else if (strcmp(p, "eip") == 0) { cmd_eip(); }
 		else { printf("Unknown command '%s'\n", p); }
 	}
 }

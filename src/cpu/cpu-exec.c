@@ -13,6 +13,7 @@ uint32_t i8259_query_intr();
 void i8259_ack_intr();
 void raise_intr(uint8_t);
 
+extern int WATCH_EIP;
 extern uint32_t main_entry;
 char assembly[40];
 char *asm_string = (char *)assembly;
@@ -80,8 +81,7 @@ void cpu_exec(volatile uint32_t n)
 		swaddr_t eip_temp = cpu.eip;
 		int instr_len = exec(cpu.eip);
 
-		//if (cpu.eip == 0x8069242) nemu_state = TEST_INT;	
-		//if (cpu.eip == 0x80691b0) nemu_state = TEST_INT;	
+		if (cpu.eip == WATCH_EIP) nemu_state = TEST_INT;	
 
 		cpu.eip += instr_len;
 		
