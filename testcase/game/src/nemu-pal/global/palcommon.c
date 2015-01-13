@@ -790,8 +790,7 @@ PAL_MKFReadChunk(
    //
    // Get the offset of the chunk.
    //
-   // fseek(fp, 4 * uiChunkNum, SEEK_SET);
-   fseek(fp, 12, SEEK_SET);
+   fseek(fp, 4 * uiChunkNum, SEEK_SET);
    fread(&uiOffset, 4, 1, fp);
    fread(&uiNextOffset, 4, 1, fp);
    Log("\tOld uiOffset %x uiNextOffset %x", uiOffset, uiNextOffset);
