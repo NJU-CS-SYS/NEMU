@@ -59,13 +59,7 @@ int isatty(int fd) {
 }
  
 int main() {
-	printf("hello\n");
-	char *s = (char *)calloc(sizeof(char), 233);
-	s[0] = '2';
-	s[1] = '3';
-	s[2] = '3';
-	s[3] = '\0';
-	printf("%s\n", s);
+	char *s = (char *)calloc(1, 65000);
 	free(s);
 	return 0;
 }

@@ -96,7 +96,7 @@ int fs_read(int fd, void *buf, int len)
 			file_table[fd].disk_offset + file_state[fd].offset,
 			len);
 	file_state[fd].offset += len;
-	Log("file %s offset %x, buf %x", file_table[fd].name, file_state[fd].offset, *(uint32_t *)buf);
+	//Log("file %s offset %x, buf %x", file_table[fd].name, file_state[fd].offset, *(uint32_t *)buf);
 	return len;
 }
 int fs_write(int fd, void *buf, int len)
@@ -142,7 +142,7 @@ int fs_lseek(int fd, int offset, int whence)
 	nemu_assert(file_state[fd].opened);
 	switch (whence)	{
 		case SEEK_SET:
-			Log("SEEK offset %x", offset);
+			//Log("SEEK offset %x", offset);
 			file_state[fd].offset = offset;
 			return offset;
 		case SEEK_CUR:

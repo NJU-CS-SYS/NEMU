@@ -188,7 +188,14 @@ PAL_RNGBlitToSurface(
       return -1;
    }
 
+   // TODO: fire the bug of free()!
+#if 0
    buf = (LPBYTE)calloc(1, 65000);
+#else
+   buf = (LPBYTE)malloc(65000);
+   memset(buf, 0, 65000);
+#endif
+
    if (buf == NULL)
    {
       return -1;
@@ -199,21 +206,29 @@ PAL_RNGBlitToSurface(
    //
    if (PAL_RNGReadFrame(buf, 65000, iNumRNG, iNumFrame, fpRngMKF) < 0)
    {
-      free(buf);
+      //free(buf);
       return -1;
    }
 
    //
    // Decompress the frame.
    //
+   // TODO: fire the bug of free()!
+  
+#if 0
    rng = (LPBYTE)calloc(1, 65000);
+#else
+   rng = (LPBYTE)malloc(65000);
+   memset(rng, 0, 65000);
+#endif
+
    if (rng == NULL)
    {
-      free(buf);
+      //free(buf);
       return -1;
    }
    Decompress(buf, rng, 65000);
-   free(buf);
+   //free(buf);
 
    //
    // Draw the frame to the surface.
@@ -402,7 +417,7 @@ PAL_RNGBlitToSurface(
    }
 
 end:
-   free(rng);
+   //free(rng);
    return 0;
 }
 
