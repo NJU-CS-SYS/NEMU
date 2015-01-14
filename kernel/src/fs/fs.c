@@ -58,7 +58,6 @@ int fs_open(const char *pathname, int flags)
 	assert(0);
 	return -1;
 }
-
 /* read return 0 to indicate that it has reached the end of file
  * but how can read to detect the end of file?
  * The first time its return value is less than the count
@@ -83,7 +82,7 @@ int fs_read(int fd, void *buf, int len)
 				len);
 		file_state[fd].offset += len;
 		Log("file %s offset %x, buf %x, len %x", file_table[fd].name, file_state[fd].offset, *(uint32_t *)buf, len);
-		if (len == 0x400) Log("fuck!");
+		if (len == 0x400) nemu_assert(0);
 		return len;
 	}
 	
