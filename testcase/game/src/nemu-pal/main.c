@@ -508,7 +508,30 @@ PAL_SplashScreen(
 }
 
 void
-main_loop() {
+main_loop()
+{
+
+	////////////////////////////////////////////////////////////
+	
+	FILE* myFp;
+	myFp = fopen("pat.mkf", "r");
+	uint8_t myBuf[1024];
+	fseek(myFp, 0, 0);
+	fread(myBuf, 1, 1024, myFp);
+	int myIdx;
+	for (myIdx = 0; myIdx < 4; myIdx ++)
+		Log("%02x%02x%02x%0x2",
+				myBuf[myIdx],
+				myBuf[myIdx+1],
+				myBuf[myIdx+2],
+				myBuf[myIdx+3]
+		   );
+	/////////////////////////////////////////////////////////////
+
+
+
+
+
    WORD          wScreenWidth = 0, wScreenHeight = 0;
    BOOL          fFullScreen = FALSE;
 
