@@ -371,7 +371,6 @@ PAL_InitFont(
 
 --*/
 {
-	Log("Into Init Font");
    FILE *fp;
 
    if (gpFont != NULL)
@@ -382,7 +381,6 @@ PAL_InitFont(
       return 0;
    }
 
-   Log("Before calloc");
    gpFont = (LPFONT)calloc(1, sizeof(FONT));
    if (gpFont == NULL)
    {
@@ -404,15 +402,14 @@ PAL_InitFont(
    //
    // Read all the character codes.
    //
-   Log("Init Font: nChar = %x", gpFont->nChar);
 #if 0
    gpFont->lpBufChar = (LPWORD)calloc(gpFont->nChar, sizeof(WORD));
 #else
+   // TODO fire the bug
    gpFont->lpBufChar = (LPWORD)malloc(gpFont->nChar * sizeof(WORD));
    memset(gpFont->lpBufChar, 0, gpFont->nChar * sizeof(WORD));
 #endif
 
-   Log("Survive");
    if (gpFont->lpBufChar == NULL)
    {
       free(gpFont);
