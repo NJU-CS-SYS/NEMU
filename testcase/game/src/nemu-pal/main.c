@@ -517,16 +517,14 @@ main_loop()
 	FILE* myFp;
 	myFp = fopen("pat.mkf", "r");
 	uint8_t myBuf[1024];
+	memset(myBuf, 0, 1024);
 	fseek(myFp, 0, 0);
-	fread(myBuf, 1, 1024, myFp);
-	int myIdx;
-	for (myIdx = 0; myIdx < 4; myIdx ++)
-		Log("%02x%02x%02x%0x2",
-				myBuf[myIdx],
-				myBuf[myIdx+1],
-				myBuf[myIdx+2],
-				myBuf[myIdx+3]
-		   );
+	int ret = fread(myBuf, 1, 2, myFp);
+	Log("ret = %x", ret);
+	Log("buf %x", myBuf[0]);
+	Log("buf %x", myBuf[1]);
+	Log("buf %x", myBuf[2]);
+	Log("buf %x", myBuf[3]);
 	fclose(myFp);
 	nemu_assert(0);
 

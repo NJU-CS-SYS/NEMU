@@ -74,6 +74,9 @@ int fs_read(int fd, void *buf, int len)
 
 	Log("filename : %s", file_table[fd].name);
 	Log("offset %x, len %x", file_state[fd].offset, len);
+	uint8_t temp;
+	ide_read(&temp, file_table[fd].disk_offset, 1);
+	Log("ide first %x", temp);
 
 	if (len == 0)
 		return 0;
