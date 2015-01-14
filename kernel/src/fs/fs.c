@@ -72,12 +72,8 @@ int fs_read(int fd, void *buf, int len)
 
 	nemu_assert(file_state[fd].opened);
 
-	Log("filename : %s", file_table[fd].name);
-	Log("offset %x, len %x", file_state[fd].offset, len);
 	uint8_t temp;
 	ide_read(&temp, file_table[fd].disk_offset, 1);
-	Log("disk offset %x", file_table[fd].disk_offset);
-	Log("ide first %x", temp);
 
 	if (len == 0)
 		return 0;
@@ -141,7 +137,6 @@ int fs_write(int fd, void *buf, int len)
 int fs_lseek(int fd, int offset, int whence)
 {
 	fd -= 3;
-	//Log("Seek file %s offset %x", file_table[fd].name, offset);
 
 	nemu_assert(fd >= 0 && fd < NR_FILES);
 	nemu_assert(file_state[fd].opened);
@@ -164,7 +159,6 @@ int fs_lseek(int fd, int offset, int whence)
 int fs_close(int fd)
 {
 	fd -= 3;
-	//Log("Close file %s", file_table[fd].name);
 	file_state[fd].opened = false;
 	file_state[fd].offset = 0;
 	return 0;
