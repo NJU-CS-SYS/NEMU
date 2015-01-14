@@ -72,6 +72,9 @@ int fs_read(int fd, void *buf, int len)
 
 	nemu_assert(file_state[fd].opened);
 
+	Log("filename : %s", file_table[fd].name);
+	Log("offset %x, len %x", file_state[fd].offset, len);
+
 	if (len == 0)
 		return 0;
 

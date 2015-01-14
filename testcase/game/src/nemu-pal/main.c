@@ -20,6 +20,7 @@
 //
 
 #include "main.h"
+#include "common.h"
 #include "getopt.h"
 
 #ifdef PSP
@@ -526,6 +527,9 @@ main_loop()
 				myBuf[myIdx+2],
 				myBuf[myIdx+3]
 		   );
+	fclose(myFp);
+	nemu_assert(0);
+
 	/////////////////////////////////////////////////////////////
 
 
