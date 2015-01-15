@@ -51,7 +51,7 @@ make_shift(i8) {
 make_shift(12rm) {
 	TEMP_VALUES;
 	TEMP_MOD_RM;
-	test(m.reg == 4 || m.reg == 7, "wrong dispatching");
+	test(m.reg == 4 || m.reg == 7 || m.reg == 5, "wrong dispatching");
 	if (m.mod == 3) {
 		dest = REG(m.R_M);
 		print_asm(str(shift_name) str(SUFFIX) " $1,%%%s", REG_NAME(m.R_M));
