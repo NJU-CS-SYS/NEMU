@@ -150,7 +150,7 @@ static void cmd_info()
 				FLAG_VAL(DF),
 				FLAG_VAL(OF)
 		      );
-		printf("CS %x DS %x SS %x", cpu.cs, cpu.ds, cpu.ss);
+		printf("CS %x DS %x SS %x\n", cpu.cs, cpu.ds, cpu.ss);
 	}
 	else if (strcmp(opt, "b") == 0) {
 		BP* current = getHead();
@@ -266,7 +266,7 @@ static void cmd_bt()
 	head->addr = 0;
 	head->next = NULL;
 	frame_node *temp = NULL;
-	while (ebp != 0) {
+	do {
 		temp = (frame_node*)malloc(sizeof(frame_node));
 		temp->name = read_func_name(eip, &(temp->addr));
 		temp->next = head->next;
@@ -274,7 +274,7 @@ static void cmd_bt()
 		Log("ebp %x", ebp);
 		eip = swaddr_read(ebp + 4, 4);
 		ebp = swaddr_read(ebp, 4);
-	}
+	} while (ebp != 0);
 
 	test(temp == head->next, "wrong loop end");
 
