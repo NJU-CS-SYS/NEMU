@@ -2,6 +2,7 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 #include "cpu/segment.h"
+#include "cpu/reg.h"
 
 /* this head file deals with instructions
  * such as push and pop which operate the stack,
@@ -17,13 +18,14 @@
 
 make_helper(concat(push_, SUFFIX)) {
 	int reg_code = instr_fetch(eip, 1) & 0x7;
-	/* according to 80386 manual, push esp/sp should be
-	 * the old value of esp/sp,
-	 * so we minus esp first by not store its result.
-	 * Due to little endian, esp should get smaller.
- 	 */
-	MEM_W( REG(4) - DATA_BYTE, REG(reg_code) );
-	REG(R_ESP) -= DATA_BYTE;
+	Sreg = SS;
+#if DATA_BYTE == 2
+	MEM_W( reg_l(R_ESP) - 2, REG(reg_code) );
+	reg_l(R_ESP) -= 2;
+#else
+	MEM_W( reg_l(R_ESP) - 4, REG(reg_code) );
+	reg_l(R_ESP) -= 4;
+#endif
 
 	print_asm("push" str(SUFFIX) " %%%s", REG_NAME(reg_code));
 	return 1;
