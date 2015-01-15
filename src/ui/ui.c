@@ -275,7 +275,7 @@ static void cmd_bt()
 		Log("ebp %x", ebp);
 		eip = swaddr_read(ebp + 4, 4);
 		ebp = swaddr_read(ebp, 4);
-	} while (eip != main_entry);
+	} while (ebp != 0x7fffffc);
 
 	test(temp == head->next, "wrong loop end");
 
