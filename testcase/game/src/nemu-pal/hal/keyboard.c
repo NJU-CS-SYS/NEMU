@@ -22,7 +22,6 @@ keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
 	const int scan = in_byte(0x60);
 	int i;
-
 	// clear release state
 	for (i = 0; i < 18; i ++)
 		if (KEY_STATE_RELEASE == key_state[i])
@@ -33,6 +32,7 @@ keyboard_event(void) {
 			if (scan == old_key) {
 				key_state[i] = KEY_STATE_WAIT_RELEASE;
 			} else {
+				Log("press");
 				key_state[i] = KEY_STATE_PRESS;
 			}
 		} else if (scan + 0x80 == keycode_array[i]) {

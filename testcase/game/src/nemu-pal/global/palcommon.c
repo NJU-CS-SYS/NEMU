@@ -763,9 +763,11 @@ PAL_MKFReadChunk(
 
 --*/
 {
+#if 0
 	Log("Get into ReadChunk");
 	Log("\tlpBuffer %p, fp %p", lpBuffer, fp);
 	Log("\tbufSize %x, chunkNum %x", uiBufferSize, uiChunkNum);
+#endif
 	UINT     uiOffset       = 0;
 	UINT     uiNextOffset   = 0;
 	UINT     uiChunkCount;
@@ -793,10 +795,10 @@ PAL_MKFReadChunk(
    fseek(fp, 4 * uiChunkNum, SEEK_SET);
    fread(&uiOffset, 4, 1, fp);
    fread(&uiNextOffset, 4, 1, fp);
-   Log("\tOld uiOffset %x uiNextOffset %x", uiOffset, uiNextOffset);
+   // Log("\tOld uiOffset %x uiNextOffset %x", uiOffset, uiNextOffset);
    uiOffset = SWAP32(uiOffset);
    uiNextOffset = SWAP32(uiNextOffset);
-   Log("\tNew uiOffset %x uiNextOffset %x", uiOffset, uiNextOffset);
+   // Log("\tNew uiOffset %x uiNextOffset %x", uiOffset, uiNextOffset);
 
    //
    // Get the length of the chunk.
@@ -805,7 +807,7 @@ PAL_MKFReadChunk(
 
    if (uiChunkLen > uiBufferSize)
    {
-	   Log("Buf size error");
+	  Log("Buf size error");
       return -2;
    }
 
@@ -820,7 +822,7 @@ PAL_MKFReadChunk(
       return -1;
    }
 
-   Log("Success read");
+   // Log("Success read");
    return (INT)uiChunkLen;
 }
 

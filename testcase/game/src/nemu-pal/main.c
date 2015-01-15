@@ -234,7 +234,7 @@ PAL_TrademarkScreen(
 {
    PAL_SetPalette(3, FALSE);
    PAL_RNGPlay(6, 0, 1000, 25);
-   UTIL_Delay(1000);
+   UTIL_Delay(10);
    PAL_FadeOut(1);
 }
 
@@ -350,8 +350,11 @@ PAL_SplashScreen(
    dstrect.x = 0;
    dstrect.w = 320;
 
+int m = 0;
    while (TRUE)
    {
+	   Log("%x", m ++);
+
       PAL_ProcessEvent();
       dwTime = SDL_GetTicks() - dwBeginTime;
 

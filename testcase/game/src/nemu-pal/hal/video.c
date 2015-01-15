@@ -146,10 +146,13 @@ void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect,
 	}
 }
 
+static uint8_t fake_s[sizeof(SDL_Surface)];
 SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int depth,
 		uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask) {
-	SDL_Surface *s = malloc(sizeof(SDL_Surface));
+	//Log("size of SDL_Surface %x", sizeof(SDL_Surface));
+	SDL_Surface *s = (void *)fake_s;
 	assert(s);
+	//Log("size of PixelFormat %x", sizeof(SDL_PixelFormat));
 	s->format = malloc(sizeof(SDL_PixelFormat));
 	assert(s);
 	s->format->palette = malloc(sizeof(SDL_Palette));

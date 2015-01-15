@@ -206,7 +206,7 @@ PAL_RNGBlitToSurface(
    //
    if (PAL_RNGReadFrame(buf, 65000, iNumRNG, iNumFrame, fpRngMKF) < 0)
    {
-      //free(buf);
+      free(buf);
       return -1;
    }
 
@@ -224,11 +224,11 @@ PAL_RNGBlitToSurface(
 
    if (rng == NULL)
    {
-      //free(buf);
+      free(buf);
       return -1;
    }
    Decompress(buf, rng, 65000);
-   //free(buf);
+   free(buf);
 
    //
    // Draw the frame to the surface.
@@ -417,7 +417,7 @@ PAL_RNGBlitToSurface(
    }
 
 end:
-   //free(rng);
+   free(rng);
    return 0;
 }
 
