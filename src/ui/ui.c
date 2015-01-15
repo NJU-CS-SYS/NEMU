@@ -128,7 +128,7 @@ static void cmd_si()
 static void cmd_info()
 {
 	char* opt = strtok(NULL, " ");
-	if (strcmp(opt, "r") == 0) {
+	if (opt == NULL || strcmp(opt, "r") == 0) {
 		printf("%-15s%#-15X%u\n","eax", cpu.eax, cpu.eax);
 		printf("%-15s%#-15X%u\n","ecx", cpu.ecx, cpu.ecx); 
 		printf("%-15s%#-15X%u\n","edx", cpu.edx, cpu.edx); 
@@ -274,7 +274,7 @@ static void cmd_bt()
 		Log("ebp %x", ebp);
 		eip = swaddr_read(ebp + 4, 4);
 		ebp = swaddr_read(ebp, 4);
-	} while (ebp != 0);
+	} while (ebp != 0x7fffffc);
 
 	test(temp == head->next, "wrong loop end");
 
