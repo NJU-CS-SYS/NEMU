@@ -75,7 +75,7 @@ make_shift(r2rm) {
 	len = 1;
 
 	m.val = instr_fetch(eip + 1, 1);
-	test(m.reg == 7, "shift cl 2 rm");
+	test(m.reg == 7 || m.reg == 4 || m.reg == 5, "shift cl 2 rm");
 	if (m.mod == 3) {
 		dest = REG(m.R_M);
 		len ++;
