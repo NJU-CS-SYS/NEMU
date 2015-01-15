@@ -4,7 +4,7 @@
 #include "../template.h"
 
 make_helper(concat(cmp_i8_rm_, SUFFIX)) {
-	TEMP_VALUES_S;
+	TEMP_VALUES;
 	TEMP_MOD_RM;
 	TEMP_I2RM(cmp, 1);
 	TEMP_SUB_I(src, dest ,result);

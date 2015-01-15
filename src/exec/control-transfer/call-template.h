@@ -69,10 +69,7 @@ make_helper(concat(ret_near_, SUFFIX)) {
 	POP(ip);
 	cpu.eip = ip & 0x0000ffff;
 #else
-	uint32_t old_eip = cpu.eip;
-	uint32_t old_esp = cpu.esp;
 	POP(cpu.eip);
-	Log("old-eip %x, old-esp %x, new-eip %x, new-esp %x", old_eip, old_esp, cpu.eip, cpu.esp);
 #endif
 	print_asm("ret");
 	return 1;
@@ -113,7 +110,7 @@ make_helper(concat(iret_, SUFFIX))
 	 */
 
 	cpu.eip --;
-	Log("eip has sub 1 for iret return len");
+	//Log("eip has sub 1 for iret return len");
 	print_asm("iret" str(SUFFIX));
 	return 1;
 }

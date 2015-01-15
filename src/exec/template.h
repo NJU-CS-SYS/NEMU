@@ -94,6 +94,8 @@ do{\
 	} else {\
 		len += read_ModR_M(eip + 1, &addr);\
 		src = instr_fetch(eip + len, size);\
+		if (size < DATA_BYTE)\
+			src = (src << (DATA_BYTE*8 - 8)) >> (DATA_BYTE*8-8);\
 		len += size;\
 		dest = MEM_R(addr);\
 		print_asm(str(name) str(SUFFIX) " $0x%x,%s", src, ModR_M_asm);\
