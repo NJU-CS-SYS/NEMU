@@ -259,6 +259,9 @@ static void _put_bt (frame_node* cur, int i)
 }
 static void cmd_bt()
 {
+	if (cpu.ebp == 0)
+		return;
+
 	swaddr_t eip = cpu.eip;
 	uint32_t ebp = cpu.ebp;
 	frame_node *head = 
@@ -275,7 +278,7 @@ static void cmd_bt()
 		Log("ebp %x", ebp);
 		eip = swaddr_read(ebp + 4, 4);
 		ebp = swaddr_read(ebp, 4);
-	} while (ebp != 0x7fffffc || ebp != 0);
+	} while (ebp != 0x7fffffc);
 
 	test(temp == head->next, "wrong loop end");
 
