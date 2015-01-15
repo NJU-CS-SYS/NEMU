@@ -266,7 +266,7 @@ static void cmd_bt()
 	head->addr = 0;
 	head->next = NULL;
 	frame_node *temp = NULL;
-	while (ebp != 0) {
+	while (ebp != 0x80000000) {
 		temp = (frame_node*)malloc(sizeof(frame_node));
 		temp->name = read_func_name(eip, &(temp->addr));
 		temp->next = head->next;

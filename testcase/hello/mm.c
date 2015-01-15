@@ -59,7 +59,14 @@ int isatty(int fd) {
 }
  
 int main() {
-	char *s = (char *)calloc(1, 65000);
-	free(s);
+	int i;
+	char *s;
+	char *p;
+	for (i = 0; i < 100; i ++) {
+		s = (char *)calloc(1, 165000);
+		p = (char *)calloc(1, 8);
+		free(s);
+		free(p);
+	}
 	return 0;
 }

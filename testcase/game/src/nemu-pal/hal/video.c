@@ -164,7 +164,7 @@ void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect, SDL_Surface *dst, SDL_
 	}
 }
 
-#define FAKE
+//#define FAKE
 #ifdef FAKE
 static uint8_t fake_palette[sizeof(SDL_Palette) * 10];
 static int fake_idx = 0;
@@ -172,15 +172,15 @@ static int fake_idx = 0;
 SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int depth,
 		uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask)
 {
-	Log("size of SDL_Surface %x", sizeof(SDL_Surface));
 	SDL_Surface *s = malloc(sizeof(SDL_Surface)); 
+	Log("SDL_Surface *s %p", s);
 	assert(s);
-	Log("size of PixelFormat %x", sizeof(SDL_PixelFormat));
 	s->format = malloc(sizeof(SDL_PixelFormat));
+	Log("s->format %p", s->format);
 	assert(s);
-	Log("size of Palette %x", sizeof(SDL_Palette));
 #ifndef FAKE
 	s->format->palette = malloc(sizeof(SDL_Palette));
+	Log("s->format->palette %p", s->format->palette);
 #else
 	s->format->palette = (void *)&(fake_palette[fake_idx]);
 	fake_idx += 8;
@@ -194,7 +194,6 @@ SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
 	s->w = width;
 	s->h = height;
 	s->pitch = (width * depth) >> 3;
-	Log("s->pixels");
 	s->pixels = (flags & SDL_HWSURFACE ? (void *)VMEM_ADDR : malloc(s->pitch * height));
 	assert(s->pixels);
 
