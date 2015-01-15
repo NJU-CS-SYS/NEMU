@@ -14,6 +14,7 @@ extern uint64_t L2_hit;
 extern uint64_t mem_access;
 extern uint64_t L2_access;
 extern uint64_t L1_access;
+extern uint32_t main_entry;
 
 int WATCH_EIP = 0;
 int nemu_state = END;
@@ -274,7 +275,7 @@ static void cmd_bt()
 		Log("ebp %x", ebp);
 		eip = swaddr_read(ebp + 4, 4);
 		ebp = swaddr_read(ebp, 4);
-	} while (ebp != 0x7fffffc);
+	} while (eip != main_entry);
 
 	test(temp == head->next, "wrong loop end");
 
