@@ -402,7 +402,7 @@ PAL_InitFont(
    //
    // Read all the character codes.
    //
-#if 0
+#if 1
    gpFont->lpBufChar = (LPWORD)calloc(gpFont->nChar, sizeof(WORD));
 #else
    // TODO fire the bug

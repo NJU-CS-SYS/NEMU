@@ -7,8 +7,8 @@
 
 int get_fps();
 
-void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, 
-		SDL_Surface *dst, SDL_Rect *dstrect) {
+void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect)
+{
 
 	assert(dst && src);
 
@@ -57,7 +57,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect,
 	}
 }
 
-void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color)
+{
 	assert(dst);
 	assert(color <= 0xff);
 
@@ -69,7 +70,8 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 	assert(0);
 }
 
-void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
+void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h)
+{
 	assert(screen);
 	assert(screen->pitch == 320);
 	if(screen->flags & SDL_HWSURFACE) {
@@ -85,11 +87,27 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h) {
 
 	/* TODO: Copy the pixels in the rectangle area to the screen. */
 
+	int pixel_idx = x + y * w;     // Iterater index and start index;
+	int limit = w * h;             // Total num of pixels;
+
+	int i,k = 0;
+	uint8_t *buf = malloc(limit);
+	for (i = 0; i < limit; i ++) {
+		buf[k ++] = screen->pixels[pixel_idx ++];
+	}
+
+	for (i = 0; i < limit; i ++) {
+		screen->pixels[i] = buf[i];
+	}
+
+	free(buf);
+
+	//Log("SDL_UpdateRect");
 	assert(0);
 }
 
-void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, 
-		int firstcolor, int ncolors) {
+void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor, int ncolors)
+{
 	assert(s);
 	assert(s->format);
 	assert(s->format->palette);
@@ -120,8 +138,8 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors,
 
 /* ======== The following functions are already implemented. ======== */
 
-void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect, 
-		SDL_Surface *dst, SDL_Rect *dstrect) {
+void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect, SDL_Surface *dst, SDL_Rect *dstrect)
+{
 	assert(src && dst);
 	int x = (scrrect == NULL ? 0 : scrrect->x);
 	int y = (scrrect == NULL ? 0 : scrrect->y);
@@ -146,16 +164,27 @@ void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect,
 	}
 }
 
-static uint8_t fake_s[sizeof(SDL_Surface)];
+#define FAKE
+#ifdef FAKE
+static uint8_t fake_palette[sizeof(SDL_Palette) * 10];
+static int fake_idx = 0;
+#endif
 SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int depth,
-		uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask) {
-	//Log("size of SDL_Surface %x", sizeof(SDL_Surface));
-	SDL_Surface *s = (void *)fake_s;
+		uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask)
+{
+	Log("size of SDL_Surface %x", sizeof(SDL_Surface));
+	SDL_Surface *s = malloc(sizeof(SDL_Surface)); 
 	assert(s);
-	//Log("size of PixelFormat %x", sizeof(SDL_PixelFormat));
+	Log("size of PixelFormat %x", sizeof(SDL_PixelFormat));
 	s->format = malloc(sizeof(SDL_PixelFormat));
 	assert(s);
+	Log("size of Palette %x", sizeof(SDL_Palette));
+#ifndef FAKE
 	s->format->palette = malloc(sizeof(SDL_Palette));
+#else
+	s->format->palette = (void *)&(fake_palette[fake_idx]);
+	fake_idx += 8;
+#endif
 	assert(s->format->palette);
 	s->format->palette->colors = NULL;
 
@@ -165,25 +194,32 @@ SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
 	s->w = width;
 	s->h = height;
 	s->pitch = (width * depth) >> 3;
+	Log("s->pixels");
 	s->pixels = (flags & SDL_HWSURFACE ? (void *)VMEM_ADDR : malloc(s->pitch * height));
 	assert(s->pixels);
 
 	return s;
 }
 
-SDL_Surface* SDL_SetVideoMode(int width, int height, int bpp, uint32_t flags) {
+SDL_Surface* SDL_SetVideoMode(int width, int height, int bpp, uint32_t flags)
+{
 	return SDL_CreateRGBSurface(flags,  width, height, bpp,
 			0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000);
 }
 
-void SDL_FreeSurface(SDL_Surface *s) {
+void SDL_FreeSurface(SDL_Surface *s)
+{
 	if(s != NULL) {
 		if(s->format != NULL) {
 			if(s->format->palette != NULL) {
 				if(s->format->palette->colors != NULL) {
 					free(s->format->palette->colors);
 				}
+#ifndef FAKE
 				free(s->format->palette);
+#else
+				fake_idx -= 8;
+#endif
 			}
 
 			free(s->format);
@@ -196,4 +232,3 @@ void SDL_FreeSurface(SDL_Surface *s) {
 		free(s);
 	}
 }
-
