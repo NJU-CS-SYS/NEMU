@@ -46,6 +46,7 @@ uint32_t loader() {
 #endif
 			/* Memory copy */
 #ifdef HAS_DEVICE
+#if 0
 			uint8_t section[BUF_LEN];
 			int times = filesz / BUF_LEN;
 			int rest = filesz % BUF_LEN;
@@ -69,6 +70,10 @@ uint32_t loader() {
 			}
 
 			nemu_assert(j == filesz);
+#else
+			ide_read((uint8_t *)dest, ELF_OFFSET_IN_DISK + ph->p_offset, filesz);
+			int j = filesz;
+#endif
 #else
 			int j;
 			char *src = (char*)ph->p_offset;
