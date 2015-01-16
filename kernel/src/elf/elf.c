@@ -16,66 +16,43 @@ void create_video_mapping();
 uint32_t get_ucr3();
 
 uint32_t loader() {
+
 	Elf32_Ehdr *elf;
 	Elf32_Phdr *ph = NULL;
 
 #ifdef HAS_DEVICE
-	Log("loading elf head...");
 	uint8_t buf[4096];
 	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
 	elf = (void*)buf;
-	Log("elf head is loaded");
 #else
 	/* The ELF file is located at memory address 0 */
 	elf = (void *)0x0;
 #endif
 
 	ph = (void*)((uint8_t*)elf + elf->e_phoff);
-	// uint16_t step = elf->e_phentsize;
 
-	int i;
+	int i, j;
+	uint8_t *dest;
+	uint32_t filesz;
+	uint32_t memsz;
 	for (i = 0; i < elf->e_phnum; i++) {
 		/* Scan the program header table, loader each segment into memory */
 		if (ph->p_type == PT_LOAD) {
-			char *dest = (char*)ph->p_vaddr;
-			uint32_t filesz = ph->p_filesz;
-			uint32_t memsz = ph->p_memsz;
+
+			dest = (uint8_t *)ph->p_vaddr;
+			filesz = ph->p_filesz;
+			memsz = ph->p_memsz;
 	
 #ifdef IA32_PAGE
-			dest = (char*)mm_malloc(ph->p_vaddr, ph->p_memsz);
+			dest = (uint8_t *)mm_malloc((uint32_t)dest, memsz);
 #endif
+
 			/* Memory copy */
+
 #ifdef HAS_DEVICE
-#if 0
-			uint8_t section[BUF_LEN];
-			int times = filesz / BUF_LEN;
-			int rest = filesz % BUF_LEN;
-			int time, k, j = 0;
-
-			for (time = 0; time < times; time ++) { // load disk data one buf a time
-				ide_read(section, 
-						 ELF_OFFSET_IN_DISK + ph->p_offset + time * BUF_LEN,
-						 BUF_LEN);
-				for (k = 0; k < BUF_LEN; k ++) {
-					dest[j] = section[k];
-					j ++;
-				}
-			}
-			
-			// load unaligned rest data
-			ide_read(section, ELF_OFFSET_IN_DISK + ph->p_offset + time * BUF_LEN, rest);
-			for (k = 0; k < rest; k ++) {
-				dest[j] = section[k];
-				j ++;
-			}
-
-			nemu_assert(j == filesz);
-#else
 			ide_read((uint8_t *)dest, ELF_OFFSET_IN_DISK + ph->p_offset, filesz);
-			int j = filesz;
-#endif
+			j = filesz;
 #else
-			int j;
 			char *src = (char*)ph->p_offset;
 			for (j = 0; j < filesz; j++)
 				dest[j] = src[j];
@@ -89,8 +66,6 @@ uint32_t loader() {
 			extern uint32_t brk;
 			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
 			if(brk < new_brk) { brk = new_brk; }
-
-			Log("a section is loaded");
 
 		}
 		ph ++;

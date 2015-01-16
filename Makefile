@@ -17,7 +17,7 @@ OBJS    = $(CFILES:.c=.o)
 # test files
 TESTFILE = testcase/game/game
 C_TEST_FILE_LIST = $(shell find testcase/c/ -name "*.c")
-S_TEST_FILE_LIST = $(shell find testcase/asm/ -name "*.S")
+#S_TEST_FILE_LIST = $(shell find testcase/asm/ -name "*.S")
 TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
 
 nemu: $(OBJS)
