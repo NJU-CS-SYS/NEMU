@@ -2,6 +2,9 @@
 #include "cpu/reg.h"
 #include "ui/ui.h"
 #include "page.h"
+
+#define TEST_FREE
+
 uint32_t hwaddr_read(hwaddr_t addr, size_t len);
 bool tlb_read(lnaddr_t addr, hwaddr_t *hwaddr);
 void tlb_insert(lnaddr_t addr, PTE pte);
@@ -32,5 +35,13 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	__hwaddr = (page_entry.page_frame << 12) + lnaddr.offset;
 
 	tlb_insert(addr, page_entry);
+
+#ifdef TEST_FREE
+	lnaddr.val = 0x81440e0;
+	dir_addr = cpu.cr3.page_directory_base << 12;
+	dir_entry.val = hwaddr_read(dir_addr + 4 * lnaddr.dir, 4);
+	if (dir_entry.present) Test(0, "Hit");
+#endif
+
 	return __hwaddr;
 }
