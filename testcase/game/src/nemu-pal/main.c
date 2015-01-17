@@ -46,165 +46,153 @@
 #endif
 static VOID
 PAL_Init(
-   WORD             wScreenWidth,
-   WORD             wScreenHeight,
-   BOOL             fFullScreen
+	WORD	wScreenWidth,
+	WORD	wScreenHeight,
+	BOOL    fFullScreen
 )
-/*++
-  Purpose:
+	/*++
+	  Purpose:
 
-    Initialize everything needed by the game.
+	  Initialize everything needed by the game.
 
-  Parameters:
+	  Parameters:
 
-    [IN]  wScreenWidth - width of the screen.
+	  [IN]  wScreenWidth - width of the screen.
 
-    [IN]  wScreenHeight - height of the screen.
+	  [IN]  wScreenHeight - height of the screen.
 
-    [IN]  fFullScreen - TRUE to use full screen mode, FALSE to use windowed mode.
+	  [IN]  fFullScreen - TRUE to use full screen mode, FALSE to use windowed mode.
 
-  Return value:
+	  Return value:
 
-    None.
+	  None.
 
---*/
+	  --*/
 {
-   int           e;
+	int           e;
 
 #if defined (NDS) && defined (GEKKO)
-   fatInitDefault();
+	fatInitDefault();
 #endif
 
-   //
-   // Initialize defaults, video and audio
-   //
+	//
+	// Initialize defaults, video and audio
+	//
 #if defined(DINGOO)
-   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) == -1)
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) == -1)
 #elif defined (__WINPHONE__)
-   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1)
+		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == -1)
 #else
-   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_CDROM | SDL_INIT_NOPARACHUTE | SDL_INIT_JOYSTICK) == -1)
+			if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_CDROM | SDL_INIT_NOPARACHUTE | SDL_INIT_JOYSTICK) == -1)
 #endif
-   {
+			{
 #if defined (_WIN32) && SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION <= 2
-      //
-      // Try the WINDIB driver if DirectX failed.
-      //
-      putenv("SDL_VIDEODRIVER=windib");
-      if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_NOPARACHUTE | SDL_INIT_JOYSTICK) == -1)
-      {
-         TerminateOnError("Could not initialize SDL: %s.\n", SDL_GetError());
-      }
+				//
+				// Try the WINDIB driver if DirectX failed.
+				//
+				putenv("SDL_VIDEODRIVER=windib");
+				if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_NOPARACHUTE | SDL_INIT_JOYSTICK) == -1)
+				{
+					TerminateOnError("Could not initialize SDL: %s.\n", SDL_GetError());
+				}
 #else
-      TerminateOnError("Could not initialize SDL: %s.\n", SDL_GetError());
+				TerminateOnError("Could not initialize SDL: %s.\n", SDL_GetError());
 #endif
-   }
+			}
 
-   //
-   // Initialize subsystems.
-   //
+	//
+	// Initialize subsystems.
+	//
 #ifdef GEKKO
-   e = VIDEO_Init_GEKKO(wScreenWidth, wScreenHeight, fFullScreen);
+	e = VIDEO_Init_GEKKO(wScreenWidth, wScreenHeight, fFullScreen);
 #else
-   e = VIDEO_Init(wScreenWidth, wScreenHeight, fFullScreen);
+	e = VIDEO_Init(wScreenWidth, wScreenHeight, fFullScreen);
 #endif
-   if (e != 0)
-   {
-      TerminateOnError("Could not initialize Video: %d.\n", e);
-   }
+	if (e != 0)
+	{
+		TerminateOnError("Could not initialize Video: %d.\n", e);
+	}
 
-   Log("VIDEO_Init success");
-   SDL_WM_SetCaption("Loading...", NULL);
+	Log("VIDEO_Init success");
+	SDL_WM_SetCaption("Loading...", NULL);
 
-   e = PAL_InitGlobals();
-   if (e != 0)
-   {
-      TerminateOnError("Could not initialize global data: %d.\n", e);
-   }
-   Log("PAL_InitGolbals success");
+	e = PAL_InitGlobals();
+	if (e != 0)
+	{
+		TerminateOnError("Could not initialize global data: %d.\n", e);
+	}
+	Log("PAL_InitGolbals success");
 
-   e = PAL_InitFont();
-   if (e != 0)
-   {
-      TerminateOnError("Could not load fonts: %d.\n", e);
-   }
-   Log("PAL_InitFont success");
+	e = PAL_InitFont();
+	if (e != 0)
+	{
+		TerminateOnError("Could not load fonts: %d.\n", e);
+	}
+	Log("PAL_InitFont success");
 
-   e = PAL_InitUI();
-   if (e != 0)
-   {
-      TerminateOnError("Could not initialize UI subsystem: %d.\n", e);
-   }
-   Log("PAL_InitUI success");
+	e = PAL_InitUI();
+	if (e != 0)
+	{
+		TerminateOnError("Could not initialize UI subsystem: %d.\n", e);
+	}
+	Log("PAL_InitUI success");
 
-   e = PAL_InitText();
-   if (e != 0)
-   {
-      TerminateOnError("Could not initialize text subsystem: %d.\n", e);
-   }
-   Log("PAL_InitText success");
+	e = PAL_InitText();
+	if (e != 0)
+	{
+		TerminateOnError("Could not initialize text subsystem: %d.\n", e);
+	}
+	Log("PAL_InitText success");
 
-   PAL_InitInput();
-   Log("PAL_InitInput success");
-   PAL_InitResources();
-   Log("PAL_InitResources success");
-   SOUND_OpenAudio();
+	PAL_InitInput();
+	Log("PAL_InitInput success");
+	PAL_InitResources();
+	Log("PAL_InitResources success");
+	SOUND_OpenAudio();
 
-#ifdef PAL_WIN95
-#ifdef _DEBUG
-   SDL_WM_SetCaption("Pal WIN95 (Debug Build)", NULL);
-#else
-   SDL_WM_SetCaption("Pal WIN95", NULL);
-#endif
-#else
-#ifdef _DEBUG
-   SDL_WM_SetCaption("Pal (Debug Build)", NULL);
-#else
-   SDL_WM_SetCaption("Pal", NULL);
-#endif
-#endif
+	SDL_WM_SetCaption("Pal", NULL);
 }
 
 VOID
 PAL_Shutdown(
-   VOID
+	VOID
 )
-/*++
-  Purpose:
+	/*++
+	  Purpose:
 
-    Free everything needed by the game.
+	  Free everything needed by the game.
 
-  Parameters:
+	  Parameters:
 
-    None.
+	  None.
 
-  Return value:
+	  Return value:
 
-    None.
+	  None.
 
---*/
+	  --*/
 {
-   SOUND_CloseAudio();
+	SOUND_CloseAudio();
 	Log("SOUND_CloseAudio success");
-   PAL_FreeFont();
+	PAL_FreeFont();
 	Log("PAL_FreeFont success");
-   PAL_FreeResources();
+	PAL_FreeResources();
 	Log("PAL_FreeResources success");
-   PAL_FreeGlobals();
+	PAL_FreeGlobals();
 	Log("PAL_FreeGlobals success");
-   PAL_FreeUI();
+	PAL_FreeUI();
 	Log("PAL_FreeUI success");
-   PAL_FreeText();
+	PAL_FreeText();
 	Log("PAL_FreeText success");
-   PAL_ShutdownInput();
+	PAL_ShutdownInput();
 	Log("PAL_ShutdownInput success");
-   VIDEO_Shutdown();
+	VIDEO_Shutdown();
 	Log("VIDEO_Shutdown success");
 
-   UTIL_CloseLog();
+	UTIL_CloseLog();
 	Log("UTIL_CloseLog success");
 
-   SDL_Quit();
+	SDL_Quit();
 	Log("SDL_Quit success");
 	HIT_GOOD_TRAP;
 #if defined(GPH)
@@ -213,385 +201,332 @@ PAL_Shutdown(
 #endif
 }
 
-VOID
-PAL_TrademarkScreen(
-   VOID
-)
+VOID PAL_TrademarkScreen(VOID)
 /*++
-  Purpose:
+	  Purpose:
 
-    Show the trademark screen.
+	  Show the trademark screen.
 
-  Parameters:
+	  Parameters:
 
-    None.
+	  None.
 
-  Return value:
+	  Return value:
 
-    None.
-
+	  None.
 --*/
 {
-   PAL_SetPalette(3, FALSE);
-   PAL_RNGPlay(6, 0, 1000, 25);
-   UTIL_Delay(10);
-   PAL_FadeOut(1);
+	PAL_SetPalette(3, FALSE);
+	PAL_RNGPlay(6, 0, 1000, 25);
+	UTIL_Delay(10);
+	PAL_FadeOut(1);
 }
 
-VOID
-PAL_SplashScreen(
-   VOID
-)
-/*++
-  Purpose:
+VOID PAL_SplashScreen(VOID)
+	/*++
+	  Purpose:
 
-    Show the splash screen.
+	  Show the splash screen.
 
-  Parameters:
+	  Parameters:
 
-    None.
+	  None.
 
-  Return value:
+	  Return value:
 
-    None.
+	  None.
 
---*/
+	  --*/
 {
-   SDL_Color     *palette = PAL_GetPalette(1, FALSE);
-   SDL_Color      rgCurrentPalette[256];
-   SDL_Surface   *lpBitmapDown, *lpBitmapUp;
-   SDL_Rect       srcrect, dstrect;
-   LPSPRITE       lpSpriteCrane;
-   LPBITMAPRLE    lpBitmapTitle;
-   LPBYTE         buf, buf2;
-   int            cranepos[9][3], i, iImgPos = 200, iCraneFrame = 0, iTitleHeight;
-   DWORD          dwTime, dwBeginTime;
-   BOOL           fUseCD = TRUE;
+	SDL_Color     *palette = PAL_GetPalette(1, FALSE);
+	SDL_Color      rgCurrentPalette[256];
+	SDL_Surface   *lpBitmapDown, *lpBitmapUp;
+	SDL_Rect       srcrect, dstrect;
+	LPSPRITE       lpSpriteCrane;
+	LPBITMAPRLE    lpBitmapTitle;
+	LPBYTE         buf, buf2;
+	int            cranepos[9][3], i, iImgPos = 200, iCraneFrame = 0, iTitleHeight;
+	DWORD          dwTime, dwBeginTime;
+	BOOL           fUseCD = TRUE;
 
-   if (palette == NULL)
-   {
-      fprintf(stderr, "ERROR: PAL_SplashScreen(): palette == NULL\n");
-      return;
-   }
+	if (palette == NULL)
+	{
+		fprintf(stderr, "ERROR: PAL_SplashScreen(): palette == NULL\n");
+		return;
+	}
 
-   //
-   // Allocate all the needed memory at once for simplification
-   //
-   buf = (LPBYTE)UTIL_calloc(1, 320 * 200 * 2);
-   buf2 = (LPBYTE)(buf + 320 * 200);
-   lpSpriteCrane = (LPSPRITE)buf2 + 32000;
+	//
+	// Allocate all the needed memory at once for simplification
+	Log("Allocate all the needed memory at once for simplification");
 
-   //
-   // Create the surfaces
-   //
-   lpBitmapDown = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
-      gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
-      gpScreen->format->Amask);
-   lpBitmapUp = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
-      gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
-      gpScreen->format->Amask);
+	buf = (LPBYTE)UTIL_calloc(1, 320 * 200 * 2);
+	buf2 = (LPBYTE)(buf + 320 * 200);
+	lpSpriteCrane = (LPSPRITE)buf2 + 32000;
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-   SDL_SetSurfacePalette(lpBitmapDown, gpScreen->format->palette);
-   SDL_SetSurfacePalette(lpBitmapUp, gpScreen->format->palette);
-#else
-   void *temp = VIDEO_GetPalette();
-   Log("SDL_Colors %p", temp);
-   SDL_SetPalette(lpBitmapDown, SDL_LOGPAL | SDL_PHYSPAL, temp, 0, 256);
-   SDL_SetPalette(lpBitmapUp, SDL_LOGPAL | SDL_PHYSPAL, temp, 0, 256);
-#endif
+	//
+	// Create the surfaces
+	Log("Create the surface");
 
-   //
-   // Read the bitmaps
-   //
-   PAL_MKFReadChunk(buf, 320 * 200, BITMAPNUM_SPLASH_UP, gpGlobals->f.fpFBP);
-   Decompress(buf, buf2, 320 * 200);
-   PAL_FBPBlitToSurface(buf2, lpBitmapUp);
-   PAL_MKFReadChunk(buf, 320 * 200, BITMAPNUM_SPLASH_DOWN, gpGlobals->f.fpFBP);
-   Decompress(buf, buf2, 320 * 200);
-   PAL_FBPBlitToSurface(buf2, lpBitmapDown);
-   PAL_MKFReadChunk(buf, 32000, SPRITENUM_SPLASH_TITLE, gpGlobals->f.fpMGO);
-   Decompress(buf, buf2, 32000);
-   lpBitmapTitle = (LPBITMAPRLE)PAL_SpriteGetFrame(buf2, 0);
-   PAL_MKFReadChunk(buf, 32000, SPRITENUM_SPLASH_CRANE, gpGlobals->f.fpMGO);
-   Decompress(buf, lpSpriteCrane, 32000);
+	lpBitmapDown = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
+			gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
+			gpScreen->format->Amask);
+	lpBitmapUp = SDL_CreateRGBSurface(gpScreen->flags, 320, 200, 8,
+			gpScreen->format->Rmask, gpScreen->format->Gmask, gpScreen->format->Bmask,
+			gpScreen->format->Amask);
 
-   iTitleHeight = PAL_RLEGetHeight(lpBitmapTitle);
-   lpBitmapTitle[2] = 0;
-   lpBitmapTitle[3] = 0; // HACKHACK
+	SDL_SetPalette(lpBitmapDown, SDL_LOGPAL | SDL_PHYSPAL, VIDEO_GetPalette(), 0, 256);
+	SDL_SetPalette(lpBitmapUp, SDL_LOGPAL | SDL_PHYSPAL, VIDEO_GetPalette(), 0, 256);
 
-   //
-   // Generate the positions of the cranes
-   //
-   for (i = 0; i < 9; i++)
-   {
-      cranepos[i][0] = RandomLong(300, 600);
-      cranepos[i][1] = RandomLong(0, 80);
-      cranepos[i][2] = RandomLong(0, 8);
-   }
+	//
+	// Read the bitmaps
+	Log("Read the bitmaps");
 
-   //
-   // Play the title music
-   //
-   if (!SOUND_PlayCDA(7))
-   {
-      fUseCD = FALSE;
-      PAL_PlayMUS(NUM_RIX_TITLE, TRUE, 2);
-   }
+	PAL_MKFReadChunk(buf, 320 * 200, BITMAPNUM_SPLASH_UP, gpGlobals->f.fpFBP);
+	Decompress(buf, buf2, 320 * 200);
 
-   //
-   // Clear all of the events and key states
-   //
-   PAL_ProcessEvent();
-   PAL_ClearKeyState();
+	int j;
+	for (j = 0; j < 10; j ++)
+		printf("%x ", buf[j]);
+	printf("\n");
 
-   dwBeginTime = SDL_GetTicks();
+	PAL_FBPBlitToSurface(buf2, lpBitmapUp);
+	PAL_MKFReadChunk(buf, 320 * 200, BITMAPNUM_SPLASH_DOWN, gpGlobals->f.fpFBP);
+	Decompress(buf, buf2, 320 * 200);
+	PAL_FBPBlitToSurface(buf2, lpBitmapDown);
+	PAL_MKFReadChunk(buf, 32000, SPRITENUM_SPLASH_TITLE, gpGlobals->f.fpMGO);
+	Decompress(buf, buf2, 32000);
+	lpBitmapTitle = (LPBITMAPRLE)PAL_SpriteGetFrame(buf2, 0);
+	PAL_MKFReadChunk(buf, 32000, SPRITENUM_SPLASH_CRANE, gpGlobals->f.fpMGO);
+	Decompress(buf, lpSpriteCrane, 32000);
 
-   srcrect.x = 0;
-   srcrect.w = 320;
-   dstrect.x = 0;
-   dstrect.w = 320;
+	iTitleHeight = PAL_RLEGetHeight(lpBitmapTitle);
+	lpBitmapTitle[2] = 0;
+	lpBitmapTitle[3] = 0; // HACKHACK
 
-int m = 0;
-   while (TRUE)
-   {
-	   Log("%x", m ++);
+	//
+	// Generate the positions of the cranes
+	Log("Generate the positions of the cranes");
 
-      PAL_ProcessEvent();
-      dwTime = SDL_GetTicks() - dwBeginTime;
+	for (i = 0; i < 9; i++)
+	{
+		cranepos[i][0] = RandomLong(300, 600);
+		cranepos[i][1] = RandomLong(0, 80);
+		cranepos[i][2] = RandomLong(0, 8);
+	}
 
-      //
-      // Set the palette
-      //
-      if (dwTime < 15000)
-      {
-         for (i = 0; i < 256; i++)
-         {
-            rgCurrentPalette[i].r = (BYTE)(palette[i].r * dwTime / 15000);
-            rgCurrentPalette[i].g = (BYTE)(palette[i].g * dwTime / 15000);
-            rgCurrentPalette[i].b = (BYTE)(palette[i].b * dwTime / 15000);
-         }
-      }
+	//
+	// Clear all of the events and key states
+	Log("Clear all of the events and key states");
 
-      VIDEO_SetPalette(rgCurrentPalette);
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-	  SDL_SetSurfacePalette(lpBitmapDown, gpScreen->format->palette);
-	  SDL_SetSurfacePalette(lpBitmapUp, gpScreen->format->palette);
-#else
-      SDL_SetPalette(lpBitmapDown, SDL_LOGPAL | SDL_PHYSPAL, VIDEO_GetPalette(), 0, 256);
-      SDL_SetPalette(lpBitmapUp, SDL_LOGPAL | SDL_PHYSPAL, VIDEO_GetPalette(), 0, 256);
-#endif
+	PAL_ProcessEvent();
+	PAL_ClearKeyState();
 
-      //
-      // Draw the screen
-      //
-      if (iImgPos > 1)
-      {
-         iImgPos--;
-      }
+	dwBeginTime = SDL_GetTicks();
 
-      //
-      // The upper part...
-      //
-      srcrect.y = iImgPos;
-      srcrect.h = 200 - iImgPos;
+	srcrect.x = 0;
+	srcrect.w = 320;
+	dstrect.x = 0;
+	dstrect.w = 320;
 
-      dstrect.y = 0;
-      dstrect.h = srcrect.h;
+	while (TRUE)
+	{
+		Log("----------------------------------------");
 
-      SDL_BlitSurface(lpBitmapUp, &srcrect, gpScreen, &dstrect);
+		PAL_ProcessEvent();
+		dwTime = SDL_GetTicks() - dwBeginTime;
 
-      //
-      // The lower part...
-      //
-      srcrect.y = 0;
-      srcrect.h = iImgPos;
+		//
+		// Set the palette
+		Log("Set the palette");
 
-      dstrect.y = 200 - iImgPos;
-      dstrect.h = srcrect.h;
+		Log("dwTime %x", dwTime);
+		if (dwTime < 15000)
+		{
+			Log("dwTime < 15000");
+			for (i = 0; i < 256; i++)
+			{
+				rgCurrentPalette[i].r = (BYTE)(palette[i].r * dwTime / 15000);
+				rgCurrentPalette[i].g = (BYTE)(palette[i].g * dwTime / 15000);
+				rgCurrentPalette[i].b = (BYTE)(palette[i].b * dwTime / 15000);
+			}
+		}
 
-      SDL_BlitSurface(lpBitmapDown, &srcrect, gpScreen, &dstrect);
+		VIDEO_SetPalette(rgCurrentPalette);
 
-      //
-      // Draw the cranes...
-      //
-      for (i = 0; i < 9; i++)
-      {
-         LPCBITMAPRLE lpFrame = PAL_SpriteGetFrame(lpSpriteCrane,
-            cranepos[i][2] = (cranepos[i][2] + (iCraneFrame & 1)) % 8);
-         cranepos[i][1] += ((iImgPos > 1) && (iImgPos & 1)) ? 1 : 0;
-         PAL_RLEBlitToSurface(lpFrame, gpScreen,
-            PAL_XY(cranepos[i][0], cranepos[i][1]));
-         cranepos[i][0]--;
-      }
-      iCraneFrame++;
+		SDL_SetPalette(lpBitmapDown, SDL_LOGPAL | SDL_PHYSPAL, VIDEO_GetPalette(), 0, 256);
+		SDL_SetPalette(lpBitmapUp, SDL_LOGPAL | SDL_PHYSPAL, VIDEO_GetPalette(), 0, 256);
 
-      //
-      // Draw the title...
-      //
-      if (PAL_RLEGetHeight(lpBitmapTitle) < iTitleHeight)
-      {
-         //
-         // HACKHACK
-         //
-         WORD w = lpBitmapTitle[2] | (lpBitmapTitle[3] << 8);
-         w++;
-         lpBitmapTitle[2] = (w & 0xFF);
-         lpBitmapTitle[3] = (w >> 8);
-      }
+		//
+		// Draw the screen
+		Log("Draw the screen");
 
-      PAL_RLEBlitToSurface(lpBitmapTitle, gpScreen, PAL_XY(255, 10));
-      VIDEO_UpdateScreen(NULL);
+		if (iImgPos > 1)
+		{
+			iImgPos--;
+		}
 
-      //
-      // Check for keypress...
-      //
-      if (g_InputState.dwKeyPress & (kKeyMenu | kKeySearch))
-      {
-         //
-         // User has pressed a key...
-         //
-         lpBitmapTitle[2] = iTitleHeight & 0xFF;
-         lpBitmapTitle[3] = iTitleHeight >> 8; // HACKHACK
+		//
+		// The upper part...
+		Log("The upper part");
 
-         PAL_RLEBlitToSurface(lpBitmapTitle, gpScreen, PAL_XY(255, 10));
-         VIDEO_UpdateScreen(NULL);
+		srcrect.y = iImgPos;
+		srcrect.h = 200 - iImgPos;
 
-         if (dwTime < 15000)
-         {
-            //
-            // If the picture has not completed fading in, complete the rest
-            //
-            while (dwTime < 15000)
-            {
-               for (i = 0; i < 256; i++)
-               {
-                  rgCurrentPalette[i].r = (BYTE)(palette[i].r * dwTime / 15000);
-                  rgCurrentPalette[i].g = (BYTE)(palette[i].g * dwTime / 15000);
-                  rgCurrentPalette[i].b = (BYTE)(palette[i].b * dwTime / 15000);
-               }
-               VIDEO_SetPalette(rgCurrentPalette);
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-			   SDL_SetSurfacePalette(lpBitmapDown, gpScreen->format->palette);
-			   SDL_SetSurfacePalette(lpBitmapUp, gpScreen->format->palette);
-#else
-			   SDL_SetPalette(lpBitmapDown, SDL_PHYSPAL | SDL_LOGPAL, VIDEO_GetPalette(), 0, 256);
-			   SDL_SetPalette(lpBitmapUp, SDL_PHYSPAL | SDL_LOGPAL, VIDEO_GetPalette(), 0, 256);
-#endif
-               UTIL_Delay(8);
-               dwTime += 250;
-            }
-            UTIL_Delay(500);
-         }
+		dstrect.y = 0;
+		dstrect.h = srcrect.h;
 
-         //
-         // Quit the splash screen
-         //
-         break;
-      }
+		SDL_BlitSurface(lpBitmapUp, &srcrect, gpScreen, &dstrect);
 
-      //
-      // Delay a while...
-      //
-      PAL_ProcessEvent();
-      while (SDL_GetTicks() - dwBeginTime < dwTime + 85)
-      {
-         SDL_Delay(1);
-         PAL_ProcessEvent();
-      }
-   }
+		//
+		// The lower part...
+		Log("The lower part");
 
-   SDL_FreeSurface(lpBitmapDown);
-   SDL_FreeSurface(lpBitmapUp);
-   free(buf);
+		srcrect.y = 0;
+		srcrect.h = iImgPos;
 
-   if (!fUseCD)
-   {
-      PAL_PlayMUS(0, FALSE, 1);
-   }
+		dstrect.y = 200 - iImgPos;
+		dstrect.h = srcrect.h;
 
-   PAL_FadeOut(1);
+		SDL_BlitSurface(lpBitmapDown, &srcrect, gpScreen, &dstrect);
+
+		//
+		// Draw the cranes...
+		Log("Draw the cranes");
+
+		for (i = 0; i < 9; i++)
+		{
+			LPCBITMAPRLE lpFrame = PAL_SpriteGetFrame(lpSpriteCrane,
+					cranepos[i][2] = (cranepos[i][2] + (iCraneFrame & 1)) % 8);
+			cranepos[i][1] += ((iImgPos > 1) && (iImgPos & 1)) ? 1 : 0;
+			PAL_RLEBlitToSurface(lpFrame, gpScreen,
+					PAL_XY(cranepos[i][0], cranepos[i][1]));
+			cranepos[i][0]--;
+		}
+		iCraneFrame++;
+
+		//
+		// Draw the title...
+		Log("Draw the title");
+
+		if (PAL_RLEGetHeight(lpBitmapTitle) < iTitleHeight)
+		{
+			//
+			// HACKHACK
+			//
+			WORD w = lpBitmapTitle[2] | (lpBitmapTitle[3] << 8);
+			w++;
+			lpBitmapTitle[2] = (w & 0xFF);
+			lpBitmapTitle[3] = (w >> 8);
+		}
+
+		PAL_RLEBlitToSurface(lpBitmapTitle, gpScreen, PAL_XY(255, 10));
+		VIDEO_UpdateScreen(NULL);
+
+		//
+		// Check for keypress...
+		Log("Check for keypress");
+
+		if (g_InputState.dwKeyPress & (kKeyMenu | kKeySearch))
+		{
+			//
+			// User has pressed a key...
+			Log("User has pressed a key");
+
+			lpBitmapTitle[2] = iTitleHeight & 0xFF;
+			lpBitmapTitle[3] = iTitleHeight >> 8; // HACKHACK
+
+			PAL_RLEBlitToSurface(lpBitmapTitle, gpScreen, PAL_XY(255, 10));
+			VIDEO_UpdateScreen(NULL);
+
+			if (dwTime < 15000)
+			{
+				//
+				// If the picture has not completed fading in, complete the rest
+				Log("complete fading the rest");
+
+				while (dwTime < 15000)
+				{
+					for (i = 0; i < 256; i++)
+					{
+						rgCurrentPalette[i].r = (BYTE)(palette[i].r * dwTime / 15000);
+						rgCurrentPalette[i].g = (BYTE)(palette[i].g * dwTime / 15000);
+						rgCurrentPalette[i].b = (BYTE)(palette[i].b * dwTime / 15000);
+					}
+					VIDEO_SetPalette(rgCurrentPalette);
+					SDL_SetPalette(lpBitmapDown, SDL_PHYSPAL | SDL_LOGPAL, VIDEO_GetPalette(), 0, 256);
+					SDL_SetPalette(lpBitmapUp, SDL_PHYSPAL | SDL_LOGPAL, VIDEO_GetPalette(), 0, 256);
+
+					UTIL_Delay(8);
+					dwTime += 250;
+				}
+				UTIL_Delay(500);
+			}
+
+			//
+			// Quit the splash screen
+			Log("Quit the splash screen");
+
+			break;
+		}
+
+		//
+		// Delay a while...
+		Log("Delay a while");
+
+		PAL_ProcessEvent();
+		while (SDL_GetTicks() - dwBeginTime < dwTime + 85)
+		{
+			SDL_Delay(1);
+			PAL_ProcessEvent();
+		}
+	}
+
+	SDL_FreeSurface(lpBitmapDown);
+	SDL_FreeSurface(lpBitmapUp);
+	free(buf);
+
+	if (!fUseCD)
+	{
+		PAL_PlayMUS(0, FALSE, 1);
+	}
+
+	PAL_FadeOut(1);
 }
-
-void
-main_loop()
+void main_loop()
 {
-   WORD          wScreenWidth = 0, wScreenHeight = 0;
-   BOOL          fFullScreen = FALSE;
+	WORD          wScreenWidth = 0, wScreenHeight = 0;
+	BOOL          fFullScreen = FALSE;
 
-#if defined(__APPLE__) && !defined(__IOS__)
-   char *p = strstr(argv[0], "/Pal.app/");
+	UTIL_OpenLog();
 
-   if (p != NULL)
-   {
-      char buf[4096];
-      strcpy(buf, argv[0]);
-      buf[p - argv[0]] = '\0';
-      chdir(buf);
-   }
-#endif
 
-#ifdef __WINPHONE__
-   SDL_SetHint(SDL_HINT_ORIENTATIONS, "LandscapeRight");
-   SDL_SetHint(SDL_HINT_WINRT_HANDLE_BACK_BUTTON, "1");
-#endif
+	//
+	// Default resolution is 640x400 (windowed) or 640x480 (fullscreen).
+	//
+	if (wScreenWidth == 0)
+	{
+		wScreenWidth = 640;
+		wScreenHeight = fFullScreen ? 480 : 400;
+	}
 
-   UTIL_OpenLog();
+	//
+	// Initialize everything
+	//
+	PAL_Init(wScreenWidth, wScreenHeight, fFullScreen);
 
-#ifdef _WIN32
-#if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION <= 2
-   putenv("SDL_VIDEODRIVER=directx");
-#endif
-#endif
+	//
+	// Show the trademark screen and splash screen
+	//
+	PAL_TrademarkScreen();
+	PAL_SplashScreen();
 
-   //
-   // Default resolution is 640x400 (windowed) or 640x480 (fullscreen).
-   //
-   if (wScreenWidth == 0)
-   {
-#ifdef __SYMBIAN32__
-#ifdef __S60_5X__
-      wScreenWidth = 640;
-      wScreenHeight = 360;
-#else
-      wScreenWidth = 320;
-      wScreenHeight = 240;
-#endif
-#else
-#if defined(GPH) || defined(DINGOO)
-      wScreenWidth = 320;
-      wScreenHeight = 240;
-#elif defined (__IOS__) || defined (__ANDROID__)
-      wScreenWidth = 320;
-      wScreenHeight = 200;
-#else
-      wScreenWidth = 640;
-      wScreenHeight = fFullScreen ? 480 : 400;
-#endif
-#endif
-   }
+	//
+	// Run the main game routine
+	//
+	PAL_GameMain();
 
-   //
-   // Initialize everything
-   //
-#ifdef PSP
-   sdlpal_psp_init();
-#endif
-   PAL_Init(wScreenWidth, wScreenHeight, fFullScreen);
-
-   //
-   // Show the trademark screen and splash screen
-   //
-   PAL_TrademarkScreen();
-   PAL_SplashScreen();
-
-   //
-   // Run the main game routine
-   //
-   PAL_GameMain();
-
-   //
-   // Should not really reach here...
-   //
-   assert(FALSE);
+	//
+	// Should not really reach here...
+	//
+	assert(FALSE);
 }

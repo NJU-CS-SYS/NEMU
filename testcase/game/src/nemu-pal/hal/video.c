@@ -10,9 +10,11 @@ int get_fps();
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect)
 {
 
+	Log("SDL_BlitSurface");
+
 	assert(dst && src);
 
-	/* TODO: Performs a fast blit from the source surface to the 
+	/* Performs a fast blit from the source surface to the 
 	 * destination surface. Only the position is used in the
 	 * ``dstrect'' (the width and height are ignored). If either
 	 * ``srcrect'' or ``dstrect'' are NULL, the entire surface 
@@ -51,10 +53,13 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
 	//Log("start %x %x", srcIdx, dstIdx);
 
+	/*
 	int i;
 	for (i = 0; i < srcLimit; i ++) {
 		dst->pixels[srcIdx ++] = src->pixels[dstIdx ++];
 	}
+	*/
+	memcpy(dst->pixels + dstIdx, src->pixels + srcIdx, srcLimit);
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color)
@@ -72,37 +77,30 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color)
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h)
 {
+	Log("SDL_UpdateRect");
+
 	assert(screen);
 	assert(screen->pitch == 320);
+
 	if(screen->flags & SDL_HWSURFACE) {
 		if(x == 0 && y == 0) {
 			/* Draw FPS */
 			vmem = VMEM_ADDR;
 			char buf[80];
-			sprintf(buf, "%dFPS", get_fps());
+			sprintf(buf, "%xFPS", get_fps());
 			draw_string(buf, 0, 0, 10);
 		}
 		return;
 	}
 
-	/* TODO: Copy the pixels in the rectangle area to the screen. */
+	Log("Copy the pixels");
+	/* Copy the pixels in the rectangle area to the screen. */
 
 	int pixel_idx = x + y * w;     // Iterater index and start index;
 	int limit = w * h;             // Total num of pixels;
 
-	int i,k = 0;
-	uint8_t *buf = malloc(limit);
-	for (i = 0; i < limit; i ++) {
-		buf[k ++] = screen->pixels[pixel_idx ++];
-	}
+	memcpy(screen->pixels, screen->pixels + pixel_idx, limit);
 
-	for (i = 0; i < limit; i ++) {
-		screen->pixels[i] = buf[i];
-	}
-
-	free(buf);
-
-	//Log("SDL_UpdateRect");
 	assert(0);
 }
 
@@ -111,9 +109,8 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor
 	assert(s);
 	assert(s->format);
 	assert(s->format->palette);
+	assert(colors);
 	assert(firstcolor == 0);
-
-	Log("1st %p, 2nd %p", s->format->palette->colors, colors);
 
 	if(s->format->palette->colors == NULL || s->format->palette->ncolors != ncolors) {
 		if(s->format->palette->ncolors != ncolors && s->format->palette->colors != NULL) {
@@ -130,8 +127,6 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor
 
 	/* Set the new palette. */
 	s->format->palette->ncolors = ncolors;
-	Log("1st %p, 2nd %p", s->format->palette->colors, colors);
-	assert(0);
 	memcpy(s->format->palette->colors, colors, sizeof(SDL_Color) * ncolors);
 
 	if(s->flags & SDL_HWSURFACE) {
@@ -168,27 +163,14 @@ void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect, SDL_Surface *dst, SDL_
 	}
 }
 
-//#define FAKE
-#ifdef FAKE
-static uint8_t fake_palette[sizeof(SDL_Palette) * 10];
-static int fake_idx = 0;
-#endif
 SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int depth,
 		uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask)
 {
 	SDL_Surface *s = malloc(sizeof(SDL_Surface)); 
-	Log("SDL_Surface *s %p", s);
 	assert(s);
 	s->format = malloc(sizeof(SDL_PixelFormat));
-	Log("s->format %p", s->format);
 	assert(s);
-#ifndef FAKE
 	s->format->palette = malloc(sizeof(SDL_Palette));
-	Log("s->format->palette %p", s->format->palette);
-#else
-	s->format->palette = (void *)&(fake_palette[fake_idx]);
-	fake_idx += 8;
-#endif
 	assert(s->format->palette);
 	s->format->palette->colors = NULL;
 
@@ -218,20 +200,13 @@ void SDL_FreeSurface(SDL_Surface *s)
 				if(s->format->palette->colors != NULL) {
 					free(s->format->palette->colors);
 				}
-#ifndef FAKE
 				free(s->format->palette);
-#else
-				fake_idx -= 8;
-#endif
 			}
-
 			free(s->format);
 		}
-		
 		if(s->pixels != NULL) {
 			free(s->pixels);
 		}
-
 		free(s);
 	}
 }

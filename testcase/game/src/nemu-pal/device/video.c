@@ -27,26 +27,13 @@ SDL_Surface              *gpScreen           = NULL;
 // Backup screen buffer
 SDL_Surface              *gpScreenBak        = NULL;
 
-#if SDL_VERSION_ATLEAST(2,0,0)
-SDL_Window               *gpWindow           = NULL;
-static SDL_Renderer      *gpRenderer         = NULL;
-static SDL_Texture       *gpTexture          = NULL;
-static SDL_Texture       *gpTouchOverlay     = NULL;
-#ifdef __WINPHONE__
-static SDL_Texture       *gpBackKeyMessage   = NULL;
-#endif
-#endif
 
 // The real screen surface
 static SDL_Surface       *gpScreenReal       = NULL;
 
 volatile BOOL g_bRenderPaused = FALSE;
 
-#if (defined (__SYMBIAN32__) && !defined (__S60_5X__)) || defined (PSP) || defined (GEKKO)
-   static BOOL bScaleScreen = FALSE;
-#else
-   static BOOL bScaleScreen = TRUE;
-#endif
+static BOOL bScaleScreen = TRUE;
 
 // Initial screen size
 static WORD               g_wInitialWidth    = 640;
@@ -56,16 +43,8 @@ static WORD               g_wInitialHeight   = 400;
 static WORD               g_wShakeTime       = 0;
 static WORD               g_wShakeLevel      = 0;
 
-#if SDL_VERSION_ATLEAST(2, 0, 0)
-#define SDL_SoftStretch SDL_UpperBlit
-#endif
-
 INT
-#ifdef GEKKO // Rikku2000: Crash on compile, allready define on WIISDK
-VIDEO_Init_GEKKO(
-#else
 VIDEO_Init(
-#endif
    WORD             wScreenWidth,
    WORD             wScreenHeight,
    BOOL             fFullScreen
@@ -90,162 +69,17 @@ VIDEO_Init(
 
 --*/
 {
-#if SDL_VERSION_ATLEAST(2,0,0)
-   SDL_Surface *overlay;
-#endif
 
    g_wInitialWidth = wScreenWidth;
    g_wInitialHeight = wScreenHeight;
 
-#if SDL_VERSION_ATLEAST(2,0,0)
-   //
-   // Before we can render anything, we need a window and a renderer.
-   //
-#if defined (__IOS__) || defined (__ANDROID__) || defined (__WINPHONE__)
-   gpWindow = SDL_CreateWindow("Pal",
-      SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, wScreenWidth, wScreenHeight,
-      SDL_WINDOW_SHOWN);
-#else
-   gpWindow = SDL_CreateWindow("Pal",
-      SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, wScreenWidth, wScreenHeight,
-      SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
-#endif
-
-   if (gpWindow == NULL)
-   {
-      return -1;
-   }
-
-   gpRenderer = SDL_CreateRenderer(gpWindow, -1, SDL_RENDERER_ACCELERATED);
-
-   if (gpRenderer == NULL)
-   {
-      return -1;
-   }
-
-#if defined (__IOS__)
-   SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 0);
-   SDL_GL_SetAttribute(SDL_GL_RETAINED_BACKING, 1);
-#endif
-
-   //
-   // Create the screen buffer and the backup screen buffer.
-   //
-   gpScreen = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 200, 8, 0, 0, 0, 0);
-   gpScreenBak = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 200, 8, 0, 0, 0, 0);
-   gpScreenReal = SDL_CreateRGBSurface(SDL_SWSURFACE, 320, 200, 32,
-                                       0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-
-   //
-   // Create texture for screen.
-   //
-   gpTexture = SDL_CreateTexture(gpRenderer, SDL_PIXELFORMAT_ARGB8888,
-							  SDL_TEXTUREACCESS_STREAMING, 320, 200);
-
-   //
-   // Failed?
-   //
-   if (gpScreen == NULL || gpScreenBak == NULL || gpScreenReal == NULL || gpTexture == NULL)
-   {
-      if (gpScreen != NULL)
-      {
-         SDL_FreeSurface(gpScreen);
-         gpScreen = NULL;
-      }
-
-      if (gpScreenBak != NULL)
-      {
-         SDL_FreeSurface(gpScreenBak);
-         gpScreenBak = NULL;
-      }
-
-      if (gpScreenReal != NULL)
-      {
-         SDL_FreeSurface(gpScreenReal);
-         gpScreenReal = NULL;
-      }
-
-	  if (gpTexture != NULL)
-	  {
-		 SDL_DestroyTexture(gpTexture);
-		 gpTexture = NULL;
-	  }
-
-      SDL_DestroyRenderer(gpRenderer);
-      gpRenderer = NULL;
-
-      SDL_DestroyWindow(gpWindow);
-      gpWindow = NULL;
-
-      return -2;
-   }
-
-   //
-   // Create texture for overlay.
-   //
-   overlay = SDL_LoadBMP(PAL_PREFIX "overlay.bmp");
-   if (overlay != NULL)
-   {
-      SDL_SetColorKey(overlay, SDL_RLEACCEL, SDL_MapRGB(overlay->format, 255, 0, 255));
-      gpTouchOverlay = SDL_CreateTextureFromSurface(gpRenderer, overlay);
-      SDL_SetTextureAlphaMod(gpTouchOverlay, 120);
-      SDL_FreeSurface(overlay);
-   }
-
-#ifdef __WINPHONE__
-   {
-      //
-      // Totally ugly hack to satisfy M$'s silly requirements.
-      // No need to understand this crap.
-      //
-#ifdef PAL_WIN95
-      extern BOOL fIsBig5;
-#endif
-      SDL_Color palette[256] = { 0 };
-      SDL_Surface *p;
-#ifdef PAL_WIN95
-      fIsBig5 = TRUE;
-#endif
-      palette[0].r = palette[0].g = palette[0].b = palette[0].a = 0;
-      palette[1].r = palette[1].g = palette[1].b = palette[1].a = 255;
-      SDL_FillRect(gpScreenBak, NULL, 0);
-      VIDEO_SetPalette(palette);
-      p = gpScreen;
-      gpScreen = gpScreenBak;
-      PAL_DrawText("\xA6\x41\xA6\xB8\xAB\xF6 Back \xB5\xB2\xA7\xF4", PAL_XY(30, 30), 1, FALSE, FALSE);
-      gpScreen = p;
-      gpBackKeyMessage = SDL_CreateTextureFromSurface(gpRenderer, gpScreenBak);
-      SDL_FillRect(gpScreenBak, NULL, 0);
-#ifdef PAL_WIN95
-      fIsBig5 = FALSE;
-#endif
-   }
-#endif
-
-#else
-
    //
    // Create the screen surface.
    //
-#if defined (NDS)
-   gpScreenReal = SDL_SetVideoMode(293, 196, 8, SDL_SWSURFACE | SDL_FULLSCREEN);
-#elif defined (__SYMBIAN32__)
-#ifdef __S60_5X__
-   gpScreenReal = SDL_SetVideoMode(640, 360, 8,
-      SDL_SWSURFACE | (fFullScreen ? SDL_FULLSCREEN : 0));
-#else
    gpScreenReal = SDL_SetVideoMode(320, 240, 8,
       SDL_SWSURFACE | (fFullScreen ? SDL_FULLSCREEN : 0));
-#endif
-#elif defined (GEKKO)
-   gpScreenReal = SDL_SetVideoMode(640, 480, 8,
-      SDL_SWSURFACE | (fFullScreen ? SDL_FULLSCREEN : 0));
-#elif defined (PSP)
-   gpScreenReal = SDL_SetVideoMode(320, 240, 8, SDL_SWSURFACE | SDL_FULLSCREEN);
-#else
    gpScreenReal = SDL_SetVideoMode(320, 200, 8,
       SDL_HWSURFACE | SDL_RESIZABLE | (fFullScreen ? SDL_FULLSCREEN : 0));
-#endif
 
    if (gpScreenReal == NULL)
    {
@@ -298,7 +132,6 @@ VIDEO_Init(
       return -2;
    }
 
-#endif
 
    if (fFullScreen)
    {

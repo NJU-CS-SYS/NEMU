@@ -19,7 +19,6 @@ void mm_brk(uint32_t new_brk) {
 		mm_malloc(brk, new_brk - brk);
 	}
 
-	Log("new brk %x, brk %x", new_brk, brk);
 	brk = new_brk;
 }
 
