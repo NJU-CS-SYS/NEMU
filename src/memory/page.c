@@ -40,7 +40,8 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 	lnaddr.val = 0x81440e0;
 	dir_addr = cpu.cr3.page_directory_base << 12;
 	dir_entry.val = hwaddr_read(dir_addr + 4 * lnaddr.dir, 4);
-	if (dir_entry.present) Test(0, "Hit");
+	page_entry.val = hwaddr_read((dir_entry.page_frame << 12) + 4 * lnaddr.page, 4);
+	if (dir_entry.present & page_entry.present) Test(0, "Hit");
 #endif
 
 	return __hwaddr;
