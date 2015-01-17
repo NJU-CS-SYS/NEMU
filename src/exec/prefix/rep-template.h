@@ -15,7 +15,7 @@ make_helper(concat(rep_, SUFFIX)) {
 		exec(eip+1);
 		cpu.ecx --;
 	}
-	return 1;
+	return 2;
 }
 
 #include "exec/template-end.h"
