@@ -188,13 +188,7 @@ PAL_RNGBlitToSurface(
       return -1;
    }
 
-   // TODO: fire the bug of free()!
-#if 0
    buf = (LPBYTE)calloc(1, 65000);
-#else
-   buf = (LPBYTE)malloc(65000);
-   memset(buf, 0, 65000);
-#endif
 
    if (buf == NULL)
    {
@@ -213,14 +207,8 @@ PAL_RNGBlitToSurface(
    //
    // Decompress the frame.
    //
-   // TODO: fire the bug of free()!
   
-#if 0
    rng = (LPBYTE)calloc(1, 65000);
-#else
-   rng = (LPBYTE)malloc(65000);
-   memset(rng, 0, 65000);
-#endif
 
    if (rng == NULL)
    {

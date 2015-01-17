@@ -402,13 +402,7 @@ PAL_InitFont(
    //
    // Read all the character codes.
    //
-#if 0
    gpFont->lpBufChar = (LPWORD)calloc(gpFont->nChar, sizeof(WORD));
-#else
-   // TODO fire the bug
-   gpFont->lpBufChar = (LPWORD)malloc(gpFont->nChar * sizeof(WORD));
-   memset(gpFont->lpBufChar, 0, gpFont->nChar * sizeof(WORD));
-#endif
 
    if (gpFont->lpBufChar == NULL)
    {

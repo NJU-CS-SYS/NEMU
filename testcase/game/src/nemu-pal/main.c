@@ -295,8 +295,10 @@ PAL_SplashScreen(
    SDL_SetSurfacePalette(lpBitmapDown, gpScreen->format->palette);
    SDL_SetSurfacePalette(lpBitmapUp, gpScreen->format->palette);
 #else
-   SDL_SetPalette(lpBitmapDown, SDL_LOGPAL | SDL_PHYSPAL, VIDEO_GetPalette(), 0, 256);
-   SDL_SetPalette(lpBitmapUp, SDL_LOGPAL | SDL_PHYSPAL, VIDEO_GetPalette(), 0, 256);
+   void *temp = VIDEO_GetPalette();
+   Log("SDL_Colors %p", temp);
+   SDL_SetPalette(lpBitmapDown, SDL_LOGPAL | SDL_PHYSPAL, temp, 0, 256);
+   SDL_SetPalette(lpBitmapUp, SDL_LOGPAL | SDL_PHYSPAL, temp, 0, 256);
 #endif
 
    //
@@ -580,7 +582,7 @@ main_loop()
    //
    // Show the trademark screen and splash screen
    //
-   // PAL_TrademarkScreen();
+   PAL_TrademarkScreen();
    PAL_SplashScreen();
 
    //

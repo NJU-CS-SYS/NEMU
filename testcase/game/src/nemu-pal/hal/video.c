@@ -113,6 +113,8 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor
 	assert(s->format->palette);
 	assert(firstcolor == 0);
 
+	Log("1st %p, 2nd %p", s->format->palette->colors, colors);
+
 	if(s->format->palette->colors == NULL || s->format->palette->ncolors != ncolors) {
 		if(s->format->palette->ncolors != ncolors && s->format->palette->colors != NULL) {
 			/* If the size of the new palette is different 
@@ -128,6 +130,8 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor
 
 	/* Set the new palette. */
 	s->format->palette->ncolors = ncolors;
+	Log("1st %p, 2nd %p", s->format->palette->colors, colors);
+	assert(0);
 	memcpy(s->format->palette->colors, colors, sizeof(SDL_Color) * ncolors);
 
 	if(s->flags & SDL_HWSURFACE) {

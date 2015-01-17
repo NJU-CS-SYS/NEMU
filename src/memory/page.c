@@ -3,9 +3,11 @@
 #include "ui/ui.h"
 #include "page.h"
 
-#define TEST_FREE
+//#define TEST_FREE
 
+#ifdef TEST_FREE
 static int trigger = 1;
+#endif
 
 uint32_t hwaddr_read(hwaddr_t addr, size_t len);
 bool tlb_read(lnaddr_t addr, hwaddr_t *hwaddr);
