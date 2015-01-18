@@ -242,12 +242,6 @@ PAL_TrademarkScreen(
    PAL_FadeOut(1);
 }
 
-#ifdef BETTER_FOR_NEMU
-#define SPLASH_DELAY 100
-#else
-#define SPLASH_DELAY 15000
-#endif
-
 VOID
 PAL_SplashScreen(
    VOID
@@ -360,9 +354,6 @@ PAL_SplashScreen(
    dstrect.x = 0;
    dstrect.w = 320;
 
-#ifdef BETTER_FOR_NEMU
-   VIDEO_SetPalette(palette);
-#endif
    while (TRUE)
    {
       PAL_ProcessEvent();
@@ -371,7 +362,6 @@ PAL_SplashScreen(
       //
       // Set the palette
       //
-#ifdef FAST_DEBUG
       if (dwTime < 15000)
       {
          for (i = 0; i < 256; i++)
@@ -383,7 +373,7 @@ PAL_SplashScreen(
       }
 
       VIDEO_SetPalette(rgCurrentPalette);
-#endif
+
 	  //
 	  // Check palette
 	  //
