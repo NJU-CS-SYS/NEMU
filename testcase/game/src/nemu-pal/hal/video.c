@@ -30,7 +30,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
 	Log("dst %p, src %p", dst->pixels, src->pixels);
 
-	if (srcrect == NULL && dstrect == NULL)
+	if ((srcrect == NULL) && (dstrect == NULL))
 	{
 		memcpy(dst->pixels, src->pixels, src->w * src->h);
 		return;
@@ -38,6 +38,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
 	if (srcrect == NULL)
 	{
+		Log("this?");
 		w = src->w;
 		h = src->h;
 		src_ptr = src->pixels;
@@ -55,7 +56,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	}
 	else
 	{
-		dst_ptr = dst->pixels + dstrect->x + srcrect->y * dst->w;
+		dst_ptr = dst->pixels + dstrect->x + dstrect->y * dst->w;
 	}
 
 	for (i = 0; i < h; i ++)
