@@ -357,7 +357,6 @@ PAL_DrawText(
          // Chinese Character
          //
          wChar = SWAP16(((LPBYTE)lpszText)[0] | (((LPBYTE)lpszText)[1] << 8));
-		 Log("Chinese character %c", wChar);
          if (fShadow)
          {
             PAL_DrawCharOnSurface(wChar, gpScreen, PAL_XY(rect.x + 1, rect.y + 1), 0);
@@ -373,7 +372,6 @@ PAL_DrawText(
          //
          // ASCII character
          //
-		 Log("ASCII character %c", *lpszText);
          if (fShadow)
          {
             PAL_DrawASCIICharOnSurface(*lpszText, gpScreen, PAL_XY(rect.x + 1, rect.y + 1), 0);
@@ -398,7 +396,7 @@ PAL_DrawText(
          urect.w = 320 - urect.x;
       }
 #endif
-      VIDEO_UpdateScreen(&urect);
+      VIDEO_UpdateScreen(NULL);
    }
 }
 

@@ -589,10 +589,9 @@ main_loop() {
    //
    // Show the trademark screen and splash screen
    //
-#ifdef FAST_DEBUG
-   PAL_TrademarkScreen();
-   PAL_SplashScreen();
-#endif
+   //PAL_TrademarkScreen();
+   PAL_SetPalette(3, FALSE);
+   //PAL_SplashScreen();
    //
    // Run the main game routine
    //

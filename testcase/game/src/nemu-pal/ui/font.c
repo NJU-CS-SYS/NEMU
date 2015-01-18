@@ -201,7 +201,6 @@ PAL_DrawCharOnSurface(
    {
       if (gpFont->lpBufChar[i] == wChar)
       {
-         Log("wChar %04x", wChar);
          break;
       }
    }

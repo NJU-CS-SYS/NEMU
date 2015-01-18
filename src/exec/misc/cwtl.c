@@ -16,8 +16,5 @@ make_helper(cwtl)
 	printf("word=%04x, dword=%08x", word, dword);
 
 	print_asm("cwtl");
-
-	nemu_state = TEST_INT;
-
 	return 1;
 }
