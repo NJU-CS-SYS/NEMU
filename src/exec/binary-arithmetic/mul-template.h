@@ -93,7 +93,7 @@ do{\
 
 #define IMUL(rst, src, dst)\
 	do {\
-		rst.val = (uint64_t)src * (uint64_t)dst;\
+		rst.val = (int64_t)src * (int64_t)dst;\
 		DATA_TYPE mask = 1 << ((DATA_BYTE << 3) - 1);\
 		if ((MSB(src) + MSB(dst)) != 1) {\
 			break;\
@@ -138,7 +138,8 @@ make_helper(concat(mul_rm2r_, SUFFIX)) {
 		print_asm("mul" str(SUFFIX) " %s", ModR_M_asm);
 	}
 
-	rst.val = src * dst;
+	// Need extension, and 64bit is large enough
+	rst.val = (uint64_t)src * (uint64_t)dst;
 	MUL_FLAG(rst);
 	MUL_RST(rst);
 
