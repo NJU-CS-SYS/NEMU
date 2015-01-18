@@ -102,7 +102,7 @@ PAL_OpeningMenu(
    Log("Draw the background");
 
    PAL_DrawOpeningMenuBackground();
-   PAL_FadeIn(0, FALSE, 1);
+   //PAL_FadeIn(0, FALSE, 1);
 
    while (TRUE)
    {

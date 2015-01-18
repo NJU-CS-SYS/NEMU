@@ -589,14 +589,10 @@ main_loop() {
    //
    // Show the trademark screen and splash screen
    //
-#if 1
+#ifdef FAST_DEBUG
    PAL_TrademarkScreen();
-#else
-   // Avoid assert(colors)!
-   PAL_SetPalette(3, FALSE);
-#endif
    PAL_SplashScreen();
-
+#endif
    //
    // Run the main game routine
    //

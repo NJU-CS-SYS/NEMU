@@ -74,8 +74,7 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h)
 			vmem = VMEM_ADDR;
 			char buf[80];
 			sprintf(buf, "%xFPS", get_fps());
-			//draw_string(buf, 0, 0, 10);
-			PAL_DrawCharOnSurface(0x73b7, gpScreen, PAL_XY(0,0), 10);
+			draw_string(buf, 0, 0, 10);
 		}
 		return;
 	}
