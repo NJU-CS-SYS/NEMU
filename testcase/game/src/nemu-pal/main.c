@@ -22,6 +22,9 @@
 #include "main.h"
 #include "getopt.h"
 
+#define BETTER_FOR_NEMU
+#define FAST_DEBUG
+
 #ifdef PSP
 #include "main_PSP.h"
 #endif
@@ -233,9 +236,17 @@ PAL_TrademarkScreen(
 {
    PAL_SetPalette(3, FALSE);
    PAL_RNGPlay(6, 0, 1000, 25);
+#ifndef BETTER_FOR_NEMU
    UTIL_Delay(1000);
+#endif
    PAL_FadeOut(1);
 }
+
+#ifdef BETTER_FOR_NEMU
+#define SPLASH_DELAY 100
+#else
+#define SPLASH_DELAY 15000
+#endif
 
 VOID
 PAL_SplashScreen(
@@ -349,6 +360,9 @@ PAL_SplashScreen(
    dstrect.x = 0;
    dstrect.w = 320;
 
+#ifdef BETTER_FOR_NEMU
+   VIDEO_SetPalette(palette);
+#endif
    while (TRUE)
    {
       PAL_ProcessEvent();
@@ -357,6 +371,7 @@ PAL_SplashScreen(
       //
       // Set the palette
       //
+#ifdef FAST_DEBUG
       if (dwTime < 15000)
       {
          for (i = 0; i < 256; i++)
@@ -368,6 +383,10 @@ PAL_SplashScreen(
       }
 
       VIDEO_SetPalette(rgCurrentPalette);
+#endif
+	  //
+	  // Check palette
+	  //
 #if SDL_VERSION_ATLEAST(2, 0, 0)
 	  SDL_SetSurfacePalette(lpBitmapDown, gpScreen->format->palette);
 	  SDL_SetSurfacePalette(lpBitmapUp, gpScreen->format->palette);
@@ -575,7 +594,12 @@ main_loop() {
    //
    // Show the trademark screen and splash screen
    //
-   // PAL_TrademarkScreen();
+#ifndef FAST_DEBUG
+   PAL_TrademarkScreen();
+#else
+   // Avoid assert(colors)!
+   PAL_SetPalette(3, FALSE);
+#endif
    PAL_SplashScreen();
 
    //

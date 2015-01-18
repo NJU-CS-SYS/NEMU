@@ -106,16 +106,42 @@ do{\
 			}\
 		}\
 	} while (0)
+
 make_helper(concat(mul_rm2r_, SUFFIX)) {
-	DATA_TYPE src, dst;
-	RST_TYPE rst;
-	int len = 1;
-	ModR_M m;
+	int       len = 1;
+	ModR_M    m;
+	RST_TYPE  rst;
+	DATA_TYPE src;
+	DATA_TYPE dst;
+
+#if DATA_BYTE == 1
+	dst = REG(R_AL);
+#elif DATA_BYTE == 2
+	dst = REG(R_AX);
+#else
 	dst = REG(R_EAX);
-	MOD_RM2R(mul, src, len);
+#endif
+
+	m.val = instr_fetch(eip + 1, 1);
+	assert(m.opcode == 0x4);
+	if (m.mod == 3)
+	{
+		src = REG(m.R_M);
+		print_asm("mul" str(SUFFIX) " %%%s", REG_NAME(m.R_M));
+		len ++;
+	}
+	else
+	{
+		swaddr_t addr;
+		len += read_ModR_M(eip + 1, &addr);
+		src = MEM_R(addr);
+		print_asm("mul" str(SUFFIX) " %s", ModR_M_asm);
+	}
+
 	rst.val = src * dst;
 	MUL_FLAG(rst);
 	MUL_RST(rst);
+
 	return len;
 }
 

@@ -275,6 +275,7 @@ VIDEO_Init(
       gpScreenReal->format->Rmask, gpScreenReal->format->Gmask,
       gpScreenReal->format->Bmask, gpScreenReal->format->Amask);
 
+   printf("At the VIDEO_Init, palette is %p\n", VIDEO_GetPalette());
    //
    // Failed?
    //

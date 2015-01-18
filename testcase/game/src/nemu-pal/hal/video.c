@@ -24,7 +24,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	int      srcX, srcY;          // the start point in source rect;
     int	     dstX, dstY;          // the start point in dest rect;
 	int      srcLimit;            // The limit of srcPixels;
-	//int      dstLimit;            // The limit of dstPixels, unused;
 	
 	if (srcrect == NULL) {
 		srcrect = &(src->clip_rect);
@@ -36,27 +35,16 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	// Init x & y
 	dstX = dstrect->x;
 	dstY = dstrect->y;
-	//dstLimit = dstrect->w * dstrect->h;
 
 	srcX = srcrect->x;
 	srcY = srcrect->y;
-	srcLimit = srcrect->w * srcrect->h;
 
-	//Log("src x %x, y %x, limit %x", srcX, srcY, srcLimit);
-	//Log("dst x %x, y %x, limit %x", dstX, dstY, dstLimit);
+	srcLimit = srcrect->w * srcrect->h;
 
 	// TODO: Confirm whether the pixels is stored by line or by column!
 	int srcIdx = srcX + srcY * (srcrect->w);
 	int dstIdx = dstX + dstY * (dstrect->w);
 
-	//Log("start %x %x", srcIdx, dstIdx);
-
-	/*
-	int i;
-	for (i = 0; i < srcLimit; i ++) {
-		dst->pixels[srcIdx ++] = src->pixels[dstIdx ++];
-	}
-	*/
 	memcpy(dst->pixels + dstIdx, src->pixels + srcIdx, srcLimit);
 }
 
@@ -97,8 +85,6 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h)
 	int limit = w * h;             // Total num of pixels;
 
 	memcpy(screen->pixels, screen->pixels + pixel_idx, limit);
-
-	assert(0);
 }
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor, int ncolors)
