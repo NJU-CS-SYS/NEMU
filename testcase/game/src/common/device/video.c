@@ -22,7 +22,10 @@ static inline void
 draw_character(char ch, int x, int y, int color) {
 	int i, j;
 	// TODO Understand this assertion!
-	//assert((ch & 0x80) == 0);
+	// Answer(?) when (ch & 0x80) != 0, it is not
+	// a ASCII character and cannot display here,
+	// meanwhile, it will cause override...
+	assert((ch & 0x80) == 0);
 	char *p = font8x8_basic[(int)ch];
 	for (i = 0; i < 8; i ++) 
 		for (j = 0; j < 8; j ++) 
@@ -32,6 +35,7 @@ draw_character(char ch, int x, int y, int color) {
 
 void
 draw_string(const char *str, int x, int y, int color) {
+	Log("Draw string %s", str);
 	while (*str) {
 		draw_character(*str ++, x, y, color);
 		if (y + 8 >= SCR_WIDTH) {

@@ -22,6 +22,8 @@
 #include "main.h"
 #include "getopt.h"
 
+#include "device/video.h"
+
 #define BETTER_FOR_NEMU
 #define FAST_DEBUG
 
@@ -587,7 +589,7 @@ main_loop() {
    //
    // Show the trademark screen and splash screen
    //
-#ifndef FAST_DEBUG
+#if 1
    PAL_TrademarkScreen();
 #else
    // Avoid assert(colors)!

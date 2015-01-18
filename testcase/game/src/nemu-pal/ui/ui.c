@@ -413,6 +413,9 @@ PAL_ReadMenu(
    //
    // Draw all the menu texts.
    //
+   Log("Draw all the menu texts");
+   Log("nMenuItem %d", nMenuItem);
+
    for (i = 0; i < nMenuItem; i++)
    {
       BYTE bColor = bLabelColor;
