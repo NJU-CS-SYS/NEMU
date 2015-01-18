@@ -104,7 +104,7 @@ process_keys
 
 	cli();
 
-	/* TODO: Traverse the key states. Find a key just pressed or released.
+	/* Traverse the key states. Find a key just pressed or released.
 	 * If a pressed key is found, call ``key_press_callback'' with the keycode.
 	 * If a released key is found, call ``key_release_callback'' with the keycode.
 	 * If any such key is found, the function return true.
@@ -113,6 +113,8 @@ process_keys
 	 */
 
 	int i;
+	bool ret = false;
+
 	for (i = 0; i < NR_KEYS; i ++) {
 		switch (query_key(i))
 		{
@@ -121,16 +123,16 @@ process_keys
 				key_press_callback(get_keycode(i));
 				wait_key(i);
 				sti();
-				return true;
+				ret = true;
 			case KEY_STATE_RELEASE:
 				Log("Call back release %s", key_name[i]);
 				key_release_callback(get_keycode(i));
 				clear_key(i);
 				sti();
-				return true;
+				ret = true;
 		}
 	}
 
 	sti();
-	return false;
+	return ret;
 }
