@@ -4,7 +4,7 @@
 
 #define NR_KEYS 18
 
-enum {KEY_STATE_EMPTY, KEY_STATE_WAIT_RELEASE, KEY_STATE_RELEASE, KEY_STATE_PRESS};
+enum { KEY_STATE_EMPTY, KEY_STATE_WAIT_RELEASE, KEY_STATE_RELEASE, KEY_STATE_PRESS };
 
 /* Only the following keys are used in NEMU-PAL. */
 static const int keycode_array[] = {
@@ -21,6 +21,8 @@ void
 keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
 	const int scan = in_byte(0x60);
+	Log("The pressed key is %x", scan);
+#if 0
 	int i;
 	// clear release state
 	for (i = 0; i < 18; i ++)
@@ -39,7 +41,7 @@ keyboard_event(void) {
 			key_state[i] = KEY_STATE_RELEASE;
 		}
 	}
-
+#endif
 	old_key = scan;
 }
 
@@ -68,7 +70,8 @@ clear_key(int index) {
 }
 
 bool 
-process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int)) {
+process_keys(void (*key_press_callback)(int), void (*key_release_callback)(int))
+{
 
 	cli();
 

@@ -234,6 +234,7 @@ PAL_TrademarkScreen(
 
 --*/
 {
+   Log("Trademark");
    PAL_SetPalette(3, FALSE);
    PAL_RNGPlay(6, 0, 1000, 25);
 #ifndef BETTER_FOR_NEMU
@@ -278,6 +279,7 @@ PAL_SplashScreen(
       return;
    }
 
+   Log("Init splash screen");
    //
    // Allocate all the needed memory at once for simplification
    //
@@ -354,6 +356,7 @@ PAL_SplashScreen(
    dstrect.x = 0;
    dstrect.w = 320;
 
+   Log("Splashing...");
    while (TRUE)
    {
       PAL_ProcessEvent();
