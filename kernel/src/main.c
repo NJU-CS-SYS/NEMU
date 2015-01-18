@@ -81,8 +81,6 @@ void init_cond() {
 	asm volatile("movl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
-	fun_color();
-
 	/* Here we go! */
 	((void(*)(void))eip)();
 

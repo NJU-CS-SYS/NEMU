@@ -20,7 +20,6 @@
 //
 
 #include "main.h"
-#include "common.h"
 
 SDL_Color *
 PAL_GetPalette(
@@ -63,8 +62,7 @@ PAL_GetPalette(
       //
       // Read failed
       //
-	   assert(0);
-	   return NULL;
+      return NULL;
    }
    else if (i <= 256 * 3)
    {
@@ -86,8 +84,6 @@ PAL_GetPalette(
 #endif
    }
 
-   Log("Palette %p", palette);
-   assert(palette != NULL);
    return palette;
 }
 
@@ -149,13 +145,12 @@ PAL_FadeOut(
    PAL_LARGE SDL_Color      palette[256];
    PAL_LARGE SDL_Color      newpalette[256];
 
-   PAL_LARGE SDL_Color * temp = VIDEO_GetPalette();
    //
    // Get the original palette...
    //
    for (i = 0; i < 256; i++)
    {
-      palette[i] = temp[i];
+      palette[i] = VIDEO_GetPalette()[i];
    }
 
    //

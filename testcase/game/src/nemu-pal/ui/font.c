@@ -22,7 +22,6 @@
 #include "font.h"
 #include "ascii.h"
 #include "util.h"
-#include "common.h"
 
 #ifdef PAL_WIN95
 
@@ -92,7 +91,6 @@
 
 BOOL fIsBig5 = FALSE;
 
-#if 0
 INT
 PAL_InitFont(
    VOID
@@ -112,11 +110,8 @@ PAL_InitFont(
 
 --*/
 {
-	/*
-   Log("Into Font Init");
    FILE *fp;
 
-   Log("Into Font Init");
    fp = fopen(PAL_PREFIX "word.dat", "rb");
    if (!fp)
    {
@@ -124,21 +119,14 @@ PAL_InitFont(
    }
 
    fseek(fp, 0x1E, SEEK_SET);
-
-   Log("Font Init, fseek end");
-
    if (fgetc(fp) == 0xAA)
    {
       fIsBig5 = TRUE;
    }
 
-   Log("Font Init, while end");
    fclose(fp);
-   Log("Font Init, fclose end");
    return 0;
-   */
 }
-#endif
 
 VOID
 PAL_FreeFont(
@@ -403,7 +391,6 @@ PAL_InitFont(
    // Read all the character codes.
    //
    gpFont->lpBufChar = (LPWORD)calloc(gpFont->nChar, sizeof(WORD));
-
    if (gpFont->lpBufChar == NULL)
    {
       free(gpFont);

@@ -10,8 +10,6 @@ int get_fps();
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect)
 {
 
-	Log("SDL_BlitSurface");
-
 	assert(dst && src);
 
 	/* Performs a fast blit from the source surface to the 
@@ -77,7 +75,6 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color)
 
 void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h)
 {
-	Log("SDL_UpdateRect");
 
 	assert(screen);
 	assert(screen->pitch == 320);
@@ -110,6 +107,7 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor
 	assert(s->format);
 	assert(s->format->palette);
 	assert(colors);
+
 	assert(firstcolor == 0);
 
 	if(s->format->palette->colors == NULL || s->format->palette->ncolors != ncolors) {
@@ -130,8 +128,7 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor
 	memcpy(s->format->palette->colors, colors, sizeof(SDL_Color) * ncolors);
 
 	if(s->flags & SDL_HWSURFACE) {
-		// TODO call write_palette correctly
-		write_palette(colors, ncolors);
+		write_palette(s->format->palette->colors, ncolors);
 	}
 }
 

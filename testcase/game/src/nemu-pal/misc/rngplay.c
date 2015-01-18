@@ -189,7 +189,6 @@ PAL_RNGBlitToSurface(
    }
 
    buf = (LPBYTE)calloc(1, 65000);
-
    if (buf == NULL)
    {
       return -1;
@@ -207,9 +206,7 @@ PAL_RNGBlitToSurface(
    //
    // Decompress the frame.
    //
-  
    rng = (LPBYTE)calloc(1, 65000);
-
    if (rng == NULL)
    {
       free(buf);

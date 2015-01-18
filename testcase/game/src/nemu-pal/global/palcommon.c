@@ -21,7 +21,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "common.h"
 #include "palcommon.h"
 
 INT
@@ -763,21 +762,15 @@ PAL_MKFReadChunk(
 
 --*/
 {
-#if 0
-	Log("Get into ReadChunk");
-	Log("\tlpBuffer %p, fp %p", lpBuffer, fp);
-	Log("\tbufSize %x, chunkNum %x", uiBufferSize, uiChunkNum);
-#endif
-	UINT     uiOffset       = 0;
-	UINT     uiNextOffset   = 0;
-	UINT     uiChunkCount;
-	UINT     uiChunkLen;
+   UINT     uiOffset       = 0;
+   UINT     uiNextOffset   = 0;
+   UINT     uiChunkCount;
+   UINT     uiChunkLen;
 
-	if (lpBuffer == NULL || fp == NULL || uiBufferSize == 0)
-	{
-	   Log("NULL error");
-	   return -1;
-	}
+   if (lpBuffer == NULL || fp == NULL || uiBufferSize == 0)
+   {
+      return -1;
+   }
 
    //
    // Get the total number of chunks.
@@ -785,8 +778,7 @@ PAL_MKFReadChunk(
    uiChunkCount = PAL_MKFGetChunkCount(fp);
    if (uiChunkNum >= uiChunkCount)
    {
-	   Log("Over error");
-	   return -1;
+      return -1;
    }
 
    //
@@ -795,10 +787,8 @@ PAL_MKFReadChunk(
    fseek(fp, 4 * uiChunkNum, SEEK_SET);
    fread(&uiOffset, 4, 1, fp);
    fread(&uiNextOffset, 4, 1, fp);
-   // Log("\tOld uiOffset %x uiNextOffset %x", uiOffset, uiNextOffset);
    uiOffset = SWAP32(uiOffset);
    uiNextOffset = SWAP32(uiNextOffset);
-   // Log("\tNew uiOffset %x uiNextOffset %x", uiOffset, uiNextOffset);
 
    //
    // Get the length of the chunk.
@@ -807,7 +797,6 @@ PAL_MKFReadChunk(
 
    if (uiChunkLen > uiBufferSize)
    {
-	  Log("Buf size error");
       return -2;
    }
 
@@ -818,11 +807,9 @@ PAL_MKFReadChunk(
    }
    else
    {
-
       return -1;
    }
 
-   // Log("Success read");
    return (INT)uiChunkLen;
 }
 
