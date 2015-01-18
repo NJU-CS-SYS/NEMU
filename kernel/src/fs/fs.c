@@ -55,7 +55,6 @@ int fs_open(const char *pathname, int flags)
 			return fd + 3;
 		}
 	}
-	assert(0);
 	return -1;
 }
 /* read return 0 to indicate that it has reached the end of file

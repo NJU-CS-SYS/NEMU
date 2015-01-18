@@ -80,14 +80,18 @@ PAL_GameMain(
    //
    gpGlobals->bCurrentSaveSlot = (BYTE)PAL_OpeningMenu();
 
+   Log("Save slot %d", gpGlobals->bCurrentSaveSlot);
    //
    // Initialize game data and set the flags to load the game resources.
    //
+   Log("Initialize game data");
+
    PAL_InitGameData(gpGlobals->bCurrentSaveSlot);
 
    //
    // Run the main game loop.
    //
+   Log("Main loop");
    dwTime = SDL_GetTicks();
    while (TRUE)
    {
@@ -96,6 +100,7 @@ PAL_GameMain(
       //
       if (gpGlobals->fGameStart)
       {
+		  Log("Initialization");
          PAL_GameStart();
          gpGlobals->fGameStart = FALSE;
       }
@@ -109,6 +114,7 @@ PAL_GameMain(
       //
       // Clear the input state of previous frame.
       //
+	  Log("Clear input");
       PAL_ClearKeyState();
 
       //

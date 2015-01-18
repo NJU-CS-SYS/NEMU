@@ -28,8 +28,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	uint8_t *src_ptr;
 	uint8_t *dst_ptr;
 
-	Log("dst %p, src %p", dst->pixels, src->pixels);
-
 	if ((srcrect == NULL) && (dstrect == NULL))
 	{
 		memcpy(dst->pixels, src->pixels, src->w * src->h);

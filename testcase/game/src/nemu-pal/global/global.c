@@ -362,6 +362,7 @@ PAL_LoadGame(
    //
    // Try to open the specified file
    //
+   Log("open %s", szFileName);
    fp = fopen(szFileName, "rb");
    if (fp == NULL)
    {
