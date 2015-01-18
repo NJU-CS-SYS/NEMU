@@ -20,6 +20,7 @@ static int old_key = 0;
 void
 keyboard_event(void) {
 	/* TODO: Fetch the scancode and update the key states. */
+	assert(0);
 	const int scan = in_byte(0x60);
 	Log("The pressed key is %x", scan);
 #if 0
