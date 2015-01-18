@@ -49,7 +49,7 @@ helper_fun opcode_table [256] = {
 /* 0x8c */	inv, lea_v, mov_r2seg, group_8f, 
 /* 0x90 */	nop, inv, inv, inv,
 /* 0x94 */	inv, inv, inv, inv,
-/* 0x98 */	inv, inv, inv, inv, 
+/* 0x98 */	cwtl, inv, inv, inv, 
 /* 0x9c */	inv, inv, inv, inv, 
 /* 0xa0 */	mov_moffs2a_b, mov_moffs2a_v, mov_a2moffs_b, mov_a2moffs_v,
 /* 0xa4 */	movs_m2m_b, movs_m2m_v, inv, inv,
