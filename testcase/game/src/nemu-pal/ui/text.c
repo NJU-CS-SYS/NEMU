@@ -396,7 +396,7 @@ PAL_DrawText(
          urect.w = 320 - urect.x;
       }
 #endif
-      VIDEO_UpdateScreen(NULL);
+      VIDEO_UpdateScreen(&urect);
    }
 }
 

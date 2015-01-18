@@ -78,17 +78,16 @@ keyboard_event(void) /* Handle type interrupt */
 		{
 			if (scan == old_key)
 			{
-				key_state[i] = KEY_STATE_WAIT_RELEASE;
+				wait_key(i);
 			}
 			else
 			{
-				key_state[i] = KEY_STATE_PRESS;
+				press_key(i);
 			}
 		}
 		else if (scan == keycode_array[i] + 0x80)
 		{
-			Log("Release %s", key_name[i]);
-			key_state[i] = KEY_STATE_RELEASE;
+			release_key(i);
 		}
 	}
 	old_key = scan;
@@ -113,7 +112,6 @@ process_keys
 	 */
 
 	int i;
-	bool ret = false;
 
 	for (i = 0; i < NR_KEYS; i ++) {
 		switch (query_key(i))
@@ -123,16 +121,16 @@ process_keys
 				key_press_callback(get_keycode(i));
 				wait_key(i);
 				sti();
-				ret = true;
+				return true;
 			case KEY_STATE_RELEASE:
 				Log("Call back release %s", key_name[i]);
 				key_release_callback(get_keycode(i));
 				clear_key(i);
 				sti();
-				ret = true;
+				return true;
 		}
 	}
 
 	sti();
-	return ret;
+	return false;
 }

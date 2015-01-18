@@ -22,31 +22,48 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 	 * (``srcrect'' is not modified).
 	 */
 	
-	int      srcX, srcY;          // the start point in source rect;
-    int	     dstX, dstY;          // the start point in dest rect;
-	int      srcLimit;            // The limit of srcPixels;
-	
-	if (srcrect == NULL) {
-		srcrect = &(src->clip_rect);
+	int      i;
+	int      w;
+	int      h;
+	uint8_t *src_ptr;
+	uint8_t *dst_ptr;
+
+	Log("dst %p, src %p", dst->pixels, src->pixels);
+
+	if (srcrect == NULL && dstrect == NULL)
+	{
+		memcpy(dst->pixels, src->pixels, src->w * src->h);
+		return;
 	}
-	if (dstrect == NULL) {
-		dstrect = &(dst->clip_rect);
+
+	if (srcrect == NULL)
+	{
+		w = src->w;
+		h = src->h;
+		src_ptr = src->pixels;
+	}
+	else
+	{
+		w = srcrect->w;
+		h = srcrect->h;
+		src_ptr = src->pixels + srcrect->x + srcrect->y * src->w;
 	}
 
-	// Init x & y
-	dstX = dstrect->x;
-	dstY = dstrect->y;
+	if (dstrect == NULL)
+	{
+		dst_ptr = dst->pixels;
+	}
+	else
+	{
+		dst_ptr = dst->pixels + dstrect->x + srcrect->y * dst->w;
+	}
 
-	srcX = srcrect->x;
-	srcY = srcrect->y;
-
-	srcLimit = srcrect->w * srcrect->h;
-
-	// TODO: Confirm whether the pixels is stored by line or by column!
-	int srcIdx = srcX + srcY * (srcrect->w);
-	int dstIdx = dstX + dstY * (dstrect->w);
-
-	memcpy(dst->pixels + dstIdx, src->pixels + srcIdx, srcLimit);
+	for (i = 0; i < h; i ++)
+	{
+		memcpy(dst_ptr, src_ptr, w);
+		dst_ptr += dst->w;
+		src_ptr += src->w;
+	}
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color)
@@ -78,14 +95,7 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h)
 		return;
 	}
 
-	Log("Copy the pixels");
 	/* Copy the pixels in the rectangle area to the screen. */
-
-	int pixel_idx = x + y * w;     // Iterater index and start index;
-	int limit = w * h;             // Total num of pixels;
-
-	memcpy(screen->pixels, screen->pixels + pixel_idx, limit);
-
 	assert(0);
 }
 
@@ -131,6 +141,7 @@ void SDL_SoftStretch(SDL_Surface *src, SDL_Rect *scrrect, SDL_Surface *dst, SDL_
 	int h = (scrrect == NULL ? src->h : scrrect->h);
 
 	assert(dstrect);
+
 	if(w == dstrect->w && h == dstrect->h) {
 		/* The source rectangle and the destination rectangle
 		 * are of the same size. If that is the case, there

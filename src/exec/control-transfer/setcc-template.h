@@ -9,7 +9,7 @@
 		m.val = instr_fetch(eip + 2, 1);\
 		if (m.mod == 3) {\
 			REG(m.R_M) = (x);\
-			print_asm(str(name) " %%%s", REG_NAME(m.reg));\
+			print_asm(str(name) " %%%s", REG_NAME(m.R_M));\
 			return len + 1;\
 		} else {\
 			swaddr_t addr;\
@@ -37,7 +37,7 @@ make_helper(set_ae) {
 	SET(!FLAG_VAL(CF), setae);
 }
 make_helper(set_e) {
-	SET(FLAG_VAL(ZF), setae);
+	SET(FLAG_VAL(ZF), sete);
 }
 make_helper(set_be) {
 	SET((FLAG_VAL(CF) || FLAG_VAL(ZF)), setbe);

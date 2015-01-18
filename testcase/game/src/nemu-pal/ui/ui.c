@@ -303,6 +303,8 @@ PAL_CreateSingleLineBox(
 #else
       SDL_SetPalette(save, SDL_PHYSPAL | SDL_LOGPAL, VIDEO_GetPalette(), 0, 256);
 #endif
+
+	  
       SDL_BlitSurface(gpScreen, &rect, save, NULL);
 
       lpBox->pos = pos;
