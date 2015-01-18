@@ -14,35 +14,43 @@ static const int keycode_array[] = {
 	K_s, K_f, K_p
 };
 
+static const char* key_name[] = {
+	"UP", "DOWN", "LEFT", "RIGHT", "ESC",
+	"RET", "SPACE", "PAGE UP", "PAGE DOWN", "r",
+	"a", "d", "e", "w", "q",
+	"s", "f", "p"
+};
+
 static int key_state[NR_KEYS];
 
 static int old_key = 0;
 void
-keyboard_event(void) {
-	/* TODO: Fetch the scancode and update the key states. */
-	assert(0);
+keyboard_event(void)
+{
+	/* Fetch the scancode and update the key states. */
 	const int scan = in_byte(0x60);
-	Log("The pressed key is %x", scan);
-#if 0
 	int i;
-	// clear release state
-	for (i = 0; i < 18; i ++)
-		if (KEY_STATE_RELEASE == key_state[i])
-			key_state[i] = KEY_STATE_EMPTY;
 	// scan
-	for (i = 0; i < 18; i ++) {
-		if (keycode_array[i] == scan) {
-			if (scan == old_key) {
+	for (i = 0; i < NR_KEYS; i ++)
+	{
+		if (keycode_array[i] == scan)
+		{
+			if (scan == old_key)
+			{
 				key_state[i] = KEY_STATE_WAIT_RELEASE;
-			} else {
-				Log("press");
+			}
+			else
+			{
+				Log("press %s", key_name[i]);
 				key_state[i] = KEY_STATE_PRESS;
 			}
-		} else if (scan + 0x80 == keycode_array[i]) {
+		}
+		else if (scan == keycode_array[i] + 0x80)
+		{
+			Log("Release %s", key_name[i]);
 			key_state[i] = KEY_STATE_RELEASE;
 		}
 	}
-#endif
 	old_key = scan;
 }
 
