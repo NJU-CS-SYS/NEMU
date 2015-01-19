@@ -13,17 +13,14 @@ static const int keycode_array[] = {
 	K_a, K_d, K_e, K_w, K_q,
 	K_s, K_f, K_p
 };
-/*
 static const char* key_name[] = {
 	"UP", "DOWN", "LEFT", "RIGHT", "ESC",
 	"RET", "SPACE", "PAGE UP", "PAGE DOWN", "r",
 	"a", "d", "e", "w", "q",
 	"s", "f", "p"
-};/
-*/
+};
 
 static int key_state[NR_KEYS];
-static int old_key = 0;
 
 static inline int
 get_keycode(int index) /* Return the keycode of key */
@@ -76,23 +73,22 @@ keyboard_event(void) /* Handle type interrupt */
 	// scan
 	for (i = 0; i < NR_KEYS; i ++)
 	{
-		if (scan == get_keycode(i))
+		switch (query_key(i))
 		{
-			if (scan == old_key)
-			{
-				wait_key(i);
-			}
-			else
-			{
-				press_key(i);
-			}
-		}
-		else if (scan == keycode_array[i] + 0x80)
-		{
-			release_key(i);
+			case KEY_STATE_EMPTY:
+				if (scan == get_keycode(i))
+				{
+					press_key(i);
+				}
+				break;
+			case KEY_STATE_WAIT_RELEASE:
+				if (scan == get_keycode(i) + 0x80)
+				{
+					release_key(i);
+				}
+				break;
 		}
 	}
-	old_key = scan;
 }
 
 bool 
