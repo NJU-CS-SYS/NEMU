@@ -9,10 +9,6 @@ make_helper(concat(cmp_i8_rm_, SUFFIX))
 	TEMP_VALUES;
 	TEMP_MOD_RM;
 	TEMP_I2RM(cmp, 1);
-	if (src == 0xff || src == 0xffff || src == 0xffffffff)
-	{
-		printf("eip %#x: imm %x\n", eip, src);
-	}
 	TEMP_SUB_I(src, dest ,result);
 	return len;
 }

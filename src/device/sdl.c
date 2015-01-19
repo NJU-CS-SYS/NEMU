@@ -70,7 +70,7 @@ void init_sdl() {
 	SDL_SetPalette(real_screen, SDL_LOGPAL | SDL_PHYSPAL, (void *)&palette, 0, 256);
 	SDL_SetPalette(screen, SDL_LOGPAL, (void *)&palette, 0, 256);
 
-	SDL_WM_SetCaption("PA", NULL);
+	SDL_WM_SetCaption("This is PA, not PAL.", NULL);
 
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 
