@@ -2,11 +2,18 @@
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
 #include "../template.h"
+#include "ui/ui.h"
 
-make_helper(concat(cmp_i8_rm_, SUFFIX)) {
+make_helper(concat(cmp_i8_rm_, SUFFIX))
+{
 	TEMP_VALUES;
 	TEMP_MOD_RM;
 	TEMP_I2RM(cmp, 1);
+	if (src == 0xff || src == 0xffff || src == 0xffffffff)
+	{
+		printf("eip %#x: imm %x\n", eip, src);
+		nemu_state = TEST_INT;
+	}
 	TEMP_SUB_I(src, dest ,result);
 	return len;
 }

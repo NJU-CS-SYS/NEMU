@@ -47,6 +47,7 @@ PAL_GameUpdate(
    int             i;
    LPEVENTOBJECT   p;
 
+   Log("Game logic update");
    //
    // Check for trigger events
    //
@@ -55,11 +56,13 @@ PAL_GameUpdate(
       //
       // Check if we are entering a new scene
       //
+	  Log("Check if we are entering a new scene");
       if (gpGlobals->fEnteringScene)
       {
          //
          // Run the script for entering the scene
          //
+		 Log("Run the script for entering the scene");
          gpGlobals->fEnteringScene = FALSE;
 
          i = gpGlobals->wNumScene - 1;
@@ -71,6 +74,7 @@ PAL_GameUpdate(
             //
             // Don't go further as we're switching to another scene
             //
+			Log("Switching to another scene");
             return;
          }
 
@@ -81,6 +85,7 @@ PAL_GameUpdate(
       //
       // Update the vanish time for all event objects
       //
+	  Log("Update the vanish time");
       for (wEventObjectID = 0; wEventObjectID < gpGlobals->g.nEventObject; wEventObjectID++)
       {
          p = &gpGlobals->g.lprgEventObject[wEventObjectID];
@@ -94,6 +99,7 @@ PAL_GameUpdate(
       //
       // Loop through all event objects in the current scene
       //
+	  Log("Loop through all event in current scene");
       for (wEventObjectID = gpGlobals->g.rgScene[gpGlobals->wNumScene - 1].wEventObjectIndex + 1;
          wEventObjectID <= gpGlobals->g.rgScene[gpGlobals->wNumScene].wEventObjectIndex;
          wEventObjectID++)
@@ -128,6 +134,7 @@ PAL_GameUpdate(
                //
                // Player is in the trigger zone.
                //
+			   Log("Player in the trigger zone");
 
                if (p->nSpriteFrames)
                {
@@ -153,6 +160,7 @@ PAL_GameUpdate(
                   //
                   // Redraw the scene
                   //
+				  Log("Redraw the scene");
                   PAL_UpdatePartyGestures(FALSE);
 
                   PAL_MakeScene();
@@ -162,6 +170,7 @@ PAL_GameUpdate(
                //
                // Execute the script.
                //
+			   Log("Execute the script");
                p->wTriggerScript = PAL_RunTriggerScript(p->wTriggerScript, wEventObjectID);
 
                PAL_ClearKeyState();
@@ -171,6 +180,7 @@ PAL_GameUpdate(
                   //
                   // Don't go further on scene switching
                   //
+				  Log("Scene switching");
                   return;
                }
             }
@@ -181,6 +191,7 @@ PAL_GameUpdate(
    //
    // Run autoscript for each event objects
    //
+   Log("Autoscirpt");
    for (wEventObjectID = gpGlobals->g.rgScene[gpGlobals->wNumScene - 1].wEventObjectIndex + 1;
       wEventObjectID <= gpGlobals->g.rgScene[gpGlobals->wNumScene].wEventObjectIndex;
       wEventObjectID++)
@@ -198,6 +209,7 @@ PAL_GameUpdate(
                //
                // Don't go further on scene switching
                //
+			   Log("Scene switching");
                return;
             }
          }
@@ -206,6 +218,7 @@ PAL_GameUpdate(
       //
       // Check if the player is in the way
       //
+	  Log("Check if the player is in the way");
       if (fTrigger && p->sState >= kObjStateBlocker && p->wSpriteNum != 0 &&
          abs(p->x - PAL_X(gpGlobals->viewport) - PAL_X(gpGlobals->partyoffset)) +
          abs(p->y - PAL_Y(gpGlobals->viewport) - PAL_Y(gpGlobals->partyoffset)) * 2 <= 12)
@@ -213,6 +226,7 @@ PAL_GameUpdate(
          //
          // Player is in the way, try to move a step
          //
+		 Log("Move a step");
          wDir = (p->wDirection + 1) % 4;
          for (i = 0; i < 4; i++)
          {
@@ -510,7 +524,9 @@ PAL_StartFrame(
    //
    // Run the game logic of one frame
    //
+   Log("Start a video frame");
    PAL_GameUpdate(TRUE);
+   Log("Update success");
    if (gpGlobals->fEnteringScene)
    {
       return;
@@ -519,11 +535,13 @@ PAL_StartFrame(
    //
    // Update the positions and gestures of party members
    //
+   Log("Update the positions and gestures");
    PAL_UpdateParty();
 
    //
    // Update the scene
    //
+   Log("Update the scene");
    PAL_MakeScene();
    VIDEO_UpdateScreen(NULL);
 
@@ -532,6 +550,7 @@ PAL_StartFrame(
       //
       // Show the in-game menu
       //
+	  Log("Show the in-game menu");
       PAL_InGameMenu();
    }
    else if (g_InputState.dwKeyPress & kKeyUseItem)
@@ -539,6 +558,7 @@ PAL_StartFrame(
       //
       // Show the use item menu
       //
+	  Log("Show the use item menu");
       PAL_GameUseItem();
    }
    else if (g_InputState.dwKeyPress & kKeyThrowItem)
@@ -546,6 +566,7 @@ PAL_StartFrame(
       //
       // Show the equipment menu
       //
+	  Log("Show the equipment menu");
       PAL_GameEquipItem();
    }
    else if (g_InputState.dwKeyPress & kKeyForce)
@@ -553,6 +574,7 @@ PAL_StartFrame(
       //
       // Show the magic menu
       //
+	  Log("Show the magic menu");
       PAL_InGameMagicMenu();
    }
    else if (g_InputState.dwKeyPress & kKeyStatus)
@@ -560,6 +582,7 @@ PAL_StartFrame(
       //
       // Show the player status
       //
+	  Log("Show the player status");
       PAL_PlayerStatus();
    }
    else if (g_InputState.dwKeyPress & kKeySearch)
@@ -567,6 +590,7 @@ PAL_StartFrame(
       //
       // Process search events
       //
+	  Log("Process search events");
       PAL_Search();
    }
    else if (g_InputState.dwKeyPress & kKeyFlee)
@@ -574,6 +598,7 @@ PAL_StartFrame(
       //
       // Quit Game
       //
+	  Log("Quit");
       if (PAL_ConfirmMenu())
       {
          PAL_PlayMUS(0, FALSE, 2);
