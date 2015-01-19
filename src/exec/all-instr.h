@@ -12,6 +12,7 @@
 #include "misc/lea.h"
 #include "misc/ldt.h"
 #include "misc/cwtl.h"
+#include "misc/rotate.h"
 
 #include "flag/flag.h"
 

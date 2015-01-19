@@ -164,12 +164,12 @@ helper_fun group_table_83[8] = {
 };
 
 helper_fun group_table_c0[8] = {
-	inv, inv, inv, inv,
+	rol_i82rm_b, inv, inv, inv,
 	sal_i8_b, shr_i8_b, inv, sar_i8_b
 };
 
 helper_fun group_table_c1[8] = {
-	inv, inv, inv, inv,
+	rol_i82rm_v, inv, inv, inv,
 	sal_i8_v, shr_i8_v, inv, sar_i8_v 
 };
 

@@ -40,7 +40,7 @@ static inline void
 release_key(int index)
 {
 	assert(index >= 0 && index < NR_KEYS);
-	key_state[index] = KEY_STATE_WAIT_RELEASE;
+	key_state[index] = KEY_STATE_RELEASE;
 }
 
 static inline void
@@ -69,24 +69,21 @@ keyboard_event(void) /* Handle type interrupt */
 {
 	/* Fetch the scancode and update the key states. */
 	const int scan = in_byte(0x60);
+	const int release_scan = scan - 0x80;
 	int i;
 	// scan
 	for (i = 0; i < NR_KEYS; i ++)
 	{
-		switch (query_key(i))
+		if (scan == get_keycode(i))
 		{
-			case KEY_STATE_EMPTY:
-				if (scan == get_keycode(i))
-				{
-					press_key(i);
-				}
-				break;
-			case KEY_STATE_WAIT_RELEASE:
-				if (scan == get_keycode(i) + 0x80)
-				{
-					release_key(i);
-				}
-				break;
+			if( query_key(i) != KEY_STATE_PRESS && query_key(i) != KEY_STATE_WAIT_RELEASE )
+			{
+				press_key(i);
+			}
+		}
+		if (release_scan == get_keycode(i))
+		{
+			release_key(i);
 		}
 	}
 }
