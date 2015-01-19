@@ -17,3 +17,21 @@ make_helper(cwtl)
 	print_asm("cwtl");
 	return 1;
 }
+
+make_helper(cltd)
+/*
+ * Sign-extended dword to qword
+ */
+{
+	int32_t dword;
+	int64_t qword;
+
+	dword = reg_l(R_EAX);
+	qword = dword;
+
+	reg_l(R_EAX) = qword & (-1);
+	reg_l(R_EDX) = (qword >> 32) & (-1);
+
+	print_asm("cltd");
+	return 1;
+}
