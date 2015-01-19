@@ -55,7 +55,7 @@ test: nemu $(TEST_FILE_LIST)
 
 
 STU_ID=131220159
-SHARED_FOLDER=~
+SHARED_FOLDER=/home/whz/submit/
 
 submit: clean
 	cd testcase && make clean
