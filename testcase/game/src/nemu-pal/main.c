@@ -22,6 +22,7 @@
 #include "main.h"
 #include "getopt.h"
 
+FLOAT pow(FLOAT,FLOAT);
 #include "device/video.h"
 
 #define BETTER_FOR_NEMU
@@ -589,6 +590,7 @@ main_loop() {
    //
    // Show the trademark screen and splash screen
    //
+   pow(0xd0000,0);
    PAL_TrademarkScreen();
    PAL_SplashScreen();
    //

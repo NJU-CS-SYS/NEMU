@@ -1153,6 +1153,7 @@ PAL_StartBattle(
    WORD           w, wPrevWaveLevel;
    SHORT          sPrevWaveProgression;
 
+   Log("Start battle");
    //
    // Set the screen waving effects
    //

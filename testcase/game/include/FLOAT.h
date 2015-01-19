@@ -22,7 +22,6 @@ static inline FLOAT F_div_int(FLOAT a, int32_t b) {
 }
 
 
-FLOAT f2F(float);
 FLOAT F_mul_F(FLOAT, FLOAT);
 FLOAT F_div_F(FLOAT, FLOAT);
 FLOAT pow(FLOAT, FLOAT);

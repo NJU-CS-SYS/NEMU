@@ -110,7 +110,16 @@ void SDL_UpdateRect(SDL_Surface *screen, int x, int y, int w, int h)
 	}
 
 	/* Copy the pixels in the rectangle area to the screen. */
-	assert(0);
+	/* TODO: No chance to test it */
+	int i;
+	uint8_t *dst = (void *)0xa0000 + x + y * 320;
+	uint8_t *src = screen->pixels + x + y * screen->w;
+	for (i = 0; i < h; i ++)
+	{
+		memcpy(dst, src, w);
+		dst += 320;
+		src += screen->w;
+	}
 }
 
 void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor, int ncolors)

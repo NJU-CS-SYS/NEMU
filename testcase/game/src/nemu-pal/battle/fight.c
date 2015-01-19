@@ -117,11 +117,14 @@ PAL_CalcBaseDamage(
    //
    if (wAttackStrength > wDefense)
    {
-      sDamage = F2int(int2F(wAttackStrength << 1) - F_mul_int(f2F(1.6), wDefense) + f2F(0.5));
+      //sDamage = F2int(int2F(wAttackStrength << 1) - F_mul_int(f2F(1.6), wDefense) + f2F(0.5));
+      sDamage = F2int(int2F(wAttackStrength << 1) - F_mul_int(0x19999, wDefense) + (1 << 15));
    }
-   else if (wAttackStrength > F2int(F_mul_int(f2F(0.6), wDefense)))
+   //else if (wAttackStrength > F2int(F_mul_int(f2F(0.6), wDefense)))
+   else if (wAttackStrength > F2int(F_mul_int(0x9999, wDefense)))
    {
-      sDamage = F2int(int2F(wAttackStrength) - F_mul_int(f2F(0.6), wDefense) + f2F(0.5));
+      //sDamage = F2int(int2F(wAttackStrength) - F_mul_int(f2F(0.6), wDefense) + f2F(0.5));
+      sDamage = F2int(int2F(wAttackStrength) - F_mul_int(0x9999, wDefense) + (1 << 15));
    }
    else
    {
@@ -382,8 +385,8 @@ PAL_UpdateTimeChargingUnit(
    }
    else
    {
-      g_Battle.flTimeChargingUnit /= 1.2f;
-      g_Battle.flTimeChargingUnit = F_div_F(g_Battle.flTimeChargingUnit, f2F(1.2));
+      //g_Battle.flTimeChargingUnit /= 1.2f;
+      g_Battle.flTimeChargingUnit = F_div_F(g_Battle.flTimeChargingUnit, 0x78643);
    }
 }
 
@@ -3438,7 +3441,8 @@ PAL_BattlePlayerPerformAction(
                fCritical = TRUE;
             }
 
-            sDamage = F2int(F_mul_int(RandomFloat(int2F(1), f2F(1.125)), sDamage));
+            //sDamage = F2int(F_mul_int(RandomFloat(int2F(1), f2F(1.125)), sDamage));
+            sDamage = F2int(F_mul_int(RandomFloat(int2F(1), 0x12000), sDamage));
 
             if (sDamage <= 0)
             {
@@ -3501,7 +3505,8 @@ PAL_BattlePlayerPerformAction(
 
                sDamage /= division;
 
-			   sDamage = F2int(F_mul_int(RandomFloat(int2F(1), f2F(1.125)), sDamage));
+			   //sDamage = F2int(F_mul_int(RandomFloat(int2F(1), f2F(1.125)), sDamage));
+			   sDamage = F2int(F_mul_int(RandomFloat(int2F(1), 0x12000), sDamage));
 
                if (sDamage <= 0)
                {
