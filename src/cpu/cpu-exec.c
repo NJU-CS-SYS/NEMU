@@ -79,6 +79,10 @@ void cpu_exec(volatile uint32_t n)
 
 	for(; n > 0; n --) {
 		swaddr_t eip_temp = cpu.eip;
+		
+		printf("%#x\n", cpu.eip);
+		fflush(stdout);
+
 		int instr_len = exec(cpu.eip);
 
 		if (cpu.eip == WATCH_EIP) nemu_state = TEST_INT;	

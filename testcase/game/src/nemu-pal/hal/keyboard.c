@@ -13,12 +13,14 @@ static const int keycode_array[] = {
 	K_a, K_d, K_e, K_w, K_q,
 	K_s, K_f, K_p
 };
+/*
 static const char* key_name[] = {
 	"UP", "DOWN", "LEFT", "RIGHT", "ESC",
 	"RET", "SPACE", "PAGE UP", "PAGE DOWN", "r",
 	"a", "d", "e", "w", "q",
 	"s", "f", "p"
-};
+};/
+*/
 
 static int key_state[NR_KEYS];
 static int old_key = 0;
