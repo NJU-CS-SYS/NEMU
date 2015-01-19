@@ -36,7 +36,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
 	if (srcrect == NULL)
 	{
-		Log("this?");
 		w = src->w;
 		h = src->h;
 		src_ptr = src->pixels;

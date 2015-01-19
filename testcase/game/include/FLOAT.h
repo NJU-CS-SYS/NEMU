@@ -17,6 +17,7 @@ static inline FLOAT F_mul_int(FLOAT a, int32_t b) {
 }
 
 static inline FLOAT F_div_int(FLOAT a, int32_t b) {
+	assert(b != 0);
 	return (a / b);
 }
 
@@ -45,6 +46,7 @@ static inline FLOAT F_mul_int(FLOAT a, uint32_t b) {
 }
 
 static inline FLOAT F_div_int(FLOAT a, uint32_t b) {
+	assert(b != 0);
 	return a / b;
 }
 
@@ -53,6 +55,7 @@ static inline FLOAT F_mul_F(FLOAT a, FLOAT b) {
 }
 
 static inline FLOAT F_div_F(FLOAT a, FLOAT b) {
+	assert(b != 0);
 	return a / b;
 }
 

@@ -9,6 +9,7 @@ FLOAT F_mul_F(FLOAT a, FLOAT b) {
 }
 
 FLOAT F_div_F(FLOAT a, FLOAT b) {
+	assert(b != 0);
 	return ((a / b) << 16);
 }
 
@@ -23,6 +24,7 @@ static inline FLOAT Fabs(FLOAT x) {
 
 FLOAT pow(FLOAT x, FLOAT y) {
 	/* we only compute x^(1/3) */
+	assert(0);
 	FLOAT t, t2, dt, next_t = int2F(2);
 
 	do {

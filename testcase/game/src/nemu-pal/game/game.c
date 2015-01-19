@@ -100,7 +100,6 @@ PAL_GameMain(
       //
       if (gpGlobals->fGameStart)
       {
-		  Log("Initialization");
          PAL_GameStart();
          gpGlobals->fGameStart = FALSE;
       }
@@ -114,7 +113,6 @@ PAL_GameMain(
       //
       // Clear the input state of previous frame.
       //
-	  Log("Clear input");
       PAL_ClearKeyState();
 
       //

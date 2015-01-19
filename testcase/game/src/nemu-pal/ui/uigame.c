@@ -50,12 +50,10 @@ PAL_DrawOpeningMenuBackground(
    //
    // Read the picture from fbp.mkf.
    //
-   Log("Read the picture from fbp.mkf");
    PAL_MKFDecompressChunk(buf, 320 * 200, MAINMENU_BACKGROUND_FBPNUM, gpGlobals->f.fpFBP);
 
    //
    // ...and blit it to the screen buffer.
-   Log("Blit the picture to the screen buffer");
    PAL_FBPBlitToSurface(buf, gpScreen);
    VIDEO_UpdateScreen(NULL);
 
@@ -81,7 +79,6 @@ PAL_OpeningMenu(
 
 --*/
 {
-   Log("Opening menu");
    WORD          wItemSelected;
    WORD          wDefaultItem     = 0;
 
@@ -98,7 +95,6 @@ PAL_OpeningMenu(
 
    //
    // Draw the background
-   Log("Draw the background");
 
    PAL_DrawOpeningMenuBackground();
    PAL_FadeIn(0, FALSE, 1);

@@ -633,7 +633,6 @@ PAL_InterpretInstruction(
       iPlayerRole = gpGlobals->rgParty[0].wPlayerRole;
    }
 
-   Log("Instr: pScript->wOperation %04x", pScript->wOperation);
    switch (pScript->wOperation)
    {
    case 0x000B:
@@ -3040,7 +3039,6 @@ PAL_RunTriggerScript(
    //
    // Set the default dialog speed.
    //
-   Log("Set the default dialog speed");
    PAL_DialogSetDelayTime(3);
 
    while (wScriptEntry != 0 && !fEnded)
@@ -3051,14 +3049,12 @@ PAL_RunTriggerScript(
          pScript->wOperation, pScript->rgwOperand[0], pScript->rgwOperand[1],
          pScript->rgwOperand[2], pScript->rgwOperand[3]);
 
-	  Log("Operation %04x", pScript->wOperation);
       switch (pScript->wOperation)
       {
       case 0x0000:
          //
          // Stop running
          //
-		 Log("Stop running");
          fEnded = TRUE;
          break;
 
@@ -3066,7 +3062,6 @@ PAL_RunTriggerScript(
          //
          // Stop running and replace the entry with the next line
          //
-		 Log("Stop running and replace the entry with the next line");
          fEnded = TRUE;
          wNextScriptEntry = wScriptEntry + 1;
          break;
@@ -3075,7 +3070,6 @@ PAL_RunTriggerScript(
          //
          // Stop running and replace the entry with the specified one
          //
-		 Log("Stop running and replace the entry with the specified one");
          if (pScript->rgwOperand[1] == 0 ||
             ++(pEvtObj->nScriptIdleFrame) < pScript->rgwOperand[1])
          {
@@ -3087,7 +3081,6 @@ PAL_RunTriggerScript(
             //
             // failed
             //
-			Log("failed");
             pEvtObj->nScriptIdleFrame = 0;
             wScriptEntry++;
          }
@@ -3097,7 +3090,6 @@ PAL_RunTriggerScript(
          //
          // unconditional jump
          //
-		 Log("Unconditional jmp");
          if (pScript->rgwOperand[1] == 0 ||
             ++(pEvtObj->nScriptIdleFrame) < pScript->rgwOperand[1])
          {
@@ -3108,7 +3100,6 @@ PAL_RunTriggerScript(
             //
             // failed
             //
-			Log("failed");
             pEvtObj->nScriptIdleFrame = 0;
             wScriptEntry++;
          }
@@ -3118,7 +3109,6 @@ PAL_RunTriggerScript(
          //
          // Call script
          //
-		 Log("Call script");
          PAL_RunTriggerScript(pScript->rgwOperand[0],
             ((pScript->rgwOperand[1] == 0) ? wEventObjectID : pScript->rgwOperand[1]));
          wScriptEntry++;
@@ -3128,7 +3118,6 @@ PAL_RunTriggerScript(
          //
          // Redraw screen
          //
-		 Log("Redraw screen");
          PAL_ClearDialog(TRUE);
 
          if (PAL_DialogIsPlayingRNG())
@@ -3161,7 +3150,6 @@ PAL_RunTriggerScript(
          //
          // Jump to the specified address by the specified rate
          //
-		 Log("Jmp to the specified addr");
          if (RandomLong(1, 100) >= pScript->rgwOperand[0])
          {
             wScriptEntry = pScript->rgwOperand[1];
@@ -3177,7 +3165,6 @@ PAL_RunTriggerScript(
          //
          // Start battle
          //
-		 Log("Battle");
          i = PAL_StartBattle(pScript->rgwOperand[0], !pScript->rgwOperand[2]);
 
          if (i == kBattleResultLost && pScript->rgwOperand[1] != 0)
@@ -3199,7 +3186,6 @@ PAL_RunTriggerScript(
          //
          // Replace the entry with the next instruction
          //
-		 Log("Replace the entry with the nexet instruction");
          wScriptEntry++;
          wNextScriptEntry = wScriptEntry;
          break;
@@ -3208,7 +3194,6 @@ PAL_RunTriggerScript(
          //
          // wait for the specified number of frames
          //
-		 Log("wait for the specified number of frames");
          {
             DWORD        time;
 
@@ -3244,7 +3229,6 @@ PAL_RunTriggerScript(
          //
          // Goto the specified address if player selected no
          //
-		 Log("Goto the sp addr if the player selected no");
          PAL_ClearDialog(FALSE);
 
          if (!PAL_ConfirmMenu())
@@ -3261,7 +3245,6 @@ PAL_RunTriggerScript(
          //
          // Show dialog in the middle part of the screen
          //
-		 Log("Show dialog in the middle part");
          PAL_ClearDialog(TRUE);
          PAL_StartDialog(kDialogCenter, (BYTE)pScript->rgwOperand[0], 0,
             pScript->rgwOperand[2] ? TRUE : FALSE);
@@ -3272,7 +3255,6 @@ PAL_RunTriggerScript(
          //
          // Show dialog in the upper part of the screen
          //
-         Log("Show dialog in the upper part of the screen");
          PAL_ClearDialog(TRUE);
          PAL_StartDialog(kDialogUpper, (BYTE)pScript->rgwOperand[1],
             pScript->rgwOperand[0], pScript->rgwOperand[2] ? TRUE : FALSE);
@@ -3283,7 +3265,6 @@ PAL_RunTriggerScript(
          //
          // Show dialog in the lower part of the screen
          //
-		 Log(" Show dialog in the lower part of the screen");
          PAL_ClearDialog(TRUE);
          PAL_StartDialog(kDialogLower, (BYTE)pScript->rgwOperand[1],
             pScript->rgwOperand[0], pScript->rgwOperand[2] ? TRUE : FALSE);
@@ -3294,7 +3275,6 @@ PAL_RunTriggerScript(
          //
          // Show text in a window at the center of the screen
          //
-         Log("Show text in a window at the center of the screen");
          PAL_ClearDialog(TRUE);
          PAL_StartDialog(kDialogCenterWindow, (BYTE)pScript->rgwOperand[0], 0, FALSE);
          wScriptEntry++;
@@ -3304,7 +3284,6 @@ PAL_RunTriggerScript(
          //
          // Restore the screen
          //
-         Log("Restore the screen");
          PAL_ClearDialog(TRUE);
          VIDEO_RestoreScreen();
          VIDEO_UpdateScreen(NULL);
@@ -3315,13 +3294,11 @@ PAL_RunTriggerScript(
          //
          // Print dialog text
          //
-         Log("Print dialog text");
          PAL_ShowDialogText(PAL_GetMsg(pScript->rgwOperand[0]));
          wScriptEntry++;
          break;
 
       default:
-		 Log("default");
          PAL_ClearDialog(TRUE);
          wScriptEntry = PAL_InterpretInstruction(wScriptEntry, wEventObjectID);
          break;
