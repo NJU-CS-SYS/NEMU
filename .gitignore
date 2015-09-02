@@ -3,5 +3,5 @@
 !*/
 !Makefile
 !*.[cSh]
-!test.sh
+!*.sh
 !.gitignore
