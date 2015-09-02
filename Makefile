@@ -8,7 +8,8 @@ LD      = ld
 CFLAGS  = -ggdb -MD -Wall -Werror -fno-strict-aliasing -Wno-unused-result -I./include -O2
 
 # jyy always knows what you have done (*^__^*)
-GITFLAGS = -q --author='jyy <njujiangyy@gmail.com>' --no-verify --allow-empty
+# whz: as PA(2014) is finished, I think there is no need to track my compilation behavior (*^_^*)
+#GITFLAGS = -q --author='jyy <njujiangyy@gmail.com>' --no-verify --allow-empty
 
 # target to compile
 CFILES  = $(shell find src/ -name "*.c")
@@ -22,9 +23,9 @@ TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
 
 nemu: $(OBJS)
 	$(CC) -o nemu $(OBJS) $(CFLAGS) -lreadline -lSDL
-	-@git add -A --ignore-errors &> /dev/null # KEEP IT
-	-@while (test -e .git/index.lock); do sleep 0.1; done # KEEP IT
-	-@(echo "> compile" && uname -a && uptime && pstree -A) | git commit -F - $(GITFLAGS) # KEEP IT
+	# -@git add -A --ignore-errors &> /dev/null # KEEP IT
+	# -@while (test -e .git/index.lock); do sleep 0.1; done # KEEP IT
+	# -@(echo "> compile" && uname -a && uptime && pstree -A) | git commit -F - $(GITFLAGS) # KEEP IT
 
 $(TEST_FILE_LIST):
 	cd `dirname $@` && make
