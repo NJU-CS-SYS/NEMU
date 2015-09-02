@@ -36,11 +36,6 @@ loader:
 	xxd -i loader > src/elf/loader.c
 	rm loader
 
-play:
-	cd loader && make
-	objcopy -S -O binary myloader/loader loader
-
-
 run: nemu $(TESTFILE)
 	./nemu -d $(TESTFILE) 2>&1 | tee log.txt
 
