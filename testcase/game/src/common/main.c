@@ -5,21 +5,21 @@ void init_timer();
 int syscall(int id, ...);
 
 void add_irq_handle(int irq, void *handler) {
-	syscall(0, irq, handler);
+    syscall(0, irq, handler);
 }
 
 void
 game_init(void) {
-	init_timer();
+    init_timer();
 
-	add_irq_handle(0, timer_event);
-	add_irq_handle(1, keyboard_event);
+    add_irq_handle(0, timer_event);
+    add_irq_handle(1, keyboard_event);
 
-	Log("game start!");
+    Log("game start!");
 
-	sti();
+    sti();
 
-	main_loop();
+    main_loop();
 
-	assert(0); /* main_loop是死循环，永远无法返回这里 */
+    assert(0); /* main_loop是死循环，永远无法返回这里 */
 }

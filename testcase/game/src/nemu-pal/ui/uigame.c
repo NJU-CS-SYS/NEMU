@@ -110,8 +110,8 @@ PAL_OpeningMenu(
       {
          //
          // Start a new game
-		 //
-		 Log("Start a new game");
+         //
+         Log("Start a new game");
          wItemSelected = 0;
          break;
       }
@@ -119,8 +119,8 @@ PAL_OpeningMenu(
       {
          //
          // Load game
-		 //
-		 Log("Load game");
+         //
+         Log("Load game");
          wItemSelected = PAL_SaveSlotMenu(1);
          if (wItemSelected != MENUITEM_VALUE_CANCELLED)
          {

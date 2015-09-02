@@ -3,9 +3,9 @@
 
 #include "exec/helper.h"
 #define make_cmov_h(x)\
-	make_helper(concat(concat(cmov, x), _w));\
-	make_helper(concat(concat(cmov, x), _l));\
-	make_helper(concat(concat(cmov, x), _v));
+    make_helper(concat(concat(cmov, x), _w));\
+    make_helper(concat(concat(cmov, x), _l));\
+    make_helper(concat(concat(cmov, x), _v));
 
 make_cmov_h(ae)
 make_cmov_h(a)

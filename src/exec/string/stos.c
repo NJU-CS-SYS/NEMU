@@ -14,5 +14,5 @@ extern char suffix;
 
 make_helper(stos_v)
 {
-	return (suffix == 'l' ? stos_l(eip) : stos_w(eip));
+    return (suffix == 'l' ? stos_l(eip) : stos_w(eip));
 }

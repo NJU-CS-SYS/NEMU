@@ -13,8 +13,8 @@ void ide_writeback(void);
 
 void
 init_ide(void) {
-	cache_init();
-	add_irq_handle(0, ide_writeback);
+    cache_init();
+    add_irq_handle(0, ide_writeback);
 }
 
 /* The loader acts as a monolithic kernel, therefore we do not need
@@ -22,25 +22,25 @@ init_ide(void) {
  * one, which is necessary for a microkernel.
  */
 void ide_read(uint8_t *buf, uint32_t offset, uint32_t len) {
-	uint32_t i;
-	for (i = 0; i < len; i ++) {
-		buf[i] = read_byte(offset + i);
-	}
+    uint32_t i;
+    for (i = 0; i < len; i ++) {
+        buf[i] = read_byte(offset + i);
+    }
 }
 
 void ide_write(uint8_t *buf, uint32_t offset, uint32_t len) {
-	uint32_t i;
-	for (i = 0; i < len; i ++) {
-		write_byte(offset + i, buf[i]);
-	}
+    uint32_t i;
+    for (i = 0; i < len; i ++) {
+        write_byte(offset + i, buf[i]);
+    }
 }
 
 void
 ide_writeback(void) {
-	static uint32_t counter = 0;
-	counter ++;
-	if (counter == WRITEBACK_TIME * HZ) {
-		cache_writeback();
-		counter = 0;
-	}
+    static uint32_t counter = 0;
+    counter ++;
+    if (counter == WRITEBACK_TIME * HZ) {
+        cache_writeback();
+        counter = 0;
+    }
 }

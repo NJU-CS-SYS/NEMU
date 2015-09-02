@@ -17,45 +17,45 @@ int enable_debug = false;
 int quiet = false;
 
 static void process_args(int argc, char *argv[]) {
-	int opt;
-	while( (opt = getopt(argc, argv, "dq")) != -1) {
-		switch(opt) {
-			case 'd':
-				enable_debug = true;
-				break;
-			case 'q':
-				quiet = true;
-				break;
-			default:
-				test(0, "bad option = %s\n", optarg);
-				break;
-		}
-	}
+    int opt;
+    while( (opt = getopt(argc, argv, "dq")) != -1) {
+        switch(opt) {
+            case 'd':
+                enable_debug = true;
+                break;
+            case 'q':
+                quiet = true;
+                break;
+            default:
+                test(0, "bad option = %s\n", optarg);
+                break;
+        }
+    }
 
-	test(argc > optind, "Program is not given\n");
+    test(argc > optind, "Program is not given\n");
 
-	set_main_args(argc - optind, argv + optind);
+    set_main_args(argc - optind, argv + optind);
 }
 
 int main(int argc, char *argv[]) {
-	process_args(argc, argv);
+    process_args(argc, argv);
 
-	/* Perform some global initialization */
-	init_regex();
-	init_signal();
-	init_bp_pool();
-	load_table();
-	init_L1();
+    /* Perform some global initialization */
+    init_regex();
+    init_signal();
+    init_bp_pool();
+    load_table();
+    init_L1();
 
 
-	/* Test whether the 'CPU_state' structure is organized correctly. */
-	reg_test();
+    /* Test whether the 'CPU_state' structure is organized correctly. */
+    reg_test();
 
-	/* Initialization of device */
-	init_device();
-	init_sdl();
+    /* Initialization of device */
+    init_device();
+    init_sdl();
 
-	main_loop();
+    main_loop();
 
-	return 0;
+    return 0;
 }

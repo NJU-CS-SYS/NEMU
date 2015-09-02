@@ -17,11 +17,11 @@ Element barrier[MAX_SIZE];
 
 void init_barrier(Element* barrier) 
 {
-	int i;
-	for (i = 0; i < MAX_SIZE; i ++) {
-		barrier[i].value = 0;
-		barrier[i].ref = 0;
-	}
+    int i;
+    for (i = 0; i < MAX_SIZE; i ++) {
+        barrier[i].value = 0;
+        barrier[i].ref = 0;
+    }
 }
 
 void insert_barrier(Element* barrier, int element) 
@@ -30,14 +30,14 @@ void insert_barrier(Element* barrier, int element)
     int i = 1;
     int pos = dst;
     while (barrier[pos].ref != EMPTY) {
-	if (barrier[pos].ref == DELETE) break;
-	i ++;
-	pos = (pos + 1) % MAX_SIZE;
-	if (pos == dst) break;
+    if (barrier[pos].ref == DELETE) break;
+    i ++;
+    pos = (pos + 1) % MAX_SIZE;
+    if (pos == dst) break;
     }
 
     if (pos == dst && barrier[pos].ref != EMPTY && barrier[pos].ref != DELETE) {
-	return;
+    return;
     }
 
     barrier[pos].value = element;
@@ -46,13 +46,13 @@ void insert_barrier(Element* barrier, int element)
 
 int main() 
 {
-	int i;
+    int i;
     init_barrier(barrier);
     for (i = 0; i < MAX_SIZE; i ++) {
-		test_data[i] = i;
+        test_data[i] = i;
     }
-	for (i = 0; i < MAX_SIZE; i ++) {
-		nemu_assert(i == test_data[i]);
-	}
+    for (i = 0; i < MAX_SIZE; i ++) {
+        nemu_assert(i == test_data[i]);
+    }
     return 0;
 }

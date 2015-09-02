@@ -4,9 +4,9 @@
 
 #define _TEMP_SUB_I(src, dest, result)\
 if (sizeof(src) == 1 && sizeof(dest) > 1) {\
-	result = dest - (DATA_TYPE_S)src;\
+    result = dest - (DATA_TYPE_S)src;\
 } else {\
-	result = dest - src;\
+    result = dest - src;\
 }
 
 #define TEMP_FLAG(src, dest, result)\
@@ -35,41 +35,41 @@ TEMP_FLAG(((~src)+1), dest, result)
 #define TEMP_R2RM(name) \
 src = REG(m.reg);\
 if (m.mod == 3) {\
-	dest = REG(m.R_M);\
-	len++;\
-	print_asm(str(name) str(SUFFIX) " %%%s, %%%s", REG_NAME(m.reg), REG_NAME(m.R_M));\
+    dest = REG(m.R_M);\
+    len++;\
+    print_asm(str(name) str(SUFFIX) " %%%s, %%%s", REG_NAME(m.reg), REG_NAME(m.R_M));\
 } else {\
-	len += read_ModR_M(eip + 1, &addr);\
-	dest = MEM_R(addr);\
-	print_asm(str(name) str(SUFFIX) " %%%s, %s", REG_NAME(m.reg), ModR_M_asm);\
+    len += read_ModR_M(eip + 1, &addr);\
+    dest = MEM_R(addr);\
+    print_asm(str(name) str(SUFFIX) " %%%s, %s", REG_NAME(m.reg), ModR_M_asm);\
 }
 
 #define TEMP_RM2R(name) \
 src = REG(m.reg);\
 if (m.mod == 3) {\
-	dest = REG(m.R_M);\
-	len++;\
-	print_asm(str(name) str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));\
+    dest = REG(m.R_M);\
+    len++;\
+    print_asm(str(name) str(SUFFIX) " %%%s,%%%s", REG_NAME(m.R_M), REG_NAME(m.reg));\
 } else {\
-	len += read_ModR_M(eip + 1, &addr);\
-	dest = MEM_R(addr);\
-	print_asm(str(name) str(SUFFIX) " %%%s,%s", ModR_M_asm, REG_NAME(m.reg));\
+    len += read_ModR_M(eip + 1, &addr);\
+    dest = MEM_R(addr);\
+    print_asm(str(name) str(SUFFIX) " %%%s,%s", ModR_M_asm, REG_NAME(m.reg));\
 }
 
 #define TEMP_I2RM(name, size) \
 if (m.mod == 3) {\
-	dest = REG(m.R_M);\
-	src = instr_fetch(eip + 2, size);\
-	if (size < DATA_BYTE)\
-		src = (src << (DATA_BYTE*8 - 8)) >> (DATA_BYTE*8-8);\
-	len += 2;\
-	print_asm(str(name) str(SUFFIX) " $0x%x, %%%s", src, REG_NAME(m.R_M));\
+    dest = REG(m.R_M);\
+    src = instr_fetch(eip + 2, size);\
+    if (size < DATA_BYTE)\
+        src = (src << (DATA_BYTE*8 - 8)) >> (DATA_BYTE*8-8);\
+    len += 2;\
+    print_asm(str(name) str(SUFFIX) " $0x%x, %%%s", src, REG_NAME(m.R_M));\
 } else {\
-	len += read_ModR_M(eip + 1, &addr);\
-	src = instr_fetch(eip + len, size);\
-	len += size;\
-	dest = MEM_R(addr);\
-	print_asm(str(name) str(SUFFIX) " $0x%x,%s", src, ModR_M_asm);\
+    len += read_ModR_M(eip + 1, &addr);\
+    src = instr_fetch(eip + len, size);\
+    len += size;\
+    dest = MEM_R(addr);\
+    print_asm(str(name) str(SUFFIX) " $0x%x,%s", src, ModR_M_asm);\
 }
 
 #define TEMP_RESULT2RM(result) \

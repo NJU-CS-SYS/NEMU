@@ -4,26 +4,26 @@
 #include "ui/ui.h"
 
 make_helper(cld) {
-	FLAG_CHG(DF, 0);
-	print_asm("cld");
-	return 1;
+    FLAG_CHG(DF, 0);
+    print_asm("cld");
+    return 1;
 }
 make_helper(std) {
-	FLAG_CHG(DF, 1);
-	print_asm("std");
-	return 1;
+    FLAG_CHG(DF, 1);
+    print_asm("std");
+    return 1;
 }
 make_helper(cli) // Clear Interrupt Flag
 {
-	FLAG_CHG(IF, 0);
-	print_asm("cli");
-	return 1;
+    FLAG_CHG(IF, 0);
+    print_asm("cli");
+    return 1;
 }
 make_helper(sti) // Set Interrupt Flag
 {
-	FLAG_CHG(IF, 1);
-	print_asm("sti");
-	return 1;
+    FLAG_CHG(IF, 1);
+    print_asm("sti");
+    return 1;
 }
 #include "exec/template-end.h"
 #undef DATA_BYTE

@@ -6,11 +6,11 @@
 #define INT3_CODE 0xcc
 #define NR_BP 32
 typedef struct breakpoint {
-	int NO;
-	swaddr_t addr;                 // use only for breakpoint
-	uint32_t value;                // use both for breakpoint and watchpoint
-	char expr[32];                 // use only for watchpoint
-	struct breakpoint *next;
+    int NO;
+    swaddr_t addr;                 // use only for breakpoint
+    uint32_t value;                // use both for breakpoint and watchpoint
+    char expr[32];                 // use only for watchpoint
+    struct breakpoint *next;
 } BP;
 
 enum _bp_state{ NORMAL, RECOVER, INIT };

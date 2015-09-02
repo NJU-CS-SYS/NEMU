@@ -14,11 +14,11 @@
 
 extern char suffix;
 make_helper(adc_r2rm_v) {
-	return (suffix == 'l' ? adc_r2rm_l(eip) : adc_r2rm_w(eip));
+    return (suffix == 'l' ? adc_r2rm_l(eip) : adc_r2rm_w(eip));
 }
 
 make_helper(adc_i82rm_v) {
-	return (suffix == 'l' ? adc_i82rm_l(eip) : adc_i82rm_w(eip));
+    return (suffix == 'l' ? adc_i82rm_l(eip) : adc_i82rm_w(eip));
 }
 
 v_helper(adc_i2r);

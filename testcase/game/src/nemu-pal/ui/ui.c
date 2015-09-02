@@ -304,7 +304,7 @@ PAL_CreateSingleLineBox(
       SDL_SetPalette(save, SDL_PHYSPAL | SDL_LOGPAL, VIDEO_GetPalette(), 0, 256);
 #endif
 
-	  
+      
       SDL_BlitSurface(gpScreen, &rect, save, NULL);
 
       lpBox->pos = pos;
@@ -739,9 +739,9 @@ PAL_LoadObjectDesc(
       pNew->wObjectID = i;
       pNew->lpDesc = strdup(p);
 
-//	   printf("########################## i = %d\n", i);
-//	   memdump(pNew->lpDesc, strlen(pNew->lpDesc));
-//	   printf("\n");
+//       printf("########################## i = %d\n", i);
+//       memdump(pNew->lpDesc, strlen(pNew->lpDesc));
+//       printf("\n");
 
       pNew->next = lpDesc;
       lpDesc = pNew;

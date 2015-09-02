@@ -17,40 +17,40 @@
 
 make_helper(concat(lgdt_, SUFFIX))
 {
-	ModR_M m;
-	m.val = instr_fetch(eip + 2, 1);
-	test(m.reg == 2, "wrong reg domain");
-	test(m.mod != 3, "wrong mod domain, expected addressing?");
-	swaddr_t addr;
-	int len = read_ModR_M(eip + 2, &addr);
-	uint16_t limit = swaddr_read(addr, 2);
-	uint32_t base = swaddr_read(addr + 2, 4);
-	cpu.gdtr.limit = limit;
+    ModR_M m;
+    m.val = instr_fetch(eip + 2, 1);
+    test(m.reg == 2, "wrong reg domain");
+    test(m.mod != 3, "wrong mod domain, expected addressing?");
+    swaddr_t addr;
+    int len = read_ModR_M(eip + 2, &addr);
+    uint16_t limit = swaddr_read(addr, 2);
+    uint32_t base = swaddr_read(addr + 2, 4);
+    cpu.gdtr.limit = limit;
 #if DATA_BYTE == 2
-	cpu.gdtr.base = base & 0xffffff;
+    cpu.gdtr.base = base & 0xffffff;
 #else
-	cpu.gdtr.base = base;
+    cpu.gdtr.base = base;
 #endif
-	print_asm("lgdt" str(SUFFIX) " %#x", addr);
-	return 1 + 1 + len;
+    print_asm("lgdt" str(SUFFIX) " %#x", addr);
+    return 1 + 1 + len;
 }
 make_helper(concat(lidt_, SUFFIX))
 {
-	ModR_M m;
-	m.val = instr_fetch(eip + 2, 1);
-	test(m.reg == 3, "wrong reg domain");
-	test(m.mod != 3, "wrong mod domain, expected addressing");
-	
-	swaddr_t addr;
-	int len = read_ModR_M(eip + 2, &addr);
-	cpu.idtr.limit = swaddr_read(addr, 2);
+    ModR_M m;
+    m.val = instr_fetch(eip + 2, 1);
+    test(m.reg == 3, "wrong reg domain");
+    test(m.mod != 3, "wrong mod domain, expected addressing");
+    
+    swaddr_t addr;
+    int len = read_ModR_M(eip + 2, &addr);
+    cpu.idtr.limit = swaddr_read(addr, 2);
 #if DATA_BYTE == 2
-	cpu.idtr.base = swaddr_read(addr + 2, 4) & 0xffffff;
+    cpu.idtr.base = swaddr_read(addr + 2, 4) & 0xffffff;
 #else
-	cpu.idtr.base = swaddr_read(addr + 2, 4);
+    cpu.idtr.base = swaddr_read(addr + 2, 4);
 #endif
 
-	print_asm("lidt" str(SUFFIX) " %#x", addr);
-	return 1 + 1 + len;
+    print_asm("lidt" str(SUFFIX) " %#x", addr);
+    return 1 + 1 + len;
 }
 #include "exec/template-end.h"

@@ -16,5 +16,5 @@ extern char suffix;
 
 make_helper(rol_i82rm_v)
 {
-	return ('l' == suffix ? rol_i82rm_l(eip) : rol_i82rm_w(eip));
+    return ('l' == suffix ? rol_i82rm_l(eip) : rol_i82rm_w(eip));
 }

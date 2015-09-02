@@ -10,9 +10,9 @@
 
 extern char suffix;
 #define make_cmov_v(x)\
-	do{\
-		return ('l' == suffix ? concat(concat(cmov,x),_l)(eip) : concat(concat(cmov,x),_w)(eip));\
-	}while(0)
+    do{\
+        return ('l' == suffix ? concat(concat(cmov,x),_l)(eip) : concat(concat(cmov,x),_w)(eip));\
+    }while(0)
 make_helper(cmovae_v) { make_cmov_v(ae); }
 make_helper(cmova_v) { make_cmov_v(a); }
 make_helper(cmovbe_v) { make_cmov_v(be); }

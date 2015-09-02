@@ -7,9 +7,9 @@ void WRITE(swaddr_t addr, size_t len, uint32_t data);
 
 uint64_t mem_access = 0;
 uint32_t cache_read(swaddr_t addr, size_t len) {
-	return READ(addr, len);
+    return READ(addr, len);
 }
 
 void cache_write(swaddr_t addr, size_t len, uint32_t data) {
-	WRITE(addr, len, data);
+    WRITE(addr, len, data);
 }

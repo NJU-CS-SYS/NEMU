@@ -15,7 +15,7 @@ extern char *asm_string;
 
 #define v_helper(name) \
 make_helper(concat(name##_, v)) {\
-	return (suffix == 'l' ? concat(name##_, l)(eip) : concat(name##_, w)(eip));\
+    return (suffix == 'l' ? concat(name##_, l)(eip) : concat(name##_, w)(eip));\
 }
 
 #define all_helper(name) \

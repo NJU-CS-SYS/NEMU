@@ -210,8 +210,8 @@ PAL_DrawCharOnSurface(
       //
       // This character does not exist in the font lib.
       //
-	  Log("Not found!");
-	  assert(0);
+      Log("Not found!");
+      assert(0);
       return;
    }
 

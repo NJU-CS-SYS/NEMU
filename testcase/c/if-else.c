@@ -1,13 +1,13 @@
 #include "trap.h"
 int cost;
 int if_else(int n) {
-	if(n > 500) cost = 150;
-	else if(n > 300) cost = 100;
-	else if(n > 100) cost = 75;
-	else if(n > 50) cost = 50;
-	else cost = 0;
+    if(n > 500) cost = 150;
+    else if(n > 300) cost = 100;
+    else if(n > 100) cost = 75;
+    else if(n > 50) cost = 50;
+    else cost = 0;
 
-	return cost;
+    return cost;
 }
 
 int test_data[] = {-1, 0, 49, 50, 51, 99, 100, 101, 299, 300, 301, 499, 500, 501};
@@ -17,12 +17,12 @@ int ans_idx;
 #define NR_DATA (sizeof(test_data) / sizeof(test_data[0]))
 
 int main() {
-	ans_idx = 0;
-	for(i = 0; i < NR_DATA; i ++) {
-		nemu_assert(if_else(test_data[i]) == ans[ans_idx ++]);
-	}
+    ans_idx = 0;
+    for(i = 0; i < NR_DATA; i ++) {
+        nemu_assert(if_else(test_data[i]) == ans[ans_idx ++]);
+    }
 
-	HIT_GOOD_TRAP;
+    HIT_GOOD_TRAP;
 
-	return 0;
+    return 0;
 }

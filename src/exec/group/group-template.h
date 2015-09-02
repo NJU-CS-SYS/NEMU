@@ -5,10 +5,10 @@ typedef int (*helper_fun)(swaddr_t);
 extern helper_fun concat(group_table_, OPCODE)[8];
 
 make_helper(concat(group_, OPCODE)) {
-	ModR_M m;
-	m.val = instr_fetch(eip + 1, 1);
+    ModR_M m;
+    m.val = instr_fetch(eip + 1, 1);
 #if 0
-	Log("m.reg = %02x", m.reg);
+    Log("m.reg = %02x", m.reg);
 #endif
-	return concat(group_table_, OPCODE)[m.reg](eip);
+    return concat(group_table_, OPCODE)[m.reg](eip);
 }

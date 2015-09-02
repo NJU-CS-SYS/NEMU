@@ -19,13 +19,13 @@
 #if DATA_BYTE == 4
 make_helper(ljmp)
 {
-	/* TODO Protecion Model Access Right Check */
-	uint32_t new_eip = instr_fetch(eip + 1, 4);
-	uint16_t new_cs = instr_fetch(eip + 5, 2);
-	cpu.eip = new_eip - 7;
-	cpu.cs = new_cs;
-	print_asm("ljmp $%#x,$%#x", new_cs, new_eip);
-	return 1 + 4 + 2;
+    /* TODO Protecion Model Access Right Check */
+    uint32_t new_eip = instr_fetch(eip + 1, 4);
+    uint16_t new_cs = instr_fetch(eip + 5, 2);
+    cpu.eip = new_eip - 7;
+    cpu.cs = new_cs;
+    print_asm("ljmp $%#x,$%#x", new_cs, new_eip);
+    return 1 + 4 + 2;
 }
 #endif
 #include "exec/template-end.h"

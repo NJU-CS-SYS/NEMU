@@ -2,9 +2,9 @@
 
 long long test_a;
 long long sub(long long a, long long b) {
-	long long c = a - b;
-	test_a = c;
-	return c;
+    long long c = a - b;
+    test_a = c;
+    return c;
 }
 
 int test_i;
@@ -16,16 +16,16 @@ long long ans[] = {0L, 0xffffffffffffffffL, 0xfffffffffffffffeL, 0x8000000000000
 #define NR_DATA (sizeof(test_data) / sizeof(test_data[0]))
 
 int main() {
-	int i, j, ans_idx = 0;
-	for(i = 0; i < NR_DATA; i ++) {
-		test_i = i;
-		for(j = 0; j < NR_DATA; j ++) {
-			test_j = j;
-			nemu_assert(sub(test_data[i], test_data[j]) == ans[ans_idx ++]);
-		}
-	}
+    int i, j, ans_idx = 0;
+    for(i = 0; i < NR_DATA; i ++) {
+        test_i = i;
+        for(j = 0; j < NR_DATA; j ++) {
+            test_j = j;
+            nemu_assert(sub(test_data[i], test_data[j]) == ans[ans_idx ++]);
+        }
+    }
 
-	HIT_GOOD_TRAP;
+    HIT_GOOD_TRAP;
 
-	return 0;
+    return 0;
 }

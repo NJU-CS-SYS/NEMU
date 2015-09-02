@@ -21,70 +21,70 @@ extern uint32_t brk;
 void fun_color(void);
 /* Initialization phase 2 */
 void init_cond() {
-	brk = 0;
+    brk = 0;
 #ifdef IA32_INTR
-	/* Reset the GDT, since the old GDT in start.S cannot be used in the future. */
-	init_segment();
+    /* Reset the GDT, since the old GDT in start.S cannot be used in the future. */
+    init_segment();
 
-	/* Set the IDT by setting up interrupt and exception handlers.
-	 * Note that system call is the only exception implemented in NEMU.
-	 */
-	init_idt();
+    /* Set the IDT by setting up interrupt and exception handlers.
+     * Note that system call is the only exception implemented in NEMU.
+     */
+    init_idt();
 #endif
 
 #ifdef HAS_DEVICE
-	/* Initialize the intel 8259 PIC (Programmable interrupt controller). */
-	init_i8259();
+    /* Initialize the intel 8259 PIC (Programmable interrupt controller). */
+    init_i8259();
 
-	/* Initialize the serial port. After that, you can use printk() to output messages. */
-	init_serial();
+    /* Initialize the serial port. After that, you can use printk() to output messages. */
+    init_serial();
 
-	/* Initialize the IDE driver. */
-	Log("init ide...");
-	init_ide();
+    /* Initialize the IDE driver. */
+    Log("init ide...");
+    init_ide();
 
-	/* Initialize the keyboard. */
-	init_kb();
+    /* Initialize the keyboard. */
+    init_kb();
 #endif
 
 #ifdef IA32_PAGE
-	/* Initialize the memory manager. */
-	init_mm();
+    /* Initialize the memory manager. */
+    init_mm();
 #endif
 
-	/* Output a welcome message. Note that the output is actually 
-	 * performed only when the serial port is available in NEMU.
-	 */
-	Log("Hello, NEMU world!");
+    /* Output a welcome message. Note that the output is actually 
+     * performed only when the serial port is available in NEMU.
+     */
+    Log("Hello, NEMU world!");
 
 #ifdef HAS_DEVICE
-	/* Write some test data to the video memory. */
-	video_mapping_write_test();
+    /* Write some test data to the video memory. */
+    video_mapping_write_test();
 #endif
 
-	/* Load the program. */
-	uint32_t eip = loader();
-	
+    /* Load the program. */
+    uint32_t eip = loader();
+    
 #ifdef HAS_DEVICE
-	/* Read data in the video memory to check whether 
-	 * the test data is written sucessfully.
-	 */
-	video_mapping_read_test();
+    /* Read data in the video memory to check whether 
+     * the test data is written sucessfully.
+     */
+    video_mapping_read_test();
 
-	/* Clear the test data we just written in the video memory. */
-	video_mapping_clear();
+    /* Clear the test data we just written in the video memory. */
+    video_mapping_clear();
 #endif
 
 #ifdef IA32_PAGE
-	/* Set the %esp for user program, which is one of the
-	 * convention of the "advanced" runtime environment. */
-	asm volatile("movl %0, %%esp" : : "i"(KOFFSET));
+    /* Set the %esp for user program, which is one of the
+     * convention of the "advanced" runtime environment. */
+    asm volatile("movl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
-	/* Here we go! */
-	((void(*)(void))eip)();
+    /* Here we go! */
+    ((void(*)(void))eip)();
 
-	HIT_GOOD_TRAP;
+    HIT_GOOD_TRAP;
 }
 
 /* Initialization phase 1
@@ -92,26 +92,26 @@ void init_cond() {
  */
 void init() {
 #ifdef IA32_PAGE
-	/* We must set up kernel virtual memory first because our kernel thinks it 
-	 * is located at 0xc0100000, which is set by the linking options in Makefile.
-	 * Before setting up correct paging, no global variable can be used. */
-	init_page();
+    /* We must set up kernel virtual memory first because our kernel thinks it 
+     * is located at 0xc0100000, which is set by the linking options in Makefile.
+     * Before setting up correct paging, no global variable can be used. */
+    init_page();
 
-	/* After paging is enabled, transform %esp to virtual address. */
-	asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
+    /* After paging is enabled, transform %esp to virtual address. */
+    asm volatile("addl %0, %%esp" : : "i"(KOFFSET));
 #endif
 
-	/* Jump to init_cond() to continue initialization. */
-	asm volatile("jmp *%0" : : "r"(init_cond));
+    /* Jump to init_cond() to continue initialization. */
+    asm volatile("jmp *%0" : : "r"(init_cond));
 
-	/* Should never reach here. */
-	nemu_assert(0);
+    /* Should never reach here. */
+    nemu_assert(0);
 }
 
 void fun_color() /* Draw some */
 {
-	char *color = (char *)0xa0000;
-	int color_idx;
-	for (color_idx = 0; color_idx < 320 * 200; color_idx ++)
-		color[color_idx] = 0x0f;
+    char *color = (char *)0xa0000;
+    int color_idx;
+    for (color_idx = 0; color_idx < 320 * 200; color_idx ++)
+        color[color_idx] = 0x0f;
 }

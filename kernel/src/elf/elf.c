@@ -17,71 +17,71 @@ uint32_t get_ucr3();
 
 uint32_t loader() {
 
-	Elf32_Ehdr *elf;
-	Elf32_Phdr *ph = NULL;
+    Elf32_Ehdr *elf;
+    Elf32_Phdr *ph = NULL;
 
 #ifdef HAS_DEVICE
-	uint8_t buf[4096];
-	ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
-	elf = (void*)buf;
+    uint8_t buf[4096];
+    ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
+    elf = (void*)buf;
 #else
-	/* The ELF file is located at memory address 0 */
-	elf = (void *)0x0;
+    /* The ELF file is located at memory address 0 */
+    elf = (void *)0x0;
 #endif
 
-	ph = (void*)((uint8_t*)elf + elf->e_phoff);
+    ph = (void*)((uint8_t*)elf + elf->e_phoff);
 
-	int i, j;
-	uint8_t *dest;
-	uint32_t filesz;
-	uint32_t memsz;
-	for (i = 0; i < elf->e_phnum; i++) {
-		/* Scan the program header table, loader each segment into memory */
-		if (ph->p_type == PT_LOAD) {
+    int i, j;
+    uint8_t *dest;
+    uint32_t filesz;
+    uint32_t memsz;
+    for (i = 0; i < elf->e_phnum; i++) {
+        /* Scan the program header table, loader each segment into memory */
+        if (ph->p_type == PT_LOAD) {
 
-			dest = (uint8_t *)ph->p_vaddr;
-			filesz = ph->p_filesz;
-			memsz = ph->p_memsz;
-	
+            dest = (uint8_t *)ph->p_vaddr;
+            filesz = ph->p_filesz;
+            memsz = ph->p_memsz;
+    
 #ifdef IA32_PAGE
-			dest = (uint8_t *)mm_malloc((uint32_t)dest, memsz);
+            dest = (uint8_t *)mm_malloc((uint32_t)dest, memsz);
 #endif
 
-			/* Memory copy */
+            /* Memory copy */
 
 #ifdef HAS_DEVICE
-			ide_read((uint8_t *)dest, ELF_OFFSET_IN_DISK + ph->p_offset, filesz);
-			j = filesz;
+            ide_read((uint8_t *)dest, ELF_OFFSET_IN_DISK + ph->p_offset, filesz);
+            j = filesz;
 #else
-			char *src = (char*)ph->p_offset;
-			for (j = 0; j < filesz; j++)
-				dest[j] = src[j];
+            char *src = (char*)ph->p_offset;
+            for (j = 0; j < filesz; j++)
+                dest[j] = src[j];
 #endif
 
-			/* Memory clear */
-			for (; j < memsz; j++)
-				dest[j] = 0;
+            /* Memory clear */
+            for (; j < memsz; j++)
+                dest[j] = 0;
 
-			/* Record the prgram break for future use. */
-			extern uint32_t brk;
-			uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
-			if(brk < new_brk) { brk = new_brk; }
+            /* Record the prgram break for future use. */
+            extern uint32_t brk;
+            uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
+            if(brk < new_brk) { brk = new_brk; }
 
-		}
-		ph ++;
-	}
+        }
+        ph ++;
+    }
 
-	volatile uint32_t entry = elf->e_entry;
+    volatile uint32_t entry = elf->e_entry;
 
 #ifdef IA32_PAGE
-	mm_malloc(KOFFSET - STACK_SIZE, STACK_SIZE);
+    mm_malloc(KOFFSET - STACK_SIZE, STACK_SIZE);
 
 #ifdef HAS_DEVICE
-	create_video_mapping();
+    create_video_mapping();
 #endif
 
-	write_cr3(get_ucr3());
+    write_cr3(get_ucr3());
 #endif
 
-	return entry;
+    return entry;
 }

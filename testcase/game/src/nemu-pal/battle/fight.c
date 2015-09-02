@@ -377,7 +377,7 @@ PAL_UpdateTimeChargingUnit(
 {
    g_Battle.flTimeChargingUnit = pow(int2F(PAL_GetPlayerDexterity(0) + 5), 0);
    g_Battle.flTimeChargingUnit = F_div_int(g_Battle.flTimeChargingUnit, 
-		   PAL_GetPlayerDexterity(0));
+           PAL_GetPlayerDexterity(0));
 
    if (gpGlobals->bBattleSpeed > 1)
    {
@@ -1264,7 +1264,7 @@ PAL_BattleStartFrame(
       case kFighterWait:
          wDexterity = PAL_GetPlayerActualDexterity(wPlayerRole);
          g_Battle.rgPlayer[i].flTimeMeter += F_mul_F(PAL_GetTimeChargingSpeed(wDexterity),
-				g_Battle.rgPlayer[i].flTimeSpeedModifier);
+                g_Battle.rgPlayer[i].flTimeSpeedModifier);
          break;
 
       case kFighterCom:
@@ -1293,17 +1293,17 @@ PAL_BattleStartFrame(
          if (g_Battle.rgPlayer[i].action.flRemainingTime <= 0 &&
             g_Battle.rgPlayer[i].sTurnOrder == -1)
          {
-	        sMax = -1;
+            sMax = -1;
 
-	        for (j = 0; j <= gpGlobals->wMaxPartyMemberIndex; j++)
-	        {
-		       if (g_Battle.rgPlayer[j].sTurnOrder > sMax)
-		       {
-			      sMax = g_Battle.rgPlayer[j].sTurnOrder;
-		       }
-	        }
+            for (j = 0; j <= gpGlobals->wMaxPartyMemberIndex; j++)
+            {
+               if (g_Battle.rgPlayer[j].sTurnOrder > sMax)
+               {
+                  sMax = g_Battle.rgPlayer[j].sTurnOrder;
+               }
+            }
 
-	        g_Battle.rgPlayer[i].sTurnOrder = sMax + 1;
+            g_Battle.rgPlayer[i].sTurnOrder = sMax + 1;
          }
 
          break;
@@ -1335,8 +1335,8 @@ PAL_BattleStartFrame(
             g_Battle.rgPlayer[i].sTurnOrder != -1 &&
             g_Battle.rgPlayer[i].sTurnOrder < sMax)
          {
-	        sMax = g_Battle.rgPlayer[i].sTurnOrder;
-	        sMaxIndex = i;
+            sMax = g_Battle.rgPlayer[i].sTurnOrder;
+            sMaxIndex = i;
          }
       }
 
@@ -1427,8 +1427,8 @@ PAL_BattleStartFrame(
                g_Battle.ActionQueue[j].wIndex = i;
                g_Battle.ActionQueue[j].wDexterity = PAL_GetEnemyDexterity(i);
                g_Battle.ActionQueue[j].wDexterity = F2int(
-					   F_mul_int(RandomFloat(f2F(0.9), f2F(1.1)),
-						   g_Battle.ActionQueue[j].wDexterity));
+                       F_mul_int(RandomFloat(f2F(0.9), f2F(1.1)),
+                           g_Battle.ActionQueue[j].wDexterity));
 
                j++;
 
@@ -1437,9 +1437,9 @@ PAL_BattleStartFrame(
                   g_Battle.ActionQueue[j].fIsEnemy = TRUE;
                   g_Battle.ActionQueue[j].wIndex = i;
                   g_Battle.ActionQueue[j].wDexterity = PAL_GetEnemyDexterity(i);
-				  g_Battle.ActionQueue[j].wDexterity = F2int(
-						  F_mul_int(RandomFloat(f2F(0.9), f2F(1.1)),
-							  g_Battle.ActionQueue[j].wDexterity));
+                  g_Battle.ActionQueue[j].wDexterity = F2int(
+                          F_mul_int(RandomFloat(f2F(0.9), f2F(1.1)),
+                              g_Battle.ActionQueue[j].wDexterity));
 
                   j++;
                }
@@ -1511,8 +1511,8 @@ PAL_BattleStartFrame(
                      wDexterity /= 2;
                   }
 
-				  wDexterity = F2int(F_mul_int(RandomFloat(f2F(0.9), f2F(1.1)),
-							  wDexterity));
+                  wDexterity = F2int(F_mul_int(RandomFloat(f2F(0.9), f2F(1.1)),
+                              wDexterity));
 
                   g_Battle.ActionQueue[j].wDexterity = wDexterity;
                }
@@ -1891,21 +1891,21 @@ PAL_BattleCommitAction(
 #ifndef PAL_CLASSIC
    if (g_Battle.rgPlayer[g_Battle.UI.wCurPlayerIndex].action.flRemainingTime <= 0)
    {
-	  SHORT sMax = -1;
+      SHORT sMax = -1;
 
-	  for (w = 0; w <= gpGlobals->wMaxPartyMemberIndex; w++)
-	  {
-		 if (g_Battle.rgPlayer[w].sTurnOrder > sMax)
-		 {
-			sMax = g_Battle.rgPlayer[w].sTurnOrder;
-		 }
-	  }
+      for (w = 0; w <= gpGlobals->wMaxPartyMemberIndex; w++)
+      {
+         if (g_Battle.rgPlayer[w].sTurnOrder > sMax)
+         {
+            sMax = g_Battle.rgPlayer[w].sTurnOrder;
+         }
+      }
 
-	  g_Battle.rgPlayer[g_Battle.UI.wCurPlayerIndex].sTurnOrder = sMax + 1;
+      g_Battle.rgPlayer[g_Battle.UI.wCurPlayerIndex].sTurnOrder = sMax + 1;
    }
    else
    {
-	  g_Battle.rgPlayer[g_Battle.UI.wCurPlayerIndex].sTurnOrder = -1;
+      g_Battle.rgPlayer[g_Battle.UI.wCurPlayerIndex].sTurnOrder = -1;
    }
 #endif
 }
@@ -3505,8 +3505,8 @@ PAL_BattlePlayerPerformAction(
 
                sDamage /= division;
 
-			   //sDamage = F2int(F_mul_int(RandomFloat(int2F(1), f2F(1.125)), sDamage));
-			   sDamage = F2int(F_mul_int(RandomFloat(int2F(1), 0x12000), sDamage));
+               //sDamage = F2int(F_mul_int(RandomFloat(int2F(1), f2F(1.125)), sDamage));
+               sDamage = F2int(F_mul_int(RandomFloat(int2F(1), 0x12000), sDamage));
 
                if (sDamage <= 0)
                {

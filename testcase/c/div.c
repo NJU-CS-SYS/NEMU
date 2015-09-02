@@ -19,9 +19,9 @@ static int i = 0;
 
 int main()
 {
-	for (i = 0; i < 6; i ++)
-	{
-		ASSERT(answer[i] == test_data[i] / DIV);
-	}
-	return 0;
+    for (i = 0; i < 6; i ++)
+    {
+        ASSERT(answer[i] == test_data[i] / DIV);
+    }
+    return 0;
 }

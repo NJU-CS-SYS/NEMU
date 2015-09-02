@@ -6,12 +6,12 @@ void add_irq_handle(int, void(*)(void));
 
 void
 init_kb(void) {
-	key_cnt = 0;
-	add_irq_handle(1, kb_handle);
+    key_cnt = 0;
+    add_irq_handle(1, kb_handle);
 }
 
 void
 kb_handle(void)
 {
-	key_cnt ++;
+    key_cnt ++;
 }
