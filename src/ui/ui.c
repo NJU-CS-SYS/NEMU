@@ -29,10 +29,10 @@ uint32_t calculate(char* e);
 void L1_print(swaddr_t addr);
 void L2_print(swaddr_t addr);
 uint32_t hwaddr_read(hwaddr_t,int);
-swaddr_t read_func_name(swaddr_t addr, swaddr_t *value);
+char *read_func_name(swaddr_t addr, swaddr_t *value);
 
 struct _frame_node {
-    swaddr_t name;
+    char *name;
     swaddr_t addr;
     struct _frame_node *next;
 };
@@ -268,14 +268,13 @@ static void cmd_bt()
 
     swaddr_t eip = cpu.eip;
     uint32_t ebp = cpu.ebp;
-    frame_node *head = 
-            (frame_node*)malloc(sizeof(frame_node));
-    head->name = (swaddr_t)"head";
+    frame_node *head = (frame_node*)malloc(sizeof(frame_node));
+    head->name = "head";
     head->addr = 0;
     head->next = NULL;
     frame_node *temp = NULL;
     do {
-        temp = (frame_node*)malloc(sizeof(frame_node));
+        temp = (frame_node *)malloc(sizeof(frame_node));
         temp->name = read_func_name(eip, &(temp->addr));
         temp->next = head->next;
         head->next = temp;
@@ -306,10 +305,10 @@ static void cmd_l2()
 }
 static void cmd_check()
 {
-    printf("L1 access times : %llu\n", L1_access);
-    printf("L1 hit times    : %llu\n", L1_hit);
-    printf("L2 access times : %llu\n", L2_access);
-    printf("L2 hit times    : %llu\n", L2_hit);
+    printf("L1 access times : %llu\n", (long long unsigned int)L1_access);
+    printf("L1 hit times    : %llu\n", (long long unsigned int)L1_hit);
+    printf("L2 access times : %llu\n", (long long unsigned int)L2_access);
+    printf("L2 hit times    : %llu\n", (long long unsigned int)L2_hit);
 }
 static void cmd_dir()
 {

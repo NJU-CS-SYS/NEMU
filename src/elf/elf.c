@@ -114,12 +114,12 @@ uint32_t get_sym_addr(char* str) {
     return 0;
 }
 
-swaddr_t read_func_name(swaddr_t addr, swaddr_t *value) {
+char *read_func_name(swaddr_t addr, swaddr_t *value) {
     int i;
     for (i = 0; i < nr_symtab_entry; i++)
         if (symtab[i].st_value <= addr && addr < symtab[i].st_value + symtab[i].st_size) {
             if (value != NULL) *value = symtab[i].st_value;
-            return (swaddr_t)(symtab[i].st_name + strtab);
+            return (symtab[i].st_name + strtab);
         }
-    return (swaddr_t)"no symbol found";
+    return "no symbol found";
 }

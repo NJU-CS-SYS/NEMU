@@ -3,7 +3,7 @@
 #include "cpu/modrm.h"
 #include "cpu/segment.h"
 
-swaddr_t read_func_name(swaddr_t addr, swaddr_t *value);
+char *read_func_name(swaddr_t addr, swaddr_t *value);
 
 #define DEBUG(name) \
 Log("esp in " str(name) " %x", cpu.esp)
@@ -20,8 +20,8 @@ make_helper(concat(call_rel_, SUFFIX)) {
         cpu.eip = eip;
      }
 
-    swaddr_t func_name = read_func_name(eip + 1 + DATA_BYTE, NULL);
-    print_asm("call" " %x <%s>", eip + 1 + DATA_BYTE, (char*)func_name);
+    char *func_name = read_func_name(eip + 1 + DATA_BYTE, NULL);
+    print_asm("call" " %x <%s>", eip + 1 + DATA_BYTE, func_name);
     return 1 + DATA_BYTE;
 }
 
