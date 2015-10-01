@@ -5,3 +5,5 @@
 !*.[cSh]
 !*.sh
 !.gitignore
+!libc.a
+!mm_malloc.o
