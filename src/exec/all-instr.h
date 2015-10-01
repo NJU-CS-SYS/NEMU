@@ -20,3 +20,5 @@
 
 #include "io/io.h"
 #include "io/hlt.h"
+
+#include "x87/x87.h"
