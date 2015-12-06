@@ -102,7 +102,11 @@ void init() {
 #endif
 
     /* Jump to init_cond() to continue initialization. */
+#if 1
     asm volatile("jmp *%0" : : "r"(init_cond));
+#else
+    init_cond();
+#endif
 
     /* Should never reach here. */
     nemu_assert(0);

@@ -25,6 +25,8 @@ typedef uint8_t bool;
 
 #include "debug.h"
 
+#define STOP asm volatile(".byte 0xcc")
+
 #endif
 
 #endif

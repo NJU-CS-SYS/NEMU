@@ -23,7 +23,7 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 extern int quiet;
 
-#define TRIGGER_INIT 0
+#define TRIGGER_INIT 1
 static int trigger = TRIGGER_INIT;
 
 void restart()
@@ -89,7 +89,7 @@ void cpu_exec(volatile uint32_t n)
         if (cpu.eip == main_entry) trigger = 1; 
 
         if( (n_temp != -1 || (enable_debug && !quiet)) && trigger ) {
-            if (cpu.eip >= 0x8000000 && cpu.eip <= 0xc0000000) {
+            if (1 || (cpu.eip >= 0x8000000 && cpu.eip <= 0xc0000000)) {
                 print_bin_instr(eip_temp, instr_len);
                 puts(assembly);
             }

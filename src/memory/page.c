@@ -41,6 +41,7 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 
     tlb_insert(addr, page_entry);
 
+#undef TEST_FREE
 #ifdef TEST_FREE
     if (trigger) {
         lnaddr.val = 0x81440e0;

@@ -310,26 +310,57 @@ static void cmd_check()
     printf("L2 access times : %llu\n", (long long unsigned int)L2_access);
     printf("L2 hit times    : %llu\n", (long long unsigned int)L2_hit);
 }
+
+#if 0
+static void print_table(uint32_t base, int indent)
+{
+    int i;
+    PDE temp;
+    for (i = 0; i < 4096; i = i + 4) {
+        temp.val = hwaddr_read(base + i, 4);
+        if (temp.present) {
+            printf("%*s%05x #=> %05x\n", indent, "", base + i, temp.page_frame);
+        }
+    }
+}
+#endif
 static void cmd_dir()
 {
-    char *p = strtok(NULL, "");
-    int n;
-    if (p == NULL) {
-        n = 1;
-    }
-    else n = strtol(p, NULL, 10);
-    int i;
     int base = cpu.cr3.page_directory_base << 12;
-    for (i = 0; i < n; i += 4) {
+    int i;
+    char *p = strtok(NULL, "");
+    if (p != NULL) base = strtoll(p, NULL, 16);
+    printf("base %05x\n", base);
+    for (i = 0; i < 4096; i += 4) {
         PDE temp;
         temp.val = hwaddr_read(base + i, 4);
-        printf("dir.no %04x    present %1x page talbe %05x\n", i, temp.present, temp.page_frame);
+        if (temp.present) {
+            printf("%05x #=> %05x\n", base + i, temp.page_frame);
+        }
     }
 }
 static void cmd_eip()
 {
     char *p = strtok(NULL, "");
     WATCH_EIP = strtoll(p, NULL, 16);
+}
+union {
+    struct {
+        uint32_t page_offset : 12;
+        uint32_t pte_idx : 10;
+        uint32_t pde_idx : 10;
+    };
+    uint32_t addr;
+} virtual_addr;
+
+hwaddr_t page_translate(lnaddr_t, int);
+static void cmd_pw()
+{
+    char *p = strtok(NULL, "");
+    int addr = strtoll(p, NULL, 16);
+    virtual_addr.addr = addr;
+    printf("pde %d pte %d page %x\n", virtual_addr.pde_idx, virtual_addr.pte_idx, virtual_addr.page_offset);
+    printf("%x #=> %x\n", addr, page_translate(addr, 4));
 }
 
 void main_loop()
@@ -362,6 +393,7 @@ void main_loop()
         else if(strcmp(p, "info") == 0) { cmd_info(); }
         else if(strcmp(p, "l1") == 0) { cmd_l1(); }
         else if(strcmp(p, "l2") == 0) { cmd_l2(); }
+        else if(strcmp(p, "pw") == 0) { cmd_pw(); }
         else if(strcmp(p, "dir") == 0) { cmd_dir(); }
         else if(strcmp(p, "e") == 0) { cmd_e(); }
         else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }

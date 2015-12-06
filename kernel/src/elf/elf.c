@@ -16,7 +16,6 @@ void create_video_mapping();
 uint32_t get_ucr3();
 
 uint32_t loader() {
-
     Elf32_Ehdr *elf;
     Elf32_Phdr *ph = NULL;
 
@@ -45,6 +44,7 @@ uint32_t loader() {
     
 #ifdef IA32_PAGE
             dest = (uint8_t *)mm_malloc((uint32_t)dest, memsz);
+            STOP;
 #endif
 
             /* Memory copy */
@@ -80,6 +80,7 @@ uint32_t loader() {
     create_video_mapping();
 #endif
 
+    STOP;
     write_cr3(get_ucr3());
 #endif
 
