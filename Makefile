@@ -3,7 +3,7 @@
 # please search the Internet, or RTFM.
 
 # setting compiler and compile options
-CC      = gcc
+CC      = gcc-4.8
 LD      = ld
 CFLAGS  = -ggdb -MD -Wall -Werror -fno-strict-aliasing -Wno-unused-result -I./include -O2
 
