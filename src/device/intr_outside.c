@@ -1,11 +1,17 @@
 #include "common.h"
-#include "sdl.h"
 #include "vga.h"
 #include "ui/ui.h"
 #include "keyboard.h"
 
 #include <sys/time.h>
 #include <signal.h>
+
+#define HAS_INTR(p) ( *(p) == 1 )
+const static uint32_t *p_intr = (uint32_t *)0x9000; // where stores intr_signal 
+const static uint32_t *p_ino = (uint32_t *)0x9999;  // where strores intr_no
+
+#define VMEM_ADDR 0xA000
+const static uint8_t *p_vmem = (uint8_t*)(VMEM_ADDR);
 
 extern uint8_t fontdata_8x16[128][16];
 uint8_t (*pixel_buf) [SCREEN_COL];
@@ -16,10 +22,6 @@ static uint64_t jiffy = 0;
 static struct itimerval it;
 extern void timer_intr();
 extern void update_screen();
-
-#define HAS_INTR(p) ( *(p) == 1 )
-const static uint32_t *p_intr = (uint32_t *)0x9000; // where stores intr_signal 
-const static uint32_t *p_ino = (uint32_t *)0x9999;  // where strores intr_no
 
 static void device_update(int signum) {
     jiffy ++;
@@ -49,13 +51,13 @@ static void device_update(int signum) {
     assert(ret == 0);
 }
 
-void sdl_clear_event_queue() {
-    SDL_Event event;
-    while(SDL_PollEvent(&event));
+// reserved
+void clear_event_queue() {
+
 }
 
-void init_sdl() {
-    //pixel_buf = screen->pixels;
+void init_intr() {
+    pixel_buf = p_vmem;
 
     struct sigaction s;
     memset(&s, 0, sizeof(s));

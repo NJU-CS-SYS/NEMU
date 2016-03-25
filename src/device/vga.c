@@ -27,8 +27,8 @@ static uint8_t vga_crtc_regs[19];
 #define VGA_CRTC_INDEX        0x3D4
 #define VGA_CRTC_DATA        0x3D5
 
-#define CTR_ROW 200
-#define CTR_COL 320
+#define CTR_ROW 1024
+#define CTR_COL 1280
 
 static void *vmem_base;
 bool vmem_dirty = false;
@@ -47,10 +47,6 @@ void vga_vmem_io_handler(hwaddr_t addr, size_t len, bool is_write) {
 void do_update_screen_graphic_mode() {
     int i, j;
     uint8_t (*vmem) [CTR_COL] = vmem_base;
-    SDL_Rect rect;
-    rect.x = 0;
-    rect.w = CTR_COL * 2;
-    rect.h = 2;
 
     for(i = 0; i < CTR_ROW; i ++) {
         if(line_dirty[i]) {
@@ -62,10 +58,8 @@ void do_update_screen_graphic_mode() {
                 draw_pixel(2 * j + 1, 2 * i + 1, color_idx);
             }
             rect.y = i * 2;
-            SDL_BlitSurface(screen, &rect, real_screen, &rect);
         }
     }
-    SDL_Flip(real_screen);
 }
 
 void update_screen() {
@@ -77,20 +71,8 @@ void update_screen() {
 }
 
 void vga_dac_io_handler(ioaddr_t addr, size_t len, bool is_write) {
-    static uint8_t *color_ptr; 
-    if(addr == VGA_DAC_WRITE_INDEX && is_write) {
-        color_ptr = (void *)&palette[ vga_dac_port_base[0] ];
-    }
-    else if(addr == VGA_DAC_DATA && is_write) {
-        *color_ptr++ = vga_dac_port_base[1] << 2;
-        if( (((void *)color_ptr - (void *)&screen->format->palette->colors) & 0x3) == 3) {
-            color_ptr ++;
-            if((void *)color_ptr == (void *)&palette[256]) {
-                SDL_SetPalette(real_screen, SDL_LOGPAL | SDL_PHYSPAL, (void *)&palette, 0, 256);
-                SDL_SetPalette(screen, SDL_LOGPAL, (void *)&palette, 0, 256);
-            }
-        }
-    }
+   // something about sdl and I can't handle
+    assert(1);
 }
 
 void vga_crtc_io_handler(ioaddr_t addr, size_t len, bool is_write) {
