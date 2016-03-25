@@ -16,6 +16,7 @@ uint32_t loader();
 void video_mapping_write_test();
 void video_mapping_read_test();
 void video_mapping_clear();
+void prepare_buffer();
 extern uint32_t brk;
 
 void fun_color(void);
@@ -45,6 +46,9 @@ void init_cond() {
 
     /* Initialize the keyboard. */
     init_kb();
+
+    /* Initialize the vedio memory buffer */
+    prepare_buffer();
 #endif
 
 #ifdef IA32_PAGE
@@ -73,6 +77,7 @@ void init_cond() {
 
     /* Clear the test data we just written in the video memory. */
     video_mapping_clear();
+
 #endif
 
 #ifdef IA32_PAGE

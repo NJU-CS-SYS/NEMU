@@ -6,6 +6,8 @@
 /* There are no more than 16(actually, 3) kinds of hardward interrupts. */
 #define NR_HARD_INTR 16
 
+#define KEYBOARD_IRQ 1
+
 struct IRQ_t {
     void (*routine)(void);
     struct IRQ_t *next;
@@ -16,6 +18,7 @@ static struct IRQ_t *handles[NR_HARD_INTR];
 static int handle_count = 0;
 
 void do_syscall(TrapFrame *);
+extern void keyboard_event();
 
 void
 add_irq_handle(int irq, void (*func)(void) ) {
@@ -34,12 +37,19 @@ void irq_handle(TrapFrame *tf) {
 
     if (irq < 0) {
         panic("Unhandled exception!");
-    } else if (irq == 0x80) {
+    } 
+    else if (irq == 0x80) {
         do_syscall(tf);
-    } else if (irq < 1000) {
+    } 
+    else if (irq < 1000) {
         panic("Unexpected exception #%d at eip = %x", irq, tf->eip);
-    } else if (irq >= 1000) {
+    }
+    else if (irq == 1000 + KEYBOARD_IRQ) { // interrupt from keyboard
+        keyboard_event();
+    } 
+    else if (irq >= 1000) {
         int irq_id = irq - 1000;
+
         if (irq_id < NR_HARD_INTR);
         else {
             Log("irq id %x", irq_id);

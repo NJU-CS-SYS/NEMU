@@ -2,13 +2,12 @@
 #include "sdl.h"
 #include "vga.h"
 #include "ui/ui.h"
+#include "keyboard.h"
 
 #include <sys/time.h>
 #include <signal.h>
 
 extern uint8_t fontdata_8x16[128][16];
-SDL_Surface *real_screen;
-SDL_Surface *screen;
 uint8_t (*pixel_buf) [SCREEN_COL];
 
 #define TIMER_HZ 100
@@ -16,8 +15,11 @@ uint8_t (*pixel_buf) [SCREEN_COL];
 static uint64_t jiffy = 0;
 static struct itimerval it;
 extern void timer_intr();
-extern void keyboard_intr();
 extern void update_screen();
+
+#define HAS_INTR(p) ( *(p) == 1 )
+const static uint32_t *p_intr = (uint32_t *)0x9000; // where stores intr_signal 
+const static uint32_t *p_ino = (uint32_t *)0x9999;  // where strores intr_no
 
 static void device_update(int signum) {
     jiffy ++;
@@ -26,22 +28,19 @@ static void device_update(int signum) {
         update_screen();
     }
 
-    SDL_Event event;
-
-    while(SDL_PollEvent(&event)) {
-        // If a key was pressed
-        uint32_t sym = event.key.keysym.sym;
-        if( event.type == SDL_KEYDOWN ) {
-            keyboard_intr(sym2scancode[sym >> 8][sym & 0xff]);
-        }
-        else if( event.type == SDL_KEYUP ) {
-            keyboard_intr(sym2scancode[sym >> 8][sym & 0xff] | 0x80);
-        }
-
-        // If the user has Xed out the window
-        if( event.type == SDL_QUIT ) {
-            //Quit the program
-            exit(0);
+    if( HAS_INTR(p_intr) ) {
+        // gte the interrupt number
+        uint32_t intr_no = *p_ino;
+        if( intr_no == KEYBOARD_IRQ ) {
+            uint32_t code = get_scancode();
+            // KEYDOWN
+            if( key_type(code) == KEYDOWN ) {
+                keyboard_intr( scancode2byte(code) );
+            }
+            // KEYUP
+            else if( key_type(code) == KEYUP) {
+                keyboard_intr( scancode2byte(code) | 0x80);
+            }
         }
     }
 
@@ -56,27 +55,11 @@ void sdl_clear_event_queue() {
 }
 
 void init_sdl() {
-    int ret = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE);
-    assert(ret == 0);
-
-    real_screen = SDL_SetVideoMode(640, 400, 8, 
-            SDL_HWSURFACE | SDL_HWPALETTE | SDL_HWACCEL | SDL_ASYNCBLIT);
-
-    screen = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 400, 8,
-            real_screen->format->Rmask, real_screen->format->Gmask,
-            real_screen->format->Bmask, real_screen->format->Amask);
-    pixel_buf = screen->pixels;
-
-    SDL_SetPalette(real_screen, SDL_LOGPAL | SDL_PHYSPAL, (void *)&palette, 0, 256);
-    SDL_SetPalette(screen, SDL_LOGPAL, (void *)&palette, 0, 256);
-
-    SDL_WM_SetCaption("This is PA, not PAL.", NULL);
-
-    SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+    //pixel_buf = screen->pixels;
 
     struct sigaction s;
     memset(&s, 0, sizeof(s));
-    s.sa_handler = device_update;
+    s.sa_handler = device_update;  
     ret = sigaction(SIGVTALRM, &s, NULL);
     assert(ret == 0);
 
