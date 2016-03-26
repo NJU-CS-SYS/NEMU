@@ -1,6 +1,7 @@
 #include "x86.h"
 #include "common.h"
 #include "vga.h"
+#include <string.h>
 
 #define KEYBOARD_PORT 0x60
 #define KEYBOARD_IRQ 1
@@ -12,6 +13,7 @@ static int next_index = 0; // the last byte's index plus one
 
 void keyboard_event(void);
 void handle_key(uint8_t);
+char kcode2char(uint8_t);
 extern void add_irq_handle(int, void(*)(void));
 
 void init_kb() {
@@ -25,14 +27,15 @@ static inline int is_keydown(uint8_t code) {
 
 void keyboard_event() {
     int key_code = in_byte(KEYBOARD_PORT);
-    if( is_keydown(code) )
+    if( is_keydown(key_code) )
     	handle_key(key_code);
 }
 
 void handle_key(uint8_t code) {
     if( next_index < STREAM_SIZE ) {
       	char c = kcode2char(code);
-      	if( c != 0 ) {
+      	
+        if( c != 0 ) {
       		char cb[2] = {c, '\0'};
         	stdin_stream[next_index ++] = c;
         	draw_string(cb, cur_x, cur_y + 8, 15); // WHITE
@@ -59,7 +62,7 @@ char get_char() {
     return c;
 }
 
-char kcode2char(KCODE_TYPE code) {
+char kcode2char(uint8_t code) {
     switch(code) {
         case 0x70:
         case 0x45: return '0';
@@ -117,6 +120,7 @@ char kcode2char(KCODE_TYPE code) {
         case 0x22: return 'X';
         case 0x35: return 'Y';
         case 0x1A: return 'Z';
+        case 0x5A: return '\n';
         default: return 0;
     }
 }

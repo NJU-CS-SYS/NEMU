@@ -1,10 +1,7 @@
 #include "common.h"
 #include "x86.h"
-
-#define SCR_WIDTH  1280
-#define SCR_HEIGHT 1024
-#define SCR_SIZE ((SCR_WIDTH) * (SCR_HEIGHT))
-#define VMEM_ADDR  ((uint8_t*)0xA0000)
+#include <string.h>
+#include "vga.h"
 
 extern char font8x8_basic[128][8];
 

@@ -5,7 +5,6 @@
 void load_table();
 void main_loop();
 void init_device();
-void init_sdl();
 void set_main_args(int, char * []);
 void init_bp_pool();
 void init_regex();
@@ -53,7 +52,6 @@ int main(int argc, char *argv[]) {
 
     /* Initialization of device */
     init_device();
-    init_sdl();
 
     main_loop();
 

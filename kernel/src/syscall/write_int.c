@@ -5,7 +5,6 @@ int int2str(int num, char *buf, int buf_size);
 
 void write_int(int num) {
 	char buffer[20];
-	int len;
 
 	if( int2str(num, buffer, 20) ) {
 		draw_string(buffer, cur_x, cur_y + 8, WHITE);

@@ -1,10 +1,7 @@
 #include "common.h"
 #include "vga.h"
-#include "keyboard.h"
 
 extern char get_char();
-extern void draw_string();
-extern display_buffer();
 
 int str2int(char *b);
 

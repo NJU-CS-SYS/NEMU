@@ -8,7 +8,8 @@ int exec(swaddr_t);
 void load_prog();
 void init_dram();
 void tlb_init();
-void sdl_clear_event_queue();
+void device_update(int);
+void clear_event_queue();
 uint32_t i8259_query_intr();
 void i8259_ack_intr();
 void raise_intr(uint8_t);
@@ -57,7 +58,7 @@ void restart()
 
     trigger = TRIGGER_INIT;
 
-    sdl_clear_event_queue();
+    clear_event_queue();
 }
 
 void print_bin_instr(swaddr_t eip, int len)
@@ -131,6 +132,7 @@ void cpu_exec(volatile uint32_t n)
 
 int int_polling()
 {
+    device_update(FLAG_VAL(IF));
     if(cpu.INTR & FLAG_VAL(IF)) {
         uint32_t intr_no = i8259_query_intr();
         i8259_ack_intr();

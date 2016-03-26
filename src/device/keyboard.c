@@ -1,9 +1,9 @@
 #include "io/port-io.h"
 #include "device/i8259.h"
 #include "ui/ui.h"
+#include "keyboard.h"
 
 #define I8042_DATA_PORT 0x60
-#define KEYBOARD_IRQ 1
 
 #define KMEM_ADDR 0x9999
 
@@ -19,19 +19,20 @@ void keyboard_intr(uint8_t scancode) {
 }
 
 uint32_t get_scancode() {
-    return *( (uint32_t *)KMEM_ADDR );
+    uint32_t *p_kmem = (uint32_t *)KMEM_ADDR;
+    return *p_kmem;
 }
 
 uint8_t scancode2byte(uint32_t code) {
-    char (*p)[4] = (char *)(&code);
-    return code[0];
+    uint8_t *p = (uint8_t*)(&code);
+    return p[0];
 }
 
 int key_type(uint32_t code) {
-    char (*p)[4] = (char *)(&code);
-    if(code[1] == 0xf0)
+    uint8_t *p = (uint8_t *)(&code);
+    if(p[1] == 0xf0)
         return KEYUP;
-    else if(code[1] == 0x00)
+    else if(p[1] == 0x00)
         return KEYDOWN;
 
     return KEYUP;
