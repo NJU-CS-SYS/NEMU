@@ -65,22 +65,28 @@ void create_video_mapping() {
 }
 
 void video_mapping_write_test() {
-    int i;
-    uint32_t *buf = (void *)VMEM_ADDR;
-    for(i = 0; i < SCR_SIZE / 4; i ++) {
+    uint32_t i;
+    uint8_t *buf = (void *)VMEM_ADDR;
+    for(i = 0; i < SCR_SIZE; i ++) {
         buf[i] = i;
     }
 }
 
 void video_mapping_read_test() {
-    int i;
-    uint32_t *buf = (void *)VMEM_ADDR;
-    for(i = 0; i < SCR_SIZE / 4; i ++) {
-        assert(buf[i] == i);
+    uint32_t i;
+    uint8_t *buf = (void *)VMEM_ADDR;
+    for(i = 0; i < SCR_SIZE; i ++) {
+        assert(buf[i] == (uint8_t)i);
     }
 }
 
 void video_mapping_clear() {
-    memset((void *)VMEM_ADDR, 0, SCR_SIZE);
+    uint32_t i;
+    uint8_t *vmem_base = (uint8_t*)VMEM_ADDR;
+    Log("in video_mapping_clear");
+
+    for(i = 0; i < SCR_SIZE; i ++) {
+        vmem_base[i] = 0;
+    }
 }
 

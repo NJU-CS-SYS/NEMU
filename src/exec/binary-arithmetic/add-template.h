@@ -32,6 +32,8 @@ make_helper(concat(add_i82rm_, SUFFIX)) {
     else REG(m.R_M) = result;
 
 //    Log("src = %d, dest = %d, result = %d", src, dest, result);
+    if(eip == 0xc0101848)
+        printf("in add_i82rm_ eip: %x, len: %d\n", eip, len);
     return len;
 } 
 

@@ -41,7 +41,7 @@ void device_update(int if_flag) {
                 keyboard_intr( scancode2byte(code) | 0x80 );
             }
         }
-    }
+    }    
 }
 
 void clear_event_queue() {

@@ -81,11 +81,17 @@ void cpu_exec(volatile uint32_t n)
     for(; n > 0; n --) {
         swaddr_t eip_temp = cpu.eip;
         
+        int f = 0;
+
         int instr_len = exec(cpu.eip);
 
         if (cpu.eip == WATCH_EIP) nemu_state = TEST_INT;    
 
         cpu.eip += instr_len;
+        if(f) {
+            printf("cpu.eip %x\n", cpu.eip);
+            f = 0;
+        }
         
         if (cpu.eip == main_entry) trigger = 1; 
 

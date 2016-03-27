@@ -11,7 +11,8 @@ extern uint8_t *pixel_buf;
 
 static inline void draw_pixel(int x, int y, uint8_t color_idx) {
     assert(x >= 0 && x < SCREEN_COL && y >= 0 && y < SCREEN_ROW);
-    pixel_buf[(x << 8) + (x << 6) + y] = color_idx;
+    //pixel_buf[(x << 8) + (x << 6) + y] = color_idx;
+    printf("in draw_pixel, x=%d , y=%d \n", x, y);
 }
 
 #endif

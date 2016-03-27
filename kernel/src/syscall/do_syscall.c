@@ -2,6 +2,9 @@
 #include "trap.h"
 #include <sys/syscall.h>
 
+#define WRITE_INT 67
+#define READ_INT 66
+
 void add_irq_handle(int, void (*)(void));
 void mm_brk(uint32_t);
 void serial_printc(char);
@@ -28,6 +31,9 @@ int fs_open(char *filename, int flag);
 int fs_read(int fd, void *buf, int len);
 int fs_lseek(int fd, int offset, int whence);
 int fs_close(int fd);
+
+void write_int(int num);
+int read_int(char *prompt);
 void do_syscall(TrapFrame *tf)
 {
     switch(tf->eax) {
@@ -63,6 +69,15 @@ void do_syscall(TrapFrame *tf)
         case SYS_close:
                       tf->eax = fs_close(tf->ebx);
                       break;
+                      
+        case WRITE_INT:
+                        write_int((int)tf->ebx);
+                        assert(tf->ebx == 123);
+                        break;
+        case READ_INT: 
+                        tf->eax = read_int((char *)tf->ebx);
+                        assert(tf->eax == 1111111);
+                        break;
         default: 
                       panic("Unhandled system call: id = %d", tf->eax);
     }

@@ -51,11 +51,7 @@ void do_update_screen_graphic_mode() {
     for(i = 0; i < CTR_ROW; i ++) {
         if(line_dirty[i]) {
             for(j = 0; j < CTR_COL; j ++) {
-                uint8_t color_idx = vmem[i][j];
-                draw_pixel(2 * j, 2 * i, color_idx);
-                draw_pixel(2 * j, 2 * i + 1, color_idx);
-                draw_pixel(2 * j + 1, 2 * i, color_idx);
-                draw_pixel(2 * j + 1, 2 * i + 1, color_idx);
+                draw_pixel(j, i, vmem[j][i]);
             }
         }
     }
@@ -71,7 +67,7 @@ void update_screen() {
 
 void vga_dac_io_handler(ioaddr_t addr, size_t len, bool is_write) {
    // something about sdl and I can't handle
-    assert(1);
+   printf("in vga_dac_io_handler\n");
 }
 
 void vga_crtc_io_handler(ioaddr_t addr, size_t len, bool is_write) {

@@ -19,8 +19,9 @@ void keyboard_intr(uint8_t scancode) {
 }
 
 uint32_t get_scancode() {
-    uint32_t *p_kmem = (uint32_t *)KMEM_ADDR;
-    return *p_kmem;
+    //uint32_t *p_kmem = (uint32_t *)KMEM_ADDR;
+    //return *p_kmem;
+    return 0x00000045; // '1'
 }
 
 uint8_t scancode2byte(uint32_t code) {
