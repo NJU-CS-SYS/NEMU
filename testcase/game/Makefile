@@ -1,4 +1,4 @@
-CC = gcc-4.8
+CC = gcc
 CFLAGS = -m32 -MD -O2 -Wall -Werror -I./include -I../lib/newlib \
 		 -fno-builtin -fno-omit-frame-pointer -fno-stack-protector 
 LDFLAGS = -melf_i386
