@@ -4,10 +4,10 @@
 #include <string.h>
 #include "trap.h"
 
-static PDE kpdir[NR_PDE] align_to_page;                        // kernel page directory
-static PTE kptable[PHY_MEM / PAGE_SIZE] align_to_page;        // kernel page tables
+PDE kpdir[NR_PDE] align_to_page;                        // kernel page directory
+PTE kptable[PHY_MEM / PAGE_SIZE] align_to_page;        // kernel page tables
 
-inline PDE* get_kpdir() { return kpdir; }
+PDE* get_kpdir() { return kpdir; }
 
 /* set up page tables for kernel */
 void init_page(void)
