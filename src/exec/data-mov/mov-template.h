@@ -4,6 +4,9 @@
 #include "../template.h"
 #include "cpu/reg.h"
 #include "cpu/segment.h"
+#include "ui/ui.h"
+#include "nemu.h"
+
 void tlb_init();
 extern int Sreg;
 
@@ -182,6 +185,7 @@ make_helper(concat(movs_m2m_, SUFFIX)) {
     Log("cpu.esi %x", cpu.esi);
     Log("cpu.edi %x", cpu.edi);
     Sreg = DS;
+
     DATA_TYPE buf = MEM_R( cpu.esi );
     Sreg = ES;
     MEM_W( cpu.edi, buf );

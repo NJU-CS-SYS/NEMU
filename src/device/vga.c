@@ -82,5 +82,5 @@ void vga_crtc_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 void init_vga() {
     vga_dac_port_base = add_pio_map(VGA_DAC_WRITE_INDEX, 2, vga_dac_io_handler);
     vga_crtc_port_base = add_pio_map(VGA_CRTC_INDEX, 2, vga_crtc_io_handler);
-    vmem_base = add_mmio_map(0xa0000, 0x20000, vga_vmem_io_handler);
+    vmem_base = add_mmio_map(VMEM_ADDR, SCR_SIZE, vga_vmem_io_handler);
 }

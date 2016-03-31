@@ -48,5 +48,6 @@ void prepare_buffer() {
 }
 
 void display_buffer() {
+    Log("in display_buffer");
     asm volatile ("cld; rep movsl" : : "c"(SCR_SIZE / 8), "S"(vmem), "D"(VMEM_ADDR));
 }

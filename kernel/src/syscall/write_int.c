@@ -8,6 +8,8 @@ void write_int(int num) {
 
 	if( int2str(num, buffer, 20) ) {
 		draw_string(buffer, cur_x, cur_y + 8, WHITE);
+		
+		Log("in write_int, before display_buffer");
 		display_buffer();
 		cur_x += 8; // '\n'
 	}

@@ -6,10 +6,9 @@
 #define INTR_COME 1
 #define INTR_NOT_COME 0
 #define HAS_INTR(p) ( *(p) == INTR_COME )
-static uint32_t *p_intr = (uint32_t *)0x9000; // where stores intr_signal 
-static uint32_t *p_ino = (uint32_t *)0x9999;  // where strores intr_no
+//static uint32_t *p_intr = (uint32_t *)0x9000; // where stores intr_signal 
+//static uint32_t *p_ino = (uint32_t *)0x9999;  // where strores intr_no
 
-#define VMEM_ADDR 0xA000
 uint8_t *pixel_buf = (uint8_t*)(VMEM_ADDR);
 
 extern uint8_t fontdata_8x16[128][16];
@@ -20,6 +19,7 @@ static uint64_t jiffy = 0;
 extern void timer_intr();
 extern void update_screen();
 
+int simula_keydown = 0;
 void device_update(int if_flag) {
     jiffy ++;
     timer_intr();
@@ -27,7 +27,7 @@ void device_update(int if_flag) {
         update_screen();
     }
 
-    if( HAS_INTR(p_intr) && if_flag) {
+    /*if( HAS_INTR(p_intr) && if_flag) {
         // gte the interrupt number
         uint32_t intr_no = *p_ino;
         if( intr_no == KEYBOARD_IRQ ) {
@@ -41,9 +41,17 @@ void device_update(int if_flag) {
                 keyboard_intr( scancode2byte(code) | 0x80 );
             }
         }
-    }    
+    }*/
+    if(simula_keydown < 7) {
+        uint32_t code = get_scancode();
+        if( key_type(code) == KEYDOWN ) {
+            keyboard_intr( scancode2byte(code) );
+        }
+        simula_keydown ++;
+    }
+        
 }
 
 void clear_event_queue() {
-    *(p_intr) = INTR_NOT_COME;
+    //*(p_intr) = INTR_NOT_COME;
 }
