@@ -16,6 +16,13 @@
  * 50 +rw PUSH r32  PUSH register dword
  */
 
+#undef MEM_W
+#if DATA_BYTE == 2
+  #define MEM_W(x, y) swaddr_write(x, DATA_BYTE, y)
+#else
+  #define MEM_W(x, y) swaddr_write(x, 4, y)
+#endif
+
 make_helper(concat(push_, SUFFIX)) {
     int reg_code = instr_fetch(eip, 1) & 0x7;
     Sreg = SS;

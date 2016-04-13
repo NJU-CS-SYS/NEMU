@@ -9,8 +9,7 @@
 #define pa_to_page_frame(pa) (((pa) & 0xfffff000) >> 12)
 
 /* Use the function to get the start address of user page directory. */
-inline PDE* get_updir();
-inline PDE* get_kpdir();
+PDE* get_updir();
 static PTE vmem_ptable[ SCR_SIZE / PAGE_SIZE ] align_to_page;   // video memory page tables
 void create_video_mapping() {
     /* TODO: create an identical mapping from virtual memory area 

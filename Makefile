@@ -21,6 +21,7 @@ C_TEST_FILE_LIST = $(shell find testcase/c/ -name "*.c")
 #S_TEST_FILE_LIST = $(shell find testcase/asm/ -name "*.S")
 TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
 
+nemu: loader
 nemu: $(OBJS)
 	$(CC) -o nemu $(OBJS) $(CFLAGS) -lreadline -lSDL
 # -@git add -A --ignore-errors &> /dev/null # KEEP IT
@@ -35,7 +36,6 @@ loader:
 	cd $(LOADER_DIR) && make
 	objcopy -S -O binary $(LOADER_DIR)/loader loader
 	xxd -i loader > src/elf/loader.c
-	rm loader
 
 run: nemu $(TESTFILE)
 	./nemu  -d $(TESTFILE) 2>&1 | tee log.txt
@@ -50,13 +50,13 @@ test: nemu $(TEST_FILE_LIST)
 	bash all.sh $(TEST_FILE_LIST)
 
 
-STU_ID=131220159
-SHARED_FOLDER=/home/whz/submit/
+#STU_ID=131220159
+#SHARED_FOLDER=/home/whz/submit/
 
-submit: clean
-	cd testcase && make clean
-	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
-	mv ../$(STU_ID).tar.bz2 $(SHARED_FOLDER) || rm ../$(STU_ID).tar.bz2
+#submit: clean
+#	cd testcase && make clean
+#	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
+#	mv ../$(STU_ID).tar.bz2 $(SHARED_FOLDER) || rm ../$(STU_ID).tar.bz2
 
 -include $(OBJS:.o=.d)
 

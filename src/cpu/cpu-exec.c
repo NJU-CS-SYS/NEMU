@@ -2,7 +2,7 @@
 #include "nemu.h"
 #include <setjmp.h>
 
-#define LOADER_START 0x100000
+#define LOADER_START 0x200000
 
 int exec(swaddr_t);
 void load_prog();

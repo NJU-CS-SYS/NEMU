@@ -7,3 +7,4 @@
 !.gitignore
 !libc.a
 !mm_malloc.o
+src/elf/loader.c
