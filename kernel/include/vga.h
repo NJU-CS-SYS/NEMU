@@ -4,7 +4,7 @@
 #define SCR_WIDTH  1280
 #define SCR_HEIGHT 1024
 #define SCR_SIZE ((SCR_WIDTH) * (SCR_HEIGHT))
-#define VMEM_ADDR  (0xA0000)
+#define VMEM_ADDR  (0xE0000000)
 
 #define WHITE 15
 

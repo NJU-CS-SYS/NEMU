@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#define VMEM_ADDR 0xA000
+#define VMEM_ADDR (0xE0000000)
 #define SCREEN_ROW 1024
 #define SCREEN_COL 1280
 #define SCR_SIZE ((SCREEN_ROW) * (SCREEN_COL))

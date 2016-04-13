@@ -2,7 +2,7 @@
 #include "io/mmio.h"
 #include "lib/misc.h"
 
-#define MMIO_SPACE_MAX (1280 * 1024)
+#define MMIO_SPACE_MAX (1024 * 1280)
 #define NR_MAP 8
 
 static uint8_t mmio_space_pool[MMIO_SPACE_MAX];
