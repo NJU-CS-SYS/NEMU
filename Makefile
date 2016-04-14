@@ -61,7 +61,7 @@ test: nemu $(TEST_FILE_LIST)
 -include $(OBJS:.o=.d)
 
 clean:
-	-rm -f nemu $(OBJS) $(OBJS:.o=.d) log.txt 2> /dev/null
+	-rm -f nemu $(OBJS) $(OBJS:.o=.d) loader log.txt 2> /dev/null
 
 opt:
 	$ perf record ./nemu $(TESTFILE)
