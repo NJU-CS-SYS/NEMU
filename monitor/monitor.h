@@ -19,6 +19,6 @@ typedef struct {
 
 // Init the monitor structure from config file,
 // and do memry mapping.
-void monitor_init(Monitor *m, const char *config);
+void init_monitor(Monitor *m, const char *config);
 
 #endif // MONITOR_H
