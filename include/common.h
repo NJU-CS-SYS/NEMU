@@ -10,11 +10,11 @@
 
 // Overload the print functions.
 
-inline void npc_fprintf(FILE *file, const char *fmt, ...) { }
-inline void npc_fputc(char ch, FILE *fp) { }
-inline void npc_fputs(const char *s, FILE *fp) { }
-
 #define fprintf npc_fprintf
+
+void npc_fprintf(FILE *file, const char *fmt, ...);
+void npc_fputc(char ch, FILE *fp);
+void npc_fputs(const char *s, FILE *fp);
 
 #ifdef printf
 #undef printf
