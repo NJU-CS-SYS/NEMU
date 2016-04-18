@@ -5,7 +5,7 @@
 # setting compiler and compile options
 CC      = gcc
 LD      = ld
-CFLAGS  = -ggdb -MD -Wall -Werror -fno-strict-aliasing -Wno-unused-result -I./include -O2
+CFLAGS  = -ggdb -MD -Wall -Werror -fno-strict-aliasing -Wno-unused-result -I./include -O0
 CFLAGS += -I ./monitor
 
 # jyy always knows what you have done (*^__^*)
@@ -25,7 +25,7 @@ TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
 
 nemu: loader
 nemu: $(OBJS)
-	$(CC) -o nemu $(OBJS) $(CFLAGS) -lreadline -lSDL
+	$(CC) -o nemu $(OBJS) $(CFLAGS) -lSDL
 # -@git add -A --ignore-errors &> /dev/null # KEEP IT
 # -@while (test -e .git/index.lock); do sleep 0.1; done # KEEP IT
 # -@(echo "> compile" && uname -a && uptime && pstree -A) | git commit -F - $(GITFLAGS) # KEEP IT

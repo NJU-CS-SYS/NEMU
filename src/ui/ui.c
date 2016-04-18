@@ -6,8 +6,6 @@
 
 #include <signal.h>
 #include <stdlib.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 
 extern uint64_t L1_hit;
 extern uint64_t L2_hit;
@@ -38,28 +36,6 @@ struct _frame_node {
 };
 typedef struct _frame_node frame_node;
 static char previous[64];
-/* We use the readline library to provide more flexibility to read from stdin. */
-char* rl_gets()
-{ /* read line get string */
-    static char *line_read = NULL;
-
-    if (line_read) { /* why this statements needed? */
-        free(line_read);
-        line_read = NULL;
-    }
-
-    /* now line_read must be NULL */
-
-    line_read = readline("(nemu) ");
-
-    if (line_read && *line_read) {
-        add_history(line_read);
-    }
-
-    /* line_read points to sth and the string isn't \0 */
-
-    return line_read;
-}
 
 /* This function will be called when you press <C-c>. And it will return to 
  * where you press <C-c>. If you are interesting in how it works, please
@@ -363,12 +339,16 @@ static void cmd_pw()
     printf("%x #=> %x\n", addr, page_translate(addr, 4));
 }
 
+void npc_gets(char buf[], size_t size);  // NPC memory-mapped stdin
+
 void main_loop()
 {
-    char *cmd;
-    while(1) {
+    char cmd[1024] = {};
 
-        cmd = rl_gets();
+    while(1) {
+        printf("(nemu) ");
+        npc_gets(cmd, sizeof(cmd));
+
         char *p = strtok(cmd, " ");
 
         if (p == NULL) {

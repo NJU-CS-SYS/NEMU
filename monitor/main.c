@@ -7,8 +7,8 @@ void init_monitor(Monitor *m, const char *config);
 
 int main(int argc, char *argv[])
 {
-    if (argc < 2) {
-        fprintf(stderr, "USAGE: %s config-file", argv[0]);
+    if (argc < 3) {
+        fprintf(stderr, "USAGE: %s config-file type", argv[0]);
         exit(EXIT_FAILURE);
     }
 
@@ -17,9 +17,21 @@ int main(int argc, char *argv[])
 
     printf("Start monitor\n");
 
-    for (;;) {
-        system("clear");
-        fprintf(stderr, "%s", m.text_buffer);
-        sleep(1);
+    m.key_state->ready = 0;
+    if (atoi(argv[2])) {
+        for (;;) {
+            system("clear");
+            fprintf(stderr, "%s", m.text_buffer);
+            sleep(1);
+        }
+    }
+    else {
+        for (;;) {
+            printf("wait for consumption\n");
+            while (m.key_state->ready) ;
+            m.key_state->data = getchar();
+            printf("input %c\n", m.key_state->data);
+            m.key_state->ready = 1;
+        }
     }
 }
