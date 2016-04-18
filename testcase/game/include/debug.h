@@ -8,13 +8,13 @@
 
 
 #define Log(format, ...) \
-    printf("\33[1;35m[%s,%d,%s]" GAME_LABEL format "\33[0m\n", \
+    printf("[%s,%d,%s]" GAME_LABEL format "\n", \
 __FILE__, __LINE__, __func__, ## __VA_ARGS__) \
 
 #define panic(format, ...) \
 do { \
     cli(); \
-    Log("\33[1;31msystem panic: " format, ## __VA_ARGS__); \
+    Log("system panic: " format, ## __VA_ARGS__); \
     HIT_BAD_TRAP; \
 } while(0)
 
