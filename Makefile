@@ -6,6 +6,7 @@
 CC      = gcc
 LD      = ld
 CFLAGS  = -ggdb -MD -Wall -Werror -fno-strict-aliasing -Wno-unused-result -I./include -O2
+CFLAGS += -I ./monitor
 
 # jyy always knows what you have done (*^__^*)
 # whz: as PA(2014) is finished, I think there is no need to track my compilation behavior (*^_^*)
@@ -13,6 +14,7 @@ CFLAGS  = -ggdb -MD -Wall -Werror -fno-strict-aliasing -Wno-unused-result -I./in
 
 # target to compile
 CFILES  = $(shell find src/ -name "*.c")
+CFILES += $(filter-out monitor/main.c, $(shell find monitor/ -name "*.c"))
 OBJS    = $(CFILES:.c=.o)
 
 # test files
@@ -27,6 +29,11 @@ nemu: $(OBJS)
 # -@git add -A --ignore-errors &> /dev/null # KEEP IT
 # -@while (test -e .git/index.lock); do sleep 0.1; done # KEEP IT
 # -@(echo "> compile" && uname -a && uptime && pstree -A) | git commit -F - $(GITFLAGS) # KEEP IT
+
+MONITOR_SRC := $(shell find monitor/ -name "*.c")
+MONITOR_OBJ := $(MONITOR_SRC:.c=.o)
+monitor: $(MONITOR_OBJ)
+	$(CC) -o monitor.bin $(CFLAGS) $^
 
 $(TEST_FILE_LIST):
 	cd `dirname $@` && make
@@ -62,7 +69,7 @@ test: nemu $(TEST_FILE_LIST)
 
 clean:
 	-rm -f nemu $(OBJS) $(OBJS:.o=.d) loader log.txt 2> /dev/null
-
+	-rm monitor.bin $(shell find -type f -name "*.map") monitor/main.d monitor/main.o
 opt:
 	$ perf record ./nemu $(TESTFILE)
 
