@@ -19,9 +19,10 @@ NPC 完全采用内存映射方式进行 IO 操作，目前使用 monitor 模块
 
 ```
 $ make monitor
-$ ./monitor.bin monitor/config 0 # 启动键盘
-$ ./monitor.bin monitor/config 1 # 启动屏幕
-$ make go                        # 带参数启动 nemu
+# 下面三条命令在独立的终端中执行
+$ ./monitor.bin monitor/config key # 启动键盘
+$ ./monitor.bin monitor/config scr # 启动屏幕
+$ make go                          # 带参数启动 nemu
 ```
 
 `config` 文件记录了相关的设定，如屏幕尺寸等，格式如下：
