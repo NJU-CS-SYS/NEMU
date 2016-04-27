@@ -54,7 +54,6 @@ int main(int argc, char *argv[]) {
     init_signal();
     init_bp_pool();
     load_table();
-    init_L1();
 
 
     /* Test whether the 'CPU_state' structure is organized correctly. */

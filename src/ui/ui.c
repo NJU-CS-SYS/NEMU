@@ -279,13 +279,6 @@ static void cmd_l2()
     swaddr_t addr = strtol(strtok(NULL,""),NULL,16);
     L2_print(addr);
 }
-static void cmd_check()
-{
-    printf("L1 access times : %llu\n", (long long unsigned int)L1_access);
-    printf("L1 hit times    : %llu\n", (long long unsigned int)L1_hit);
-    printf("L2 access times : %llu\n", (long long unsigned int)L2_access);
-    printf("L2 hit times    : %llu\n", (long long unsigned int)L2_hit);
-}
 
 #if 0
 static void print_table(uint32_t base, int indent)
@@ -377,7 +370,6 @@ void main_loop()
         else if(strcmp(p, "dir") == 0) { cmd_dir(); }
         else if(strcmp(p, "e") == 0) { cmd_e(); }
         else if(strcmp(p, "reload") == 0) { cpu.eip = 0x100000; }
-        else if (strcmp(p, "check") == 0) { cmd_check(); }
         else if (strcmp(p, "eip") == 0) { cmd_eip(); }
         else { printf("Unknown command '%s'\n", p); }
     }
