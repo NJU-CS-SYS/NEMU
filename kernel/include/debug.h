@@ -9,13 +9,13 @@
 void printk(const char *, ...);
 
 #define Log(format, ...) \
-    printk("\33[1;35m[%s,%d,%s]" KERNEL_LABEL format "\33[0m\n", \
+    printk("[%s,%d,%s]" KERNEL_LABEL format "\n", \
             __FILE__, __LINE__, __func__, ## __VA_ARGS__); \
 
 #define panic(format, ...) \
 do { \
     cli(); \
-    Log("\33[1;31msystem panic: " format, ## __VA_ARGS__); \
+    Log("system panic: " format, ## __VA_ARGS__); \
     HIT_BAD_TRAP; \
 } while(0)
 

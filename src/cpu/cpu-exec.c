@@ -129,7 +129,7 @@ void cpu_exec(volatile uint32_t n)
                 free_all();
                 return;
             case TEST_INT:
-                printf("\33[1;32m---Stop to confirm, press `c' to continue---\33[0m\n");
+                printf("---Stop to confirm, press `c' to continue---\n");
                 fflush(stdout);
                 return;
         }

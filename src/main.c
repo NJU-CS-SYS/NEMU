@@ -1,5 +1,10 @@
 #include "common.h"
 
+#ifdef SYS_LAB
+#include "monitor.h"
+int global_use_std = 1;  // TODO cond-compile it
+#endif
+
 #include <unistd.h>
 
 void load_table();
@@ -12,6 +17,7 @@ void init_signal();
 void init_L1();
 void reg_test();
 
+Monitor monitor;
 int enable_debug = false;
 int quiet = false;
 
@@ -37,6 +43,9 @@ static void process_args(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
+    init_monitor(&monitor, "monitor/config");  // TODO cond-compile it and get from commandline
+    global_use_std = 0;  // TODO cond-compile it
+
     process_args(argc, argv);
 
     /* Perform some global initialization */

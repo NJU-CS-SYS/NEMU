@@ -45,7 +45,7 @@ make_helper(nemu_trap) {
             swaddr_write(cpu.ebp + 4 * 10, 4, cpu.eax);
             break;
         default:
-            printf("nemu: HIT \33[1;31m%s\33[0m TRAP at eip = 0x%08x\n\n", (cpu.eax == 0 ? "GOOD" : "BAD"), cpu.eip);
+            printf("nemu: HIT %s TRAP at eip = 0x%08x\n\n", (cpu.eax == 0 ? "GOOD" : "BAD"), cpu.eip);
             nemu_state = END;
     }
 
@@ -59,7 +59,7 @@ static int print_buffer(uint32_t ptr, size_t len)
     for (i = 0; i < len; i ++) {
         str_buffer[buffer_idx] = swaddr_read(ptr + i, 1);
         if ( str_buffer[buffer_idx] == '\n'  || str_buffer[buffer_idx] == '\0' ) {
-            printf("\33[1;32m%s\33[0m", str_buffer);
+            printf("%s", str_buffer);
             fflush(stdout);
             int cnt = strlen(str_buffer);
             memset(str_buffer, 0, 1024);

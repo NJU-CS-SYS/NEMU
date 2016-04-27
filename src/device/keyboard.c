@@ -2,6 +2,7 @@
 #include "device/i8259.h"
 #include "ui/ui.h"
 #include "keyboard.h"
+#include "monitor.h"
 
 #define I8042_DATA_PORT 0x60
 
@@ -50,3 +51,22 @@ void init_i8042() {
     newkey = false;
 }
 
+#include <stdlib.h>
+char npc_getc()
+{
+    extern volatile Monitor monitor;
+    while (!monitor.key_state->ready) ;
+    char ch = monitor.key_state->data;
+    monitor.key_state->ready = 0;
+    return ch;
+}
+
+void npc_gets(char buf[], size_t size)
+{
+    char ch;
+    char *end = buf + size - 1;
+    while ((ch = npc_getc()) != '\n' && buf < end) {
+        *buf++ = ch;
+    }
+    *buf = '\0';
+}
