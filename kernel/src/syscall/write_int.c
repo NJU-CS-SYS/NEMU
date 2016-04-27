@@ -31,5 +31,6 @@ int int2str(int num, char *buf, int buf_size) {
 	} while(num && i < buf_size - 1);
     buf[i] = '\0';
 
+    printk("In int2str %s\n", buf);
     return i;
 }

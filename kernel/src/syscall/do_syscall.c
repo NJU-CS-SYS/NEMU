@@ -3,7 +3,8 @@
 #include <sys/syscall.h>
 
 #define WRITE_INT 67
-#define READ_INT 66
+#define READ_INT  66
+#define WRITE_C   68
 
 void add_irq_handle(int, void (*)(void));
 void mm_brk(uint32_t);
@@ -33,6 +34,7 @@ int fs_lseek(int fd, int offset, int whence);
 int fs_close(int fd);
 
 void write_int(int num);
+void write_char(unsigned c);
 int read_int(char *prompt);
 void do_syscall(TrapFrame *tf)
 {
@@ -77,6 +79,9 @@ void do_syscall(TrapFrame *tf)
         case READ_INT: 
                         tf->eax = read_int((char *)tf->ebx);
                         assert(tf->eax == 1111111);
+                        break;
+        case WRITE_C:   
+                        write_char(tf->ebx);
                         break;
         default: 
                       panic("Unhandled system call: id = %d", tf->eax);
