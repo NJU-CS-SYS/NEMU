@@ -7,11 +7,7 @@
 #include <signal.h>
 #include <stdlib.h>
 
-extern uint64_t L1_hit;
-extern uint64_t L2_hit;
 extern uint64_t mem_access;
-extern uint64_t L2_access;
-extern uint64_t L1_access;
 extern uint32_t main_entry;
 
 int WATCH_EIP = 0;
@@ -24,8 +20,6 @@ void cpu_exec(uint32_t);
 void restart();
 void test_tokens(char* e);
 uint32_t calculate(char* e);
-void L1_print(swaddr_t addr);
-void L2_print(swaddr_t addr);
 uint32_t hwaddr_read(hwaddr_t,int);
 char *read_func_name(swaddr_t addr, swaddr_t *value);
 
@@ -269,16 +263,6 @@ static void cmd_bt()
         free(temp);
     }
 }
-static void cmd_l1()
-{
-    swaddr_t addr = strtol(strtok(NULL,""),NULL,16);
-    L1_print(addr);
-}
-static void cmd_l2()
-{
-    swaddr_t addr = strtol(strtok(NULL,""),NULL,16);
-    L2_print(addr);
-}
 
 #if 0
 static void print_table(uint32_t base, int indent)
@@ -364,8 +348,6 @@ void main_loop()
         else if(strcmp(p, "si") == 0) { cmd_si(); }
         else if(strcmp(p, "bt") == 0) { cmd_bt(); }
         else if(strcmp(p, "info") == 0) { cmd_info(); }
-        else if(strcmp(p, "l1") == 0) { cmd_l1(); }
-        else if(strcmp(p, "l2") == 0) { cmd_l2(); }
         else if(strcmp(p, "pw") == 0) { cmd_pw(); }
         else if(strcmp(p, "dir") == 0) { cmd_dir(); }
         else if(strcmp(p, "e") == 0) { cmd_e(); }

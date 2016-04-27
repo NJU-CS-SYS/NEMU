@@ -15,7 +15,6 @@ void set_main_args(int, char * []);
 void init_bp_pool();
 void init_regex();
 void init_signal();
-void init_L1();
 void reg_test();
 
 Monitor monitor;
