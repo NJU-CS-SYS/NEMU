@@ -3,9 +3,9 @@
 #include "ui/ui.h"
 #include "keyboard.h"
 
-#define INTR_COME 1
-#define INTR_NOT_COME 0
-#define HAS_INTR(p) ( *(p) == INTR_COME )
+//#define INTR_COME 1
+//#define INTR_NOT_COME 0
+//#define HAS_KEYBOARD_INTR(p) ( *(p) == INTR_COME )
 //static uint32_t *p_intr = (uint32_t *)0x9000; // where stores intr_signal 
 //static uint32_t *p_ino = (uint32_t *)0x9999;  // where strores intr_no
 
@@ -19,7 +19,6 @@ static uint64_t jiffy = 0;
 extern void timer_intr();
 extern void update_screen();
 
-int simula_keydown = 0;
 void device_update(int if_flag) {
     jiffy ++;
     timer_intr();
@@ -27,29 +26,17 @@ void device_update(int if_flag) {
         update_screen();
     }
 
-    /*if( HAS_INTR(p_intr) && if_flag) {
-        // gte the interrupt number
-        uint32_t intr_no = *p_ino;
-        if( intr_no == KEYBOARD_IRQ ) {
-            uint32_t code = get_scancode();
-            // KEYDOWN
-            if( key_type(code) == KEYDOWN ) {
-                keyboard_intr( scancode2byte(code) );
-            }
-            // KEYUP
-            else if( key_type(code) == KEYUP) {
-                keyboard_intr( scancode2byte(code) | 0x80 );
-            }
-        }
-    }*/
-    if(simula_keydown < 7) {
+    if(npc_keyboardintr() && if_flag) {
         uint32_t code = get_scancode();
+        // KEYDOWN
         if( key_type(code) == KEYDOWN ) {
             keyboard_intr( scancode2byte(code) );
         }
-        simula_keydown ++;
-    }
-        
+        // KEYUP
+        else if( key_type(code) == KEYUP) {
+            keyboard_intr( scancode2byte(code) | 0x80 );
+        }
+    }   
 }
 
 void clear_event_queue() {

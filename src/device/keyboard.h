@@ -9,5 +9,7 @@ uint32_t get_scancode();
 uint8_t scancode2byte(uint32_t);
 void keyboard_intr(uint8_t);
 int key_type(uint32_t);
+bool npc_keyboardintr();
+char npc_getchar();
 
 #endif
