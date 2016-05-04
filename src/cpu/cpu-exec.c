@@ -1,6 +1,16 @@
 #include "ui/ui.h"
 #include "nemu.h"
+
+#ifndef DEPLOY
+
 #include <setjmp.h>
+jmp_buf jbuf;    /* Make it easy to perform exception handling */
+
+#else
+
+#define setjmp(...)
+
+#endif
 
 #define LOADER_START 0x200000
 
@@ -17,7 +27,6 @@ extern int WATCH_EIP;
 extern uint32_t main_entry;
 char assembly[40];
 char *asm_string = (char *)assembly;
-jmp_buf jbuf;    /* Make it easy to perform exception handling */
 
 extern uint8_t loader [];
 extern uint32_t loader_len;
