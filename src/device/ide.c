@@ -2,12 +2,26 @@
 #include "io/port-io.h"
 #include "device/i8259.h"
 #include "cpu/reg.h"
+
+// FIXME 暂时删除文件操作，
+// 我们并没有准备好通过 NPC 对外存进行控制，
+// 所以目前准备像内核那样处理应用程序，即将二进制文件制作成 C 数组参与 NEMU 的编译。
+// （2015 级 PA 将内核/loader也作为外部文件进行读取，现在看来取用 2014 级 PA 开了顺路倒车……）
+
+#ifdef DEPLOY
+
+#define fwrite(...)
+#define fread(...)
+#define fseek(...)
+#define fopen(...) NULL
+
+#endif // ifndef DEPLOY
+
 #define IDE_CTRL_PORT 0x3F6
 #define IDE_PORT 0x1F0
 #define IDE_IRQ 14
 
 static uint8_t *ide_port_base;
-
 static uint32_t sector, disk_idx;
 static uint32_t byte_cnt;
 static bool ide_write;
@@ -32,8 +46,6 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
             disk_idx = sector << 9;
             fseek(disk_fp, disk_idx, SEEK_SET);
             
-            //printf("%x: disk_idx = %x, sector = %x, intr %x\n", cpu.eip, disk_idx, sector, cpu.INTR);
-
             byte_cnt = 0;
 
             if(ide_port_base[7] == 0x20) {
@@ -60,15 +72,15 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
             }
         }
     }
-    //printf("file pos : %ld, eip : %x, intr %x\n", ftell(disk_fp), cpu.eip, cpu.INTR);
 }
 
 void init_ide() {
     ide_port_base = add_pio_map(IDE_PORT, 8, ide_io_handler);
     ide_port_base[7] = 0x40;
 
+#ifndef DEPLOY
     extern char *exec_file;
+#endif
     disk_fp = fopen(exec_file, "r+");
-    printf("file pos : %ld\n", ftell(disk_fp));
     assert(disk_fp);
 }
