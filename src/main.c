@@ -6,14 +6,10 @@ int global_use_std = 1;  // 控制输出目标的开关，用于在模拟器初�
 Monitor monitor;
 #endif
 
-void load_table();
 void main_loop();
 void init_device();
 void init_sdl();
 void set_exec_file(const char *filename);
-void init_bp_pool();
-void init_regex();
-void init_signal();
 void init_L1();
 
 int enable_debug = false;
@@ -41,16 +37,10 @@ int main(int argc, char *argv[]) {
 #endif
 #endif
 
-    set_exec_file(argv[1]);
-
     enable_debug = true;
     quiet = false;
 
     /* Perform some global initialization */
-    init_regex();
-    init_signal();
-    init_bp_pool();
-    load_table();
     init_L1();
 
     /* Initialization of device */
