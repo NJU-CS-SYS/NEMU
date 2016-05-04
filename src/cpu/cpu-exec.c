@@ -19,6 +19,7 @@ void init_dram();
 void tlb_init();
 uint32_t i8259_query_intr();
 void i8259_ack_intr();
+void load_prog(void);
 void raise_intr(uint8_t);
 
 char assembly[40];
@@ -51,6 +52,8 @@ void restart()
     cpu.gdtr.limit = 0;
     cpu.gdtr.base = 0;
     cpu.cr[0] = 0; // Set PE to 0
+
+    load_prog();
 
     init_dram();
 }

@@ -8,3 +8,4 @@
 !libc.a
 !mm_malloc.o
 src/elf/loader.c
+src/elf/testfile.c
