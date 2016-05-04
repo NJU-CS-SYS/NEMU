@@ -28,6 +28,7 @@ void init_i8042() {
     newkey = false;
 }
 
+#ifdef SYS_LAB
 #include <stdlib.h>
 char npc_getc()
 {
@@ -47,3 +48,4 @@ void npc_gets(char buf[], size_t size)
     }
     *buf = '\0';
 }
+#endif

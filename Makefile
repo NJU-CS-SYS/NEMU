@@ -45,13 +45,10 @@ loader:
 	xxd -i loader > src/elf/loader.c
 
 run: nemu $(TESTFILE)
-	./nemu -d $(TESTFILE) 2>&1 | tee log.txt
-
-go: nemu $(TESTFILE)
 	./nemu $(TESTFILE) 2>&1 | tee log.txt
 
 gdb: nemu $(TESTFILE)
-	gdb --args ./nemu -dq $(TESTFILE)
+	gdb --args ./nemu $(TESTFILE)
 
 test: nemu $(TEST_FILE_LIST)
 	bash all.sh $(TEST_FILE_LIST)

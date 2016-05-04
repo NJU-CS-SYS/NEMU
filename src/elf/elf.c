@@ -4,24 +4,21 @@
 #include <elf.h>
 #include <sys/stat.h>
 
-static int main_argc;
-static char **main_argv;
-char *exec_file;
+const char *exec_file;
 
 static char *strtab = NULL;
 static Elf32_Sym *symtab = NULL;
 static int nr_symtab_entry;
 uint32_t main_entry;
 
-void set_main_args(int argc, char *argv[]) {
-    main_argc = argc;
-    main_argv = argv;
-    exec_file = main_argv[0];
+void set_exec_file(const char *filename) {
+    exec_file = filename;
 }
 
 /* Load symbol table and string table from ELF file for future use.
  * For detail information, please refer to "man elf". */
 void load_table() {
+    Log("%s", exec_file);
     FILE *fp = fopen(exec_file, "rb");
     test(fp, "file not exist!");
 

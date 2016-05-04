@@ -339,15 +339,22 @@ static void cmd_pw()
     printf("%x #=> %x\n", addr, page_translate(addr, 4));
 }
 
+#ifdef SYS_LAB
 void npc_gets(char buf[], size_t size);  // NPC memory-mapped stdin
+#endif
 
 void main_loop()
 {
     char cmd[1024] = {};
 
     while(1) {
-        printf("(nemu) ");
+        fprintf(stderr, "(nemu) ");
+#ifdef SYS_LAB
         npc_gets(cmd, sizeof(cmd));
+#else
+        fgets(cmd, sizeof(cmd), stdin);
+        cmd[strlen(cmd) - 1] = '\0';
+#endif
 
         char *p = strtok(cmd, " ");
 
