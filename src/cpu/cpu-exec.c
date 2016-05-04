@@ -56,8 +56,6 @@ void restart()
     bp_state = INIT;
 
     trigger = TRIGGER_INIT;
-
-    sdl_clear_event_queue();
 }
 
 void print_bin_instr(swaddr_t eip, int len)
