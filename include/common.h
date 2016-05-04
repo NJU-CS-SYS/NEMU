@@ -3,8 +3,13 @@
 
 #include "debug.h"
 #include "macro.h"
+#include <stdint.h>
+#include <assert.h>
+#include <string.h>
 
-//#define SYS_LAB
+
+#define SYS_LAB
+#define DEPLOY
 
 #ifdef SYS_LAB
 
@@ -37,11 +42,32 @@ void npc_fputs(const char *s, FILE *fp);
 
 #define puts(s) npc_fputs(s, stdout)
 
+#ifdef stdin
+#undef stdin
 #endif
+#define stdin  NULL
 
-#include <stdint.h>
-#include <assert.h>
-#include <string.h>
+#ifdef stdout
+#undef stdout
+#endif
+#define stdout NULL
+
+#ifdef stderr
+#undef stderr
+#endif
+#define stderr NULL
+
+#ifdef assert
+#undef assert
+#endif
+#define assert(expr) do {} while (!(expr))
+
+#ifdef fflush
+#undef fflush
+#endif
+#define fflush(x) do {} while (0)
+
+#endif
 
 typedef uint8_t bool;
 typedef uint32_t hwaddr_t;

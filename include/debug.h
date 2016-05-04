@@ -24,10 +24,11 @@
 extern int enable_debug;
 
 #define Log(format,...) \
-    (enable_debug ?  \
-     fprintf(stdout, "%s,%s,%d: " format "\n", \
-         __FILE__, __func__, __LINE__, ## __VA_ARGS__), \
-     fflush(stdout) \
-     : (void)0)
+    do { \
+        if (enable_debug) { \
+            fprintf(stdout, "%s,%s,%d: " format "\n", __FILE__, __func__, __LINE__, ## __VA_ARGS__); \
+            fflush(stdout); \
+        } \
+    } while (0)
 
 #endif

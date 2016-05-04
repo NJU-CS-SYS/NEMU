@@ -6,7 +6,7 @@ CC      = $(ARCH)gcc
 LD      = $(ARCH)ld
 DUMP    = $(ARCH)objdump
 
-CFLAGS  = -MD -Wall -Werror -fno-strict-aliasing -Wno-unused-result -I./include -I ./monitor -O3 -static
+CFLAGS  = -std=gnu11 -static -MD -Wall -Werror -fno-stack-protector -Wno-unused-result -I./include -I ./monitor -O0
 
 # target to compile
 CFILES  = $(shell find src/ -name "*.c")
@@ -21,6 +21,20 @@ TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
 
 LOADER_DIR = kernel
 LOADER = $(LOADER_DIR)/loader
+
+LIBC = $(shell $(CC) -print-file-name=libc.a)
+LIBGCC = $(shell $(CC) -print-file-name=libgcc.a)
+LIBGCC_EH = $(shell $(CC) -print-file-name=libgcc_eh.a)
+
+# 生成用户态 MIPS 大端目标代码
+#$(LD) -m elf32btsmip -e main $(filter-out monitor/monitor.o, $(OBJS)) $(LIBC) $(LIBGCC) $(LIBGCC_EH) $(LIBC) -o mips-nemu
+mono: $(LOADER) $(OBJS)
+	$(LD) -m elf32btsmip -e main $(filter-out monitor/monitor.o, $(OBJS)) $(LIBGCC) -o mips-nemu
+
+# 只产生可重定位文件，据此先统计不引入标准库时指令使用情况，
+# 然后观察需要提供哪些标准库函数(LIGGCC 用于提供 GCC 内置函数实现）。
+mono.o: $(LOADER) $(OBJS)
+	$(LD) -r $(filter-out monitor/monitor.o, $(OBJS)) $(LIBGCC) -o mips.o
 
 nemu: $(LOADER)
 nemu: $(OBJS) $(LOADER)
