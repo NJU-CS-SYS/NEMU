@@ -9,8 +9,8 @@
 
 #define TIMER_HZ 100
 
-// TODO: 使用 timer_intr() 处理时间中断
-// TODO: 使用 keyboard_intr() 处理键盘中断
+extern void timer_intr();                   // TODO: 使用 timer_intr() 处理时间中断
+extern void keyboard_intr(uint8_t keycode); // TODO: 使用 keyboard_intr() 处理键盘中断
 
 static struct itimerval it = {};
 
