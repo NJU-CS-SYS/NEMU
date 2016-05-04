@@ -348,7 +348,8 @@ void main_loop()
     char cmd[1024] = {};
 
     while(1) {
-        fprintf(stderr, "(nemu) ");
+        printf("(nemu) ");
+        fflush(stdout);
 #ifdef SYS_LAB
         npc_gets(cmd, sizeof(cmd));
 #else

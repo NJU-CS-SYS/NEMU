@@ -4,7 +4,7 @@
 #include "debug.h"
 #include "macro.h"
 
-#define SYS_LAB
+//#define SYS_LAB
 
 #ifdef SYS_LAB
 

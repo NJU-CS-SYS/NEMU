@@ -13,6 +13,7 @@ extern void keyboard_intr();
 static struct itimerval it = {};
 
 static void device_update(int signum) {
+    return;
     printf("time event!");
     timer_intr();
 
