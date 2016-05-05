@@ -49,8 +49,9 @@ monitor: $(MONITOR_OBJ)
 
 src/elf/loader.c: $(shell find kernel/* -type f -name "*.[chS]")
 	cd $(LOADER_DIR) && make
-	objcopy -S -O binary $(LOADER)
-	xxd -i $(LOADER) > src/elf/loader.c
+	objcopy -S -O binary $(LOADER) loader
+	xxd -i loader > src/elf/loader.c
+	rm loader
 
 src/elf/testfile.c: $(shell find `dirname $(TESTFILE)`/* -type f -name "*.[chS]")
 	cd `dirname $(TESTFILE)` && make
