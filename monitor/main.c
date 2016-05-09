@@ -38,6 +38,18 @@ int main(int argc, char *argv[])
             if (kill(*(m.pid), SIGUSR1) == -1) perror("");
         }
     }
+    else if (!strcmp(argv[2], "timer")) {
+        // 0.5s
+        struct timeval tv;
+        tv.tv_sec = 0;
+        tv.tv_usec = 500 * 1000;
+        for (;;) {
+            select(0, NULL, NULL, NULL, &tv);
+            if (*(m.pid) == 0) continue;
+            if (kill(*(m.pid), SIGUSR2) == -1) perror("");
+            else puts("timer");
+        }
+    }
     else {
         fprintf(stderr, "Unknown type '%s'\n", argv[2]);
         exit(EXIT_FAILURE);

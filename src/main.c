@@ -12,6 +12,7 @@ int global_use_std = 1;  // 控制输出目标的开关，用于在模拟器初�
 #include <signal.h>  // sigaction & etc.
 
 void kb_callback(int unused);
+void timer_callback(int unused);
 
 #endif
 
@@ -51,7 +52,10 @@ int main(int argc, char *argv[]) {
     if (sigaction(SIGUSR1, &sa, NULL) == -1) {
         perror(NULL);
     }
-
+    sa.sa_handler = timer_callback;
+    if (sigaction(SIGUSR2, &sa, NULL) == -1) {
+        perror(NULL);
+    }
     pid_t pid = getpid();  // 之后进行深拷贝，所以使用临时变量即可。
     init_monitor(&monitor, "monitor/config", &pid);
     global_use_std = 0;
