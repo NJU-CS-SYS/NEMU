@@ -21,11 +21,11 @@ int quiet = false;
 #ifdef DEPLOY
 ssize_t write(int fd, const void *buf, size_t count) { return 0; }
 ssize_t read(int fd, void *buf, size_t count) { return 0; }
-void *sbrk(void *i) { return NULL; }
+void *sbrk(int *i) { return NULL; }
 off_t lseek(int fd, off_t offset, int whence) { return 0; }
 int fstat(int fd, void *buf) { return 0; }
 int isatty(int fd) { return 0; }
-void close(int fd) {}
+int close(int fd) { return 0; }
 #endif
 
 int main(int argc, char *argv[]) {

@@ -8,8 +8,7 @@
 #include <string.h>
 
 
-//#define SYS_LAB
-//#define DEPLOY
+#define SYS_LAB
 
 #ifdef SYS_LAB
 
