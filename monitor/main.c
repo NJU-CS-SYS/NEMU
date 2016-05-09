@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
-void init_monitor(Monitor *m, const char *config);
+#include <signal.h>
+#include <sys/select.h>
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     }
 
     Monitor m;
-    init_monitor(&m, argv[1]);
+    init_monitor(&m, argv[1], NULL);
 
     printf("Start monitor\n");
 
@@ -28,12 +28,14 @@ int main(int argc, char *argv[])
         }
     }
     else if (!strcmp(argv[2], "key")) {
+        m.key_state->ready = 0;
         for (;;) {
-            printf("wait for consumption\n");
-            while (m.key_state->ready) ;
+            while (m.key_state->ready) {}
+            printf("inputed %c\n", m.key_state->data);
+            printf("input:\n");
             m.key_state->data = getchar();
-            printf("input %c\n", m.key_state->data);
             m.key_state->ready = 1;
+            if (kill(*(m.pid), SIGUSR1) == -1) perror("");
         }
     }
     else {

@@ -1,6 +1,7 @@
-640         // Height in pixels
-192         // Width in pixels
+560         // Height in pixels
+240         // Width in pixels
 8           // Font height in pixels
 8           // Font width in pixels
 screen.map  // the filename used for mapping text buffer
 key.map     // the filename used for mapping key state
+pid.map     // the filename used for mapping pid used to send signals

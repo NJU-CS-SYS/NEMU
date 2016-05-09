@@ -74,6 +74,9 @@ typedef uint32_t lnaddr_t;
 typedef uint32_t swaddr_t;
 typedef int16_t ioaddr_t;
 
+#ifdef DEPLOY
+typedef int pid_t;
+#endif
 
 /* boolean */
 #define false 0

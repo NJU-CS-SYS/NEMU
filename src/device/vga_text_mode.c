@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+#include <unistd.h>
 
 #ifdef SYS_LAB
 
@@ -20,7 +21,7 @@ static int curr_col = 0;
 void npc_fputc(char ch, FILE *fp)
 {
     if (global_use_std) {
-        fputc(ch, fp);
+        write(2, &ch, sizeof(ch));
     }
     else {
         if (curr_line == HEIGHT) {

@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <signal.h>
 
 static void *create_mapping_file(const char *filename, size_t length)
 {
@@ -34,16 +35,17 @@ static void *create_mapping_file(const char *filename, size_t length)
     return map;
 }
 
-void init_monitor(Monitor *m, const char *path_to_config)
+void init_monitor(Monitor *m, const char *path_to_config, pid_t *pid)
 {
     FILE *config = fopen(path_to_config, "r");
     if (config == NULL) {
         perror("fopen");
         exit(EXIT_FAILURE);
     }
-    
+
     char screen_map_file[256];
     char key_map_file[256];
+    char pid_map_file[256];
 
     // Parse config file
     {
@@ -61,6 +63,9 @@ void init_monitor(Monitor *m, const char *path_to_config)
         fgets(linebuf, sizeof(linebuf), config);
         sscanf(linebuf, "%s", key_map_file);
 
+        fgets(linebuf, sizeof(linebuf), config);
+        sscanf(linebuf, "%s", pid_map_file);
+
         m->width = size_info[idx_scr_w] / size_info[idx_font_w];
         m->height = size_info[idx_scr_h] / size_info[idx_font_h];
 
@@ -70,5 +75,7 @@ void init_monitor(Monitor *m, const char *path_to_config)
     // Memory mapping
     m->text_buffer = create_mapping_file(screen_map_file, sizeof(m->text_buffer[0]) * (m->width * m->height + 1));
     m->key_state = create_mapping_file(key_map_file, sizeof(*(m->key_state)));
+    m->pid = create_mapping_file(pid_map_file, sizeof(*(m->pid)));
+    if (pid != NULL) *(m->pid) = *pid;
 }
 
