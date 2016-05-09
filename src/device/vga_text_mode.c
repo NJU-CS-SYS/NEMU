@@ -16,7 +16,7 @@ static int curr_col = 0;
 
 void npc_fputc(char ch, FILE *fp)
 {
-    if (global_use_std) {
+    if (global_use_std && fp != NULL) {
         fputc(ch, fp);
     }
     else {

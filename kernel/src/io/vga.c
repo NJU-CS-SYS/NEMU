@@ -18,7 +18,7 @@ static inline void draw_pixel(int x, int y, int color) {
 void draw_character(char ch, int x, int y, int color) {
     assert((ch & 0x80) == 0); // is not a ASCII character
 
-    int i, j;
+    /*int i, j;
     char *p = font8x8_basic[(int)ch];
     for (i = 0; i < 8; i ++) 
         for (j = 0; j < 8; j ++) 
@@ -27,6 +27,10 @@ void draw_character(char ch, int x, int y, int color) {
 
     cur_x = x;
     cur_y = y;
+    */
+    
+    // to monitor
+    vmem[0] = ch;
 }
 
 void draw_string(const char *str, int x, int y, int color) {
@@ -49,5 +53,5 @@ void prepare_buffer() {
 
 void display_buffer() {
     Log("in display_buffer");
-    asm volatile ("cld; rep movsl" : : "c"(SCR_SIZE / 8), "S"(vmem), "D"(VMEM_ADDR));
+    asm volatile ("cld; rep movsl" : : "c"(SCR_SIZE), "S"(vmem), "D"(VMEM_ADDR));
 }
