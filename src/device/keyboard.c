@@ -34,6 +34,7 @@ void init_i8042() {
     newkey = false;
 }
 
+#ifdef SYS_LAB
 #include <stdlib.h>
 bool npc_keyboardintr() {
     extern volatile Monitor monitor;
@@ -108,3 +109,4 @@ uint8_t char2keycode(char c) {
         default  : return 0;
     }
 }
+#endif

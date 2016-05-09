@@ -1,8 +1,11 @@
+#include "common.h"
 #include "monitor.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
+
+#ifdef SYS_LAB
 
 extern Monitor monitor;
 extern int global_use_std; // TODO cond-compile it
@@ -63,3 +66,5 @@ void npc_fprintf(FILE *fp, const char *fmt, ...)
     va_end(args);
     npc_fputs_chomp(str, fp);
 }
+
+#endif

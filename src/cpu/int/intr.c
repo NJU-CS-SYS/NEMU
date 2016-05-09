@@ -1,4 +1,3 @@
-#include <setjmp.h>
 #include "common.h"
 
 #include "cpu/reg.h"
@@ -7,7 +6,13 @@
 #include "stack.h"
 #include "ui/ui.h"
 
+#ifndef DEPLOY
+#include <setjmp.h>
 extern jmp_buf jbuf;
+#else
+#define longjmp(...) do {} while (0)
+#endif
+
 extern uint32_t main_entry;
 
 void raise_intr(uint8_t NO)
