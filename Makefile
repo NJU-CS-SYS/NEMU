@@ -1,77 +1,83 @@
-# **** GNU make manual: http://www.gnu.org/software/make/manual/make.html ****
-# If you have questions about the follwing Makefile script, 
-# please search the Internet, or RTFM.
+# Cross compilation toggle
 
 # setting compiler and compile options
-CC      = gcc
-LD      = ld
-CFLAGS  = -ggdb -MD -Wall -Werror -fno-strict-aliasing -Wno-unused-result -I./include -O0
-CFLAGS += -I ./monitor
+# ARCH 前缀在特定的 target 下会设置成交叉编译工具链的前缀
+CC      = $(ARCH)gcc
+LD      = $(ARCH)ld
+DUMP    = $(ARCH)objdump
 
-# jyy always knows what you have done (*^__^*)
-# whz: as PA(2014) is finished, I think there is no need to track my compilation behavior (*^_^*)
-#GITFLAGS = -q --author='jyy <njujiangyy@gmail.com>' --no-verify --allow-empty
+CFLAGS  = -std=gnu11 -static -MD -Wall -Werror -fno-stack-protector -Wno-unused-result -I./include -I ./monitor -O0
 
-# target to compile
-CFILES  = $(shell find src/ -name "*.c")
+CFILES  = src/elf/loader.c src/elf/testfile.c
+CFILES := $(CFILES) $(filter-out $(CFILES), $(shell find src/ -name "*.c"))
 CFILES += $(filter-out monitor/main.c, $(shell find monitor/ -name "*.c"))
 OBJS    = $(CFILES:.c=.o)
 
-# test files
-TESTFILE = testcase/game/game
-C_TEST_FILE_LIST = $(shell find testcase/c/ -name "*.c")
-#S_TEST_FILE_LIST = $(shell find testcase/asm/ -name "*.S")
-TEST_FILE_LIST = $(C_TEST_FILE_LIST:.c=) $(S_TEST_FILE_LIST:.S=)
+TESTFILE = testcase/c/quick-sort
 
-nemu: loader
+LOADER_DIR = kernel
+LOADER = $(LOADER_DIR)/loader
+
+LIBC = $(shell $(CC) -print-file-name=libc.a)
+LIBGCC = $(shell $(CC) -print-file-name=libgcc.a)
+LIBGCC_EH = $(shell $(CC) -print-file-name=libgcc_eh.a)
+
+# 在特定目标下使用特定类型工具链，减少对 Makefile 的修改
+nemu_on_npc.o nemu_on_npc: ARCH = mips-linux-gnu-
+
+# 只产生可重定位文件，据此先统计不引入标准库时指令使用情况，
+# 然后观察需要提供哪些标准库函数(LIGGCC 用于提供 GCC 内置函数实现）。
+nemu_on_npc.o: $(OBJS)
+	$(LD) -r $(filter-out monitor/monitor.o, $(OBJS)) $(LIBGCC) -o $@
+	$(DUMP) -d $@ > $@.txt
+
+# 生成用户态 MIPS 大端目标代码
+#$(LD) -m elf32btsmip -e main $(filter-out monitor/monitor.o, $(OBJS)) $(LIBC) $(LIBGCC) $(LIBGCC_EH) $(LIBC) -o mips-nemu
+nemu_on_npc: $(OBJS)
+	$(LD) -m elf32btsmip -e main $(filter-out monitor/monitor.o, $(OBJS)) $(LIBGCC) -o $@
+	$(DUMP) -d $@ > $@.txt
+
 nemu: $(OBJS)
-	$(CC) -o nemu $(OBJS) $(CFLAGS) -lSDL
-# -@git add -A --ignore-errors &> /dev/null # KEEP IT
-# -@while (test -e .git/index.lock); do sleep 0.1; done # KEEP IT
-# -@(echo "> compile" && uname -a && uptime && pstree -A) | git commit -F - $(GITFLAGS) # KEEP IT
+	$(CC) -o nemu $(OBJS) $(CFLAGS)
+	$(DUMP) -d $@ > $@.txt
 
 MONITOR_SRC := $(shell find monitor/ -name "*.c")
 MONITOR_OBJ := $(MONITOR_SRC:.c=.o)
+
 monitor: $(MONITOR_OBJ)
 	$(CC) -o monitor.bin $(CFLAGS) $^
 
-$(TEST_FILE_LIST):
-	cd `dirname $@` && make
-
-LOADER_DIR = kernel
-loader:
+src/elf/loader.c: $(shell find kernel/* -type f -name "*.[chS]")
 	cd $(LOADER_DIR) && make
-	objcopy -S -O binary $(LOADER_DIR)/loader loader
+	objcopy -S -O binary $(LOADER) loader
 	xxd -i loader > src/elf/loader.c
+	rm loader
 
-run: nemu $(TESTFILE)
-	./nemu -d $(TESTFILE) 2>&1 | tee log.txt
+src/elf/testfile.c: $(shell find `dirname $(TESTFILE)`/* -type f -name "*.[chS]")
+	cd `dirname $(TESTFILE)` && make
+	mv $(TESTFILE) testfile
+	xxd -i testfile > $@
+	rm testfile
 
-go: nemu $(TESTFILE)
-	./nemu $(TESTFILE) 2>&1 | tee log.txt
+run: nemu
+	./nemu 2>&1 | tee log.txt
 
-gdb: nemu $(TESTFILE)
-	gdb --args ./nemu -dq $(TESTFILE)
-
-test: nemu $(TEST_FILE_LIST)
-	bash all.sh $(TEST_FILE_LIST)
-
-
-#STU_ID=131220159
-#SHARED_FOLDER=/home/whz/submit/
-
-#submit: clean
-#	cd testcase && make clean
-#	cd .. && tar cvj $(shell pwd | grep -o '[^/]*$$') > $(STU_ID).tar.bz2
-#	mv ../$(STU_ID).tar.bz2 $(SHARED_FOLDER) || rm ../$(STU_ID).tar.bz2
+gdb: nemu
+	gdb ./nemu
 
 -include $(OBJS:.o=.d)
 
 clean:
-	-rm -f nemu $(OBJS) $(OBJS:.o=.d) loader log.txt 2> /dev/null
-	-rm monitor.bin $(shell find -type f -name "*.map") monitor/main.d monitor/main.o
-opt:
-	$ perf record ./nemu $(TESTFILE)
+	-rm -f nemu monitor.bin nemu_on_npc nemu_on_npc.o 2> /dev/null
+	-rm $(OBJS)
+	-cd $(LOADER_DIR) && make clean
+	-cd testcase && make clean
+	-rm -f $(shell find -type f -name "*.d")
+	-rm -f $(shell find -type f -name "*.txt")
+	-rm -f $(shell find -type f -name "*.map")
+
+opt: nemu
+	perf record ./nemu
 
 rep:
-	$ perf report -i perf.data
+	perf report -i perf.data
