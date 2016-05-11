@@ -9,19 +9,15 @@
 static uint8_t *i8042_data_port_base;
 static bool newkey;
 
-void keyboard_intr(uint8_t scancode) {
+void keyboard_intr(uint8_t c) {
     if(nemu_state == RUNNING && newkey == false) {
-        i8042_data_port_base[0] = scancode;
+        i8042_data_port_base[0] = c;
         i8259_raise_intr(KEYBOARD_IRQ);
         newkey = true;
     }
 }
 
 uint8_t char2keycode(char c);
-uint8_t get_scancode() {
-    char c = npc_getchar();
-    return char2keycode(c);
-}
 
 void i8042_io_handler(ioaddr_t addr, size_t len, bool is_write) {
     if(!is_write) {
@@ -43,7 +39,9 @@ bool npc_keyboardintr() {
 
 char npc_getchar() {
     extern volatile Monitor monitor;
-    char ch = monitor.key_state->data;
+    char c = monitor.key_state->data;
+    uint8_t scancode = char2keycode(ch);
+    char ch  = kcode2char(scancode); 
     monitor.key_state->ready = 0;
     return ch;
 }
@@ -65,6 +63,69 @@ void npc_gets(char buf[], size_t size)
         *buf++ = ch;
     }
     *buf = '\0';
+}
+
+char kcode2char(uint8_t code) {
+    switch(code) {
+        case 0x70:
+        case 0x45: return '0';
+
+        case 0x69:
+        case 0x16: return '1';
+        
+        case 0x72:
+        case 0x1E: return '2';
+        
+        case 0x7A:
+        case 0x26: return '3';
+        
+        case 0x6B:
+        case 0x25: return '4';
+        
+        case 0x73:
+        case 0x2E: return '5';
+        
+        case 0x74:
+        case 0x36: return '6';
+        
+        case 0x6C:
+        case 0x3D: return '7';
+        
+        case 0x75:
+        case 0x3E: return '8';
+        
+        case 0x7D:
+        case 0x46: return '9';
+        
+        case 0x1C: return 'A';
+        case 0x32: return 'B';
+        case 0x21: return 'C';
+        case 0x23: return 'D';
+        case 0x24: return 'E';
+        case 0x2B: return 'F';
+        case 0x34: return 'G';
+        case 0x33: return 'H';
+        case 0x43: return 'I';
+        case 0x3B: return 'J';
+        case 0x42: return 'K';
+        case 0x4B: return 'L';
+        case 0x3A: return 'M';
+        case 0x31: return 'N';
+        case 0x44: return 'O';
+        case 0x4D: return 'P';
+        case 0x15: return 'Q';
+        case 0x2D: return 'R';
+        case 0x1B: return 'S';
+        case 0x2C: return 'T';
+        case 0x3C: return 'U';
+        case 0x2A: return 'V';
+        case 0x1D: return 'W';
+        case 0x22: return 'X';
+        case 0x35: return 'Y';
+        case 0x1A: return 'Z';
+        case 0x5A: return '\n';
+        default: return 0;
+    }
 }
 
 uint8_t char2keycode(char c) {

@@ -7,8 +7,7 @@ int str2int(char *b);
 
 int read_int(char *prompt) {
 	// display prompt	
-	draw_string(prompt, cur_x, cur_y + 8, WHITE);
-	display_buffer();
+	draw_string(prompt);
 
 	// read
 	char buffer[20];

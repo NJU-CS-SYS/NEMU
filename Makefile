@@ -23,7 +23,7 @@ LIBGCC = $(shell $(CC) -print-file-name=libgcc.a)
 LIBGCC_EH = $(shell $(CC) -print-file-name=libgcc_eh.a)
 
 # 在特定目标下使用特定类型工具链，减少对 Makefile 的修改
-nemu_on_npc.o nemu_on_npc: ARCH = mips-linux-gnu-
+#nemu_on_npc.o nemu_on_npc: ARCH = mips-linux-gnu-
 
 # 只产生可重定位文件，据此先统计不引入标准库时指令使用情况，
 # 然后观察需要提供哪些标准库函数(LIGGCC 用于提供 GCC 内置函数实现）。

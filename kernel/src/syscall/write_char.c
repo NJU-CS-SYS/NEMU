@@ -7,9 +7,5 @@ void write_char(unsigned c) {
 	buffer[1] = c_byte;
 	buffer[0] = 0;
 
-	draw_string(buffer, cur_x, cur_y + 8, WHITE);
-		
-	Log("in write_char, before display_buffer");
-	display_buffer();
-	cur_x += 8; // '\n'
+	draw_string(buffer);
 }

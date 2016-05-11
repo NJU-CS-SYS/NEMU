@@ -12,7 +12,7 @@ static char stdin_stream[STREAM_SIZE];
 static int next_index = 0; // the last byte's index plus one
 
 void keyboard_event(void);
-void handle_key(uint8_t);
+void handle_key(char);
 char kcode2char(uint8_t);
 extern void add_irq_handle(int, void(*)(void));
 
@@ -21,25 +21,17 @@ void init_kb() {
 	add_irq_handle(KEYBOARD_IRQ, keyboard_event);
 }
 
-static inline int is_keydown(uint8_t code) {
-	return ( (code & 0x80) == 0x80 ) ? 0 : 1; 
-}
-
 void keyboard_event() {
-    int key_code = in_byte(KEYBOARD_PORT);
-    if( is_keydown(key_code) )
-    	handle_key(key_code);
+    char key = in_byte(KEYBOARD_PORT);
+    handle_key(key);
 }
 
-void handle_key(uint8_t code) {
+void handle_key(char c) {
     if( next_index < STREAM_SIZE ) {
-      	char c = kcode2char(code);
-      	
         if( c != 0 ) {
       		char cb[2] = {c, '\0'};
         	stdin_stream[next_index ++] = c;
-        	draw_string(cb, cur_x, cur_y + 8, 15); // WHITE
-        	display_buffer(); // display the pressing key
+        	draw_string(cb); // WHITE
         }
     }
 }

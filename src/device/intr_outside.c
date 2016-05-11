@@ -10,8 +10,8 @@ extern void timer_intr();
 void device_update(int if_flag) {
     if(npc_keyboardintr() && if_flag) {
         // KEYDOWN
-        uint8_t code = get_scancode();
-        keyboard_intr( code );
+        char c = npc_getchar();
+        keyboard_intr(c);
     }   
 }
 
