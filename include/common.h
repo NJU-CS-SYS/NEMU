@@ -8,8 +8,7 @@
 #include <string.h>
 
 
-//#define SYS_LAB
-//#define DEPLOY
+#define SYS_LAB
 
 #ifdef SYS_LAB
 
@@ -75,6 +74,9 @@ typedef uint32_t lnaddr_t;
 typedef uint32_t swaddr_t;
 typedef int16_t ioaddr_t;
 
+#ifdef DEPLOY
+typedef int pid_t;
+#endif
 
 /* boolean */
 #define false 0

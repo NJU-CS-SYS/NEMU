@@ -1,3 +1,4 @@
+#include "common.h"
 #include "device/i8259.h"
 #include "ui/ui.h"
 
@@ -14,4 +15,10 @@ void timer_intr() {
 
 void init_timer() {
     count = 0;
+}
+
+static int rt_cnt = 0;  // real timer counter
+void timer_callback(int unused)
+{
+    printf("timer event %d\n", rt_cnt++);
 }

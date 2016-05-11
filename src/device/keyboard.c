@@ -32,10 +32,6 @@ void init_i8042() {
 
 #ifdef SYS_LAB
 #include <stdlib.h>
-bool npc_keyboardintr() {
-    extern volatile Monitor monitor;
-    return monitor.key_state->ready;
-}
 
 char npc_getchar() {
     extern volatile Monitor monitor;
@@ -46,12 +42,17 @@ char npc_getchar() {
     return ch;
 }
 
+#define KEY_BUF_MAX 128
+static char key_buf[KEY_BUF_MAX];
+static int key_buf_head = 0;  // inclusive
+static int key_buf_tail = 0;  // exclusive
+
 char npc_getc()
 {
-    extern volatile Monitor monitor;
-    while (!monitor.key_state->ready) ;
-    char ch = monitor.key_state->data;
-    monitor.key_state->ready = 0;
+    // Read a char as soon as the input buffer is available.
+    while (key_buf_head == key_buf_tail) {}
+    char ch = key_buf[key_buf_head++];
+    if (key_buf_head == KEY_BUF_MAX) key_buf_head = 0;
     return ch;
 }
 
@@ -169,5 +170,13 @@ uint8_t char2keycode(char c) {
         case '\n': return 0x5A;
         default  : return 0;
     }
+
+// 键盘事件回调函数 / 中断处理函数
+void kb_callback(int unused)
+{
+    extern Monitor monitor;
+    key_buf[key_buf_tail++] = monitor.key_state->data;
+    if (key_buf_tail == KEY_BUF_MAX) key_buf_tail = 0;
+    monitor.key_state->ready = 0;
 }
 #endif
