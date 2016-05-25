@@ -56,7 +56,7 @@ void restart()
 
     load_prog();
 
-    trigger = TRIGGER_INIT;
+   // trigger = TRIGGER_INIT;
 
     init_dram();
 }
@@ -111,7 +111,6 @@ void cpu_exec(volatile uint32_t n)
 
 int int_polling()
 {
-    device_update(FLAG_VAL(IF));
     if(cpu.INTR & FLAG_VAL(IF)) {
         uint32_t intr_no = i8259_query_intr();
         i8259_ack_intr();

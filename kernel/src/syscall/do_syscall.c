@@ -5,6 +5,7 @@
 #define WRITE_INT 67
 #define READ_INT  66
 #define WRITE_C   68
+#define READ_C    69
 
 void add_irq_handle(int, void (*)(void));
 void mm_brk(uint32_t);
@@ -36,6 +37,8 @@ int fs_close(int fd);
 void write_int(int num);
 void write_char(unsigned c);
 int read_int(char *prompt);
+char read_char();
+
 void do_syscall(TrapFrame *tf)
 {
     switch(tf->eax) {
@@ -74,14 +77,15 @@ void do_syscall(TrapFrame *tf)
                       
         case WRITE_INT:
                         write_int((int)tf->ebx);
-                        assert(tf->ebx == 123);
                         break;
         case READ_INT: 
                         tf->eax = read_int((char *)tf->ebx);
-                        assert(tf->eax == 1111111);
                         break;
         case WRITE_C:   
                         write_char(tf->ebx);
+                        break;
+        case READ_C:   
+                        tf->eax = read_char();
                         break;
         default: 
                       panic("Unhandled system call: id = %d", tf->eax);

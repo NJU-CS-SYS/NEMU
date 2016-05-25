@@ -13,6 +13,7 @@ int read_int(char *prompt) {
 	char buffer[20];
 	int i = 0;
 	char c;
+	
 	while( (c = get_char()) != '\n' ) {
 		buffer[i ++] = c;
 	}
@@ -27,4 +28,11 @@ int str2int(char *str) {
 		str ++;
 	}
 	return n;
+}
+
+char read_char() {
+	Log("kernel read_char before get_char\n");
+	char c = get_char();
+	Log("read_char got char\n");
+	return c;
 }

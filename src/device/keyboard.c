@@ -5,8 +5,13 @@
 #include "monitor.h"
 
 #define I8042_DATA_PORT 0x60
+#define I8042_BUF_HEAD_PORT 0x76
+#define I8042_BUF_TAIL_PORT 0x77
 
 static uint8_t *i8042_data_port_base;
+static uint8_t *key_buf_head_port;
+static uint8_t *key_buf_tail_port;
+
 static bool newkey;
 
 void keyboard_intr(uint8_t c) {
@@ -18,41 +23,61 @@ void keyboard_intr(uint8_t c) {
 }
 
 uint8_t char2keycode(char c);
-
-void i8042_io_handler(ioaddr_t addr, size_t len, bool is_write) {
-    if(!is_write) {
-        newkey = false;
-    }
-}
-
-void init_i8042() {
-    i8042_data_port_base = add_pio_map(I8042_DATA_PORT, 1, i8042_io_handler);
-    newkey = false;
-}
+char kcode2char(uint8_t code);
 
 #ifdef SYS_LAB
 #include <stdlib.h>
-
-char npc_getchar() {
-    extern volatile Monitor monitor;
-    char c = monitor.key_state->data;
-    uint8_t scancode = char2keycode(ch);
-    char ch  = kcode2char(scancode); 
-    monitor.key_state->ready = 0;
-    return ch;
-}
 
 #define KEY_BUF_MAX 128
 static char key_buf[KEY_BUF_MAX];
 static int key_buf_head = 0;  // inclusive
 static int key_buf_tail = 0;  // exclusive
 
+char buf_read() {
+    char c = key_buf[key_buf_head ++];
+    if (key_buf_head == KEY_BUF_MAX) key_buf_head = 0; 
+    key_buf_head_port[0] = key_buf_head;
+    return c;
+}
+
+void buf_write(char c) {
+    key_buf[key_buf_tail ++] = c;
+    if (key_buf_tail == KEY_BUF_MAX) key_buf_tail = 0; 
+    key_buf_tail_port[0] = key_buf_tail;
+}
+
+void i8042_io_handler(ioaddr_t addr, size_t len, bool is_write) {
+    if(!is_write) {
+        newkey = false;   
+        // remove the read char in npc buffer, it is already read through PORT
+        buf_read();
+    }
+}
+
+void buf_head_io_handler(ioaddr_t addr, size_t len, bool is_write) {
+    if(is_write) {
+        key_buf_head = key_buf_head_port[0];
+    }
+}
+
+void buf_tail_io_handler(ioaddr_t addr, size_t len, bool is_write) {
+    if(is_write) {
+        key_buf_tail = key_buf_tail_port[0];
+    }
+}
+void init_i8042() {
+    i8042_data_port_base = add_pio_map(I8042_DATA_PORT, KEY_BUF_MAX, i8042_io_handler);
+    key_buf_head_port    = add_pio_map(I8042_BUF_HEAD_PORT, 1, buf_head_io_handler);
+    key_buf_tail_port    = add_pio_map(I8042_BUF_TAIL_PORT, 1, buf_tail_io_handler);
+    newkey = false;
+}
+
 char npc_getc()
 {
     // Read a char as soon as the input buffer is available.
     while (key_buf_head == key_buf_tail) {}
-    char ch = key_buf[key_buf_head++];
-    if (key_buf_head == KEY_BUF_MAX) key_buf_head = 0;
+    char ch = buf_read();
+    
     return ch;
 }
 
@@ -98,32 +123,32 @@ char kcode2char(uint8_t code) {
         case 0x7D:
         case 0x46: return '9';
         
-        case 0x1C: return 'A';
-        case 0x32: return 'B';
-        case 0x21: return 'C';
-        case 0x23: return 'D';
-        case 0x24: return 'E';
-        case 0x2B: return 'F';
-        case 0x34: return 'G';
-        case 0x33: return 'H';
-        case 0x43: return 'I';
-        case 0x3B: return 'J';
-        case 0x42: return 'K';
-        case 0x4B: return 'L';
-        case 0x3A: return 'M';
-        case 0x31: return 'N';
-        case 0x44: return 'O';
-        case 0x4D: return 'P';
-        case 0x15: return 'Q';
-        case 0x2D: return 'R';
-        case 0x1B: return 'S';
-        case 0x2C: return 'T';
-        case 0x3C: return 'U';
-        case 0x2A: return 'V';
-        case 0x1D: return 'W';
-        case 0x22: return 'X';
-        case 0x35: return 'Y';
-        case 0x1A: return 'Z';
+        case 0x1C: return 'a';
+        case 0x32: return 'b';
+        case 0x21: return 'c';
+        case 0x23: return 'd';
+        case 0x24: return 'e';
+        case 0x2B: return 'f';
+        case 0x34: return 'g';
+        case 0x33: return 'h';
+        case 0x43: return 'i';
+        case 0x3B: return 'j';
+        case 0x42: return 'k';
+        case 0x4B: return 'l';
+        case 0x3A: return 'm';
+        case 0x31: return 'n';
+        case 0x44: return 'o';
+        case 0x4D: return 'p';
+        case 0x15: return 'q';
+        case 0x2D: return 'r';
+        case 0x1B: return 's';
+        case 0x2C: return 't';
+        case 0x3C: return 'u';
+        case 0x2A: return 'v';
+        case 0x1D: return 'w';
+        case 0x22: return 'x';
+        case 0x35: return 'y';
+        case 0x1A: return 'z';
         case 0x5A: return '\n';
         default: return 0;
     }
@@ -141,42 +166,48 @@ uint8_t char2keycode(char c) {
         case '7': return 0x3D;
         case '8': return 0x3E;
         case '9': return 0x46;
-        case 'A': return 0x1C;
-        case 'B': return 0x32;        
-        case 'C': return 0x21;
-        case 'D': return 0x23;
-        case 'E': return 0x24;
-        case 'F': return 0x2B;
-        case 'G': return 0x34;
-        case 'H': return 0x33;
-        case 'I': return 0x43;
-        case 'J': return 0x3B;
-        case 'K': return 0x42;
-        case 'L': return 0x4B;
-        case 'M': return 0x3A;
-        case 'N': return 0x31;
-        case 'O': return 0x44;
-        case 'P': return 0x4D;
-        case 'Q': return 0x15;
-        case 'R': return 0x2D;
-        case 'S': return 0x1B;
-        case 'T': return 0x2C;
-        case 'U': return 0x3C;
-        case 'V': return 0x2A;
-        case 'W': return 0x1D;
-        case 'X': return 0x22;
-        case 'Y': return 0x35;
-        case 'Z': return 0x1A;
+        case 'a': return 0x1C;
+        case 'b': return 0x32;        
+        case 'c': return 0x21;
+        case 'd': return 0x23;
+        case 'e': return 0x24;
+        case 'f': return 0x2B;
+        case 'g': return 0x34;
+        case 'h': return 0x33;
+        case 'i': return 0x43;
+        case 'j': return 0x3B;
+        case 'k': return 0x42;
+        case 'l': return 0x4B;
+        case 'm': return 0x3A;
+        case 'n': return 0x31;
+        case 'o': return 0x44;
+        case 'p': return 0x4D;
+        case 'q': return 0x15;
+        case 'r': return 0x2D;
+        case 's': return 0x1B;
+        case 't': return 0x2C;
+        case 'u': return 0x3C;
+        case 'v': return 0x2A;
+        case 'w': return 0x1D;
+        case 'x': return 0x22;
+        case 'y': return 0x35;
+        case 'z': return 0x1A;
         case '\n': return 0x5A;
         default  : return 0;
     }
+}
 
 // 键盘事件回调函数 / 中断处理函数
 void kb_callback(int unused)
 {
     extern Monitor monitor;
-    key_buf[key_buf_tail++] = monitor.key_state->data;
-    if (key_buf_tail == KEY_BUF_MAX) key_buf_tail = 0;
+    
+    uint8_t data = monitor.key_state->data;
+    uint8_t scancode = char2keycode(data);
+    char c  = kcode2char(scancode);
+
+    buf_write(c);
+
     monitor.key_state->ready = 0;
 }
 #endif
