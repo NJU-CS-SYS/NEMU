@@ -6,14 +6,14 @@ extern char get_char();
 int str2int(char *b);
 
 int read_int(char *prompt) {
-	// display prompt	
+	// display prompt
 	draw_string(prompt);
 
 	// read
 	char buffer[20];
 	int i = 0;
 	char c;
-	
+
 	while( (c = get_char()) != '\n' ) {
 		buffer[i ++] = c;
 	}
@@ -23,7 +23,7 @@ int read_int(char *prompt) {
 
 int str2int(char *str) {
 	int n = 0;
-	while( *str ) { 
+	while( *str ) {
 		n = n * 10 + ( (*str) - '0' );
 		str ++;
 	}
@@ -31,8 +31,6 @@ int str2int(char *str) {
 }
 
 char read_char() {
-	Log("kernel read_char before get_char\n");
 	char c = get_char();
-	Log("read_char got char\n");
 	return c;
 }

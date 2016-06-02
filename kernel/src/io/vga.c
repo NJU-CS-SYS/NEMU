@@ -6,14 +6,17 @@
 extern char font8x8_basic[128][8];
 
 void draw_character(char ch) {
-    assert((ch & 0x80) == 0); // is not a ASCII character
-    
+    //assert((ch & 0x80) == 0); // is not a ASCII character
+
     // to monitor
     out_byte(VMEM_DATA_PORT_BASE, ch);
 }
 
 void draw_string(const char *str) {
+    out_long(VMEM_DATA_PORT_BASE, (uint32_t)str);
+    out_long(VMEM_DATA_PORT_BASE, (uint32_t)(*str));
     while (*str) {
-        draw_character(*str ++);
+        draw_character(*str);
+        str ++;
     }
 }

@@ -2,7 +2,7 @@
 
 # setting compiler and compile options
 # ARCH 前缀在特定的 target 下会设置成交叉编译工具链的前缀
-CC      = $(ARCH)gcc-5.2
+CC      = $(ARCH)gcc
 LD      = $(ARCH)ld
 DUMP    = $(ARCH)objdump
 

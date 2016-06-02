@@ -1,5 +1,6 @@
 #include "x86.h"
 #include "trap.h"
+#include "vga.h"
 #include <sys/syscall.h>
 
 #define WRITE_INT 67
@@ -42,9 +43,9 @@ char read_char();
 void do_syscall(TrapFrame *tf)
 {
     switch(tf->eax) {
-        /* The ``add_irq_handle'' system call is artificial. We use it to 
-         * let user program register its interrupt handlers. But this is 
-         * very dangerous in a real operating system. Therefore such a 
+        /* The ``add_irq_handle'' system call is artificial. We use it to
+         * let user program register its interrupt handlers. But this is
+         * very dangerous in a real operating system. Therefore such a
          * system call never exists in GNU/Linux.
          */
         case 0: add_irq_handle(tf->ebx, (void*)tf->ecx); break;
@@ -74,20 +75,22 @@ void do_syscall(TrapFrame *tf)
         case SYS_close:
                       tf->eax = fs_close(tf->ebx);
                       break;
-                      
+
         case WRITE_INT:
-                        write_int((int)tf->ebx);
+                        write_int((int)(tf->ebx));
                         break;
-        case READ_INT: 
-                        tf->eax = read_int((char *)tf->ebx);
+        case READ_INT:
+                        tf->eax = read_int((char *)(tf->ebx));
+                        draw_string("read_int, tf->eax\n");
+                        out_word(VMEM_DATA_PORT_BASE, tf->eax);
                         break;
-        case WRITE_C:   
+        case WRITE_C:
                         write_char(tf->ebx);
                         break;
-        case READ_C:   
+        case READ_C:
                         tf->eax = read_char();
                         break;
-        default: 
+        default:
                       panic("Unhandled system call: id = %d", tf->eax);
     }
 }

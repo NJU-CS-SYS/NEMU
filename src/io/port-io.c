@@ -20,6 +20,7 @@ static void pio_callback(ioaddr_t addr, size_t len, bool is_write) {
     int i;
     for(i = 0; i < nr_map; i ++) {
         if(addr >= maps[i].low && addr + len - 1 <= maps[i].high) {
+            printf("pio_callback calling, i: %d, addr %x, is_write:%x\n", i, addr, is_write);
             maps[i].callback(addr, len, is_write);
             return;
         }
@@ -33,6 +34,7 @@ void* add_pio_map(ioaddr_t addr, size_t len, pio_callback_t callback) {
     maps[nr_map].low = addr;
     maps[nr_map].high = addr + len - 1;
     maps[nr_map].callback = callback;
+    printf("add_pio_map: addr:%x, len:%x, low:%x, high:%x, nr_map:%d\n", addr, len, addr, addr+len-1, nr_map);
     nr_map ++;
     return pio_space + addr;
 }
@@ -43,6 +45,7 @@ uint32_t pio_read(ioaddr_t addr, size_t len) {
     assert(len == 1 || len == 2 || len == 4);
     assert(addr + len - 1 < PORT_IO_SPACE_MAX);
     uint32_t data = *(uint32_t *)(pio_space + addr) & (~0u >> ((4 - len) << 3));
+    printf("pio_read: addr %x, len %x, data %x\n", addr, len, data);
     pio_callback(addr, len, false);
     return data;
 }

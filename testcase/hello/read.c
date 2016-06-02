@@ -1,8 +1,8 @@
-char *prompt = "Enter an integer:";
+char *prompt = "Enter an integer:\n";
 int main()
 {
     asm volatile ( "movl $66, %eax;"        // system call ID, 66 = READ_INT
-                   "movl $prompt, %ebx;"    // prompt 
+                   "movl $prompt, %ebx;"    // prompt
                    "int $0x80");
     return 0;
 }

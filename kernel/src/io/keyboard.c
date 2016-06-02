@@ -4,8 +4,8 @@
 #include <string.h>
 
 #define KEYBOARD_PORT_BASE 0x60
-#define BUF_HEAD_PORT      0x76
-#define BUF_TAIL_PORT      0x77
+#define BUF_HEAD_PORT      0x10
+#define BUF_TAIL_PORT      0x40
 #define KEYBOARD_IRQ 1
 
 void keyboard_event(void);
@@ -23,23 +23,24 @@ void keyboard_event() {
 }
 
 void handle_key(char c) {
-    
-    Log("kernel handled key");
+
 }
 
 char get_char() {
+    draw_string("in get_char()\n");
     uint8_t buf_head = in_byte(BUF_HEAD_PORT);
     uint8_t buf_tail = in_byte(BUF_TAIL_PORT);
 
     while(buf_head == buf_tail) {
-        buf_head = in_byte(BUF_HEAD_PORT);
         buf_tail = in_byte(BUF_TAIL_PORT);
+        buf_head = in_byte(BUF_HEAD_PORT);
     }
 
-    Log("get_char got a char"); 
 
     // get the first character
     char c = in_byte(KEYBOARD_PORT_BASE + buf_head);
 
+    draw_string("geted a char: ");
+    out_byte(VMEM_DATA_PORT_BASE, c);
     return c;
 }
