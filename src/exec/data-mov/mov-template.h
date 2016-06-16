@@ -150,7 +150,7 @@ make_helper(concat(movs_b2r_, SUFFIX)) {
         src = MEM_R(addr);
 
         if(addr == 0x80490f8)
-            printf("0x80490f8 src: %x\n", src);
+            printf("movsb from 0x80490f8 data: %x\n", src);
 
         print_asm("movsb" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
     }

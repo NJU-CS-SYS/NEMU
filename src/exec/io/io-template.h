@@ -31,9 +31,8 @@ make_helper(concat(out_i2a_, SUFFIX))
 make_helper(concat(out_d2a_, SUFFIX))
 {
     ioaddr_t ioaddr = reg_w(R_DX);
-    printf("before pio_write\n");
     pio_write( ioaddr, DATA_BYTE, REG(R_EAX) );
-    printf("eip %x: port %x, data %x\n", eip, ioaddr, REG(R_EAX));
+    printf("eip %x: out port %x, data %x\n", eip, ioaddr, REG(R_EAX));
     print_asm("out %%%s,%s", REG_NAME(R_EAX), "(%dx)");
     return 1;
 }

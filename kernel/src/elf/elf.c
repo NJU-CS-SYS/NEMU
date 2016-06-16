@@ -41,7 +41,7 @@ uint32_t loader() {
             dest = (uint8_t *)ph->p_vaddr;
             filesz = ph->p_filesz;
             memsz = ph->p_memsz;
-    
+
 #ifdef IA32_PAGE
             dest = (uint8_t *)mm_malloc((uint32_t)dest, memsz);
 #endif

@@ -8,7 +8,7 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len);
 
 /* Memory accessing interfaces */
 
-uint32_t hwaddr_read(hwaddr_t addr, size_t len) 
+uint32_t hwaddr_read(hwaddr_t addr, size_t len)
 {
     assert(len == 1 || len == 2 || len == 4);
     int mmio_code = is_mmio(addr);
@@ -16,13 +16,13 @@ uint32_t hwaddr_read(hwaddr_t addr, size_t len)
         //printf("Read MMIO %x ", mmio_code);
         uint32_t video_data =  mmio_read(addr, len, mmio_code);
         //printf("MMIO Data = %02x\n", (unsigned char)video_data);
-        return video_data;    
+        return video_data;
     } else {
         return cache_read(addr, len);
     }
 }
 
-void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data) 
+void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data)
 {
     assert(len == 1 || len == 2 || len == 4);
     int mmio_code = is_mmio(addr);
@@ -34,7 +34,7 @@ void hwaddr_write(hwaddr_t addr, size_t len, uint32_t data)
     }
 }
 
-static uint32_t lnaddr_read(lnaddr_t addr, size_t len) 
+static uint32_t lnaddr_read(lnaddr_t addr, size_t len)
 {
     assert(len == 1 || len == 2 || len == 4);
     if (cpu.cr0.protect_enable && cpu.cr0.paging) {
@@ -52,7 +52,7 @@ static void lnaddr_write(lnaddr_t addr, size_t len, uint32_t data)
     return hwaddr_write(addr, len, data);
 }
 
-uint32_t swaddr_read(swaddr_t addr, size_t len) 
+uint32_t swaddr_read(swaddr_t addr, size_t len)
 {
     lnaddr_t lnaddr;
     assert(len == 1 || len == 2 || len == 4);
@@ -63,7 +63,7 @@ uint32_t swaddr_read(swaddr_t addr, size_t len)
     return lnaddr_read(lnaddr, len);
 }
 
-void swaddr_write(swaddr_t addr, size_t len, uint32_t data) 
+void swaddr_write(swaddr_t addr, size_t len, uint32_t data)
 {
     assert(len == 1 || len == 2 || len == 4);
     if (PE) {
@@ -72,13 +72,13 @@ void swaddr_write(swaddr_t addr, size_t len, uint32_t data)
     lnaddr_write(addr, len, data);
 }
 
-static uint32_t hwaddr_read_instr(hwaddr_t addr, size_t len) 
+static uint32_t hwaddr_read_instr(hwaddr_t addr, size_t len)
 {
     assert(len == 1 || len == 2 || len == 4);
     return cache_read(addr, len);
 }
 
-uint32_t instr_fetch(swaddr_t addr, size_t len) 
+uint32_t instr_fetch(swaddr_t addr, size_t len)
 {
     assert(len == 1 || len == 2 || len == 4);
     lnaddr_t lnaddr;
