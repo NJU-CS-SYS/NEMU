@@ -25,7 +25,7 @@ static void cmd_c()
 
 static void cmd_r()
 {
-    if(nemu_state != END) { 
+    if(nemu_state != END) {
         char c;
         while(1) {
             printf("The program is already running. Restart the program? (y or n)");
@@ -67,14 +67,14 @@ static void cmd_info()
     char* opt = strtok(NULL, " ");
     if (opt == NULL || strcmp(opt, "r") == 0) {
         printf("%-15s%#-15X%u\n","eax", cpu.eax, cpu.eax);
-        printf("%-15s%#-15X%u\n","ecx", cpu.ecx, cpu.ecx); 
-        printf("%-15s%#-15X%u\n","edx", cpu.edx, cpu.edx); 
-        printf("%-15s%#-15X%u\n","ebx", cpu.ebx, cpu.ebx); 
-        printf("%-15s%#-15X%u\n","esp", cpu.esp, cpu.esp); 
-        printf("%-15s%#-15X%u\n","ebp", cpu.ebp, cpu.ebp); 
-        printf("%-15s%#-15X%u\n","esi", cpu.esi, cpu.esi); 
-        printf("%-15s%#-15X%u\n","edi", cpu.edi, cpu.edi); 
-        printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip); 
+        printf("%-15s%#-15X%u\n","ecx", cpu.ecx, cpu.ecx);
+        printf("%-15s%#-15X%u\n","edx", cpu.edx, cpu.edx);
+        printf("%-15s%#-15X%u\n","ebx", cpu.ebx, cpu.ebx);
+        printf("%-15s%#-15X%u\n","esp", cpu.esp, cpu.esp);
+        printf("%-15s%#-15X%u\n","ebp", cpu.ebp, cpu.ebp);
+        printf("%-15s%#-15X%u\n","esi", cpu.esi, cpu.esi);
+        printf("%-15s%#-15X%u\n","edi", cpu.edi, cpu.edi);
+        printf("%-15s%#-15X%u\n","eip", cpu.eip, cpu.eip);
         printf("CF PF AF ZF SF TF IF DF OF\n"
                "%2d %2d %2d %2d %2d %2d %2d %2d %2d\n",
                 FLAG_VAL(CF),

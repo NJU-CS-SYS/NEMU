@@ -52,7 +52,8 @@ void init_monitor(Monitor *m, const char *path_to_config, pid_t *pid)
         char linebuf[256];
         int size_info[4];  // scr_w, scr_h, font_w, font_h
         int idx_scr_w = 0, idx_scr_h = 1, idx_font_w = 2, idx_font_h = 3;
-        for (int i = 0; i < sizeof(size_info) / sizeof(size_info[0]); i++) {
+		int i;
+        for (i = 0; i < sizeof(size_info) / sizeof(size_info[0]); i++) {
             fgets(linebuf, sizeof(linebuf), config);
             sscanf(linebuf, "%d", &size_info[i]);
         }
