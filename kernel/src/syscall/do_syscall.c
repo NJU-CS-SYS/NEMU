@@ -81,8 +81,6 @@ void do_syscall(TrapFrame *tf)
                         break;
         case READ_INT:
                         tf->eax = read_int((char *)(tf->ebx));
-                        draw_string("read_int, tf->eax\n");
-                        out_word(VMEM_DATA_PORT_BASE, tf->eax);
                         break;
         case WRITE_C:
                         write_char(tf->ebx);

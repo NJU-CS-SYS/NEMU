@@ -27,7 +27,6 @@ void handle_key(char c) {
 }
 
 char get_char() {
-    draw_string("in get_char()\n");
     uint8_t buf_head = in_byte(BUF_HEAD_PORT);
     uint8_t buf_tail = in_byte(BUF_TAIL_PORT);
 
@@ -40,7 +39,6 @@ char get_char() {
     // get the first character
     char c = in_byte(KEYBOARD_PORT_BASE + buf_head);
 
-    draw_string("geted a char: ");
     out_byte(VMEM_DATA_PORT_BASE, c);
     return c;
 }

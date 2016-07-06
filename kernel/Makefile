@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -m32 -MD -O2 -Wall -Werror -I./include -I./include/newlib \
 		 -fno-builtin -fno-omit-frame-pointer -fno-stack-protector
 ASFLAGS = -m32 -MD -I./include
-LDFLAGS = -Ttext=0xc0200000 -m elf_i386
+LDFLAGS = -Ttext=0x200000 -m elf_i386
 
 CSRC = $(shell find ./src -name "*.c")
 SSRC = $(shell find ./src -name "*.S")
