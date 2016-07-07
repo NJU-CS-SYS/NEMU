@@ -32,6 +32,10 @@ start:
 #	define va_to_pa(x) (x)
 #endif
 
+.globl start_cond
+.type start, @function
+.type start_cond, @function
+
 .globl start
 start:
 	lgdt    va_to_pa(gdtdesc) # See i386 manual for more information

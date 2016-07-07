@@ -15,7 +15,7 @@ CFILES := $(CFILES) $(filter-out $(CFILES), $(shell find src/ -name "*.c"))
 CFILES += $(filter-out monitor/main.c, $(shell find monitor/ -name "*.c"))
 OBJS    = $(CFILES:.c=.o)
 
-TESTFILE = testcase/c/quick-sort
+TESTFILE = testcase/hello/printf
 
 LOADER_DIR = kernel
 LOADER = $(LOADER_DIR)/loader
@@ -78,6 +78,8 @@ clean:
 	-rm -f $(shell find -type f -name "*.d")
 	-rm -f $(shell find -type f -name "*.txt")
 	-rm -f $(shell find -type f -name "*.map")
+	-rm -f src/elf/loader.c
+	-rm -f src/elf/testfile.c
 
 opt: nemu
 	perf record ./nemu
