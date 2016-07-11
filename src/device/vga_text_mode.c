@@ -1,12 +1,12 @@
+#ifdef SYS_LAB
 #include "common.h"
-#include "monitor.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include <unistd.h>
 
-#ifdef SYS_LAB
+#include "monitor.h"
 
 extern Monitor monitor;
 extern int global_use_std; // TODO cond-compile it

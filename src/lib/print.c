@@ -1,3 +1,4 @@
+#if 0
 typedef unsigned int size_t;
 typedef unsigned int uintptr_t;
 
@@ -309,4 +310,4 @@ printfmt(void (*putch)(int, void*), void *putdat, const char *fmt, ...)
 	vprintfmt(putch, putdat, fmt, ap);
 	va_end(ap);
 }
-
+#endif

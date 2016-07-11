@@ -4,15 +4,12 @@
 #include "debug.h"
 #include "macro.h"
 #include <stdint.h>
-#include <assert.h>
+//#include <assert.h>
 #include <string.h>
 
-
-#define SYS_LAB
-#define SYS_LAB_SCR
+//#define SYS_LAB
 
 #ifdef SYS_LAB
-#ifdef SYS_LAB_SCR
 // Overload the print functions.
 
 #define fprintf npc_fprintf
@@ -79,7 +76,6 @@ void npc_fputs(const char *s, FILE *fp);
 char npc_getc();
 #define getchar npc_getc
 
-#endif // SYS_LAB_SCR
 #endif // SYS_LAB
 
 typedef uint8_t bool;

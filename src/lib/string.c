@@ -1,6 +1,7 @@
-#include <common.h>
+#include "common.h"
 
-size_t strlen(const char *s){
+size_t strlen(const char *s)
+{
     size_t n;
 
     for (n = 0; *s != '\0'; s++)
@@ -27,7 +28,8 @@ char *strcpy(char *dst, const char *src)
     return ret;
 }
 
-size_t strlcpy(char *dst, const char *src, size_t size){
+size_t strlcpy(char *dst, const char *src, size_t size)
+{
     char *dst_in;
 
     dst_in = dst;
@@ -39,13 +41,15 @@ size_t strlcpy(char *dst, const char *src, size_t size){
     return dst - dst_in;
 }
 
-int strcmp(const char *p, const char *q){
+int strcmp(const char *p, const char *q)
+{
     while (*p && *p == *q)
         p++, q++;
     return (int) ((unsigned char) *p - (unsigned char) *q);
 }
 
-void *memset(void *v, int c, size_t n){
+void *memset(void *v, int c, size_t n)
+{
     char *p;
     int m;
 
@@ -57,7 +61,8 @@ void *memset(void *v, int c, size_t n){
     return v;
 }
 
-void *memmove(void *dst, const void *src, size_t n){
+void *memmove(void *dst, const void *src, size_t n)
+{
     const char *s;
     char *d;
 
@@ -75,11 +80,13 @@ void *memmove(void *dst, const void *src, size_t n){
     return dst;
 }
 
-void *memcpy(void *dst, const void *src, size_t n){
+void *memcpy(void *dst, const void *src, size_t n)
+{
     return memmove(dst, src, n);
 }
 
-int atoi(const char *nptr){
+int atoi(const char *nptr)
+{
     int num=0;
     int i=1;
     if(nptr[0]!='-')num=nptr[0]-'0';
@@ -88,7 +95,8 @@ int atoi(const char *nptr){
     else return num;
 }
 
-char *strtok(char *string_org, const char* demial){
+char *strtok(char *string_org, const char* demial)
+{
     static unsigned char *last; //save remain
     unsigned char* str; //ret str
     const unsigned char* ctrl = (const unsigned char*)demial;
@@ -135,7 +143,8 @@ char *strtok(char *string_org, const char* demial){
 
 #define LONG_MAX 2147483647L
 #define LONG_MIN (-2147483647L-1L)
-long strtol ( char *  nptr, char  **  endptr, int  base   )  {
+long strtol ( char *  nptr, char  **  endptr, int  base   )
+{
     const char *s = nptr;
     unsigned long acc;
     unsigned char c;

@@ -6,7 +6,10 @@
 #define KEYBOARD_IRQ 1
 
 void keyboard_intr(uint8_t);
+
+#ifdef SYS_LAB
 char npc_getc();
 void npc_gets(char buf[], size_t size);
+#endif
 
 #endif

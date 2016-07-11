@@ -21,6 +21,7 @@ make_helper(inv) {
             eip, temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]);
 
     test(0, "eip %#x", eip);
+    return 0;
 }
 
 make_helper(int3) {

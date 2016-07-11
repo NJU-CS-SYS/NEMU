@@ -1,10 +1,11 @@
 #include "common.h"
 
 #ifdef SYS_LAB
+#ifndef DEPLOY
+
 #include "monitor.h"
 Monitor monitor;
 
-#ifndef DEPLOY
 
 int global_use_std = 1;  // 控制输出目标的开关，用于在模拟器初始化前只使用标准输出。
 #include <sys/types.h>
@@ -15,7 +16,6 @@ void kb_callback(int unused);
 void timer_callback(int unused);
 
 #endif
-
 #endif
 
 void main_loop();

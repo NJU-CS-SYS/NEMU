@@ -2,17 +2,23 @@
 #include "device/i8259.h"
 #include "ui/ui.h"
 #include "keyboard.h"
-#include "monitor.h"
 
 #define I8042_DATA_PORT 0x60
 #define I8042_BUF_HEAD_PORT 0x10
 #define I8042_BUF_TAIL_PORT 0x40
 
-static uint8_t *i8042_data_port_base;
-static uint8_t *key_buf_head_port;
-static uint8_t *key_buf_tail_port;
+uint8_t *i8042_data_port_base;
+uint8_t *key_buf_head_port;
+uint8_t *key_buf_tail_port;
 
-static bool newkey;
+bool newkey;
+
+#ifdef DEPLOY
+void init_i8042() {} // Empty function as we currently not use it.
+#endif
+
+#ifdef SYS_LAB
+#include "monitor.h"
 
 // not used
 void keyboard_intr(uint8_t c) {
@@ -25,6 +31,8 @@ void keyboard_intr(uint8_t c) {
 
 uint8_t char2keycode(char c);
 char kcode2char(uint8_t code);
+
+#endif
 
 #ifdef SYS_LAB
 #include <stdlib.h>
@@ -68,6 +76,7 @@ void buf_tail_io_handler(ioaddr_t addr, size_t len, bool is_write) {
         key_buf_tail = key_buf_tail_port[0];
     }
 }
+
 void init_i8042() {
     i8042_data_port_base = add_pio_map(I8042_DATA_PORT, KEY_BUF_MAX, i8042_io_handler);
     key_buf_head_port    = add_pio_map(I8042_BUF_HEAD_PORT, 1, buf_head_io_handler);
