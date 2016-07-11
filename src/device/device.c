@@ -9,4 +9,5 @@ void init_device() {
     init_timer();
     init_i8042();
     init_ide();
+    init_vga();
 }

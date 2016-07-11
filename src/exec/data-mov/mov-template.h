@@ -4,6 +4,9 @@
 #include "../template.h"
 #include "cpu/reg.h"
 #include "cpu/segment.h"
+#include "ui/ui.h"
+#include "nemu.h"
+
 void tlb_init();
 extern int Sreg;
 
@@ -88,7 +91,7 @@ make_helper(concat(mov_moffs2a_, SUFFIX)) {
     return 5;
 }
 
-make_helper(concat(movz_b2_, SUFFIX)) 
+make_helper(concat(movz_b2_, SUFFIX))
 {
     uint8_t src;
     int len = 2;
@@ -101,8 +104,8 @@ make_helper(concat(movz_b2_, SUFFIX))
     } else {
         swaddr_t addr;
         len += read_ModR_M(eip + 2, &addr);
-        src = swaddr_read(addr, 1); 
-        
+        src = swaddr_read(addr, 1);
+
         print_asm("movzb" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
         }
     REG(m.reg) = src;
@@ -110,7 +113,7 @@ make_helper(concat(movz_b2_, SUFFIX))
     return len;
 }
 
-make_helper(concat(movz_w2_, SUFFIX)) 
+make_helper(concat(movz_w2_, SUFFIX))
 { uint16_t src; int len = 2;
     ModR_M m;
     m.val = instr_fetch(eip + 2, 1);
@@ -123,7 +126,7 @@ make_helper(concat(movz_w2_, SUFFIX))
         swaddr_t addr;
         len += read_ModR_M(eip + 2, &addr);
         src = swaddr_read(addr, 2);
-        
+
         print_asm("movzw" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
       }
     REG(m.reg) = src;
@@ -145,7 +148,10 @@ make_helper(concat(movs_b2r_, SUFFIX)) {
         swaddr_t addr;
         len += read_ModR_M(eip + 2, &addr);
         src = MEM_R(addr);
-        
+
+        if(addr == 0x80490f8)
+            printf("movsb from 0x80490f8 data: %x\n", src);
+
         print_asm("movsb" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
     }
     int shift_len = (DATA_BYTE - 1) * 8;
@@ -168,7 +174,7 @@ make_helper(concat(movs_w2r_, SUFFIX)) {
         swaddr_t addr;
         len += read_ModR_M(eip + 2, &addr);
         src = MEM_R(addr);
-        
+
         print_asm("movsw" str(SUFFIX) " %s,%%%s", ModR_M_asm, REG_NAME(m.reg));
     }
     int shift_len = (DATA_BYTE - 2) * 8;
@@ -182,6 +188,7 @@ make_helper(concat(movs_m2m_, SUFFIX)) {
     Log("cpu.esi %x", cpu.esi);
     Log("cpu.edi %x", cpu.edi);
     Sreg = DS;
+
     DATA_TYPE buf = MEM_R( cpu.esi );
     Sreg = ES;
     MEM_W( cpu.edi, buf );
@@ -197,7 +204,7 @@ make_helper(concat(movs_m2m_, SUFFIX)) {
 }
 
 #if DATA_BYTE == 4
-make_helper(mov_CR2r) 
+make_helper(mov_CR2r)
 {
     ModR_M m;
     m.val = instr_fetch(eip + 2, 1);

@@ -1,5 +1,7 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
+#include "ui/ui.h"
+#include "nemu.h"
 
 make_helper(exec);
 

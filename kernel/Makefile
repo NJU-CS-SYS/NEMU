@@ -13,7 +13,6 @@ MM_MALLOC_OBJ = src/memory/mm_malloc.o
 ALL_OBJS = $(OBJS) $(START_OBJ) 
 
 loader: $(ALL_OBJS)
-	ld $(LDFLAGS) -r -o asdf $(START_OBJ) $(OBJS) $(MM_MALLOC_OBJ)
 	ld $(LDFLAGS) -o loader $(START_OBJ) $(OBJS) $(MM_MALLOC_OBJ) libc.a
 	objdump -D loader > code.txt
 

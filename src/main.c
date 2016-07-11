@@ -52,12 +52,8 @@ int main(int argc, char *argv[]) {
     enable_debug = true;
     quiet = false;
 
-    /* Perform some global initialization */
-    init_L1();
-
     /* Initialization of device */
     init_device();
-    init_sdl();
 
     main_loop();
 

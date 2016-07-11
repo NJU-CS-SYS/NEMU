@@ -43,7 +43,7 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
                 | ide_port_base[4] << 8 | ide_port_base[3];
             disk_idx = sector << 9;
             fseek(disk_fp, disk_idx, SEEK_SET);
-            
+
             byte_cnt = 0;
 
             if(ide_port_base[7] == 0x20) {
@@ -61,6 +61,7 @@ void ide_io_handler(ioaddr_t addr, size_t len, bool is_write) {
         }
     }
     else {
+        printf("ide read: addr %x, len %x\n", addr, len);
         if(addr - IDE_PORT == 0 && len == 4) {
             assert(!ide_write);
             fread(ide_port_base, 4, 1, disk_fp);

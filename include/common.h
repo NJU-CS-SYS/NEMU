@@ -8,10 +8,11 @@
 #include <string.h>
 
 
-//#define SYS_LAB
+#define SYS_LAB
+#define SYS_LAB_SCR
 
 #ifdef SYS_LAB
-
+#ifdef SYS_LAB_SCR
 // Overload the print functions.
 
 #define fprintf npc_fprintf
@@ -66,6 +67,7 @@ void npc_fputs(const char *s, FILE *fp);
 #endif
 #define fflush(x) do {} while (0)
 
+#endif
 #endif
 
 typedef uint8_t bool;

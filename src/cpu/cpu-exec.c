@@ -17,6 +17,7 @@ jmp_buf jbuf;    /* Make it easy to perform exception handling */
 int exec(swaddr_t);
 void init_dram();
 void tlb_init();
+void device_update(int);
 uint32_t i8259_query_intr();
 void i8259_ack_intr();
 void load_prog(void);
@@ -55,6 +56,8 @@ void restart()
 
     load_prog();
 
+   // trigger = TRIGGER_INIT;
+
     init_dram();
 }
 
@@ -76,11 +79,17 @@ void cpu_exec(volatile uint32_t n)
 
     for(; n > 0; n --) {
         swaddr_t eip_temp = cpu.eip;
-        
+
+        int f = 0;
+
         int instr_len = exec(cpu.eip);
 
         cpu.eip += instr_len;
-        
+        if(f) {
+            printf("cpu.eip %x\n", cpu.eip);
+            f = 0;
+        }
+
         if (n_temp != -1 || (enable_debug && !quiet)) {
             print_bin_instr(eip_temp, instr_len);
             puts(assembly);

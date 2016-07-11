@@ -12,7 +12,7 @@
 #define STACK_SIZE (1 << 20)
 
 void ide_read(uint8_t *, uint32_t, uint32_t);
-void create_video_mapping();
+//void create_video_mapping();
 uint32_t get_ucr3();
 
 uint32_t loader() {
@@ -41,7 +41,7 @@ uint32_t loader() {
             dest = (uint8_t *)ph->p_vaddr;
             filesz = ph->p_filesz;
             memsz = ph->p_memsz;
-    
+
 #ifdef IA32_PAGE
             dest = (uint8_t *)mm_malloc((uint32_t)dest, memsz);
 #endif
@@ -75,10 +75,10 @@ uint32_t loader() {
 #ifdef IA32_PAGE
     mm_malloc(KOFFSET - STACK_SIZE, STACK_SIZE);
 
-#ifdef HAS_DEVICE
+/*#ifdef HAS_DEVICE
     create_video_mapping();
 #endif
-
+*/
     write_cr3(get_ucr3());
 #endif
 

@@ -13,9 +13,10 @@ void init_idt();
 void init_mm();
 uint32_t loader();
 
-void video_mapping_write_test();
+/*void video_mapping_write_test();
 void video_mapping_read_test();
 void video_mapping_clear();
+void prepare_buffer();*/
 extern uint32_t brk;
 
 void fun_color(void);
@@ -45,6 +46,7 @@ void init_cond() {
 
     /* Initialize the keyboard. */
     init_kb();
+
 #endif
 
 #ifdef IA32_PAGE
@@ -57,31 +59,20 @@ void init_cond() {
      */
     Log("Hello, NEMU world!");
 
-#ifdef HAS_DEVICE
-    /* Write some test data to the video memory. */
-    video_mapping_write_test();
-#endif
-
     /* Load the program. */
     uint32_t eip = loader();
     
-#ifdef HAS_DEVICE
-    /* Read data in the video memory to check whether 
-     * the test data is written sucessfully.
-     */
-    video_mapping_read_test();
-
-    /* Clear the test data we just written in the video memory. */
-    video_mapping_clear();
-#endif
 
 #ifdef IA32_PAGE
+    Log("Entering esp = 0");
     /* Set the %esp for user program, which is one of the
      * convention of the "advanced" runtime environment. */
     asm volatile("movl %0, %%esp" : : "i"(KOFFSET));
+    Log("Leadved esp = 0");
 #endif
 
     /* Here we go! */
+    Log("Here we go");
     ((void(*)(void))eip)();
 
     HIT_GOOD_TRAP;
