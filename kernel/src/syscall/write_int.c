@@ -14,19 +14,24 @@ void write_int(int num) {
 int int2str(int num, char *buf, int buf_size) {
 	if(buf == NULL) return -1;
 
-	int i = 0, digit;
+    char buf_t[100];
+	int i = 0, len = 0, digit;
 	if( num < 0 ) {
-		buf[i ++] = '-';
+		buf_t[i ++] = '-';
 		num = -num;
 	}
 
 	do {
 		digit = num % 10;
 		num = num / 10;
-		buf[i ++] = (char)(digit + '0');
+		buf_t[i ++] = (char)(digit + '0');
 	} while(num && i < buf_size - 1);
     buf[i] = '\0';
+    len = i;
 
-    printk("In int2str %s\n", buf);
-    return i;
+    for (int j = 0; j < len; j ++) {
+        buf[j] = buf_t[--i];
+    }
+
+    return len;
 }

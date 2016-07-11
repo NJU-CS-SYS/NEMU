@@ -1,4 +1,4 @@
-char *prompt = "Enter an integer:\n";
+const char prompt[] = "Enter an integer:\n";
 int main()
 {
     asm volatile ( "movl $66, %eax;"        // system call ID, 66 = READ_INT

@@ -30,6 +30,7 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 extern int quiet;
 
+#include "memory.h"
 void restart()
 {
     /* Perform some initialization to restart a program */
@@ -59,6 +60,7 @@ void restart()
    // trigger = TRIGGER_INIT;
 
     init_dram();
+
 }
 
 void print_bin_instr(swaddr_t eip, int len)
