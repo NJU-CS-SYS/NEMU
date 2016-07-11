@@ -97,7 +97,7 @@ static void cmd_x()
     char* _addr = strtok(NULL, "");
     if((_num != NULL) && (_addr != NULL)) {
         int num = atoi(_num);
-        swaddr_t addr = strtoll(_addr, NULL, 16);
+        swaddr_t addr = strtol(_addr, NULL, 16);
         Log("rst addr is %x", addr);
         int i;
         for(i = 0; i < num; i++){
@@ -121,7 +121,7 @@ static void cmd_s()
     char* _addr = strtok(NULL, "");
     if((_num != NULL) && (_addr != NULL)) {
         int num = atoi(_num);
-        swaddr_t addr = strtoll(_addr, NULL, 16);
+        swaddr_t addr = strtol(_addr, NULL, 16);
         Log("rst addr is %x", addr);
         int i;
         for(i = 0; i < num; i++){
