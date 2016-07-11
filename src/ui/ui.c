@@ -9,6 +9,8 @@ void restart();
 
 #ifdef SYS_LAB
 void npc_gets(char buf[], size_t size);  // NPC memory-mapped stdin
+void npc_fputs(const char *s, FILE *fp);
+void npc_fputs_chomp(const char *s, FILE *fp);
 #endif
 
 static void cmd_c()
@@ -145,10 +147,12 @@ void main_loop()
     char cmd[1024] = {};
 
     while(1) {
-        printf("(nemu) ");
+        //printf("(nemu) ");
 
 #ifdef SYS_LAB
+        npc_fputs_chomp("\n(nemu) ", NULL);
         npc_gets(cmd, sizeof(cmd));
+        npc_fputs(cmd, NULL);
 #else
         fflush(stdout);
         fgets(cmd, sizeof(cmd), stdin);

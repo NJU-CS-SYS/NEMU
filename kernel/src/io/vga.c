@@ -13,8 +13,6 @@ void draw_character(char ch) {
 }
 
 void draw_string(const char *str) {
-    out_long(VMEM_DATA_PORT_BASE, (uint32_t)str);
-    out_long(VMEM_DATA_PORT_BASE, (uint32_t)(*str));
     while (*str) {
         draw_character(*str);
         str ++;

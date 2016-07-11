@@ -37,7 +37,6 @@ static int key_buf_tail = 0;  // exclusive
 char buf_read() {
     char c = key_buf[key_buf_head ++];
     if (key_buf_head == KEY_BUF_MAX) key_buf_head = 0;
-    printf("buf_read, key_buf_head:%x\n", key_buf_head);
     key_buf_head_port[0] = key_buf_head;
     return c;
 }
@@ -46,7 +45,6 @@ void buf_write(char c) {
     key_buf[key_buf_tail] = c;
     i8042_data_port_base[key_buf_tail ++] = c;
     if (key_buf_tail == KEY_BUF_MAX) key_buf_tail = 0;
-    printf("buf_write, key_buf_tail:%x\n", key_buf_tail);
     key_buf_tail_port[0] = key_buf_tail;
 }
 
@@ -60,14 +58,12 @@ void i8042_io_handler(ioaddr_t addr, size_t len, bool is_write) {
 }
 
 void buf_head_io_handler(ioaddr_t addr, size_t len, bool is_write) {
-    printf("buf_head_io_headler, is_write %x, key_buf_head %x\n", is_write, key_buf_head);
     if(is_write) {
         key_buf_head = key_buf_head_port[0];
     }
 }
 
 void buf_tail_io_handler(ioaddr_t addr, size_t len, bool is_write) {
-     printf("buf_tail_io_headler, is_write %x, key_buf_tail %x\n", is_write, key_buf_tail);
     if(is_write) {
         key_buf_tail = key_buf_tail_port[0];
     }
@@ -84,7 +80,6 @@ char npc_getc()
     // Read a char as soon as the input buffer is available.
     while (key_buf_head == key_buf_tail) {}
     char ch = buf_read();
-    printf("npc_getc geted: %x\n", ch);
 
     return ch;
 }
@@ -211,10 +206,8 @@ void kb_callback(int unused)
     extern Monitor monitor;
 
     uint8_t data = monitor.key_state->data;
-    printf("kb_callback1 data:%x\n", data);
     uint8_t scancode = char2keycode(data);
     char c  = kcode2char(scancode);
-    printf("kb_callback2 c:%x\n", c);
 
     buf_write(c);
 

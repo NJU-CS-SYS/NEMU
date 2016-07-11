@@ -74,10 +74,11 @@ uint32_t instr_fetch(swaddr_t addr, size_t len)
 {
     assert(len == 1 || len == 2 || len == 4);
     hwaddr_t hwaddr;
-    if (cpu.cr0.protect_enable && cpu.cr0.paging) {
+    /*if (cpu.cr0.protect_enable && cpu.cr0.paging) {
         hwaddr = page_translate(addr,len);
     } else {
         hwaddr = addr;
-    }
+    }*/
+    hwaddr = addr;
     return hwaddr_read_instr(hwaddr, len);
 }

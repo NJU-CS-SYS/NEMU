@@ -3,7 +3,7 @@
 
 extern char get_char();
 
-int str2int(char *b);
+int str2int(char *b, int i);
 
 int read_int(char *prompt) {
 	// display prompt
@@ -18,14 +18,14 @@ int read_int(char *prompt) {
 		buffer[i ++] = c;
 	}
 	buffer[i] = '\0';
-	return str2int(buffer);
+	return str2int(buffer, --i);
 }
 
-int str2int(char *str) {
-	int n = 0;
-	while( *str ) {
-		n = n * 10 + ( (*str) - '0' );
-		str ++;
+int str2int(char *str, int m) {
+    int n = 0;
+    //for (int i = m; i >= 0; i --) {
+    for (int i = 0; i <= m; i ++) {
+		n = n * 10 + ( (str[i]) - '0' );
 	}
 	return n;
 }
