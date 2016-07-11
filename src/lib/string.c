@@ -133,3 +133,71 @@ void *strtok(char *string_org, const char* demial){
 		return string_org;
 	}
 }
+
+#define LONG_MAX 2147483647L  
+#define LONG_MIN (-2147483647L-1L)
+#include<stdio.h>
+long strtol ( char *  nptr, char  **  endptr, int  base   )  {
+      const char *s = nptr;
+     unsigned long acc;
+      unsigned char c;
+    unsigned long cutoff;
+     int neg = 0,any, cutlim;
+//判断正负号   
+  do{ c = *s++;
+      } while (c==' ');
+      if (c == '-')
+    {
+          neg = 1;
+         c = *s++;
+    }
+      else if (c == '+')
+          c = *s++;
+//判断进制数
+      if ((base == 0 || base == 16) &&
+          c == '0' && (*s == 'x' || *s == 'X'))
+      {
+          c = s[1];
+          s += 2;
+          base = 16;
+      }
+      if (base == 0)
+          base = c == '0' ? 8 : 10;
+  
+//溢出处理
+     cutoff = neg ? -(unsigned long) LONG_MIN : LONG_MAX;
+     cutlim = cutoff % (unsigned long) base;
+      cutoff /= (unsigned long) base;
+      for (acc = 0, any = 0;; c = *s++)
+      {
+         if (c>='0'&&c<='9')
+              c -= '0';
+          else if ((c>='A'&&c<='Z')||(c>='a'&&c<='z'))
+             c -= (c>='A'&&c<='Z') ? 'A' - 10 : 'a' - 10;
+          else
+              break;
+          if ((int) c >= base)
+              break;
+          if (any < 0 || acc > cutoff || (acc == cutoff && (int) c > cutlim))
+              any = -1;
+          else
+          {
+              any = 1;
+              acc *= base;
+             acc += c;
+          }
+      }
+//超过范围则输出range error
+     if (any < 0)
+      {
+        // acc = neg ? LONG_MIN : LONG_MAX;
+          //errno = ERANGE;
+    printf("range error.\n");
+      }
+      else if (neg)
+          acc = -acc;
+      if (endptr != 0)
+         *endptr = any ?(char *) ( s - 1) : (char *) nptr;
+      return acc;
+ }
+
