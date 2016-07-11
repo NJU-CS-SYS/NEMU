@@ -27,19 +27,6 @@ void init_L1();
 int enable_debug = false;
 int quiet = false;
 
-/**
- * FIXME: 在这里临时定义系统原语，检查调用情况，尽可能删除。
- */
-#ifdef DEPLOY
-ssize_t write(int fd, const void *buf, size_t count) { return 0; }
-ssize_t read(int fd, void *buf, size_t count) { return 0; }
-void *sbrk(int *i) { return NULL; }
-off_t lseek(int fd, off_t offset, int whence) { return 0; }
-int fstat(int fd, void *buf) { return 0; }
-int isatty(int fd) { return 0; }
-int close(int fd) { return 0; }
-#endif
-
 int main(int argc, char *argv[]) {
 
 #ifdef SYS_LAB

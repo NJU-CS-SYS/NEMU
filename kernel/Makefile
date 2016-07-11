@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -m32 -MD -O2 -Wall -Werror -I./include -I./include/newlib \
 		 -fno-builtin -fno-omit-frame-pointer -fno-stack-protector
 ASFLAGS = -m32 -MD -I./include
-LDFLAGS = -Ttext=0x200000 -m elf_i386
+LDFLAGS = -Ttext=0x200000 -T kern.ld -m elf_i386
 
 CSRC = $(shell find ./src -name "*.c")
 SSRC = $(shell find ./src -name "*.S")
@@ -13,8 +13,9 @@ MM_MALLOC_OBJ = src/memory/mm_malloc.o
 ALL_OBJS = $(OBJS) $(START_OBJ) 
 
 loader: $(ALL_OBJS)
-	ld $(LDFLAGS) -e start -o loader $(START_OBJ) $(OBJS) $(MM_MALLOC_OBJ) libc.a
-	objdump -d loader > code.txt
+	ld $(LDFLAGS) -r -o asdf $(START_OBJ) $(OBJS) $(MM_MALLOC_OBJ)
+	ld $(LDFLAGS) -o loader $(START_OBJ) $(OBJS) $(MM_MALLOC_OBJ) libc.a
+	objdump -D loader > code.txt
 
 -include $(ALL_OBJS:.o=.d)
 

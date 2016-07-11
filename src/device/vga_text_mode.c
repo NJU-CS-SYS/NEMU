@@ -20,29 +20,38 @@ static int curr_col = 0;
 
 void npc_fputc(char ch, FILE *fp)
 {
+    // Backup the global vars to avoid async side-effects,
+    // which may make (line * WIDTH + col) exceed buffer boundary.
+    int local_line = curr_line;
+    int local_col = curr_col;
+
     if (global_use_std) {
         write(2, &ch, sizeof(ch));
     }
     else {
-        if (curr_line == HEIGHT) {
+
+        if (local_line == HEIGHT) {
             // No line for print, it is time to scroll ;-)
             memmove(VMEM, VMEM + sizeof(VMEM[0]) * WIDTH, sizeof(VMEM[0]) * WIDTH * (HEIGHT - 1));
             memset(VMEM + sizeof(VMEM[0]) * WIDTH * (HEIGHT - 1), ' ', WIDTH);
-            curr_line--;
+            local_line--;
         }
         if (ch == '\n') {
             // Use space to mimic new line
-            while (curr_col < WIDTH) VMEM[curr_line * WIDTH + curr_col++] = ' ';
+            while (local_col < WIDTH) VMEM[local_line * WIDTH + local_col++] = ' ';
         }
         else {
-            VMEM[curr_line * WIDTH + curr_col++] = ch;
+            VMEM[local_line * WIDTH + local_col++] = ch;
         }
     }
 
-    if (curr_col == WIDTH) {
-        curr_line++;
-        curr_col = 0;
+    if (local_col == WIDTH) {
+        local_line++;
+        local_col = 0;
     }
+
+    curr_line = local_line;
+    curr_col = local_col;
 }
 
 void npc_fputs_chomp(const char *s, FILE *fp)
