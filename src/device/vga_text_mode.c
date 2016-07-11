@@ -25,10 +25,15 @@ void npc_fputc(char ch, FILE *fp)
     int local_line = curr_line;
     int local_col = curr_col;
 
+#ifndef DEPLOY
+    // When we compile NEMU to mips code,
+    // we can never output to stdout.
     if (global_use_std) {
         write(2, &ch, sizeof(ch));
     }
-    else {
+    else
+#endif
+    {
 
         if (local_line == HEIGHT) {
             // No line for print, it is time to scroll ;-)

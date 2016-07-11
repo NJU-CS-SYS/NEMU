@@ -36,6 +36,12 @@ void npc_fputs(const char *s, FILE *fp);
 
 #define putc(ch, file) npc_fputc(ch, file)
 
+#ifdef putchar
+#undef putchar
+#endif
+
+#define putchar(ch) npc_fputc(ch, stdout)
+
 #ifdef puts
 #undef puts
 #endif
@@ -67,8 +73,14 @@ void npc_fputs(const char *s, FILE *fp);
 #endif
 #define fflush(x) do {} while (0)
 
+#ifdef getchar
+#undef getchar
 #endif
-#endif
+char npc_getc();
+#define getchar npc_getc
+
+#endif // SYS_LAB_SCR
+#endif // SYS_LAB
 
 typedef uint8_t bool;
 typedef uint32_t hwaddr_t;
