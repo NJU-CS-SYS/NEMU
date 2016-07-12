@@ -1,6 +1,5 @@
 #include "common.h"
 #include "x86.h"
-#include <string.h>
 #include "vga.h"
 
 extern char font8x8_basic[128][8];

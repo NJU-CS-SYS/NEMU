@@ -13,7 +13,7 @@
 
 void ide_read(uint8_t *, uint32_t, uint32_t);
 //void create_video_mapping();
-uint32_t get_ucr3();
+//uint32_t get_ucr3();
 
 uint32_t loader() {
     Elf32_Ehdr *elf;
@@ -62,9 +62,9 @@ uint32_t loader() {
                 dest[j] = 0;
 
             /* Record the prgram break for future use. */
-            extern uint32_t brk;
-            uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
-            if(brk < new_brk) { brk = new_brk; }
+            //extern uint32_t brk;
+            //uint32_t new_brk = ph->p_vaddr + ph->p_memsz - 1;
+            //if(brk < new_brk) { brk = new_brk; }
 
         }
         ph ++;

@@ -9,12 +9,11 @@ SSRC = $(shell find ./src -name "*.S")
 
 OBJS = $(SSRC:.S=.o) $(CSRC:.c=.o)
 START_OBJ = start/start.o
-MM_MALLOC_OBJ = src/memory/mm_malloc.o 
 ALL_OBJS = $(OBJS) $(START_OBJ) 
 
 loader: $(ALL_OBJS)
-	ld $(LDFLAGS) -r -o asdf $(START_OBJ) $(OBJS) $(MM_MALLOC_OBJ)
-	ld $(LDFLAGS) -o loader $(START_OBJ) $(OBJS) $(MM_MALLOC_OBJ) libc.a
+	ld $(LDFLAGS) -r -o asdf $(START_OBJ) $(OBJS)
+	ld $(LDFLAGS) -o loader $(START_OBJ) $(OBJS) libc.a
 	objdump -D loader > code.txt
 
 -include $(ALL_OBJS:.o=.d)

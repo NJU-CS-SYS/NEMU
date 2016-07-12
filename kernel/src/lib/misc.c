@@ -5,6 +5,6 @@
  * But the execution flow should not reach here.
  */
 void* sbrk(int incr) {
-    assert(0);
+    //assert(0);
     return NULL;
 }
