@@ -6,7 +6,7 @@
 /* Simulate the (main) behavor of DRAM. Although this will lower the performace of NEMU,
  * it makes you clear about how DRAM is read/written.
  */
-extern uint64_t mem_access;
+//extern uint64_t mem_access;
 #define COL_WIDTH 10
 #define ROW_WIDTH 10
 #define BANK_WIDTH 3
@@ -56,7 +56,7 @@ void init_dram() {
 }
 
 static void ddr3_read(hwaddr_t addr, void *data) {
-    mem_access ++;
+    //mem_access ++;
     test(addr < HW_MEM_SIZE, "addr = %x\n, eip = %x", addr, cpu.eip);
 
     dram_addr temp;
@@ -80,7 +80,7 @@ static void ddr3_read(hwaddr_t addr, void *data) {
 }
 
 static void ddr3_write(hwaddr_t addr, void *data, uint8_t *mask) {
-    mem_access ++;
+    //mem_access ++;
     test(addr < HW_MEM_SIZE, "addr = %x\n", addr);
 
     dram_addr temp;
@@ -114,7 +114,7 @@ uint32_t dram_read(hwaddr_t addr, size_t len) {
     // but the data got is aligned
     // so use twice longer array
     // and finally get data accoring to offset
-    
+
     ddr3_read(addr, temp);
 
     if( (addr ^ (addr + len - 1)) & ~(BURST_MASK)  ) {

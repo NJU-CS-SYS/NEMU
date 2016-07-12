@@ -60,7 +60,6 @@ make_helper(concat(leave_, SUFFIX)) {
 }
 
 make_helper(concat(ret_near_, SUFFIX)) {
-    Sreg = SS;
 #if DATA_BYTE == 2
     DATA_TYPE ip;
     POP(ip);
@@ -83,7 +82,7 @@ make_helper(concat(ret_imm16_, SUFFIX)) {
     POP(cpu.eip);
 #endif
     cpu.esp -= imm16;
-    
+
     print_asm("ret");
     return 1;
 }
@@ -98,7 +97,7 @@ make_helper(concat(iret_, SUFFIX))
 
     /* TODO This amend of eip is expected the intr is caused by
      * instruction `int' with 2 bytes in total. This may not be
-     * always correct, so pay attention to this code when you 
+     * always correct, so pay attention to this code when you
      * run into fault
      */
 

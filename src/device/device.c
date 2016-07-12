@@ -5,8 +5,6 @@ void init_i8042();
 void init_ide();
 
 void init_device() {
-    init_serial();
-    init_timer();
     init_i8042();
     init_ide();
     init_vga();

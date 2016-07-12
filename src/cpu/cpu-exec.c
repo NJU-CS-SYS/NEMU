@@ -35,7 +35,6 @@ void restart()
 {
     /* Perform some initialization to restart a program */
     memcpy(hwa_to_va(LOADER_START), loader, loader_len);
-    tlb_init();
 
     /* General initialization */
     cpu.eip = LOADER_START;

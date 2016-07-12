@@ -7,9 +7,6 @@
 #include "ui/ui.h"
 #include "nemu.h"
 
-void tlb_init();
-extern int Sreg;
-
 make_helper(concat(mov_i2r_, SUFFIX)) {
     int reg_code = instr_fetch(eip, 1) & 0x7;
     DATA_TYPE imm = instr_fetch(eip + 1, DATA_BYTE);
@@ -187,10 +184,8 @@ make_helper(concat(movs_m2m_, SUFFIX)) {
     Log("data length %d", DATA_BYTE);
     Log("cpu.esi %x", cpu.esi);
     Log("cpu.edi %x", cpu.edi);
-    Sreg = DS;
 
     DATA_TYPE buf = MEM_R( cpu.esi );
-    Sreg = ES;
     MEM_W( cpu.edi, buf );
     print_asm("movs %%ds:%%%s,%%es:%%%s", regsl[R_ESI], regsl[R_EDI]);
     if (FLAG_VAL(DF)) {
@@ -215,7 +210,6 @@ make_helper(mov_CR2r)
 
 make_helper(mov_r2CR)
 {
-    tlb_init();
     ModR_M m;
     m.val = instr_fetch(eip + 2, 1);
     CR(m.reg) = REG(m.R_M);

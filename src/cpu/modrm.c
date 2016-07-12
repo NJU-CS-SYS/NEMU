@@ -20,7 +20,7 @@ int read_ModR_M(swaddr_t eip, swaddr_t *addr) {
     int base_reg = -1, index_reg = -1, scale = 0;
 
     /* When m.mod == 3, the instruction is not going to access memory.
-     * This situation should be handle before calling read_ModR_M(). 
+     * This situation should be handle before calling read_ModR_M().
      * Therefore, m.mod should not be 3 here.
      */
     assert(m.mod != 3);
@@ -41,8 +41,8 @@ int read_ModR_M(swaddr_t eip, swaddr_t *addr) {
     }
 
     if(m.mod == 0) {
-        if(base_reg == R_EBP) { base_reg = -1; Sreg = SS; }
-        else { disp_size = 0;  Sreg = DS; }
+        if(base_reg == R_EBP) { base_reg = -1;  }
+        else { disp_size = 0; }
     }
     else if(m.mod == 1) { disp_size = 1; }
 
@@ -65,14 +65,14 @@ int read_ModR_M(swaddr_t eip, swaddr_t *addr) {
     else { disp_buf[0] = '\0'; }
 
     if(base_reg == -1) { base_buf[0] = '\0'; }
-    else { 
-        sprintf(base_buf, "%%%s", regsl[base_reg]); 
+    else {
+        sprintf(base_buf, "%%%s", regsl[base_reg]);
         *addr += reg_l(base_reg);
     }
 
     if(index_reg == -1) { index_buf[0] = '\0'; }
-    else { 
-        sprintf(index_buf, ",%%%s,%d", regsl[index_reg], 1 << scale); 
+    else {
+        sprintf(index_buf, ",%%%s,%d", regsl[index_reg], 1 << scale);
         *addr += reg_l(index_reg) << scale;
     }
 
