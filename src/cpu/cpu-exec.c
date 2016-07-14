@@ -68,7 +68,7 @@ void print_bin_instr(swaddr_t eip, int len)
     printf("%8x:   ", eip);
     for(int i = 0; i < len; i ++)
         printf("%02x ", swaddr_read(eip + i, 1));
-    printf("%*.s", 50 - (12 + 3 * len), "");
+    //printf("%*.s", 50 - (12 + 3 * len), "");
 }
 
 int int_polling();
