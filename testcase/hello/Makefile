@@ -1,7 +1,7 @@
 CC      = gcc
 LD		= ld
 CFLAGS  = -m32 -Wall -Werror -static -I.. -I../lib/newlib
-LDFLAGS = -melf_i386 -e main -Ttext-segment=0x209000
+LDFLAGS = -melf_i386 -e main -Ttext-segment=0x202000
 #LDFLAGS = -melf_i386 -e main
 
 SRCS = $(shell ls *.c)

@@ -2,9 +2,9 @@
 
 #include "cpu/reg.h"
 #include "idt.h"
-#include "cpu/segment.h"
 #include "stack.h"
 #include "ui/ui.h"
+#include "memory.h"
 
 #ifndef DEPLOY
 #include <setjmp.h>
@@ -33,7 +33,7 @@ void raise_intr(uint8_t NO)
     push(cpu.eflags);
     push(cpu.cs);
     push(cpu.eip);
-    
+
     Log("the eip stored is %x", cpu.eip);
 
     /* Jump */
@@ -42,7 +42,7 @@ void raise_intr(uint8_t NO)
 
     /* Debug */
     //printf("NO %x\n", NO);
-    Log("desc\n%08x\n%08x", 
+    Log("desc\n%08x\n%08x",
             *(uint32_t *)(&desc), *((uint32_t *)(&desc) + 1));
     Log("new cs %x", cpu.cs);
     Log("new eip %x", cpu.eip);

@@ -3,7 +3,6 @@
 #include "cpu/modrm.h"
 #include "../template.h"
 #include "cpu/reg.h"
-#include "cpu/segment.h"
 #include "ui/ui.h"
 #include "nemu.h"
 

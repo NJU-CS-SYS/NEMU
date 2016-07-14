@@ -4,84 +4,40 @@
 #include "keyboard.h"
 #include "monitor.h"
 
-#define I8042_DATA_PORT 0x60
-#define I8042_BUF_HEAD_PORT 0x10
-#define I8042_BUF_TAIL_PORT 0x40
-
 static uint8_t *i8042_data_port_base;
-static uint8_t *key_buf_head_port;
-static uint8_t *key_buf_tail_port;
 
-static bool newkey;
-
-// not used
-void keyboard_intr(uint8_t c) {
-    if(nemu_state == RUNNING && newkey == false) {
-        i8042_data_port_base[0] = c;
-        i8259_raise_intr(KEYBOARD_IRQ);
-        newkey = true;
+void i8042_io_handler(ioaddr_t addr, size_t len, bool is_write) {
+    if(!is_write) {
+        // remove the read char in npc buffer, it is already read through PORT
+        //buf_read();
     }
 }
 
-uint8_t char2keycode(char c);
-char kcode2char(uint8_t code);
+void init_i8042() {
+    i8042_data_port_base = add_pio_map(I8042_DATA_PORT, 1, i8042_io_handler);
+}
+
 
 #ifdef SYS_LAB
 #include <stdlib.h>
 
 #define KEY_BUF_MAX 128
 static char key_buf[KEY_BUF_MAX];
-static int key_buf_head = 0;  // inclusive
-static int key_buf_tail = 0;  // exclusive
+static int key_buf_head = 0;
+static int key_buf_tail = 0;
 
-char buf_read() {
-    char c = key_buf[key_buf_head ++];
-    if (key_buf_head == KEY_BUF_MAX) key_buf_head = 0;
-    key_buf_head_port[0] = key_buf_head;
-    return c;
-}
-
-void buf_write(char c) {
-    key_buf[key_buf_tail] = c;
-    i8042_data_port_base[key_buf_tail ++] = c;
-    if (key_buf_tail == KEY_BUF_MAX) key_buf_tail = 0;
-    key_buf_tail_port[0] = key_buf_tail;
-}
-
-void i8042_io_handler(ioaddr_t addr, size_t len, bool is_write) {
-    if(!is_write) {
-        newkey = false;
-        // remove the read char in npc buffer, it is already read through PORT
-        printf("i8042_io_handler, read: addr %x, len %x\n", addr, len);
-        buf_read();
-    }
-}
-
-void buf_head_io_handler(ioaddr_t addr, size_t len, bool is_write) {
-    if(is_write) {
-        key_buf_head = key_buf_head_port[0];
-    }
-}
-
-void buf_tail_io_handler(ioaddr_t addr, size_t len, bool is_write) {
-    if(is_write) {
-        key_buf_tail = key_buf_tail_port[0];
-    }
-}
-void init_i8042() {
-    i8042_data_port_base = add_pio_map(I8042_DATA_PORT, KEY_BUF_MAX, i8042_io_handler);
-    key_buf_head_port    = add_pio_map(I8042_BUF_HEAD_PORT, 1, buf_head_io_handler);
-    key_buf_tail_port    = add_pio_map(I8042_BUF_TAIL_PORT, 1, buf_tail_io_handler);
-    newkey = false;
-}
+uint8_t char2keycode(char c);
+char kcode2char(uint8_t code);
 
 char npc_getc()
 {
     // Read a char as soon as the input buffer is available.
     while (key_buf_head == key_buf_tail) {}
-    char ch = buf_read();
 
-    return ch;
+    char c = key_buf[key_buf_head ++];
+    if (key_buf_head == KEY_BUF_MAX) key_buf_head = 0;
+
+    return c;
 }
 
 void npc_gets(char buf[], size_t size)
@@ -92,6 +48,21 @@ void npc_gets(char buf[], size_t size)
         *buf++ = ch;
     }
     *buf = '\0';
+}
+
+// 键盘事件回调函数 / 中断处理函数
+void kb_callback(int unused)
+{
+    extern Monitor monitor;
+
+    uint8_t data = monitor.key_state->data;
+    uint8_t scancode = char2keycode(data);
+    char c  = kcode2char(scancode);
+
+    key_buf[key_buf_tail ++] = c;
+    if (key_buf_tail == KEY_BUF_MAX) key_buf_tail = 0;
+
+    monitor.key_state->ready = 0;
 }
 
 char kcode2char(uint8_t code) {
@@ -200,17 +171,4 @@ uint8_t char2keycode(char c) {
     }
 }
 
-// 键盘事件回调函数 / 中断处理函数
-void kb_callback(int unused)
-{
-    extern Monitor monitor;
-
-    uint8_t data = monitor.key_state->data;
-    uint8_t scancode = char2keycode(data);
-    char c  = kcode2char(scancode);
-
-    buf_write(c);
-
-    monitor.key_state->ready = 0;
-}
 #endif

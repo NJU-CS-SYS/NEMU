@@ -1,7 +1,6 @@
 #include "exec/helper.h"
 #include "exec/template-start.h"
 #include "cpu/modrm.h"
-#include "cpu/segment.h"
 
 #define DEBUG(name) \
 Log("esp in " str(name) " %x", cpu.esp)

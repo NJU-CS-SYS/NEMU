@@ -1,6 +1,4 @@
 #include "common.h"
-#include "cpu/segment.h"
-#include "io/mmio.h"
 #include "cpu/reg.h"
 uint32_t dram_read(swaddr_t addr, size_t len);
 uint32_t dram_write(swaddr_t addr, size_t len, uint32_t data);

@@ -29,7 +29,12 @@ int int2str(int num, char *buf, int buf_size) {
     buf[i] = '\0';
     len = i;
 
-    for (int j = 0; j < len; j ++) {
+    int j = 0;
+    if (buf_t[0] == '-') {
+        buf[0] = '-';
+        j = 1;
+    }
+    for (; j < len; j ++) {
         buf[j] = buf_t[--i];
     }
 

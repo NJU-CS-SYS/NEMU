@@ -4,8 +4,6 @@
 
 #include "nemu.h"
 
-#include "cpu/segment.h"
-
 char ModR_M_asm[MODRM_ASM_BUF_SIZE];
 #define print_ModR_M_asm(...) \
     assert(snprintf(ModR_M_asm, MODRM_ASM_BUF_SIZE, __VA_ARGS__) < MODRM_ASM_BUF_SIZE )
