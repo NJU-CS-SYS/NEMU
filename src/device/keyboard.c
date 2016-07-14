@@ -8,8 +8,7 @@ static uint8_t *i8042_data_port_base;
 
 void i8042_io_handler(ioaddr_t addr, size_t len, bool is_write) {
     if(!is_write) {
-        // remove the read char in npc buffer, it is already read through PORT
-        //buf_read();
+        //i8042_data_port_base[0] = npc_getc();
     }
 }
 
@@ -56,14 +55,57 @@ void kb_callback(int unused)
     extern Monitor monitor;
 
     uint8_t data = monitor.key_state->data;
-    uint8_t scancode = char2keycode(data);
-    char c  = kcode2char(scancode);
 
-    key_buf[key_buf_tail ++] = c;
+    key_buf[key_buf_tail ++] = data;
     if (key_buf_tail == KEY_BUF_MAX) key_buf_tail = 0;
 
     monitor.key_state->ready = 0;
 }
+
+uint8_t char2keycode(char c) {
+    switch(c) {
+        case '0': return 0x45;
+        case '1': return 0x16;
+        case '2': return 0x1E;
+        case '3': return 0x26;
+        case '4': return 0x25;
+        case '5': return 0x2E;
+        case '6': return 0x36;
+        case '7': return 0x3D;
+        case '8': return 0x3E;
+        case '9': return 0x46;
+        case 'a': return 0x1C;
+        case 'b': return 0x32;
+        case 'c': return 0x21;
+        case 'd': return 0x23;
+        case 'e': return 0x24;
+        case 'f': return 0x2B;
+        case 'g': return 0x34;
+        case 'h': return 0x33;
+        case 'i': return 0x43;
+        case 'j': return 0x3B;
+        case 'k': return 0x42;
+        case 'l': return 0x4B;
+        case 'm': return 0x3A;
+        case 'n': return 0x31;
+        case 'o': return 0x44;
+        case 'p': return 0x4D;
+        case 'q': return 0x15;
+        case 'r': return 0x2D;
+        case 's': return 0x1B;
+        case 't': return 0x2C;
+        case 'u': return 0x3C;
+        case 'v': return 0x2A;
+        case 'w': return 0x1D;
+        case 'x': return 0x22;
+        case 'y': return 0x35;
+        case 'z': return 0x1A;
+        case '\n': return 0x5A;
+        default  : printf("unknown char %x\n",c);return 0;
+    }
+}
+#endif
+
 
 char kcode2char(uint8_t code) {
     switch(code) {
@@ -128,47 +170,3 @@ char kcode2char(uint8_t code) {
     }
 }
 
-uint8_t char2keycode(char c) {
-    switch(c) {
-        case '0': return 0x45;
-        case '1': return 0x16;
-        case '2': return 0x1E;
-        case '3': return 0x26;
-        case '4': return 0x25;
-        case '5': return 0x2E;
-        case '6': return 0x36;
-        case '7': return 0x3D;
-        case '8': return 0x3E;
-        case '9': return 0x46;
-        case 'a': return 0x1C;
-        case 'b': return 0x32;
-        case 'c': return 0x21;
-        case 'd': return 0x23;
-        case 'e': return 0x24;
-        case 'f': return 0x2B;
-        case 'g': return 0x34;
-        case 'h': return 0x33;
-        case 'i': return 0x43;
-        case 'j': return 0x3B;
-        case 'k': return 0x42;
-        case 'l': return 0x4B;
-        case 'm': return 0x3A;
-        case 'n': return 0x31;
-        case 'o': return 0x44;
-        case 'p': return 0x4D;
-        case 'q': return 0x15;
-        case 'r': return 0x2D;
-        case 's': return 0x1B;
-        case 't': return 0x2C;
-        case 'u': return 0x3C;
-        case 'v': return 0x2A;
-        case 'w': return 0x1D;
-        case 'x': return 0x22;
-        case 'y': return 0x35;
-        case 'z': return 0x1A;
-        case '\n': return 0x5A;
-        default  : printf("unknown char %x\n",c);return 0;
-    }
-}
-
-#endif
