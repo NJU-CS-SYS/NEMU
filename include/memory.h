@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#define HW_MEM_SIZE (128 * 1024 * 1024)
+#define HW_MEM_SIZE (4 * 1024 * 1024)
 
 extern uint8_t *hw_mem;
 

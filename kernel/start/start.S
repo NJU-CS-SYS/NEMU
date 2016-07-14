@@ -6,7 +6,7 @@
 start:
 # Set up a stack for C code.
 	movl $0, %ebp
-	movl $(128 << 20), %esp
+	movl $(4 << 20), %esp
 	jmp init				# never return
 
 #else

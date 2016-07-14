@@ -9,8 +9,8 @@
 //extern uint64_t mem_access;
 #define COL_WIDTH 10
 #define ROW_WIDTH 10
-#define BANK_WIDTH 3
-#define RANK_WIDTH (27 - COL_WIDTH - ROW_WIDTH - BANK_WIDTH)
+#define BANK_WIDTH 1
+#define RANK_WIDTH (22 - COL_WIDTH - ROW_WIDTH - BANK_WIDTH)
 
 typedef union {
     struct {

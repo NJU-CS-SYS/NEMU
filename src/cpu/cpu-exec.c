@@ -39,7 +39,7 @@ void restart()
     /* General initialization */
     cpu.eip = LOADER_START;
     cpu.ebp = 0;
-    cpu.esp = 0x8000000;
+    cpu.esp = 0x600000;
     cpu.eflags = 0x2;
     cpu.eax = 0;
     cpu.ecx = 0;
