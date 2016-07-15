@@ -4,7 +4,6 @@ DUMP   := objdump
 
 CFLAGS := -m32
 CFLAGS += -std=gnu11
-CFLAGS += -static
 CFLAGS += -MD
 CFLAGS += -Wall -Werror
 CFLAGS += -fno-stack-protector -Wno-unused-result

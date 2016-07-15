@@ -122,7 +122,10 @@ uint32_t dram_read(hwaddr_t addr, size_t len) {
         ddr3_read(addr + BURST_LEN, temp + BURST_LEN);
     }
 
-    return *(uint32_t *)(temp + offset) & (~0u >> ((4 - len) << 3));
+    uint8_t *buf = temp + offset;
+    uint32_t result = (buf[3] << 24) | (buf[2] << 16) | (buf[1] << 8) | buf[0];
+
+    return result & (~0u >> ((4 - len) << 3));
 }
 
 void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
