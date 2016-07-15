@@ -51,7 +51,9 @@ void* add_pio_map(ioaddr_t addr, size_t len, pio_callback_t callback) {
 uint32_t pio_read(ioaddr_t addr, size_t len) {
     assert(len == 1 || len == 2 || len == 4);
     assert(addr + len - 1 < PORT_IO_SPACE_MAX);
-    uint32_t data = *(uint32_t *)(pio_space + addr) & (~0u >> ((4 - len) << 3));
+    uint8_t *pio_buf = pio_space + addr;
+    uint32_t result = (pio_buf[3] << 24) | (pio_buf[2] << 16) | (pio_buf[1] << 8) | pio_buf[0];
+    uint32_t data = result & (~0u >> ((4 - len) << 3));
     printf("pio_read: addr %x, len %x, data %x\n", addr, len, data);
     pio_callback(addr, len, false);
     return data;
