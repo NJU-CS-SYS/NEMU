@@ -12,7 +12,7 @@ jmp_buf jbuf;    /* Make it easy to perform exception handling */
 
 #endif
 
-#define LOADER_START 0x200000
+#define LOADER_START 0x100000
 
 int exec(swaddr_t);
 void init_dram();
