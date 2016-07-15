@@ -1,6 +1,7 @@
 #include "common.h"
 #include "io/mmio.h"
 #include "lib/misc.h"
+#include "debug.h"
 
 #define MMIO_SPACE_MAX (1024 * 1280)
 #define NR_MAP 8
@@ -20,6 +21,7 @@ static int nr_map = 0;
 
 /* device interface */
 void* add_mmio_map(hwaddr_t addr, size_t len, mmio_callback_t callback) {
+    Log("nr_map is %d", nr_map);
     assert(nr_map < NR_MAP);
     assert(mmio_space_free_index + len <= MMIO_SPACE_MAX);
 

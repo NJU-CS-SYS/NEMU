@@ -8,7 +8,7 @@ static uint8_t *vmem_data_port_base;
 
 void vga_vmem_io_handler(ioaddr_t addr, size_t len, bool is_write) {
   if (is_write) {
-    npc_putc(vmem_data_port_base[0]);
+    putchar(vmem_data_port_base[0]);
   }
 }
 

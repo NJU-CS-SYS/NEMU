@@ -1,5 +1,6 @@
 #include "common.h"
 #include "io/port-io.h"
+#include "debug.h"
 
 #define PORT_IO_SPACE_MAX 65536
 #define NR_MAP 8
@@ -41,6 +42,12 @@ void* add_pio_map(ioaddr_t addr, size_t len, pio_callback_t callback) {
 
 
 /* CPU interface */
+// len <-> ~0u >> ((4 - len) << 3)
+//  0             0x00000000
+//  1             0x000000ff
+//  2             0x0000ffff
+//  3             0x00ffffff
+//  4             0xffffffff
 uint32_t pio_read(ioaddr_t addr, size_t len) {
     assert(len == 1 || len == 2 || len == 4);
     assert(addr + len - 1 < PORT_IO_SPACE_MAX);
