@@ -31,7 +31,7 @@ make_helper(concat(lgdt_, SUFFIX))
 #else
     cpu.gdtr.base = base;
 #endif
-    print_asm("lgdt" str(SUFFIX) " %#x", addr);
+    print_asm("lgdt" str(SUFFIX) " 0x%x", addr);
     return 1 + 1 + len;
 }
 make_helper(concat(lidt_, SUFFIX))
@@ -50,7 +50,7 @@ make_helper(concat(lidt_, SUFFIX))
     cpu.idtr.base = swaddr_read(addr + 2, 4);
 #endif
 
-    print_asm("lidt" str(SUFFIX) " %#x", addr);
+    print_asm("lidt" str(SUFFIX) " 0x%x", addr);
     return 1 + 1 + len;
 }
 #include "exec/template-end.h"

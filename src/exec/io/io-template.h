@@ -7,7 +7,7 @@ make_helper(concat(in_i2a_, SUFFIX))
     ioaddr_t ioaddr = instr_fetch(eip + 1, 1);
     REG(R_EAX) = pio_read(ioaddr, DATA_BYTE);
 
-    print_asm("in $%#x", ioaddr);
+    print_asm("in $0x%x", ioaddr);
 
     return 2;
 }
@@ -25,7 +25,7 @@ make_helper(concat(out_i2a_, SUFFIX))
     ioaddr_t ioaddr = instr_fetch(eip + 1, 1);
     pio_write( ioaddr, DATA_BYTE, REG(R_EAX) );
 
-    print_asm("out %#x", ioaddr);
+    print_asm("out 0x%x", ioaddr);
     return 2;
 }
 make_helper(concat(out_d2a_, SUFFIX))

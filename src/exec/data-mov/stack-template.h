@@ -46,7 +46,7 @@ make_helper(concat(push_i2s_, SUFFIX))
     Sreg = SS;
     MEM_W(cpu.esp, imm);
     
-    print_asm("push" str(SUFFIX) " $%#x", imm);
+    print_asm("push" str(SUFFIX) " $0x%x", imm);
     return 1 + DATA_BYTE;
 }
 make_helper(concat(push_m2s_, SUFFIX))

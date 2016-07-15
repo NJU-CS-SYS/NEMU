@@ -23,7 +23,7 @@ make_helper(concat(and_i2r_, SUFFIX)) {
     result = dest & src;
     TEMP_AND_FLAG(src, dest, result);
     REG(R_EAX) = result;
-    print_asm("and" str(SUFFIX) " $%#x,%s", src, REG_NAME(R_EAX));
+    print_asm("and" str(SUFFIX) " $0x%x,%s", src, REG_NAME(R_EAX));
     return len;
 }
 

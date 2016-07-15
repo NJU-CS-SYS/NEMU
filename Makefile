@@ -19,7 +19,7 @@ CFILES := $(GENERATED) $(filter-out $(GENERATED), $(shell find src/ -name "*.c")
 OBJS_DIR := objs
 OBJS     := $(CFILES:%.c=$(OBJS_DIR)/%.o)
 
-TESTFILE = testcase/hello/printf
+TESTFILE = testcase/c/add
 
 LOADER_DIR = kernel
 LOADER = $(LOADER_DIR)/loader

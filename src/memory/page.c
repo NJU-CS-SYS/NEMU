@@ -28,12 +28,12 @@ hwaddr_t page_translate(lnaddr_t addr, size_t len)
 
     dir_entry.val = hwaddr_read(dir_addr + 4 * lnaddr.dir, 4);
     if (!dir_entry.present) {
-        Test(0, "dir fault: eip %#x, vaddr %#x, dir %#x, page %#x, offset %#x", cpu.eip, addr, lnaddr.dir, lnaddr.page, lnaddr.offset);
+        Test(0, "dir fault: eip 0x%x, vaddr 0x%x, dir 0x%x, page 0x%x, offset 0x%x", cpu.eip, addr, lnaddr.dir, lnaddr.page, lnaddr.offset);
         assert(0);
     }
     page_entry.val = hwaddr_read((dir_entry.page_frame << 12) + 4 * lnaddr.page, 4);
     if (!page_entry.present) {
-        Test(0, "page fault: eip %#x, vaddr %#x, dir %#x, page %#x, offset %#x", cpu.eip, addr, lnaddr.dir, lnaddr.page, lnaddr.offset);
+        Test(0, "page fault: eip 0x%x, vaddr 0x%x, dir 0x%x, page 0x%x, offset 0x%x", cpu.eip, addr, lnaddr.dir, lnaddr.page, lnaddr.offset);
         assert(0);
     }
     __hwaddr = (page_entry.page_frame << 12) + lnaddr.offset;

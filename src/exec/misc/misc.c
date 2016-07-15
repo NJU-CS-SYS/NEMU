@@ -20,7 +20,7 @@ make_helper(inv) {
     Log("invalid opcode(eip = 0x%08x): %02x %02x %02x %02x %02x %02x %02x %02x ...", 
             eip, temp[0], temp[1], temp[2], temp[3], temp[4], temp[5], temp[6], temp[7]);
 
-    test(0, "eip %#x", eip);
+    test(0, "eip 0x%x", eip);
     return 0;
 }
 
