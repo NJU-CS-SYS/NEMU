@@ -1,17 +1,24 @@
-# Cross compilation toggle
+CC     := gcc
+LD     := ld
+DUMP   := objdump
 
-CC      = gcc
-LD      = ld
-DUMP    = objdump
-
-CFLAGS  = -m32 -std=gnu11 -static -MD -Wall -Werror -fno-stack-protector -Wno-unused-result -I./include -I ./monitor -O0
-
+CFLAGS := -m32
+CFLAGS += -std=gnu11
+CFLAGS += -static
+CFLAGS += -MD
+CFLAGS += -Wall -Werror
+CFLAGS += -fno-stack-protector -Wno-unused-result
+CFLAGS += -I ./include
 CFLAGS += -ggdb3
 
-CFILES  = src/elf/loader.c src/elf/testfile.c
-CFILES := $(CFILES) $(filter-out $(CFILES), $(shell find src/ -name "*.c"))
-CFILES += $(filter-out monitor/main.c, $(shell find monitor/ -name "*.c"))
-OBJS    = $(CFILES:.c=.o)
+KERNEL_SRC := src/elf/loader.c
+TESTFILE_SRC := src/elf/testfile.c
+
+GENERATED := $(KERNEL_SRC) $(TESTFILE_SRC)
+CFILES := $(GENERATED) $(filter-out $(GENERATED), $(shell find src/ -name "*.c"))
+
+OBJS_DIR := objs
+OBJS     := $(CFILES:%.c=$(OBJS_DIR)/%.o)
 
 TESTFILE = testcase/hello/printf
 
@@ -28,17 +35,21 @@ MONITOR_OBJ := $(MONITOR_SRC:.c=.o)
 monitor.bin: $(MONITOR_OBJ)
 	$(CC) -o $@ $(CFLAGS) $^
 
-src/elf/loader.c: $(shell find kernel/* -type f -name "*.[chS]")
+$(KERNEL_SRC): $(shell find kernel/* -type f -name "*.[chS]")
 	cd $(LOADER_DIR) && make
 	objcopy -S -O binary $(LOADER) loader
 	xxd -i loader > src/elf/loader.c
 	rm loader
 
-src/elf/testfile.c: $(shell find `dirname $(TESTFILE)`/* -type f -name "*.[chS]")
+$(TESTFILE_SRC): $(shell find `dirname $(TESTFILE)`/* -type f -name "*.[chS]")
 	cd `dirname $(TESTFILE)` && make
 	mv $(TESTFILE) testfile
 	xxd -i testfile > $@
 	rm testfile
+
+$(OBJS_DIR)/%.o: %.c
+	mkdir -p `dirname $@`
+	$(CC) $(CFLAGS) -c $< -o $@
 
 run: nemu
 	./nemu 2>&1 | tee log.txt
