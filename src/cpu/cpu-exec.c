@@ -30,6 +30,8 @@ extern uint8_t loader [];
 extern uint32_t loader_len;
 extern int quiet;
 
+static int instr_counter = 0;
+
 #include "memory.h"
 void restart()
 {
@@ -55,6 +57,7 @@ void restart()
     cpu.gdtr.base = 0;
     cpu.cr[0] = 0; // Set PE to 0
 
+    instr_counter = 0;
     load_prog();
 
    // trigger = TRIGGER_INIT;
@@ -65,9 +68,11 @@ void restart()
 
 void print_bin_instr(swaddr_t eip, int len)
 {
-    printf("%8x:   ", eip);
+    printf("#%7d %8x:   ", instr_counter++, eip);
     for(int i = 0; i < len; i ++)
         printf("%02x ", swaddr_read(eip + i, 1));
+    int left = 50 - (12 + 3 * len);
+    while (left--) putchar(' ');
     //printf("%*.s", 50 - (12 + 3 * len), "");
 }
 
@@ -85,6 +90,8 @@ void cpu_exec(volatile uint32_t n)
         int f = 0;
 
         int instr_len = exec(cpu.eip);
+        extern uint8_t *serial_port_base;
+        if (serial_port_base[5] != 0x20) for(;;){}
 
         cpu.eip += instr_len;
         if(f) {
