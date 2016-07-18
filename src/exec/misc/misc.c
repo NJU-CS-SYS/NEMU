@@ -15,6 +15,7 @@ make_helper(inv) {
     /* invalid opcode */
 
     uint8_t temp[8];
+    // TODO Avoid int pointer casting!
     ((uint32_t *)temp)[0] = instr_fetch(eip, 4);
     ((uint32_t *)temp)[1] = instr_fetch(eip + 4, 4);
     Log("invalid opcode(eip = 0x%08x): %02x %02x %02x %02x %02x %02x %02x %02x ...", 

@@ -6,7 +6,7 @@
 #define NR_MAP 8
 
 /* "+ 3" is for hacking, see pio_read() below */
-static uint8_t pio_space[PORT_IO_SPACE_MAX + 3];
+uint8_t pio_space[PORT_IO_SPACE_MAX + 3];
 
 typedef struct {
     ioaddr_t low;
@@ -48,13 +48,13 @@ void* add_pio_map(ioaddr_t addr, size_t len, pio_callback_t callback) {
 //  2             0x0000ffff
 //  3             0x00ffffff
 //  4             0xffffffff
-uint32_t pio_read(ioaddr_t addr, size_t len) {
+uint32_t __attribute__((optimize("O0"))) pio_read(ioaddr_t addr, size_t len) {
     assert(len == 1 || len == 2 || len == 4);
     assert(addr + len - 1 < PORT_IO_SPACE_MAX);
     uint8_t *pio_buf = pio_space + addr;
     uint32_t result = (pio_buf[3] << 24) | (pio_buf[2] << 16) | (pio_buf[1] << 8) | pio_buf[0];
     uint32_t data = result & (~0u >> ((4 - len) << 3));
-    printf("pio_read: addr %x, len %x, data %x\n", addr, len, data);
+    printf("pio_read: addr %x(%08x), len %x, data %x\n", addr, (unsigned int)pio_buf, len, data);
     pio_callback(addr, len, false);
     return data;
 }

@@ -135,7 +135,7 @@ void dram_write(hwaddr_t addr, size_t len, uint32_t data) {
     uint8_t mask[2 * BURST_LEN];
     memset(mask, 0, 2 * BURST_LEN);
 
-    *(uint32_t *)(temp + offset) = data;
+    memcpy(temp + offset, &data, 4);
     memset(mask + offset, 1, len);
 
     ddr3_write(addr, temp, mask);

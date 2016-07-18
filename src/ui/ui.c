@@ -64,10 +64,8 @@ static void cmd_si()
     if(nemu_state != END) { nemu_state = STOP; }
 }
 
-static void cmd_info()
+void info()
 {
-    char* opt = strtok(NULL, " ");
-    if (opt == NULL || strcmp(opt, "r") == 0) {
         printf("%-15s%-15X%u\n","eax", cpu.eax, cpu.eax);
         printf("%-15s%-15X%u\n","ecx", cpu.ecx, cpu.ecx);
         printf("%-15s%-15X%u\n","edx", cpu.edx, cpu.edx);
@@ -90,6 +88,13 @@ static void cmd_info()
                 FLAG_VAL(OF)
               );
         printf("CS %x DS %x SS %x\n", cpu.cs, cpu.ds, cpu.ss);
+}
+
+static void cmd_info()
+{
+    char* opt = strtok(NULL, " ");
+    if (opt == NULL || strcmp(opt, "r") == 0) {
+        info();
     }
 }
 

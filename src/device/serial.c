@@ -7,7 +7,7 @@
 #define CH_OFFSET 0
 #define LSR_OFFSET 5        /* line status register */
 
-static uint8_t *serial_port_base;
+uint8_t *serial_port_base;
 
 void serial_io_handler(ioaddr_t addr, size_t len, bool is_write) {
     if(is_write) {

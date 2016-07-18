@@ -78,11 +78,12 @@ void print_bin_instr(swaddr_t eip, int len)
 
 int int_polling();
 
+void info();
 void cpu_exec(volatile uint32_t n)
 {
     volatile uint32_t n_temp = n;
 
-    setjmp(jbuf);
+    // setjmp(jbuf);
 
     for(; n > 0; n --) {
         swaddr_t eip_temp = cpu.eip;
@@ -90,8 +91,13 @@ void cpu_exec(volatile uint32_t n)
         int f = 0;
 
         int instr_len = exec(cpu.eip);
+
+        //info();
+
         extern uint8_t *serial_port_base;
+        extern uint8_t pio_space[];
         if (serial_port_base[5] != 0x20) for(;;){}
+        if (pio_space[0x1f7] != 0x40) for(;;){}
 
         cpu.eip += instr_len;
         if(f) {
