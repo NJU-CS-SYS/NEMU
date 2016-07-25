@@ -1,8 +1,8 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-#include "debug.h"
 #include "macro.h"
+#include "debug.h"
 #include <stdint.h>
 #include <assert.h>
 #include <string.h>

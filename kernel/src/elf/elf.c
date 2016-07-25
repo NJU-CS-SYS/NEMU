@@ -6,7 +6,7 @@
 
 #ifdef HAS_DEVICE
 #define ELF_OFFSET_IN_DISK 0
-#define BUF_LEN 4096
+#define BUF_LEN 128
 #endif
 
 #define STACK_SIZE (1 << 20)
@@ -20,8 +20,8 @@ uint32_t loader() {
     Elf32_Phdr *ph = NULL;
 
 #ifdef HAS_DEVICE
-    uint8_t buf[4096];
-    ide_read(buf, ELF_OFFSET_IN_DISK, 4096);
+    uint8_t buf[BUF_LEN];
+    ide_read(buf, ELF_OFFSET_IN_DISK, BUF_LEN);
     elf = (void*)buf;
 #else
     /* The ELF file is located at memory address 0 */

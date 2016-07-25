@@ -57,7 +57,7 @@ void init_dram() {
 
 static void ddr3_read(hwaddr_t addr, void *data) {
     mem_access ++;
-    test(addr < HW_MEM_SIZE, "addr = %x\n, eip = %x", addr, cpu.eip);
+    test(addr < HW_MEM_SIZE, "addr = %x, eip = %x\n", addr, cpu.eip);
 
     dram_addr temp;
     // the low 3 bits are cleared to 0

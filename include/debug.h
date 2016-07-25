@@ -4,12 +4,19 @@
 #include <stdio.h>
 #include <assert.h>
 
+#include "macro.h"
+#include "ui/ui.h"
+
+extern int nemu_state;
+void info();
+
 #define test(cond, ...) \
     do { \
         if(!(cond)) { \
             fflush(stdout); \
-            fprintf(stderr, __VA_ARGS__); \
-            assert(0); \
+            fprintf(stderr, __FILE__ "@" str(__LINE__) ": " __VA_ARGS__); \
+            info(); \
+            nemu_state = TEST_INT; \
         } \
     } while(0)
 
@@ -17,10 +24,11 @@
     do { \
         if(!(cond)) { \
             fflush(stdout); \
-            fprintf(stderr, __VA_ARGS__); \
-            nemu_state = TEST_INT;\
+            fprintf(stderr, __FILE__ "@" str(__LINE__) ": " __VA_ARGS__); \
+            nemu_state = TEST_INT; \
         } \
     } while(0)
+
 extern int enable_debug;
 
 #define Log(format,...) \
